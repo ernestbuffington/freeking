@@ -1,5 +1,6 @@
 #pragma once
 
+#include "FileSystem.h"
 #include <filesystem>
 #include <fstream>
 #include <unordered_map>
@@ -20,16 +21,23 @@ namespace Freeking
 		int size;
 	};
 
-	class PakFile
+	class PakFile : public IFileSystem
 	{
 	public:
+
+		static std::unique_ptr<PakFile> Create(const std::filesystem::path& path);
 
 		PakFile(const std::filesystem::path& path);
 		~PakFile();
 
-		std::vector<char> GetFileData(const std::string& filename);
+		virtual bool FileExists(const std::string& filename) override;
+		virtual std::vector<char> GetFileData(const std::string& filename) override;
+
+	protected:
+
 
 	private:
+
 
 		struct FileItem
 		{

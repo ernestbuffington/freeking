@@ -23,8 +23,6 @@ namespace Freeking
 
 		std::unique_ptr<class Window> _window;
 
-		PakFile _pak;
-
 		int _viewportWidth;
 		int _viewportHeight;
 

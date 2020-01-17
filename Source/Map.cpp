@@ -47,8 +47,8 @@ namespace Freeking
 		for (int i = 0; i < textureInfo.Num(); ++i)
 		{
 			const auto& texInfo = textureInfo[i];
-			auto path = Paths::KingpinDir() / "main/textures" / (std::string(texInfo.TextureName) + std::string(".tga"));
-			_textures.push_back(Util::LoadTexture(path.string()));
+			auto path = "textures/" + (std::string(texInfo.TextureName) + std::string(".tga"));
+			_textures.push_back(Util::LoadTexture(path));
 		}
 
 		int lmSize = 1024;

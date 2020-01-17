@@ -2,6 +2,7 @@
 #include "Texture2D.h"
 #include "ShaderProgram.h"
 #include "Font.h"
+#include "FileSystem.h"
 #include <charconv>
 #include <filesystem>
 #include <fstream> 
@@ -35,6 +36,29 @@ namespace Freeking
 	}
 
 	std::shared_ptr<Texture2D> Util::LoadTexture(const std::string& path)
+	{
+		auto buffer = FileSystem::GetFileData(path);
+		auto data = buffer.data();
+
+		int imageWidth;
+		int imageHeight;
+		int imageChannels;
+		uint8_t* image = stbi_load_from_memory((uint8_t*)data, (std::int32_t)buffer.size(), &imageWidth, &imageHeight, &imageChannels, 0);
+
+		auto texture = std::make_shared<Texture2D>(
+			imageWidth,
+			imageHeight,
+			GL_RGBA,
+			imageChannels == 3 ? GL_RGB : GL_RGBA,
+			GL_UNSIGNED_BYTE,
+			image);
+
+		stbi_image_free(image);
+
+		return texture;
+	}
+
+	std::shared_ptr<Texture2D> Util::LoadTexture2(const std::string& path)
 	{
 		auto buffer = LoadFile(path);
 		auto data = buffer.data();
@@ -86,7 +110,7 @@ namespace Freeking
 		{
 			std::filesystem::path fontPath(path);
 			fontPath = fontPath.remove_filename();
-			pageTextures.push_back(Util::LoadTexture(fontPath.append(pages[i].ToString()).string()));
+			pageTextures.push_back(Util::LoadTexture2(fontPath.append(pages[i].ToString()).string()));
 		}
 
 		auto chars = fontJson["chars"];

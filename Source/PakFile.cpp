@@ -2,6 +2,11 @@
 
 namespace Freeking
 {
+	std::unique_ptr<PakFile> PakFile::Create(const std::filesystem::path& path)
+	{
+		return std::make_unique<PakFile>(path);
+	}
+
 	PakFile::PakFile(const std::filesystem::path& path)
 	{
 		_stream.open(path, std::ios::binary | std::ios::ate);
@@ -43,6 +48,16 @@ namespace Freeking
 		{
 			_stream.close();
 		}
+	}
+
+	bool PakFile::FileExists(const std::string& filename)
+	{
+		if (!_stream.is_open())
+		{
+			return false;
+		}
+
+		return _fileItems.find(filename) != _fileItems.end();
 	}
 
 	std::vector<char> PakFile::GetFileData(const std::string& filename)

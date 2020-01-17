@@ -31,8 +31,8 @@ namespace Freeking
 		};
 
 		Font(float lineHeight,
-			 const std::vector<std::shared_ptr<Texture2D>>& pageTextures,
-			 const std::map<int32_t, Character>& characters);
+			 std::vector<std::shared_ptr<Texture2D>> pageTextures,
+			 std::map<int32_t, Character> characters);
 
 		bool TryGetCharacter(int32_t id, Character& character) const;
 

@@ -10,6 +10,7 @@ namespace Freeking
 	{
 		static std::vector<char> LoadFile(const std::string& filepath);
 		static std::shared_ptr<class Texture2D> LoadTexture(const std::string& path);
+		static std::shared_ptr<class Texture2D> LoadTexture2(const std::string& path);
 		static std::shared_ptr<class ShaderProgram> LoadShader(const std::string& vertPath, const std::string& fragPath);
 		static std::shared_ptr<class Font> LoadFont(const std::string& path);
 		static Vector2f ScreenSpaceToPixelPosition(const Vector2f& point, const Vector4i& viewport);
