@@ -60,20 +60,17 @@ namespace Freeking
 			return {};
 		}
 
-		std::ifstream ifs(filepath, std::ios::binary | std::ios::ate);
+		std::ifstream stream(filepath, std::ios::binary | std::ios::ate);
+		auto fileSize = std::filesystem::file_size(filepath);
 
-		auto end = ifs.tellg();
-		ifs.seekg(0, std::ios::beg);
-
-		auto size = std::size_t(end - ifs.tellg());
-
-		if (size == 0)
+		if (fileSize == 0)
 		{
 			return {};
 		}
 
-		std::vector<char> buffer(size);
-		ifs.read((char*)buffer.data(), buffer.size());
+		std::vector<char> buffer(fileSize);
+		stream.seekg(0);
+		stream.read((char*)buffer.data(), buffer.size());
 
 		return buffer;
 	}

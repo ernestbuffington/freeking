@@ -21,6 +21,7 @@
 #include "Map.h"
 #include "Lightmap.h"
 #include "Paths.h"
+#include "Thug.h"
 #include <glad/glad.h>
 #include <iostream>
 #include <fstream>
@@ -31,9 +32,10 @@
 namespace Freeking
 {
 	Game::Game(int argc, char** argv)
-	{	
+	{
+		FileSystem::AddFileSystem(PhysicalFileSystem::Create(std::filesystem::current_path()));
 		FileSystem::AddFileSystem(PhysicalFileSystem::Create(Paths::KingpinDir() / "main"));
-		FileSystem::AddFileSystem(PakFile::Create(Paths::KingpinDir() / "main/Pak0.pak"));
+		FileSystem::AddFileSystem(PakFile::Create(Paths::KingpinDir() / "main/Pak0.pak"));	
 
 		static const std::string windowTitle = "Kingpin";
 		_viewportWidth = 1920;
@@ -100,37 +102,10 @@ namespace Freeking
 		auto lineRenderer = std::make_unique<LineRenderer>(1000000);
 		auto spriteBatch = std::make_unique<SpriteBatch>(1000);
 		FreeCamera camera;
-
 		bool debug = true;
-
-		std::vector<std::shared_ptr<KeyframeMesh>> mdxMeshes;
-		std::array<std::string, 3> mdxNames =
-		{
-			"body",
-			"head",
-			"legs",
-		};
-
-		for (size_t i = 0; i < mdxNames.size(); ++i)
-		{
-			auto mdxBuffer = FileSystem::GetFileData("models/actors/thug/" + mdxNames[i] + ".mdx");
-			auto mdxData = mdxBuffer.data();
-			auto& mdxFile = MDXFile::Create(mdxData);
-
-			auto mdxMesh = std::make_shared<KeyframeMesh>();
-			mdxFile.Build(mdxData, mdxMesh);
-			mdxMesh->SetDiffuse(Util::LoadTexture("models/actors/thug/" + mdxNames[i] + "_001.tga"));
-			mdxMesh->Commit();
-
-			mdxMeshes.push_back(mdxMesh);
-		}
-
-		double frameTime = 0;
-		Matrix4x4 modelMatrix;
-
-		auto keyframeShader = Util::LoadShader("Shaders/VertexSkinnedMesh.vert", "Shaders/VertexSkinnedMesh.frag");
 		auto font = Util::LoadFont("Assets/roboto-bold.json");
 		auto map = std::make_shared<Map>(BspFile::Create(FileSystem::GetFileData("maps/sr1.bsp").data()));
+		auto thug = std::make_shared<Thug>();
 
 		while (running)
 		{
@@ -174,11 +149,6 @@ namespace Freeking
 				debug = !debug;
 			}
 
-			if (Input::JustPressed(Button::KeyV))
-			{
-				modelMatrix = Matrix4x4::Translation(camera.GetPosition()) * Quaternion::FromDegreeAngles(Vector3f(0, camera.GetYaw(), 0)).ToMatrix4x4();
-			}
-
 			auto inputForce = Vector3f(0.0f, 0.0f, 0.0f);
 			if (Input::IsDown(Button::KeyW)) inputForce += Vector3f(0.0f, 0.0f, 1.0f);
 			if (Input::IsDown(Button::KeyS)) inputForce -= Vector3f(0.0f, 0.0f, 1.0f);
@@ -205,42 +175,7 @@ namespace Freeking
 			Matrix4x4 viewProjectionMatrix = projectionMatrix * viewMatrix;
 
 			map->Render(viewProjectionMatrix);
-
-			keyframeShader->Bind();
-			keyframeShader->SetUniformValue("diffuse", 0);
-			keyframeShader->SetUniformValue("frameVertexBuffer", 1);
-			keyframeShader->SetUniformValue("normalBuffer", 2);
-
-			auto frameCount = mdxMeshes.at(0)->GetFrameCount();
-			frameTime += (10.0 * deltaTime);
-			frameTime = fmod(frameTime, (float)frameCount);
-
-			uint32_t frame = (uint32_t)floor(frameTime);
-			frame %= frameCount;
-			uint32_t nextFrame = (frame + 1) % frameCount;
-			float delta = (float)frameTime - (float)frame;
-			delta = Math::Clamp(delta, 0.0f, 1.0f);
-
-			keyframeShader->SetUniformValue("delta", delta);
-
-			for (int i = 0; i < 1; ++i)
-			{
-				auto m = Matrix4x4::Translation(Vector3f(0, 0, i * 40.0f));
-				keyframeShader->SetUniformValue("viewProj", viewProjectionMatrix * (modelMatrix * m));
-
-				for (auto& mdxMesh : mdxMeshes)
-				{
-					keyframeShader->SetUniformValue("frames[0].index", (int)(frame * mdxMesh->GetFrameVertexCount()));
-					keyframeShader->SetUniformValue("frames[0].translate", mdxMesh->FrameTransforms[frame].translate);
-					keyframeShader->SetUniformValue("frames[0].scale", mdxMesh->FrameTransforms[frame].scale);
-
-					keyframeShader->SetUniformValue("frames[1].index", (int)(nextFrame * mdxMesh->GetFrameVertexCount()));
-					keyframeShader->SetUniformValue("frames[1].translate", mdxMesh->FrameTransforms[nextFrame].translate);
-					keyframeShader->SetUniformValue("frames[1].scale", mdxMesh->FrameTransforms[nextFrame].scale);
-
-					mdxMesh->Draw();
-				}
-			}
+			thug->Render(viewProjectionMatrix, deltaTime);
 
 			if (debug)
 			{

@@ -15,26 +15,6 @@ using json::JSON;
 
 namespace Freeking
 {
-	std::vector<char> Util::LoadFile(const std::string& filepath)
-	{
-		std::ifstream ifs(filepath, std::ios::binary | std::ios::ate);
-
-		auto end = ifs.tellg();
-		ifs.seekg(0, std::ios::beg);
-
-		auto size = std::size_t(end - ifs.tellg());
-
-		if (size == 0)
-		{
-			return {};
-		}
-
-		std::vector<char> buffer(size);
-		ifs.read((char*)buffer.data(), buffer.size());
-
-		return buffer;
-	}
-
 	std::shared_ptr<Texture2D> Util::LoadTexture(const std::string& path)
 	{
 		auto buffer = FileSystem::GetFileData(path);
@@ -58,33 +38,10 @@ namespace Freeking
 		return texture;
 	}
 
-	std::shared_ptr<Texture2D> Util::LoadTexture2(const std::string& path)
-	{
-		auto buffer = LoadFile(path);
-		auto data = buffer.data();
-
-		int imageWidth;
-		int imageHeight;
-		int imageChannels;
-		uint8_t* image = stbi_load_from_memory((uint8_t*)data, (std::int32_t)buffer.size(), &imageWidth, &imageHeight, &imageChannels, 0);
-
-		auto texture = std::make_shared<Texture2D>(
-			imageWidth,
-			imageHeight,
-			GL_RGBA,
-			imageChannels == 3 ? GL_RGB : GL_RGBA,
-			GL_UNSIGNED_BYTE,
-			image);
-
-		stbi_image_free(image);
-
-		return texture;
-	}
-
 	std::shared_ptr<ShaderProgram> Util::LoadShader(const std::string& vertPath, const std::string& fragPath)
 	{
-		auto vertSource = LoadFile(vertPath);
-		auto fragSource = LoadFile(fragPath);
+		auto vertSource = FileSystem::GetFileData(vertPath);
+		auto fragSource = FileSystem::GetFileData(fragPath);
 
 		if (vertSource.empty() || fragSource.empty())
 		{
@@ -98,7 +55,7 @@ namespace Freeking
 
 	std::shared_ptr<Font> Util::LoadFont(const std::string& path)
 	{
-		auto fontBuffer = Util::LoadFile(path);
+		auto fontBuffer = FileSystem::GetFileData(path);
 		auto fontString = std::string(fontBuffer.data(), fontBuffer.size());
 		auto fontJson = JSON::Load(fontString);
 
@@ -110,7 +67,7 @@ namespace Freeking
 		{
 			std::filesystem::path fontPath(path);
 			fontPath = fontPath.remove_filename();
-			pageTextures.push_back(Util::LoadTexture2(fontPath.append(pages[i].ToString()).string()));
+			pageTextures.push_back(Util::LoadTexture(fontPath.append(pages[i].ToString()).string()));
 		}
 
 		auto chars = fontJson["chars"];
