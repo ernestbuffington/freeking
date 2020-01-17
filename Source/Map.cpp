@@ -29,20 +29,17 @@ namespace Freeking
 		_shader->Unbind();
 	}
 
-	Map::Map(const std::string& path)
+	Map::Map(const BspFile& bspFile)
 	{
-		auto fileBuffer = Util::LoadFile(path);
-		auto fileData = fileBuffer.data();
-		auto& bspFile = BspFile::Create(fileData);
-		auto entities = bspFile.GetLumpArray<char>(fileData, bspFile.Header.Entities);
-		auto vertices = bspFile.GetLumpArray<Vector3f>(fileData, bspFile.Header.Vertices);
-		auto models = bspFile.GetLumpArray<BspModel>(fileData, bspFile.Header.Models);
-		auto faces = bspFile.GetLumpArray<BspFace>(fileData, bspFile.Header.Faces);
-		auto edges = bspFile.GetLumpArray<BspEdge>(fileData, bspFile.Header.Edges);
-		auto faceEdges = bspFile.GetLumpArray<int32_t>(fileData, bspFile.Header.FaceEdges);
-		auto planes = bspFile.GetLumpArray<BspPlane>(fileData, bspFile.Header.Planes);
-		auto textureInfo = bspFile.GetLumpArray<BspTextureInfo>(fileData, bspFile.Header.TextureInfo);
-		auto lightmapData = bspFile.GetLumpArray<uint8_t>(fileData, bspFile.Header.Lightmaps);
+		auto entities = bspFile.GetLumpArray<char>(bspFile.Header.Entities);
+		auto vertices = bspFile.GetLumpArray<Vector3f>(bspFile.Header.Vertices);
+		auto models = bspFile.GetLumpArray<BspModel>(bspFile.Header.Models);
+		auto faces = bspFile.GetLumpArray<BspFace>(bspFile.Header.Faces);
+		auto edges = bspFile.GetLumpArray<BspEdge>(bspFile.Header.Edges);
+		auto faceEdges = bspFile.GetLumpArray<int32_t>(bspFile.Header.FaceEdges);
+		auto planes = bspFile.GetLumpArray<BspPlane>(bspFile.Header.Planes);
+		auto textureInfo = bspFile.GetLumpArray<BspTextureInfo>(bspFile.Header.TextureInfo);
+		auto lightmapData = bspFile.GetLumpArray<uint8_t>(bspFile.Header.Lightmaps);
 
 		std::string entityString(entities.Data(), entities.Num());
 		_entityLump = std::make_unique<EntityLump>(entityString);

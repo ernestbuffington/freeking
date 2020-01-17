@@ -8,6 +8,8 @@
 
 namespace Freeking
 {
+	struct BspFile;
+
 	class LightmapNode;
 	class LightmapImage;
 
@@ -15,7 +17,7 @@ namespace Freeking
 	{
 	public:
 
-		Map(const std::string& path);
+		Map(const BspFile& bspFile);
 
 		void Render(const Matrix4x4& viewProjection);
 

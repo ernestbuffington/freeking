@@ -39,5 +39,4 @@
 *.vcxproj
 *.vcxproj.filters
 *.vcxproj.user
-*Assets/
 packages.config

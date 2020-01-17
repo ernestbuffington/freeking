@@ -3,6 +3,7 @@
 #include <memory>
 #include <string>
 #include <filesystem>
+#include "PakFile.h"
 
 namespace Freeking
 {
@@ -21,6 +22,8 @@ namespace Freeking
 		void LockMouse(bool lockMouse);
 
 		std::unique_ptr<class Window> _window;
+
+		PakFile _pak;
 
 		int _viewportWidth;
 		int _viewportHeight;

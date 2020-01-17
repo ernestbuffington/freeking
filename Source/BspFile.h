@@ -46,9 +46,9 @@ namespace Freeking
 		}
 
 		template<typename ElementType>
-		LumpArray<ElementType> GetLumpArray(const char* Data, const BspLumpHeader& Lump) const
+		LumpArray<ElementType> GetLumpArray(const BspLumpHeader& Lump) const
 		{
-			return LumpArray<ElementType>((ElementType*)&Data[Lump.Offset], Lump.Length / sizeof(ElementType));
+			return LumpArray<ElementType>((ElementType*)((const char*)this + Lump.Offset), Lump.Length / sizeof(ElementType));
 		}
 
 		static const int MagicNumber = 0x50534249;

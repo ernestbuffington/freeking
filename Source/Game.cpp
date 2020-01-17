@@ -30,7 +30,8 @@
 
 namespace Freeking
 {
-	Game::Game(int argc, char** argv)
+	Game::Game(int argc, char** argv) :
+		_pak(Paths::KingpinDir() / "main/Pak0.pak")
 	{	
 		static const std::string windowTitle = "Kingpin";
 		_viewportWidth = 1920;
@@ -108,15 +109,17 @@ namespace Freeking
 			"legs",
 		};
 
+		auto thugPath = Paths::KingpinDir() / "main/models/actors/thug/";
+
 		for (size_t i = 0; i < mdxNames.size(); ++i)
 		{
-			auto mdxBuffer = Util::LoadFile("Assets/" + mdxNames[i] + ".mdx");
+			auto mdxBuffer = Util::LoadFile(thugPath.string() + mdxNames[i] + ".mdx");
 			auto mdxData = mdxBuffer.data();
 			auto& mdxFile = MDXFile::Create(mdxData);
 
 			auto mdxMesh = std::make_shared<KeyframeMesh>();
 			mdxFile.Build(mdxData, mdxMesh);
-			mdxMesh->SetDiffuse(Util::LoadTexture("Assets/" + mdxNames[i] + "_001.tga"));
+			mdxMesh->SetDiffuse(Util::LoadTexture(thugPath.string() + mdxNames[i] + "_001.tga"));
 			mdxMesh->Commit();
 
 			mdxMeshes.push_back(mdxMesh);
@@ -127,7 +130,7 @@ namespace Freeking
 
 		auto keyframeShader = Util::LoadShader("Shaders/VertexSkinnedMesh.vert", "Shaders/VertexSkinnedMesh.frag");
 		auto font = Util::LoadFont("Assets/roboto-bold.json");
-		auto map = std::make_shared<Map>("Assets/sr1.bsp");
+		auto map = std::make_shared<Map>(BspFile::Create(_pak.GetFileData("maps/sr1.bsp").data()));
 
 		while (running)
 		{
