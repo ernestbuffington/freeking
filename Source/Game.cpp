@@ -19,7 +19,6 @@
 #include "Mesh.h"
 #include "Util.h"
 #include "Map.h"
-#include "Lightmap.h"
 #include "Paths.h"
 #include "Thug.h"
 #include <glad/glad.h>
