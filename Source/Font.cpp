@@ -1,6 +1,6 @@
 #include "Font.h"
 #include "Util.h"
-#include "../ThirdParty/json.hpp"
+#include "ThirdParty/json/json.hpp"
 
 using json::JSON;
 

@@ -40,3 +40,6 @@
 *.vcxproj.filters
 *.vcxproj.user
 packages.config
+
+# cmake build directory
+/build/

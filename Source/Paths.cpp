@@ -1,5 +1,5 @@
 #include "Paths.h"
-#include "../ThirdParty/ValveFileVDF/vdf_parser.hpp"
+#include "ThirdParty/ValveFileVDF/vdf_parser.hpp"
 #include <Windows.h>
 #include <winreg.h>
 #include <atlstr.h>
