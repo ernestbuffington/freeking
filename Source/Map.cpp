@@ -66,13 +66,15 @@ namespace Freeking
 
 		pf.Stop("Map textures");
 
+		pf.Start();
+
 		int lmSize = 1024;
 		auto lightmapImage = std::make_shared<LightmapImage>(lmSize, lmSize);
-		auto lmRootNode = std::make_shared<LightmapNode>(0, 0, lmSize, lmSize);
+		auto lmRootNodeIndex = LightmapNode::NewNode(0, 0, lmSize, lmSize);
 
 		std::array<uint8_t, (16 * 16) * 3> blackPixels = { 0 };
-		auto blackLightmapNode = ReadLightmap(*lightmapImage, lmRootNode, 0, 16, 16, blackPixels.data());
-		Vector2f blackLightmapUV(8.0f / lightmapImage->GetWidth(), 8.0f / lightmapImage->GetHeight());
+		ReadLightmap(*lightmapImage, lmRootNodeIndex, 0, 16, 16, blackPixels.data());
+		Vector2f firstLightmapUV(8.0f / lightmapImage->GetWidth(), 8.0f / lightmapImage->GetHeight());
 
 		for (int modelIndex = 0; modelIndex < models.Num(); ++modelIndex)
 		{
@@ -149,7 +151,7 @@ namespace Freeking
 					u /= (float)faceTexture->GetWidth();
 					v /= (float)faceTexture->GetHeight();
 
-					faceVertices[edgeIndex] = { position, normal, { Vector2f(u, v), blackLightmapUV, blackLightmapUV } };
+					faceVertices[edgeIndex] = { position, normal, { Vector2f(u, v), firstLightmapUV, firstLightmapUV } };
 				}
 
 				if (face.LightmapOffset != 0)
@@ -171,10 +173,11 @@ namespace Freeking
 						}
 
 						auto lightmapOffset = face.LightmapOffset + (((lwidth * lheight) * 3) * lightStyleIndex);
-						auto rect = ReadLightmap(*lightmapImage, lmRootNode, lightmapOffset, lwidth, lheight, lightmapData.Data());
+						auto nodeIndex = ReadLightmap(*lightmapImage, lmRootNodeIndex, lightmapOffset, lwidth, lheight, lightmapData.Data());
 
-						if (rect)
+						if (nodeIndex != -1)
 						{
+							const auto& node = LightmapNode::GetNode(nodeIndex);
 							auto uvIndex = lightStyleIndex + 1;
 
 							for (size_t i = 0; i < faceVertices.size(); ++i)
@@ -192,8 +195,8 @@ namespace Freeking
 								vcoord += 8.0f;
 								vcoord /= lheight * 16.0f;
 
-								ucoord = ((ucoord * lwidth) + rect->GetX()) / lightmapImage->GetWidth();
-								vcoord = ((vcoord * lheight) + rect->GetY()) / lightmapImage->GetHeight();
+								ucoord = ((ucoord * lwidth) + node.GetX()) / lightmapImage->GetWidth();
+								vcoord = ((vcoord * lheight) + node.GetY()) / lightmapImage->GetHeight();
 
 								vertex.UV[uvIndex].x = ucoord;
 								vertex.UV[uvIndex].y = vcoord;
@@ -218,7 +221,9 @@ namespace Freeking
 				}
 			}
 		}
+		pf.Stop("Map create");
 
+		pf.Start();
 		_lightmapTexture = std::make_shared<Texture2D>(
 			lmSize,
 			lmSize,
@@ -226,6 +231,7 @@ namespace Freeking
 			GL_RGB,
 			GL_UNSIGNED_BYTE,
 			lightmapImage->Data.data());
+		pf.Stop("Lightmap upload");
 
 		pf.Start();
 
@@ -242,21 +248,23 @@ namespace Freeking
 		_lightmapSampler = std::make_shared<TextureSampler>(WrapMode::WRAPMODE_CLAMP_EDGE, FilterMode::FILTERMODE_LINEAR_NO_MIP);
 	}
 
-	std::shared_ptr<LightmapNode> Map::ReadLightmap(LightmapImage& image, std::shared_ptr<LightmapNode>& root, int offset, int width, int height, const uint8_t* buffer)
+	int Map::ReadLightmap(LightmapImage& image, int rootIndex, int offset, int width, int height, const uint8_t* buffer)
 	{
 		if (height <= 0 || width <= 0)
 		{
-			return nullptr;
+			return -1;
 		}
 
-		auto node = LightmapNode::Allocate(root, width, height);
-		if (node)
+		auto nodeIndex = LightmapNode::Allocate(rootIndex, width, height);
+		if (rootIndex != -1)
 		{
+			const auto& node = LightmapNode::GetNode(nodeIndex);
+
 			for (int x = 0; x < width; ++x)
 			{
 				for (int y = 0; y < height; ++y)
 				{
-					int dstPixel = ((node->GetY() + y) * image.GetWidth()) + (node->GetX() + x);
+					int dstPixel = ((node.GetY() + y) * image.GetWidth()) + (node.GetX() + x);
 					int dstIndex = dstPixel * 3;
 					int srcPixel = (y * width) + x;
 					int srcIndex = offset + (srcPixel * 3);
@@ -268,6 +276,6 @@ namespace Freeking
 			}
 		}
 
-		return node;
+		return nodeIndex;
 	}
 }

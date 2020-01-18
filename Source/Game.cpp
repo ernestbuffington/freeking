@@ -110,7 +110,7 @@ namespace Freeking
 
 		for (const auto& e : map->Entities())
 		{
-			if (e.classname._Starts_with("cast_"))
+			if (e.classname.substr(0, 5) == "cast_")
 			{
 				auto thug = std::make_shared<Thug>(e);
 				Vector3f origin(e.origin.x, e.origin.z, -e.origin.y);
@@ -118,8 +118,6 @@ namespace Freeking
 				camera.MoveTo(origin);
 
 				thugs.push_back(std::move(thug));
-
-				//break;
 			}
 		}
 

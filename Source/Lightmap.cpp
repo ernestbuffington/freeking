@@ -2,64 +2,72 @@
 
 namespace Freeking
 {
+	std::vector<LightmapNode> LightmapNode::NodePool = std::vector<LightmapNode>(65536);
+	int LightmapNode::CurrentNodeIndex = 0;
+
 	LightmapImage::LightmapImage(int width, int height) :
 		_width(width), _height(height)
 	{
 		Data.resize((width * height) * 3);
 	}
 
-	LightmapNode::LightmapNode(int x, int y, int width, int height) :
-		_x(x),
-		_y(y),
-		_width(width),
-		_height(height),
-		_filled(false),
-		_a(nullptr),
-		_b(nullptr)
+	int LightmapNode::NewNode(int x, int y, int width, int height)
 	{
+		auto& node = NodePool[CurrentNodeIndex];
+		node._x = x;
+		node._y = y;
+		node._width = width;
+		node._height = height;
+		node._filled = false;
+		node._a = -1;
+		node._b = -1;
+
+		return CurrentNodeIndex++;
 	}
 
-	std::shared_ptr<LightmapNode> LightmapNode::Allocate(std::shared_ptr<LightmapNode>& parent, int width, int height)
+	int LightmapNode::Allocate(int parentIndex, int width, int height)
 	{
-		if (parent->_a && parent->_b)
+		auto& parent = NodePool[parentIndex];
+
+		if (parent._a != -1 || parent._b != -1)
 		{
-			auto a = Allocate(parent->_a, width, height);
-			if (a)
+			auto a = Allocate(parent._b, width, height);
+			if (a != -1)
 			{
 				return a;
 			}
 
-			return Allocate(parent->_b, width, height);
+			return Allocate(parent._a, width, height);
 		}
 
-		if (parent->_filled)
+		if (parent._filled)
 		{
-			return nullptr;
+			return -1;
 		}
 
-		if (parent->_width < width || parent->_height < height)
+		if (parent._width < width || parent._height < height)
 		{
-			return nullptr;
+			return -1;
 		}
 
-		if (parent->_width == width && parent->_height == height)
+		if (parent._width == width && parent._height == height)
 		{
-			parent->_filled = true;
+			parent._filled = true;
 
-			return parent;
+			return parentIndex;
 		}
 
-		if ((parent->_width - width) > (parent->_height - height))
+		if ((parent._width - width) > (parent._height - height))
 		{
-			parent->_a = std::make_shared<LightmapNode>(parent->_x, parent->_y, width, parent->_height);
-			parent->_b = std::make_shared<LightmapNode>(parent->_x + width, parent->_y, parent->_width - width, parent->_height);
+			parent._a = NewNode(parent._x, parent._y, width, parent._height);
+			parent._b = NewNode(parent._x + width, parent._y, parent._width - width, parent._height);
 		}
 		else
 		{
-			parent->_a = std::make_shared<LightmapNode>(parent->_x, parent->_y, parent->_width, height);
-			parent->_b = std::make_shared<LightmapNode>(parent->_x, parent->_y + height, parent->_width, parent->_height - height);
+			parent._a = NewNode(parent._x, parent._y, parent._width, height);
+			parent._b = NewNode(parent._x, parent._y + height, parent._width, parent._height - height);
 		}
 
-		return Allocate(parent->_a, width, height);
+		return Allocate(parent._a, width, height);
 	}
 }

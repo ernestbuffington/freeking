@@ -26,24 +26,28 @@ namespace Freeking
 	{
 	public:
 
-		LightmapNode(int x, int y, int width, int height);
-
-		static std::shared_ptr<LightmapNode> Allocate(std::shared_ptr<LightmapNode>& parent, int width, int height);
+		static int Allocate(int parentIndex, int width, int height);
 
 		inline int GetX() const { return _x; }
 		inline int GetY() const { return _y; }
 		inline int GetWidth() const { return _width; }
 		inline int GetHeight() const { return _height; }
 
+		static int NewNode(int x, int y, int width, int height);
+		inline static const LightmapNode& GetNode(int index) { return NodePool.at(index); }
+
 	private:
+
+		static std::vector<LightmapNode> NodePool;
+		static int CurrentNodeIndex;
 
 		int _x;
 		int _y;
 		int _width;
 		int _height;
 		bool _filled;
-		std::shared_ptr<LightmapNode> _a;
-		std::shared_ptr<LightmapNode> _b;
+		int _a;
+		int _b;
 	};
 }
 
