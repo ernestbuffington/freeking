@@ -6,6 +6,7 @@
 #include "Util.h"
 #include "Mesh.h"
 #include "Paths.h"
+#include "Profiler.h"
 #include <array>
 
 namespace Freeking
@@ -31,6 +32,8 @@ namespace Freeking
 
 	Map::Map(const BspFile& bspFile)
 	{
+		Profiler pf;
+
 		auto entities = bspFile.GetLumpArray<char>(bspFile.Header.Entities);
 		auto vertices = bspFile.GetLumpArray<Vector3f>(bspFile.Header.Vertices);
 		auto models = bspFile.GetLumpArray<BspModel>(bspFile.Header.Models);
@@ -41,15 +44,27 @@ namespace Freeking
 		auto textureInfo = bspFile.GetLumpArray<BspTextureInfo>(bspFile.Header.TextureInfo);
 		auto lightmapData = bspFile.GetLumpArray<uint8_t>(bspFile.Header.Lightmaps);
 
+		pf.Start();
 		std::string entityString(entities.Data(), entities.Num());
 		_entityLump = std::make_unique<EntityLump>(entityString);
+		pf.Stop("EntityLump");
 
+		pf.Start();
+		std::map<std::string, std::shared_ptr<Texture2D>> textures;
 		for (int i = 0; i < textureInfo.Num(); ++i)
 		{
 			const auto& texInfo = textureInfo[i];
-			auto path = "textures/" + (std::string(texInfo.TextureName) + std::string(".tga"));
-			_textures.push_back(Util::LoadTexture(path));
+			auto textureName = std::string(texInfo.TextureName);
+
+			if (_textures.find(textureName) == _textures.end())
+			{
+				auto path = "textures/" + (textureName + std::string(".tga"));
+				_textures.emplace(textureName, Util::LoadTexture(path));
+			}
 		}
+		std::cout << _textures.size() << " map textures" << std::endl;
+
+		pf.Stop("Map textures");
 
 		int lmSize = 1024;
 		auto lightmapImage = std::make_shared<LightmapImage>(lmSize, lmSize);
@@ -81,20 +96,23 @@ namespace Freeking
 				}
 
 				Mesh* mesh = nullptr;
+				auto textureName = std::string(faceTextureInfo.TextureName);
 
-				if (_meshes.find(face.TextureInfo) == _meshes.end())
+				if (_meshes.find(textureName) == _meshes.end())
 				{
 					auto newMesh = std::make_unique<Mesh>();
-					newMesh->SetDiffuse(_textures[face.TextureInfo]);
-					_meshes.insert(std::make_pair(face.TextureInfo, std::move(newMesh)));
+					newMesh->SetDiffuse(_textures[textureName]);
+					_meshes.emplace(textureName, std::move(newMesh));
 				}
 
-				mesh = _meshes[face.TextureInfo].get();
+				mesh = _meshes[textureName].get();
 
 				if (mesh == nullptr)
 				{
 					continue;
 				}
+
+				const auto& faceTexture = _textures[textureName];
 
 				float umin = std::numeric_limits<float>::max();
 				float vmin = std::numeric_limits<float>::max();
@@ -128,8 +146,8 @@ namespace Freeking
 
 					faceUVs[edgeIndex] = Vector2f(u, v);
 
-					u /= (float)_textures[face.TextureInfo]->GetWidth();
-					v /= (float)_textures[face.TextureInfo]->GetHeight();
+					u /= (float)faceTexture->GetWidth();
+					v /= (float)faceTexture->GetHeight();
 
 					faceVertices[edgeIndex] = { position, normal, { Vector2f(u, v), blackLightmapUV, blackLightmapUV } };
 				}
@@ -209,11 +227,15 @@ namespace Freeking
 			GL_UNSIGNED_BYTE,
 			lightmapImage->Data.data());
 
+		pf.Start();
+
 		for (auto& mesh : _meshes)
 		{
 			mesh.second->SetLightmap(_lightmapTexture);
 			mesh.second->Commit();
 		}
+
+		pf.Stop("Map commit");
 
 		_shader = Util::LoadShader("Shaders/Mesh.vert", "Shaders/Mesh.frag");
 		_textureSampler = std::make_shared<TextureSampler>(WrapMode::WRAPMODE_REPEAT, FilterMode::FILTERMODE_LINEAR);

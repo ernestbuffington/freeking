@@ -27,9 +27,9 @@ namespace Freeking
 
 	private:
 
-		std::map<uint16_t, std::unique_ptr<Mesh>> _meshes;
+		std::map<std::string, std::unique_ptr<Mesh>> _meshes;
 		std::shared_ptr<Texture2D> _lightmapTexture;
-		std::vector<std::shared_ptr<Texture2D>> _textures;
+		std::map<std::string, std::shared_ptr<Texture2D>> _textures;
 		std::shared_ptr<ShaderProgram> _shader;
 		std::unique_ptr<EntityLump> _entityLump;
 		std::shared_ptr<TextureSampler> _textureSampler;
