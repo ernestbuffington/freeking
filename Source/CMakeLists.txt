@@ -70,4 +70,6 @@ if (MSVC)
   endfunction()
 
     windows_copy_files(${PROJECT_NAME} ${SDL2_DLL_DIR} "${CMAKE_BINARY_DIR}/bin/$<CONFIG>/" SDL2.dll)
+    windows_copy_files(${PROJECT_NAME} "${CMAKE_SOURCE_DIR}/Assets/" "${CMAKE_BINARY_DIR}/bin/$<CONFIG>/Assets")
+    windows_copy_files(${PROJECT_NAME} "${CMAKE_SOURCE_DIR}/Shaders/" "${CMAKE_BINARY_DIR}/bin/$<CONFIG>/Shaders")
 endif()
