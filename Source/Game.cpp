@@ -105,7 +105,23 @@ namespace Freeking
 		bool debug = true;
 		auto font = Util::LoadFont("Assets/roboto-bold.json");
 		auto map = std::make_shared<Map>(BspFile::Create(FileSystem::GetFileData("maps/sr1.bsp").data()));
-		auto thug = std::make_shared<Thug>();
+
+		std::vector<std::shared_ptr<Thug>> thugs;
+
+		for (const auto& e : map->Entities())
+		{
+			if (e.classname._Starts_with("cast_"))
+			{
+				auto thug = std::make_shared<Thug>(e);
+				Vector3f origin(e.origin.x, e.origin.z, -e.origin.y);
+				thug->ModelMatrix = Matrix4x4::Translation(origin) * Matrix3x3::RotationY(Math::DegreesToRadians(e.angle)).ToMatrix4x4();
+				camera.MoveTo(origin);
+
+				thugs.push_back(std::move(thug));
+
+				//break;
+			}
+		}
 
 		while (running)
 		{
@@ -175,7 +191,11 @@ namespace Freeking
 			Matrix4x4 viewProjectionMatrix = projectionMatrix * viewMatrix;
 
 			map->Render(viewProjectionMatrix);
-			thug->Render(viewProjectionMatrix, deltaTime);
+
+			for (const auto& thug : thugs)
+			{
+				thug->Render(viewProjectionMatrix, deltaTime);
+			}
 
 			if (debug)
 			{
@@ -184,6 +204,9 @@ namespace Freeking
 					Vector3f origin(e.origin.x, e.origin.z, -e.origin.y);
 					Vector3f bounds(10, 10, 10);
 
+					std::string name;
+					e.TryGetString("name", name);
+
 					Vector2f screenPosition;
 					float distance;
 					if (Util::WorldPointToNormalisedScreenPoint(origin, screenPosition, projectionMatrix, viewMatrix, 512.0f, distance))
@@ -191,7 +214,7 @@ namespace Freeking
 						float alpha = 1.0f - (distance / 512.0f);
 						lineRenderer->DrawSphere(origin, 4.0f, 4, 4, Vector4f(0, 1, 1, alpha));
 						screenPosition = Util::ScreenSpaceToPixelPosition(screenPosition, Vector4i(0, 0, _viewportWidth, _viewportHeight));
-						spriteBatch->DrawText(font.get(), e.classname, screenPosition, Vector4f(1, 1, 1, alpha), 0.25f);
+						spriteBatch->DrawText(font.get(), e.classname + "(" + name + ")", screenPosition, Vector4f(1, 1, 1, alpha), 0.25f);
 					}
 				}
 

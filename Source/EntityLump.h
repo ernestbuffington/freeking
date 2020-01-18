@@ -17,9 +17,10 @@ namespace Freeking
 		{
 		public:
 
-			bool TryGetString(const std::string& key, std::string& value);
-			bool TryGetFloat(const std::string& key, float& value);
-			bool TryGetVector(const std::string& key, Vector3f& value);
+			bool TryGetString(const std::string& key, std::string& value) const;
+			bool TryGetSplitString(const std::string& key, std::vector<std::string>& value) const;
+			bool TryGetFloat(const std::string& key, float& value) const;
+			bool TryGetVector(const std::string& key, Vector3f& value) const;
 
 			std::map<std::string, std::string> keyValues;
 
@@ -27,6 +28,7 @@ namespace Freeking
 			std::string targetname;
 			std::string target;
 			Vector3f origin;
+			float angle;
 			bool logic;
 		};
 

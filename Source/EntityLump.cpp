@@ -18,6 +18,7 @@ namespace Freeking
 			{
 				entityDef.TryGetString("targetname", entityDef.targetname);
 				entityDef.TryGetString("target", entityDef.target);
+				entityDef.TryGetFloat("angle", entityDef.angle);
 				entityDef.logic = !entityDef.TryGetVector("origin", entityDef.origin);
 
 				Entities.push_back(entityDef);
@@ -25,7 +26,7 @@ namespace Freeking
 		}
 	}
 
-	bool EntityLump::EntityDef::TryGetString(const std::string& key, std::string& value)
+	bool EntityLump::EntityDef::TryGetString(const std::string& key, std::string& value) const
 	{
 		auto it = keyValues.find(key);
 		if (it == keyValues.end())
@@ -38,7 +39,20 @@ namespace Freeking
 		return true;
 	}
 
-	bool EntityLump::EntityDef::TryGetFloat(const std::string& key, float& value)
+	bool EntityLump::EntityDef::TryGetSplitString(const std::string& key, std::vector<std::string>& value) const
+	{
+		auto it = keyValues.find(key);
+		if (it == keyValues.end())
+		{
+			return false;
+		}
+
+		value = SplitString(it->second, " ");
+
+		return true;
+	}
+
+	bool EntityLump::EntityDef::TryGetFloat(const std::string& key, float& value) const
 	{
 		std::string s;
 		if (!TryGetString(key, s))
@@ -49,7 +63,7 @@ namespace Freeking
 		return TryParseFloat(s, value);
 	}
 
-	bool EntityLump::EntityDef::TryGetVector(const std::string& key, Vector3f& value)
+	bool EntityLump::EntityDef::TryGetVector(const std::string& key, Vector3f& value) const
 	{
 		std::string s;
 		if (!TryGetString(key, s))

@@ -62,6 +62,7 @@ namespace Freeking
 
 		struct FrameTransform
 		{
+			std::string name;
 			Vector3f translate;
 			Vector3f scale;
 		};

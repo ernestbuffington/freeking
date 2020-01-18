@@ -2,31 +2,76 @@
 #include "MdxFile.h"
 #include "Util.h"
 #include "FileSystem.h"
+#include "Input.h"
+#include <charconv>
 
 namespace Freeking
 {
-	Thug::Thug() :
-		_frameTime(0.0)
+	Thug::Thug(const EntityLump::EntityDef& entityDef) :
+		_frameTime(0.0),
+		_animIndex(0)
 	{
+		auto actorName = entityDef.classname.substr(5);
+
 		static const std::array<std::string, 3> bodyParts =
 		{
-			"body",
 			"head",
+			"body",
 			"legs",
 		};
 
+		static std::unordered_map<std::string, std::array<std::string, 3>> skinFolders =
+		{
+			{"bitch", {"bitch", "bitch", "bitch"}},
+			{"bum_sit", {"thug", "thug", "thug"}},
+			{"punk", {"thug", "thug", "thug"}},
+			{"runt", {"runt", "runt", "thug"}},
+			{"shorty", {"thug", "thug", "thug"}},
+			{"thug", {"thug", "thug", "thug"}},
+			{"thug_sit", {"thug", "thug", "thug"}},
+			{"whore", {"bitch", "bitch", "bitch"}},
+		};
+
+		const auto& skinFolder = skinFolders[actorName];
+
+		std::vector<std::string> artSkins;
+		entityDef.TryGetSplitString("art_skins", artSkins);
+
+		int bodyPartIndex = 0;
 		for (const auto& bodyPart : bodyParts)
 		{
-			auto mdxBuffer = FileSystem::GetFileData("models/actors/thug/" + bodyPart + ".mdx");
+			auto mdxBuffer = FileSystem::GetFileData("models/actors/" + actorName + "/" + bodyPart + ".mdx");
 			auto mdxData = mdxBuffer.data();
 			auto& mdxFile = MDXFile::Create(mdxData);
 
 			auto mesh = std::make_shared<KeyframeMesh>();
 			mdxFile.Build(mdxData, mesh);
-			mesh->SetDiffuse(Util::LoadTexture("models/actors/thug/" + bodyPart + "_001.tga"));
+			mesh->SetDiffuse(Util::LoadTexture("models/actors/" + skinFolder[bodyPartIndex] + "/" + bodyPart + "_" + artSkins[bodyPartIndex] + ".tga"));
 			mesh->Commit();
 
 			_meshes.push_back(mesh);
+
+			bodyPartIndex++;
+		}
+
+		std::string currentFrameName = "";
+		size_t currentFrameIndex = 0;
+
+		for (auto frameTransform : _meshes[0]->FrameTransforms)
+		{
+			auto indexStart = frameTransform.name.find_last_of('_');
+			auto frameName = frameTransform.name.substr(0, indexStart);
+
+			if (currentFrameName != frameName)
+			{
+				currentFrameName = frameName;
+				_animFrameIndex.push_back({ currentFrameIndex, 0 });
+			}
+
+			auto& animFrameIndex = _animFrameIndex.back();
+			animFrameIndex.numFrames += 1;
+
+			currentFrameIndex++;
 		}
 
 		_shader = Util::LoadShader("Shaders/VertexSkinnedMesh.vert", "Shaders/VertexSkinnedMesh.frag");
@@ -34,12 +79,24 @@ namespace Freeking
 
 	void Thug::Render(const Matrix4x4& viewProjection, double dt)
 	{
+		if (Input::JustPressed(Button::KeyLeft))
+		{
+			_animIndex--;
+		}
+		else if (Input::JustPressed(Button::KeyRight))
+		{
+			_animIndex++;
+		}
+
+		_animIndex = Math::Clamp(_animIndex, 0, (int)_animFrameIndex.size() - 1);
+
 		_shader->Bind();
 		_shader->SetUniformValue("diffuse", 0);
 		_shader->SetUniformValue("frameVertexBuffer", 1);
 		_shader->SetUniformValue("normalBuffer", 2);
 
-		auto frameCount = _meshes.at(0)->GetFrameCount();
+		auto animFrameIndex = _animFrameIndex[_animIndex];
+		auto frameCount = animFrameIndex.numFrames;
 		_frameTime += (10.0 * dt);
 		_frameTime = fmod(_frameTime, (float)frameCount);
 
@@ -49,8 +106,11 @@ namespace Freeking
 		float delta = (float)_frameTime - (float)frame;
 		delta = Math::Clamp(delta, 0.0f, 1.0f);
 
+		frame += animFrameIndex.firstFrame;
+		nextFrame += animFrameIndex.firstFrame;
+
 		_shader->SetUniformValue("delta", delta);
-		_shader->SetUniformValue("viewProj", viewProjection);
+		_shader->SetUniformValue("viewProj", viewProjection * ModelMatrix);
 
 		for (const auto& mesh : _meshes)
 		{

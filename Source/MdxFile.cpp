@@ -20,6 +20,7 @@ namespace Freeking
 
 			mesh->FrameTransforms.push_back(
 				{
+					frameName,
 					Vector3f(frame->Translate[0], frame->Translate[1], frame->Translate[2]),
 					Vector3f(frame->Scale[0], frame->Scale[1], frame->Scale[2])
 				});
@@ -89,6 +90,12 @@ namespace Freeking
 			}
 
 			vertexOffset += numCommandVertices;
+		}
+
+		pos = Header.OffsetSkins;
+		for (int skinIndex = 0; skinIndex < Header.NumSkins; ++skinIndex)
+		{
+			const auto& skin = Read<MDXSkin>(data, pos, 1);
 		}
 	}
 }
