@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
-    <assemblyIdentity type="win64" name="kingpin" version="1.0.0.0"/>
-    <description>kingpin</description>
+    <assemblyIdentity type="win64" name="freeking" version="1.0.0.0"/>
+    <description>freeking</description>
     <application xmlns="urn:schemas-microsoft-com:asm.v3">
         <windowsSettings xmlns:ws="http://schemas.microsoft.com/SMI/2005/WindowsSettings">
             <ws:dpiAware>True</ws:dpiAware>

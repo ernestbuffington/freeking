@@ -4,8 +4,8 @@ file(GLOB_RECURSE FREEKING_SOURCES "${CMAKE_CURRENT_LIST_DIR}/*.cpp" "${CMAKE_CU
 file(GLOB_RECURSE FREEKING_C_SOURCES "${CMAKE_CURRENT_LIST_DIR}/*.c")
 file(GLOB_RECURSE FREEKING_HEADERS "${CMAKE_CURRENT_LIST_DIR}/*.h")
 
-set(FREEKING_RC ${CMAKE_SOURCE_DIR}/assets/kingpin.rc)
-set(FREEKING_MANIFEST ${CMAKE_SOURCE_DIR}/assets/kingpin.exe.manifest)
+set(FREEKING_RC ${CMAKE_SOURCE_DIR}/resources/freeking.rc)
+set(FREEKING_MANIFEST ${CMAKE_SOURCE_DIR}/resources/freeking.exe.manifest)
 
 # imgui use GLAD loader
 add_definitions(-DIMGUI_IMPL_OPENGL_LOADER_GLAD)
