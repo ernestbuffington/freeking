@@ -54,6 +54,35 @@ namespace Freeking
 			bodyPartIndex++;
 		}
 
+		if (actorName == "punk")
+		{
+			static const std::array<std::string, 3> attachments =
+			{
+				"cigar",
+				"fedora",
+				"tommygun"
+			};
+
+			for (const auto& attachment : attachments)
+			{
+				auto mdxBuffer = FileSystem::GetFileData("models/actors/" + actorName + "/" + attachment + ".mdx");
+				if (mdxBuffer.empty())
+				{
+					continue;
+				}
+
+				auto mdxData = mdxBuffer.data();
+				auto& mdxFile = MDXFile::Create(mdxData);
+
+				auto mesh = std::make_shared<KeyframeMesh>();
+				mdxFile.Build(mdxData, mesh);
+				mesh->SetDiffuse(Util::LoadTexture(mesh->Skins[0]));
+				mesh->Commit();
+
+				_meshes.push_back(mesh);
+			}
+		}
+
 		std::string currentFrameName = "";
 		size_t currentFrameIndex = 0;
 

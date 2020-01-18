@@ -52,6 +52,17 @@ namespace Freeking
 		return true;
 	}
 
+	bool EntityLump::EntityDef::TryGetInt(const std::string& key, int& value) const
+	{
+		std::string s;
+		if (!TryGetString(key, s))
+		{
+			return false;
+		}
+
+		return TryParseInt(s, value);
+	}
+
 	bool EntityLump::EntityDef::TryGetFloat(const std::string& key, float& value) const
 	{
 		std::string s;
@@ -98,6 +109,11 @@ namespace Freeking
 	bool EntityLump::TryParseFloat(const std::string& s, float& v)
 	{
 		return std::from_chars(s.data(), s.data() + s.size(), v, std::chars_format::general).ec == std::errc();
+	}
+
+	bool EntityLump::TryParseInt(const std::string& s, int& v)
+	{
+		return std::from_chars(s.data(), s.data() + s.size(), v).ec == std::errc();
 	}
 
 	std::vector<std::string> EntityLump::SplitString(const std::string& s, const std::string& delimiter)

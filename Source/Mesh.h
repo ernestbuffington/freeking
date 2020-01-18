@@ -80,6 +80,7 @@ namespace Freeking
 		std::vector<Vertex> Vertices;
 		std::vector<FrameVertex> FrameVertices;
 		std::vector<FrameTransform> FrameTransforms;
+		std::vector<std::string> Skins;
 
 	private:
 

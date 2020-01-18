@@ -1,5 +1,6 @@
 #include "MdxFile.h"
 #include "NormalTable.h"
+#include <iostream>
 
 namespace Freeking
 {
@@ -96,6 +97,8 @@ namespace Freeking
 		for (int skinIndex = 0; skinIndex < Header.NumSkins; ++skinIndex)
 		{
 			const auto& skin = Read<MDXSkin>(data, pos, 1);
+			std::string skinName((char*)skin->Path.data());
+			mesh->Skins.push_back(skinName);
 		}
 	}
 }

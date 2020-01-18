@@ -19,6 +19,7 @@ namespace Freeking
 
 			bool TryGetString(const std::string& key, std::string& value) const;
 			bool TryGetSplitString(const std::string& key, std::vector<std::string>& value) const;
+			bool TryGetInt(const std::string& key, int& value) const;
 			bool TryGetFloat(const std::string& key, float& value) const;
 			bool TryGetVector(const std::string& key, Vector3f& value) const;
 
@@ -39,6 +40,7 @@ namespace Freeking
 		static bool TryParseEntityDef(const std::string& string, size_t& pos, EntityDef& entityDef);
 		static bool TryParseVector(const std::string& s, Vector3f& v);
 		static bool TryParseFloat(const std::string& s, float& v);
+		static bool TryParseInt(const std::string& s, int& v);
 
 		static std::vector<std::string> SplitString(const std::string& s, const std::string& delimiter);
 		static std::string ParseSubString(const std::string& string, size_t& pos);
