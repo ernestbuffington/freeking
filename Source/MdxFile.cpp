@@ -11,6 +11,11 @@ namespace Freeking
 
 	void MDXFile::Build(std::shared_ptr<KeyframeMesh>& mesh) const
 	{
+		if (!IsValid())
+		{
+			return;
+		}
+
 		uint32_t pos = Header.OffsetFrames;
 		for (int frameIndex = 0; frameIndex < Header.NumFrames; ++frameIndex)
 		{

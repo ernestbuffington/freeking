@@ -18,6 +18,11 @@ namespace Freeking
 	std::shared_ptr<Texture2D> Util::LoadTexture(const std::string& path)
 	{
 		auto buffer = FileSystem::GetFileData(path);
+		if (buffer.empty())
+		{
+			return nullptr;
+		}
+
 		auto data = buffer.data();
 
 		int imageWidth;
@@ -56,6 +61,11 @@ namespace Freeking
 	std::shared_ptr<Font> Util::LoadFont(const std::string& path)
 	{
 		auto fontBuffer = FileSystem::GetFileData(path);
+		if (fontBuffer.empty())
+		{
+			return nullptr;
+		}
+
 		auto fontString = std::string(fontBuffer.data(), fontBuffer.size());
 		auto fontJson = JSON::Load(fontString);
 

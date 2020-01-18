@@ -37,7 +37,17 @@ namespace Freeking
 	std::filesystem::path Paths::SteamGameDir(uint32_t appid)
 	{
 		const auto& steamPath = SteamDir();
+		if (steamPath.empty())
+		{
+			return {};
+		}
+
 		auto vdfPath = steamPath / "steamapps/libraryfolders.vdf";
+		if (!std::filesystem::exists(vdfPath))
+		{
+			return {};
+		}
+
 		std::ifstream vdfFile(vdfPath);
 		auto vdfRoot = tyti::vdf::read(vdfFile);
 
@@ -81,6 +91,6 @@ namespace Freeking
 			}
 		}
 
-		return std::filesystem::path();
+		return {};
 	}
 }

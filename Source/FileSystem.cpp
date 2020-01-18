@@ -8,7 +8,10 @@ namespace Freeking
 
 	void FileSystem::AddFileSystem(std::unique_ptr<IFileSystem> fileSystem)
 	{
-		_fileSystems.push_back(std::move(fileSystem));
+		if (fileSystem)
+		{
+			_fileSystems.push_back(std::move(fileSystem));
+		}
 	}
 
 	bool FileSystem::FileExists(const std::string& filename)

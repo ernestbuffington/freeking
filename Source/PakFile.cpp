@@ -4,7 +4,12 @@ namespace Freeking
 {
 	std::unique_ptr<PakFile> PakFile::Create(const std::filesystem::path& path)
 	{
-		return std::make_unique<PakFile>(path);
+		if (std::filesystem::exists(path))
+		{
+			return std::make_unique<PakFile>(path);
+		}
+
+		return nullptr;
 	}
 
 	PakFile::PakFile(const std::filesystem::path& path)

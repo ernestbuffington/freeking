@@ -52,32 +52,32 @@ namespace Freeking
 			bodyPartIndex++;
 		}
 
-		if (actorName == "punk")
-		{
-			static const std::array<std::string, 3> attachments =
-			{
-				"cigar",
-				"fedora",
-				"tommygun"
-			};
+		//if (actorName == "punk")
+		//{
+		//	static const std::array<std::string, 3> attachments =
+		//	{
+		//		"cigar",
+		//		"fedora",
+		//		"tommygun"
+		//	};
 
-			for (const auto& attachment : attachments)
-			{
-				auto mdxBuffer = FileSystem::GetFileData("models/actors/" + actorName + "/" + attachment + ".mdx");
-				if (mdxBuffer.empty())
-				{
-					continue;
-				}
+		//	for (const auto& attachment : attachments)
+		//	{
+		//		auto mdxBuffer = FileSystem::GetFileData("models/actors/" + actorName + "/" + attachment + ".mdx");
+		//		if (mdxBuffer.empty())
+		//		{
+		//			continue;
+		//		}
 
-				auto& mdxFile = MDXFile::Create(mdxBuffer.data());
-				auto mesh = std::make_shared<KeyframeMesh>();
-				mdxFile.Build(mesh);
-				mesh->SetDiffuse(Util::LoadTexture(mesh->Skins[0]));
-				mesh->Commit();
+		//		auto& mdxFile = MDXFile::Create(mdxBuffer.data());
+		//		auto mesh = std::make_shared<KeyframeMesh>();
+		//		mdxFile.Build(mesh);
+		//		mesh->SetDiffuse(Util::LoadTexture(mesh->Skins[0]));
+		//		mesh->Commit();
 
-				_meshes.push_back(mesh);
-			}
-		}
+		//		_meshes.push_back(mesh);
+		//	}
+		//}
 
 		std::string currentFrameName = "";
 		size_t currentFrameIndex = 0;

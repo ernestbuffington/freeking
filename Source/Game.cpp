@@ -211,7 +211,9 @@ namespace Freeking
 						float alpha = 1.0f - (distance / 512.0f);
 						lineRenderer->DrawSphere(origin, 4.0f, 4, 4, Vector4f(0, 1, 1, alpha));
 						screenPosition = Util::ScreenSpaceToPixelPosition(screenPosition, Vector4i(0, 0, _viewportWidth, _viewportHeight));
-						spriteBatch->DrawText(font.get(), e.classname + "(" + name + ")", screenPosition, Vector4f(1, 1, 1, alpha), 0.25f);
+						auto text = e.classname + " (" + name + ")";
+						spriteBatch->DrawText(font.get(), text, screenPosition + Vector2f(2, 2), Vector4f(0, 0, 0, alpha), 0.25f);
+						spriteBatch->DrawText(font.get(), text, screenPosition, Vector4f(1, 1, 1, alpha), 0.25f);
 					}
 				}
 
@@ -219,8 +221,21 @@ namespace Freeking
 				lineRenderer->Flush(viewProjectionMatrix);
 				glEnable(GL_DEPTH_TEST);
 
+				auto fps = timer.GetFps();
+				Vector4f fpsColor = Vector4f(0, 1, 0, 1);
+
+				if (fps < 30)
+				{
+					fpsColor = Vector4f(1, 0, 0, 1);
+				}
+				else if (fps < 60)
+				{
+					fpsColor = Vector4f(1, 1, 0, 1);
+				}
+
 				auto orthoProjection = Matrix4x4::Ortho(0, (float)_viewportWidth, (float)_viewportHeight, 0, -1.0f, 1.0f);
-				spriteBatch->DrawText(font.get(), std::to_string(timer.GetFps()), Vector2f(8, 0), Vector4f(1, 1, 1, 1), 0.5f);
+				spriteBatch->DrawText(font.get(), std::to_string(fps), Vector2f(10, 2), Vector4f(0, 0, 0, 1), 0.75f);
+				spriteBatch->DrawText(font.get(), std::to_string(fps), Vector2f(8, 0), fpsColor, 0.75f);
 				spriteBatch->Flush(orthoProjection);
 			}
 
