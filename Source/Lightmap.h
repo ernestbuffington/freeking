@@ -11,6 +11,8 @@ namespace Freeking
 
 		LightmapImage(int width, int height);
 
+		void Insert(int rectX, int rectY, int width, int height, const uint8_t* buffer);
+
 		inline int GetWidth() const { return _width; }
 		inline int GetHeight() const { return _height; }
 

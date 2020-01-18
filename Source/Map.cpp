@@ -73,7 +73,7 @@ namespace Freeking
 		auto lightmapImage = std::make_shared<LightmapImage>(lmSize, lmSize);
 
 		std::array<uint8_t, (16 * 16) * 3> blackPixels = { 0 };
-		ReadLightmap(*lightmapImage, 0, 0, 0, 16, 16, blackPixels.data());
+		lightmapImage->Insert(0, 0, 16, 16, blackPixels.data());
 		Vector2f firstLightmapUV(8.0f / lightmapImage->GetWidth(), 8.0f / lightmapImage->GetHeight());
 
 		auto packingRoot = rectpack2D::empty_spaces<false>({ lmSize, lmSize });
@@ -180,7 +180,7 @@ namespace Freeking
 						if (packingNode.has_value())
 						{
 							auto lightmapOffset = face.LightmapOffset + (((lwidth * lheight) * 3) * lightStyleIndex);
-							ReadLightmap(*lightmapImage, lightmapOffset, packingNode->x, packingNode->y, lwidth, lheight, lightmapData.Data());
+							lightmapImage->Insert(packingNode->x, packingNode->y, lwidth, lheight, lightmapData.Data() + lightmapOffset);
 
 							auto uvIndex = lightStyleIndex + 1;
 
@@ -250,28 +250,5 @@ namespace Freeking
 		_shader = Util::LoadShader("Shaders/Mesh.vert", "Shaders/Mesh.frag");
 		_textureSampler = std::make_shared<TextureSampler>(WrapMode::WRAPMODE_REPEAT, FilterMode::FILTERMODE_LINEAR);
 		_lightmapSampler = std::make_shared<TextureSampler>(WrapMode::WRAPMODE_CLAMP_EDGE, FilterMode::FILTERMODE_LINEAR_NO_MIP);
-	}
-
-	void Map::ReadLightmap(LightmapImage& image, int offset, int rectX, int rectY, int width, int height, const uint8_t* buffer)
-	{
-		if (height <= 0 || width <= 0)
-		{
-			return;
-		}
-
-		for (int x = 0; x < width; ++x)
-		{
-			for (int y = 0; y < height; ++y)
-			{
-				int dstPixel = ((rectY + y) * image.GetWidth()) + (rectX + x);
-				int dstIndex = dstPixel * 3;
-				int srcPixel = (y * width) + x;
-				int srcIndex = offset + (srcPixel * 3);
-
-				image.Data[dstIndex] = buffer[srcIndex];
-				image.Data[dstIndex + 1] = buffer[srcIndex + 1];
-				image.Data[dstIndex + 2] = buffer[srcIndex + 2];
-			}
-		}
 	}
 }
