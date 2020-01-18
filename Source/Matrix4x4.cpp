@@ -1,6 +1,6 @@
 #include "Matrix4x4.h"
 #include "Matrix3x3.h"
-#include "Math.h"
+#include "Maths.h"
 
 namespace Freeking
 {

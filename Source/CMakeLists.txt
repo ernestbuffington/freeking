@@ -4,8 +4,8 @@ file(GLOB_RECURSE FREEKING_SOURCES "${CMAKE_CURRENT_LIST_DIR}/*.cpp" "${CMAKE_CU
 file(GLOB_RECURSE FREEKING_C_SOURCES "${CMAKE_CURRENT_LIST_DIR}/*.c")
 file(GLOB_RECURSE FREEKING_HEADERS "${CMAKE_CURRENT_LIST_DIR}/*.h")
 
-set(FREEKING_RC ${CMAKE_SOURCE_DIR}/assets/windows/freeking.rc)
-set(FREEKING_MANIFEST ${CMAKE_SOURCE_DIR}/assets/windows/freeking.exe.manifest)
+set(FREEKING_RC ${CMAKE_SOURCE_DIR}/assets/kingpin.rc)
+set(FREEKING_MANIFEST ${CMAKE_SOURCE_DIR}/assets/kingpin.exe.manifest)
 
 # imgui use GLAD loader
 add_definitions(-DIMGUI_IMPL_OPENGL_LOADER_GLAD)
@@ -45,9 +45,9 @@ set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 target_link_libraries(${PROJECT_NAME}
   PRIVATE
     SDL2::SDL2
-    OpenAL::OpenAL
-    fmt::fmt
   )
+
+include_directories(ThirdParty/glad/include)
 
 # configure filesystem for slightly older compilers
 if (_CXX_FILESYSTEM_HAVE_HEADER)
@@ -70,5 +70,4 @@ if (MSVC)
   endfunction()
 
     windows_copy_files(${PROJECT_NAME} ${SDL2_DLL_DIR} "${CMAKE_BINARY_DIR}/bin/$<CONFIG>/" SDL2.dll)
-    windows_copy_files(${PROJECT_NAME} ${OPENAL_DLL_DIR} "${CMAKE_BINARY_DIR}/bin/$<CONFIG>/" soft_oal.dll)
 endif()

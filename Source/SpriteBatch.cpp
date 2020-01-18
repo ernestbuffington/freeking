@@ -4,7 +4,7 @@
 #include "VertexBuffer.h"
 #include "Texture2D.h"
 #include "Font.h"
-#include "Math.h"
+#include "Maths.h"
 
 namespace Freeking
 {

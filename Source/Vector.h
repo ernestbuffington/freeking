@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Math.h"
-#include <cmath>
+#include "Maths.h"
 #include <ostream>
 #include <sstream>
 

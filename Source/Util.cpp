@@ -8,9 +8,9 @@
 #include <fstream> 
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "../ThirdParty/stb/stb_image.h"
+#include "ThirdParty/stb/stb_image.h"
 
-#include "../ThirdParty/json.hpp"
+#include "ThirdParty/json/json.hpp"
 using json::JSON;
 
 namespace Freeking

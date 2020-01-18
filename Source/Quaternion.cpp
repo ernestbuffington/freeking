@@ -1,8 +1,7 @@
 #include "Quaternion.h"
 #include "Matrix3x3.h"
 #include "Matrix4x4.h"
-#include "Math.h"
-#include <cmath>
+#include "Maths.h"
 
 namespace Freeking
 {

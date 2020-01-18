@@ -8,7 +8,7 @@
 #include "Paths.h"
 #include "Profiler.h"
 #include <array>
-#include "../ThirdParty/rectpack2d/finders_interface.h"
+#include "ThirdParty/rectpack2d/finders_interface.h"
 
 namespace Freeking
 {

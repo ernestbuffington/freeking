@@ -15,10 +15,10 @@ namespace Freeking
 			HKEY key;
 			TCHAR value[1024];
 			DWORD length = sizeof(value);
-			LONG result = RegOpenKeyEx(HKEY_CURRENT_USER, L"Software\\Valve\\Steam", 0, KEY_READ, &key);
+			LONG result = RegOpenKeyEx(HKEY_CURRENT_USER, "Software\\Valve\\Steam", 0, KEY_READ, &key);
 			if (result == 0)
 			{
-				RegQueryValueEx(key, L"SteamPath", NULL, NULL, reinterpret_cast<LPBYTE>(&value), &length);
+				RegQueryValueEx(key, "SteamPath", NULL, NULL, reinterpret_cast<LPBYTE>(&value), &length);
 				RegCloseKey(key);
 
 				return value;

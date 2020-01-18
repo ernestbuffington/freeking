@@ -37,8 +37,8 @@ namespace Freeking
 		FileSystem::AddFileSystem(PakFile::Create(Paths::KingpinDir() / "main/Pak0.pak"));	
 
 		static const std::string windowTitle = "Kingpin";
-		_viewportWidth = 1920;
-		_viewportHeight = 1080;
+		_viewportWidth = 2880;
+		_viewportHeight = 1620;
 		_window = std::make_unique<Window>(windowTitle, _viewportWidth, _viewportHeight);
 		_mouseLocked = false;
 	}
