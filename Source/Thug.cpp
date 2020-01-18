@@ -41,11 +41,9 @@ namespace Freeking
 		for (const auto& bodyPart : bodyParts)
 		{
 			auto mdxBuffer = FileSystem::GetFileData("models/actors/" + actorName + "/" + bodyPart + ".mdx");
-			auto mdxData = mdxBuffer.data();
-			auto& mdxFile = MDXFile::Create(mdxData);
-
+			auto& mdxFile = MDXFile::Create(mdxBuffer.data());
 			auto mesh = std::make_shared<KeyframeMesh>();
-			mdxFile.Build(mdxData, mesh);
+			mdxFile.Build(mesh);
 			mesh->SetDiffuse(Util::LoadTexture("models/actors/" + skinFolder[bodyPartIndex] + "/" + bodyPart + "_" + artSkins[bodyPartIndex] + ".tga"));
 			mesh->Commit();
 
@@ -71,11 +69,9 @@ namespace Freeking
 					continue;
 				}
 
-				auto mdxData = mdxBuffer.data();
-				auto& mdxFile = MDXFile::Create(mdxData);
-
+				auto& mdxFile = MDXFile::Create(mdxBuffer.data());
 				auto mesh = std::make_shared<KeyframeMesh>();
-				mdxFile.Build(mdxData, mesh);
+				mdxFile.Build(mesh);
 				mesh->SetDiffuse(Util::LoadTexture(mesh->Skins[0]));
 				mesh->Commit();
 

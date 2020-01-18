@@ -20,15 +20,15 @@ namespace Freeking
 		}
 
 		template<typename T>
-		static const T* Read(const char* data, uint32_t& offset, uint32_t count)
+		const T* Read(uint32_t& offset, uint32_t count) const
 		{
-			auto ptr = (T*)&data[offset];
+			auto ptr = (T*)((const char*)this + offset);
 			offset += (sizeof(T) * count);
 
 			return ptr;
 		}
 
-		void Build(const char* data, std::shared_ptr<KeyframeMesh>& mesh) const;
+		void Build(std::shared_ptr<KeyframeMesh>& mesh) const;
 
 		static const int MagicNumber = 0x58504449;
 		static const int Version = 4;

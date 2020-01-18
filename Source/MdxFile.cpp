@@ -10,13 +10,13 @@ namespace Freeking
 		Vector3f Normal;
 	};
 
-	void MDXFile::Build(const char* data, std::shared_ptr<KeyframeMesh>& mesh) const
+	void MDXFile::Build(std::shared_ptr<KeyframeMesh>& mesh) const
 	{
 		uint32_t pos = Header.OffsetFrames;
 		for (int frameIndex = 0; frameIndex < Header.NumFrames; ++frameIndex)
 		{
-			auto frame = Read<MDXFrame>(data, pos, 1);
-			auto vertices = Read<MDXVertex>(data, pos, Header.NumVertices);
+			auto frame = Read<MDXFrame>(pos, 1);
+			auto vertices = Read<MDXVertex>(pos, Header.NumVertices);
 			std::string frameName((char*)frame->Name.data());
 
 			mesh->FrameTransforms.push_back(
@@ -48,7 +48,7 @@ namespace Freeking
 		pos = Header.OffsetCommands;
 		for (int commandIndex = 0; commandIndex < Header.NumCommands; ++commandIndex)
 		{
-			auto command = Read<MDXCommand>(data, pos, 1);
+			auto command = Read<MDXCommand>(pos, 1);
 			if (command->TrisTypeNum == 0)
 			{
 				break;
@@ -58,7 +58,7 @@ namespace Freeking
 
 			for (int commandVertexIndex = 0; commandVertexIndex < numCommandVertices; ++commandVertexIndex)
 			{
-				auto commandVertex = Read<MDXCommandVertex>(data, pos, 1);
+				auto commandVertex = Read<MDXCommandVertex>(pos, 1);
 				Vector2f uv(commandVertex->TextureCoordinates[0], commandVertex->TextureCoordinates[1]);
 
 				mesh->Vertices.push_back(
@@ -96,7 +96,7 @@ namespace Freeking
 		pos = Header.OffsetSkins;
 		for (int skinIndex = 0; skinIndex < Header.NumSkins; ++skinIndex)
 		{
-			const auto& skin = Read<MDXSkin>(data, pos, 1);
+			const auto& skin = Read<MDXSkin>(pos, 1);
 			std::string skinName((char*)skin->Path.data());
 			mesh->Skins.push_back(skinName);
 		}
