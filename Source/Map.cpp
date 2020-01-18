@@ -56,7 +56,7 @@ namespace Freeking
 		auto lmRootNode = std::make_shared<LightmapNode>(0, 0, lmSize, lmSize);
 
 		std::array<uint8_t, (16 * 16) * 3> blackPixels = { 0 };
-		auto blackLightmapNode = Map::ReadLightmap(*lightmapImage, lmRootNode, 0, 16, 16, blackPixels.data());
+		auto blackLightmapNode = ReadLightmap(*lightmapImage, lmRootNode, 0, 16, 16, blackPixels.data());
 		Vector2f blackLightmapUV(8.0f / lightmapImage->GetWidth(), 8.0f / lightmapImage->GetHeight());
 
 		for (int modelIndex = 0; modelIndex < models.Num(); ++modelIndex)
@@ -153,7 +153,7 @@ namespace Freeking
 						}
 
 						auto lightmapOffset = face.LightmapOffset + (((lwidth * lheight) * 3) * lightStyleIndex);
-						auto rect = Map::ReadLightmap(*lightmapImage, lmRootNode, lightmapOffset, lwidth, lheight, lightmapData.Data());
+						auto rect = ReadLightmap(*lightmapImage, lmRootNode, lightmapOffset, lwidth, lheight, lightmapData.Data());
 
 						if (rect)
 						{

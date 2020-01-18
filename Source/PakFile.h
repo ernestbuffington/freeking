@@ -33,11 +33,7 @@ namespace Freeking
 		virtual bool FileExists(const std::string& filename) override;
 		virtual std::vector<char> GetFileData(const std::string& filename) override;
 
-	protected:
-
-
 	private:
-
 
 		struct FileItem
 		{

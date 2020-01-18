@@ -60,7 +60,7 @@ namespace Freeking
 		auto fontJson = JSON::Load(fontString);
 
 		std::vector<std::shared_ptr<Texture2D>> pageTextures;
-		std::map<int32_t, Font::Character> characters;
+		std::unordered_map<int32_t, Font::Character> characters;
 
 		auto pages = fontJson["pages"];
 		for (int i = 0; i < pages.size(); ++i)
@@ -74,7 +74,7 @@ namespace Freeking
 		for (int i = 0; i < chars.size(); ++i)
 		{
 			auto& c = chars[i];
-			characters.insert(std::make_pair(
+			characters.emplace(
 				c["id"].ToInt(),
 				Font::Character
 				{
@@ -87,7 +87,7 @@ namespace Freeking
 					(float)c["yoffset"].ToInt(),
 					(float)c["xadvance"].ToInt(),
 					(uint32_t)c["page"].ToInt(),
-				}));
+				});
 		}
 
 		float lineHeight = (float)fontJson["common"]["lineHeight"].ToInt();

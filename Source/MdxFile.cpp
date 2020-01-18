@@ -1,6 +1,5 @@
 #include "MdxFile.h"
 #include "NormalTable.h"
-#include <iostream>
 
 namespace Freeking
 {

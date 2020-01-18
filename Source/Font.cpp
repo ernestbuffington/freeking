@@ -8,7 +8,7 @@ namespace Freeking
 {
 	Font::Font(float lineHeight,
 			   std::vector<std::shared_ptr<Texture2D>> pageTextures,
-			   std::map<int32_t, Character> characters) :
+			   std::unordered_map<int32_t, Character> characters) :
 		_lineHeight(lineHeight),
 		_pageTextures(std::move(pageTextures)),
 		_characters(std::move(characters))

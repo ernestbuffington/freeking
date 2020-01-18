@@ -1,6 +1,6 @@
 #pragma once
 
-#include <map>
+#include <unordered_map>
 #include <memory>
 #include <vector>
 
@@ -32,7 +32,7 @@ namespace Freeking
 
 		Font(float lineHeight,
 			 std::vector<std::shared_ptr<Texture2D>> pageTextures,
-			 std::map<int32_t, Character> characters);
+			 std::unordered_map<int32_t, Character> characters);
 
 		bool TryGetCharacter(int32_t id, Character& character) const;
 
@@ -43,6 +43,6 @@ namespace Freeking
 
 		float _lineHeight;
 		std::vector<std::shared_ptr<Texture2D>> _pageTextures;
-		std::map<int32_t, Character> _characters;
+		std::unordered_map<int32_t, Character> _characters;
 	};
 }
