@@ -8,6 +8,7 @@
 #include "Paths.h"
 #include "Profiler.h"
 #include <array>
+#include "../ThirdParty/rectpack2d/finders_interface.h"
 
 namespace Freeking
 {
@@ -70,11 +71,13 @@ namespace Freeking
 
 		int lmSize = 1024;
 		auto lightmapImage = std::make_shared<LightmapImage>(lmSize, lmSize);
-		auto lmRootNodeIndex = LightmapNode::NewNode(0, 0, lmSize, lmSize);
 
 		std::array<uint8_t, (16 * 16) * 3> blackPixels = { 0 };
-		ReadLightmap(*lightmapImage, lmRootNodeIndex, 0, 16, 16, blackPixels.data());
+		ReadLightmap(*lightmapImage, 0, 0, 0, 16, 16, blackPixels.data());
 		Vector2f firstLightmapUV(8.0f / lightmapImage->GetWidth(), 8.0f / lightmapImage->GetHeight());
+
+		auto packingRoot = rectpack2D::empty_spaces<false>({ lmSize, lmSize });
+		packingRoot.insert({ 16, 16 });
 
 		for (int modelIndex = 0; modelIndex < models.Num(); ++modelIndex)
 		{
@@ -172,12 +175,13 @@ namespace Freeking
 							continue;
 						}
 
-						auto lightmapOffset = face.LightmapOffset + (((lwidth * lheight) * 3) * lightStyleIndex);
-						auto nodeIndex = ReadLightmap(*lightmapImage, lmRootNodeIndex, lightmapOffset, lwidth, lheight, lightmapData.Data());
+						auto packingNode = packingRoot.insert({ lwidth, lheight });
 
-						if (nodeIndex != -1)
+						if (packingNode.has_value())
 						{
-							const auto& node = LightmapNode::GetNode(nodeIndex);
+							auto lightmapOffset = face.LightmapOffset + (((lwidth * lheight) * 3) * lightStyleIndex);
+							ReadLightmap(*lightmapImage, lightmapOffset, packingNode->x, packingNode->y, lwidth, lheight, lightmapData.Data());
+
 							auto uvIndex = lightStyleIndex + 1;
 
 							for (size_t i = 0; i < faceVertices.size(); ++i)
@@ -195,8 +199,8 @@ namespace Freeking
 								vcoord += 8.0f;
 								vcoord /= lheight * 16.0f;
 
-								ucoord = ((ucoord * lwidth) + node.GetX()) / lightmapImage->GetWidth();
-								vcoord = ((vcoord * lheight) + node.GetY()) / lightmapImage->GetHeight();
+								ucoord = ((ucoord * lwidth) + packingNode->x) / lightmapImage->GetWidth();
+								vcoord = ((vcoord * lheight) + packingNode->y) / lightmapImage->GetHeight();
 
 								vertex.UV[uvIndex].x = ucoord;
 								vertex.UV[uvIndex].y = vcoord;
@@ -248,34 +252,26 @@ namespace Freeking
 		_lightmapSampler = std::make_shared<TextureSampler>(WrapMode::WRAPMODE_CLAMP_EDGE, FilterMode::FILTERMODE_LINEAR_NO_MIP);
 	}
 
-	int Map::ReadLightmap(LightmapImage& image, int rootIndex, int offset, int width, int height, const uint8_t* buffer)
+	void Map::ReadLightmap(LightmapImage& image, int offset, int rectX, int rectY, int width, int height, const uint8_t* buffer)
 	{
 		if (height <= 0 || width <= 0)
 		{
-			return -1;
+			return;
 		}
 
-		auto nodeIndex = LightmapNode::Allocate(rootIndex, width, height);
-		if (rootIndex != -1)
+		for (int x = 0; x < width; ++x)
 		{
-			const auto& node = LightmapNode::GetNode(nodeIndex);
-
-			for (int x = 0; x < width; ++x)
+			for (int y = 0; y < height; ++y)
 			{
-				for (int y = 0; y < height; ++y)
-				{
-					int dstPixel = ((node.GetY() + y) * image.GetWidth()) + (node.GetX() + x);
-					int dstIndex = dstPixel * 3;
-					int srcPixel = (y * width) + x;
-					int srcIndex = offset + (srcPixel * 3);
+				int dstPixel = ((rectY + y) * image.GetWidth()) + (rectX + x);
+				int dstIndex = dstPixel * 3;
+				int srcPixel = (y * width) + x;
+				int srcIndex = offset + (srcPixel * 3);
 
-					image.Data[dstIndex] = buffer[srcIndex];
-					image.Data[dstIndex + 1] = buffer[srcIndex + 1];
-					image.Data[dstIndex + 2] = buffer[srcIndex + 2];
-				}
+				image.Data[dstIndex] = buffer[srcIndex];
+				image.Data[dstIndex + 1] = buffer[srcIndex + 1];
+				image.Data[dstIndex + 2] = buffer[srcIndex + 2];
 			}
 		}
-
-		return nodeIndex;
 	}
 }

@@ -21,7 +21,7 @@ namespace Freeking
 
 		void Render(const Matrix4x4& viewProjection);
 
-		static int ReadLightmap(LightmapImage& image, int rootIndex, int offset, int width, int height, const uint8_t* buffer);
+		static void ReadLightmap(LightmapImage& image, int offset, int rectX, int rectY, int width, int height, const uint8_t* buffer);
 
 		const std::vector<EntityLump::EntityDef>& Entities() const { return _entityLump->Entities; }
 

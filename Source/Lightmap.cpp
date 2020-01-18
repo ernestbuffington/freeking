@@ -44,20 +44,17 @@ namespace Freeking
 		{
 			return -1;
 		}
-
-		if (parent._width < width || parent._height < height)
+		else if (parent._width < width || parent._height < height)
 		{
 			return -1;
 		}
-
-		if (parent._width == width && parent._height == height)
+		else if (parent._width == width && parent._height == height)
 		{
 			parent._filled = true;
 
 			return parentIndex;
 		}
-
-		if ((parent._width - width) > (parent._height - height))
+		else if ((parent._width - width) > (parent._height - height))
 		{
 			parent._a = NewNode(parent._x, parent._y, width, parent._height);
 			parent._b = NewNode(parent._x + width, parent._y, parent._width - width, parent._height);
