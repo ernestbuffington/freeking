@@ -179,7 +179,7 @@ namespace Freeking
 			{
 				std::string key = ParseSubString(string, pos);
 				std::string value = ParseSubString(string, pos);
-				entityDef.keyValues.insert(std::make_pair(key, value));
+				entityDef.keyValues.emplace(key, value);
 
 				continue;
 			}

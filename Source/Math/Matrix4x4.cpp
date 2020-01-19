@@ -263,6 +263,11 @@ namespace Freeking
 		);
 	}
 
+	Matrix4x4 Matrix4x4::operator*(const Matrix3x3& rhs) const
+	{
+		return *this * rhs.ToMatrix4x4();
+	}
+
 	void Matrix4x4::operator*=(const Matrix4x4& rhs)
 	{
 		*this = *this * rhs;

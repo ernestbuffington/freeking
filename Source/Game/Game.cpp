@@ -81,6 +81,15 @@ namespace Freeking
 		Input::ResetMouseDelta();
 	}
 
+#pragma pack(push)
+#pragma pack(1) 
+	struct NavPoint
+	{
+		Vector4f point;
+		uint8_t unknown[213];
+	};
+#pragma pack(pop)
+
 	void Game::Run()
 	{
 		uint64_t now = SDL_GetPerformanceCounter();
@@ -98,12 +107,24 @@ namespace Freeking
 
 		_window->Swap();
 
-		auto lineRenderer = std::make_unique<LineRenderer>(1000000);
+		auto lineRenderer = std::make_unique<LineRenderer>(2000000);
 		auto spriteBatch = std::make_unique<SpriteBatch>(1000);
 		FreeCamera camera;
 		bool debug = true;
 		auto font = Util::LoadFont("Assets/roboto-bold.json");
 		auto map = std::make_shared<Map>(BspFile::Create(FileSystem::GetFileData("maps/sr1.bsp").data()));
+
+		auto navdata = FileSystem::GetFileData("navdata/sr1.nav");
+		uint16_t numPoints = *(uint16_t*)&navdata[4];
+		NavPoint* navPoints = (NavPoint*)&navdata[6];
+
+		Vector3 origin(0, 0, 0);
+
+		for (int i = 0; i < numPoints; ++i)
+		{
+			NavPoint* navPoint = (NavPoint*)&navdata[6 + ((229) * i)];
+			std::cout << navPoint->point << std::endl;
+		}
 
 		std::vector<std::shared_ptr<Thug>> thugs;
 
@@ -113,7 +134,7 @@ namespace Freeking
 			{
 				auto thug = std::make_shared<Thug>(e);
 				Vector3f origin(e.origin.x, e.origin.z, -e.origin.y);
-				thug->ModelMatrix = Matrix4x4::Translation(origin) * Matrix3x3::RotationY(Math::DegreesToRadians(e.angle)).ToMatrix4x4();
+				thug->ModelMatrix = Matrix4x4::Translation(origin) * Matrix3x3::RotationY(Math::DegreesToRadians(e.angle));
 				camera.MoveTo(origin);
 
 				thugs.push_back(std::move(thug));
@@ -215,6 +236,14 @@ namespace Freeking
 						spriteBatch->DrawText(font.get(), text, screenPosition + Vector2f(2, 2), Vector4f(0, 0, 0, alpha), 0.25f);
 						spriteBatch->DrawText(font.get(), text, screenPosition, Vector4f(1, 1, 1, alpha), 0.25f);
 					}
+				}
+
+				for (int i = 0; i < numPoints; ++i)
+				{
+					const auto& navpoint = navPoints[i];
+					origin = Vector3(navpoint.point.y, navpoint.point.w, -navpoint.point.z);
+
+					lineRenderer->DrawAABBox(origin, Vector3f(-5, -5, -5), Vector3f(5, 5, 5), Vector4f(0, 1, 0, 1.0f));
 				}
 
 				glDisable(GL_DEPTH_TEST);

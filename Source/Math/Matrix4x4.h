@@ -36,6 +36,7 @@ namespace Freeking
 		void ClipProjection(const Vector4f& clipPlane);
 
 		Matrix4x4 operator*(const Matrix4x4& rhs) const;
+		Matrix4x4 operator*(const class Matrix3x3& rhs) const;
 		void operator*=(const Matrix4x4& rhs);
 		Vector4f operator*(const Vector4f& rhs) const;
 		Vector3f operator*(const Vector3f& rhs) const;

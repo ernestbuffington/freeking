@@ -246,7 +246,7 @@ namespace Freeking
 		return v;
 	}
 
-	Matrix4x4 Matrix3x3::ToMatrix4x4()
+	Matrix4x4 Matrix3x3::ToMatrix4x4() const
 	{
 		Matrix4x4 r;
 

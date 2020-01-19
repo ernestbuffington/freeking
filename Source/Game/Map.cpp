@@ -18,7 +18,7 @@ namespace Freeking
 		_shader->SetUniformValue("viewProj", viewProjection);
 		_shader->SetUniformValue("diffuse", 0);
 		_shader->SetUniformValue("lightmap", 1);
-		_shader->SetUniformValue("brightness", 2.0f);
+		_shader->SetUniformValue("brightness", 4.0f);
 
 		_textureSampler->Bind(0);
 		_lightmapSampler->Bind(1);
@@ -69,7 +69,7 @@ namespace Freeking
 
 		pf.Start();
 
-		int lmSize = 1024;
+		int lmSize = 2048;
 		auto lightmapImage = std::make_shared<LightmapImage>(lmSize, lmSize);
 
 		std::array<uint8_t, (16 * 16) * 3> blackPixels = { 0 };
@@ -167,7 +167,7 @@ namespace Freeking
 					int lwidth = (int)(lmaxu - lminu + 1);
 					int lheight = (int)(lmaxv - lminv + 1);
 
-					for (int lightStyleIndex = 0; lightStyleIndex < 2; ++lightStyleIndex)
+					for (int lightStyleIndex = 0; lightStyleIndex < 4; ++lightStyleIndex)
 					{
 						auto lightStyle = face.LightmapStyles[lightStyleIndex];
 						if (lightStyle == 255)
