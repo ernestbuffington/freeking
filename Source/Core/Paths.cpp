@@ -30,7 +30,27 @@ namespace Freeking
 
 	std::filesystem::path Paths::KingpinDir()
 	{
-		static const std::filesystem::path dir = SteamGameDir(38430);
+		static std::filesystem::path dir;
+
+		if (dir.empty())
+		{
+			HKEY key;
+			TCHAR value[1024];
+			DWORD length = sizeof(value);
+			LONG result = RegOpenKeyEx(HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\kingpin.exe", 0, KEY_READ, &key);
+			if (result == 0)
+			{
+				RegQueryValueEx(key, "Path", NULL, NULL, reinterpret_cast<LPBYTE>(&value), &length);
+				RegCloseKey(key);
+
+				dir = value;
+			}
+			else
+			{
+				dir = SteamGameDir(38430);
+			}
+		}
+
 		return dir;
 	}
 
