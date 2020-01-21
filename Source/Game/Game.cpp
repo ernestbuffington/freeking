@@ -21,6 +21,7 @@
 #include "Map.h"
 #include "Paths.h"
 #include "Thug.h"
+#include "Nav/NavFile.h"
 #include <glad/glad.h>
 #include <iostream>
 #include <fstream>
@@ -81,15 +82,6 @@ namespace Freeking
 		Input::ResetMouseDelta();
 	}
 
-#pragma pack(push)
-#pragma pack(1) 
-	struct NavPoint
-	{
-		Vector4f point;
-		uint8_t unknown[213];
-	};
-#pragma pack(pop)
-
 	void Game::Run()
 	{
 		uint64_t now = SDL_GetPerformanceCounter();
@@ -107,24 +99,17 @@ namespace Freeking
 
 		_window->Swap();
 
+		std::string mapName("sr1");
+
 		auto lineRenderer = std::make_unique<LineRenderer>(2000000);
 		auto spriteBatch = std::make_unique<SpriteBatch>(1000);
 		FreeCamera camera;
 		bool debug = true;
 		auto font = Util::LoadFont("Assets/roboto-bold.json");
-		auto map = std::make_shared<Map>(BspFile::Create(FileSystem::GetFileData("maps/sr1.bsp").data()));
+		auto map = std::make_shared<Map>(BspFile::Create(FileSystem::GetFileData("maps/" + mapName + ".bsp").data()));
 
-		auto navdata = FileSystem::GetFileData("navdata/sr1.nav");
-		uint16_t numPoints = *(uint16_t*)&navdata[4];
-		NavPoint* navPoints = (NavPoint*)&navdata[6];
-
-		Vector3 origin(0, 0, 0);
-
-		for (int i = 0; i < numPoints; ++i)
-		{
-			NavPoint* navPoint = (NavPoint*)&navdata[6 + ((229) * i)];
-			std::cout << navPoint->point << std::endl;
-		}
+		auto navData = FileSystem::GetFileData("navdata/" + mapName + ".nav");
+		auto navNodes = NavFile::ReadNodes(navData.data());
 
 		std::vector<std::shared_ptr<Thug>> thugs;
 
@@ -132,6 +117,11 @@ namespace Freeking
 		{
 			if (e.classname.substr(0, 5) == "cast_")
 			{
+				if (e.classname == "cast_dog")
+				{
+					continue;
+				}
+
 				auto thug = std::make_shared<Thug>(e);
 				Vector3f origin(e.origin.x, e.origin.z, -e.origin.y);
 				thug->ModelMatrix = Matrix4x4::Translation(origin) * Matrix3x3::RotationY(Math::DegreesToRadians(e.angle));
@@ -238,10 +228,10 @@ namespace Freeking
 					}
 				}
 
-				for (int i = 0; i < numPoints; ++i)
+				for (int i = 0; i < navNodes.size(); ++i)
 				{
-					const auto& navpoint = navPoints[i];
-					origin = Vector3(navpoint.point.y, navpoint.point.w, -navpoint.point.z);
+					const auto& navpoint = navNodes[i];
+					auto origin = Vector3(navpoint.Position.y, navpoint.Position.w, -navpoint.Position.z);
 
 					lineRenderer->DrawAABBox(origin, Vector3f(-5, -5, -5), Vector3f(5, 5, 5), Vector4f(0, 1, 0, 1.0f));
 				}
