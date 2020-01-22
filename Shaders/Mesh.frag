@@ -30,7 +30,8 @@ void main()
 	vec3 lightmapColor = lightmapColor0 + lightmapColor1;
 
 	float gamma = 1.5;
-	textureColor.rgb = pow(textureColor.rgb, vec3(1.0 / gamma));
+	vec3 finalColor = textureColor.rgb * lightmapColor.rgb * lightmapColor.rgb;
+	finalColor.rgb = pow(finalColor.rgb, vec3(1.0 / gamma));
 
-	fragColor = vec4(textureColor.rgb * lightmapColor.rgb, textureColor.a * alphaMultiply);
+	fragColor = vec4(finalColor.rgb, textureColor.a * alphaMultiply);
 }
