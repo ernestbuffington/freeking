@@ -1,3 +1,6 @@
+#pragma once
+
+#include "BspFlags.h"
 #include "Vector.h"
 #include <stdint.h>
 
@@ -83,7 +86,7 @@ namespace Freeking
 		float OffsetU;
 		Vector3f AxisV;
 		float OffsetV;
-		uint32_t Flags;
+		BspSurfaceFlags Flags;
 		uint32_t Value;
 		char TextureName[32];
 		uint32_t NextTextureInfo;

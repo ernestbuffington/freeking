@@ -3,6 +3,8 @@
 uniform sampler2D diffuse;
 uniform sampler2D lightmap;
 uniform float brightness;
+uniform float alphaMultiply;
+uniform float alphaCutOff;
 
 in VertexData
 {
@@ -16,7 +18,13 @@ out vec4 fragColor;
 
 void main()
 {
-	vec3 textureColor = texture(diffuse, vert.uv0).rgb;
+	vec4 textureColor = texture(diffuse, vert.uv0);
+
+	if (textureColor.a < alphaCutOff)
+	{
+		discard;
+	}
+
 	vec3 lightmapColor0 = texture(lightmap, vert.uv1).rgb * 2.0;
 	vec3 lightmapColor1 = texture(lightmap, vert.uv2).rgb * brightness;
 	vec3 lightmapColor = lightmapColor0 + lightmapColor1;
@@ -24,5 +32,5 @@ void main()
 	float gamma = 1.5;
 	textureColor.rgb = pow(textureColor.rgb, vec3(1.0 / gamma));
 
-    fragColor = vec4(textureColor.rgb * lightmapColor.rgb, 1.0);
+	fragColor = vec4(textureColor.rgb * lightmapColor.rgb, textureColor.a * alphaMultiply);
 }

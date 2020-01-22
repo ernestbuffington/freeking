@@ -112,12 +112,10 @@ namespace Freeking
 			viewport.y + (viewport.w - ((point.y * 0.5f + 0.5f) * viewport.w)));
 	}
 
-	bool Util::WorldPointToNormalisedScreenPoint(const Vector3f& position, Vector2f& result, const Matrix4x4& projectionMatrix, const Matrix4x4& viewMatrix, float maxDistance, float& distance)
+	bool Util::WorldPointToNormalisedScreenPoint(const Vector3f& position, Vector2f& result, const Matrix4x4& projectionMatrix, const Matrix4x4& viewMatrix, float maxDistance)
 	{
 		Vector4f in(position.x, position.y, position.z, 1.0f);
 		in = projectionMatrix * (viewMatrix * in);
-
-		distance = in.w;
 
 		if (in.w < 0.001f || in.w > maxDistance)
 		{

@@ -12,7 +12,7 @@
 
 namespace Freeking
 {
-	class Mesh
+	class BrushMesh
 	{
 	public:
 
@@ -25,18 +25,20 @@ namespace Freeking
 
 		void Draw();
 		void Commit();
-		void AddVertex(const Vertex& vertex);
-		void AddIndex(uint32_t index);
-		void SetDiffuse(const std::shared_ptr<Texture2D>& texture);
-		void SetLightmap(const std::shared_ptr<Texture2D>& texture);
+		inline void SetDiffuse(const std::shared_ptr<Texture2D>& texture) { _diffuse = texture; }
+		inline void SetLightmap(const std::shared_ptr<Texture2D>& texture) { _lightmap = texture; }
 
-		inline size_t GetNumVertices() const { return _vertices.size(); }
-		inline size_t GetNumIndices() const { return _indices.size(); }
+		inline size_t GetNumVertices() const { return Vertices.size(); }
+		inline size_t GetNumIndices() const { return Indices.size(); }
+
+		std::vector<Vertex> Vertices;
+		std::vector<uint32_t> Indices;
+
+		float AlphaCutOff;
+		float AlphaMultiply;
+		bool Translucent;
 
 	private:
-
-		std::vector<Vertex> _vertices;
-		std::vector<uint32_t> _indices;
 
 		std::unique_ptr<VertexBinding> _vertexBinding;
 		std::unique_ptr<VertexBuffer> _vertexBuffer;

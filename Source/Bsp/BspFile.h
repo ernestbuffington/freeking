@@ -1,3 +1,5 @@
+#pragma once
+
 #include "BspStructures.h"
 #include "Vector.h"
 #include <stdint.h>

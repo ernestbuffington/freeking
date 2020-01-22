@@ -1,39 +1,47 @@
+#pragma once
+
 #include <stdint.h>
 
 namespace Freeking
 {
-	enum class BspSurfaceFlags : int32_t
+	enum class BspSurfaceFlags : uint32_t
 	{
-		SURF_LIGHT = 0x1,
-		SURF_SLICK = 0x2,
-		SURF_SKY = 0x4,
-		SURF_WARP = 0x8,
-		SURF_TRANS33 = 0x10,
-		SURF_TRANS66 = 0x20,
-		SURF_FLOWING = 0x40,
-		SURF_NODRAW = 0x80,
-		SURF_HINT = 0x100,
-		SURF_SKIP = 0x200,
-		SURF_SPECULAR = 0x400,
-		SURF_DIFFUSE = 0x800,
-		SURF_ALPHA = 0x1000,
-		SURF_MIRROR = 0x2000,
-		SURF_WINDOW33 = 0x4000,
-		SURF_WINDOW66 = 0x8000,
-		SURF_10000 = 0x10000,
-		SURF_20000 = 0x20000,
-		SURF_40000 = 0x40000,
-		SURF_WATER = 0x80000,
-		SURF_CONCRETE = 0x100000,
-		SURF_FABRIC = 0x200000,
-		SURF_GRAVEL = 0x400000,
-		SURF_METAL = 0x800000,
-		SURF_METALLITE = 0x1000000,
-		SURF_TIN = 0x2000000,
-		SURF_WOOD = 0x4000000,
-		SURF_REFLECTFAKE = 0x8000000,
-		SURF_REFLECTLIGHT = 0x10000000,
-		SURF_40000000 = 0x20000000,
-		SURF_80000000 = 0x40000000,
+		Light = 0x1,
+		Slick = 0x2,
+		Sky = 0x4,
+		Warp = 0x8,
+		Trans33 = 0x10,
+		Trans66 = 0x20,
+		Flowing = 0x40,
+		NoDraw = 0x80,
+		Hint = 0x100,
+		Skip = 0x200,
+		Specular = 0x400,
+		Diffuse = 0x800,
+		Masked = 0x1000,
+		Mirror = 0x2000,
+		Window33 = 0x4000,
+		Window66 = 0x8000,
+		_10000 = 0x10000,
+		_20000 = 0x20000,
+		_40000 = 0x40000,
+		Water = 0x80000,
+		Concrete = 0x100000,
+		Fabric = 0x200000,
+		Gravel = 0x400000,
+		Metal = 0x800000,
+		MetalLite = 0x1000000,
+		Tin = 0x2000000,
+		Wood = 0x4000000,
+		ReflectFake = 0x8000000,
+		ReflectLight = 0x10000000,
+		_20000000 = 0x20000000,
+		_40000000 = 0x40000000,
+		_80000000 = 0x80000000,
 	};
+
+	inline bool operator&(BspSurfaceFlags a, BspSurfaceFlags b)
+	{
+		return static_cast<int>(a) & static_cast<int>(b);
+	}
 }

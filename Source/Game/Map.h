@@ -13,6 +13,13 @@ namespace Freeking
 	class LightmapNode;
 	class LightmapImage;
 
+	class BrushModel
+	{
+	public:
+
+		std::map<std::string, std::shared_ptr<BrushMesh>> Meshes;
+	};
+
 	class Map
 	{
 	public:
@@ -22,10 +29,11 @@ namespace Freeking
 		void Render(const Matrix4x4& viewProjection);
 
 		const std::vector<EntityLump::EntityDef>& Entities() const { return _entityLump->Entities; }
+		const std::shared_ptr<BrushModel>& GetBrushModel(uint32_t index) const { return _models.at(index); }
 
 	private:
 
-		std::map<std::string, std::unique_ptr<Mesh>> _meshes;
+		std::vector<std::shared_ptr<BrushModel>> _models;
 		std::shared_ptr<Texture2D> _lightmapTexture;
 		std::map<std::string, std::shared_ptr<Texture2D>> _textures;
 		std::shared_ptr<ShaderProgram> _shader;

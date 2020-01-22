@@ -18,14 +18,45 @@ namespace Freeking
 		_shader->SetUniformValue("viewProj", viewProjection);
 		_shader->SetUniformValue("diffuse", 0);
 		_shader->SetUniformValue("lightmap", 1);
-		_shader->SetUniformValue("brightness", 4.0f);
+		_shader->SetUniformValue("brightness", 2.0f);
 
 		_textureSampler->Bind(0);
 		_lightmapSampler->Bind(1);
 
-		for (auto& mesh : _meshes)
+		glDisable(GL_BLEND);
+
+		_shader->SetUniformValue("alphaMultiply", 1.0f);
+
+		for (const auto& brushModel : _models)
 		{
-			mesh.second->Draw();
+			for (auto& mesh : brushModel->Meshes)
+			{
+				if (mesh.second->Translucent)
+				{
+					continue;
+				}
+
+				_shader->SetUniformValue("alphaCutOff", mesh.second->AlphaCutOff);
+				mesh.second->Draw();
+			}
+		}
+
+		glEnable(GL_BLEND);
+
+		_shader->SetUniformValue("alphaCutOff", 0.0f);
+
+		for (const auto& brushModel : _models)
+		{
+			for (auto& mesh : brushModel->Meshes)
+			{
+				if (!mesh.second->Translucent)
+				{
+					continue;
+				}
+
+				_shader->SetUniformValue("alphaMultiply", mesh.second->AlphaMultiply);
+				mesh.second->Draw();
+			}
 		}
 
 		_shader->Unbind();
@@ -83,34 +114,41 @@ namespace Freeking
 		{
 			if (modelIndex > 0)
 			{
-				break;
+				//break;
 			}
 
-			const auto& brushModel = models[modelIndex];
+			const auto& model = models[modelIndex];
+			auto brushModel = std::make_shared<BrushModel>();
 
-			for (int faceIndex = brushModel.FirstFace; faceIndex < (brushModel.FirstFace + brushModel.NumFaces); ++faceIndex)
+			for (int faceIndex = model.FirstFace; faceIndex < (model.FirstFace + model.NumFaces); ++faceIndex)
 			{
 				const auto& face = faces[faceIndex];
 				const auto& faceTextureInfo = textureInfo[face.TextureInfo];
 
-				if ((faceTextureInfo.Flags & (int)BspSurfaceFlags::SURF_NODRAW) ||
-					(faceTextureInfo.Flags & (int)BspSurfaceFlags::SURF_SKY) ||
-					(faceTextureInfo.Flags & (int)BspSurfaceFlags::SURF_WARP))
+				if ((faceTextureInfo.Flags & BspSurfaceFlags::NoDraw) ||
+					(faceTextureInfo.Flags & BspSurfaceFlags::Sky) ||
+					(faceTextureInfo.Flags & BspSurfaceFlags::Warp))
 				{
 					continue;
 				}
 
-				Mesh* mesh = nullptr;
+				auto masked = (faceTextureInfo.Flags & BspSurfaceFlags::Masked);
+				auto trans = (faceTextureInfo.Flags & BspSurfaceFlags::Trans33) || (faceTextureInfo.Flags & BspSurfaceFlags::Trans66);
+
+				BrushMesh* mesh = nullptr;
 				auto textureName = std::string(faceTextureInfo.TextureName);
 
-				if (_meshes.find(textureName) == _meshes.end())
+				if (brushModel->Meshes.find(textureName) == brushModel->Meshes.end())
 				{
-					auto newMesh = std::make_unique<Mesh>();
+					auto newMesh = std::make_shared<BrushMesh>();
 					newMesh->SetDiffuse(_textures[textureName]);
-					_meshes.emplace(textureName, std::move(newMesh));
+					newMesh->AlphaMultiply = trans ? ((faceTextureInfo.Flags & BspSurfaceFlags::Trans33) ? 0.33f : 0.66f) : 1.0f;
+					newMesh->AlphaCutOff = masked ? 0.67f : 0.0f;
+					newMesh->Translucent = trans;
+					brushModel->Meshes.emplace(textureName, std::move(newMesh));
 				}
 
-				mesh = _meshes[textureName].get();
+				mesh = brushModel->Meshes[textureName].get();
 
 				if (mesh == nullptr)
 				{
@@ -118,6 +156,8 @@ namespace Freeking
 				}
 
 				const auto& faceTexture = _textures[textureName];
+				auto textureWidth = faceTexture->GetWidth();
+				auto textureHeight = faceTexture->GetHeight();
 
 				float umin = std::numeric_limits<float>::max();
 				float vmin = std::numeric_limits<float>::max();
@@ -126,7 +166,7 @@ namespace Freeking
 
 				int baseVertex = mesh->GetNumVertices();
 
-				std::vector<Mesh::Vertex> faceVertices;
+				std::vector<BrushMesh::Vertex> faceVertices;
 				faceVertices.resize(face.NumEdges);
 
 				std::vector<Vector2f> faceUVs;
@@ -151,8 +191,8 @@ namespace Freeking
 
 					faceUVs[edgeIndex] = Vector2f(u, v);
 
-					u /= (float)faceTexture->GetWidth();
-					v /= (float)faceTexture->GetHeight();
+					u /= (float)textureWidth;
+					v /= (float)textureHeight;
 
 					faceVertices[edgeIndex] = { position, normal, { Vector2f(u, v), firstLightmapUV, firstLightmapUV } };
 				}
@@ -211,7 +251,7 @@ namespace Freeking
 
 				for (size_t i = 0; i < faceVertices.size(); ++i)
 				{
-					mesh->AddVertex(faceVertices[i]);
+					mesh->Vertices.emplace_back(faceVertices[i]);
 				}
 
 				int numTriangles = face.NumEdges - 2;
@@ -219,11 +259,13 @@ namespace Freeking
 				for (int triangleIndex = 0; triangleIndex < numTriangles; ++triangleIndex)
 				{
 					uint32_t baseIndex = baseVertex + triangleIndex;
-					mesh->AddIndex(baseIndex + 2);
-					mesh->AddIndex(baseIndex + 1);
-					mesh->AddIndex(baseVertex);
+					mesh->Indices.emplace_back(baseIndex + 2);
+					mesh->Indices.emplace_back(baseIndex + 1);
+					mesh->Indices.emplace_back(baseVertex);
 				}
 			}
+
+			_models.push_back(std::move(brushModel));
 		}
 		pf.Stop("Map create");
 
@@ -239,10 +281,13 @@ namespace Freeking
 
 		pf.Start();
 
-		for (auto& mesh : _meshes)
+		for (auto& model : _models)
 		{
-			mesh.second->SetLightmap(_lightmapTexture);
-			mesh.second->Commit();
+			for (auto& mesh : model->Meshes)
+			{
+				mesh.second->SetLightmap(_lightmapTexture);
+				mesh.second->Commit();
+			}
 		}
 
 		pf.Stop("Map commit");

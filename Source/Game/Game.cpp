@@ -210,14 +210,18 @@ namespace Freeking
 				for (const auto& e : map->Entities())
 				{
 					Vector3f origin(e.origin.x, e.origin.z, -e.origin.y);
-					Vector3f bounds(10, 10, 10);
+					float distance = origin.LengthBetween(camera.GetPosition());
+
+					if (distance >= 512.0f)
+					{
+						continue;
+					}
 
 					std::string name;
 					e.TryGetString("name", name);
 
 					Vector2f screenPosition;
-					float distance;
-					if (Util::WorldPointToNormalisedScreenPoint(origin, screenPosition, projectionMatrix, viewMatrix, 512.0f, distance))
+					if (Util::WorldPointToNormalisedScreenPoint(origin, screenPosition, projectionMatrix, viewMatrix, 512.0f))
 					{
 						float alpha = 1.0f - (distance / 512.0f);
 						lineRenderer->DrawSphere(origin, 4.0f, 4, 4, Vector4f(0, 1, 1, alpha));
@@ -233,7 +237,23 @@ namespace Freeking
 					const auto& navpoint = navNodes[i];
 					auto origin = Vector3(navpoint.Position.y, navpoint.Position.w, -navpoint.Position.z);
 
-					lineRenderer->DrawAABBox(origin, Vector3f(-5, -5, -5), Vector3f(5, 5, 5), Vector4f(0, 1, 0, 1.0f));
+					float distance = origin.LengthBetween(camera.GetPosition());
+
+					if (distance >= 512.0f)
+					{
+						continue;
+					}
+
+					Vector2f screenPosition;
+					if (Util::WorldPointToNormalisedScreenPoint(origin, screenPosition, projectionMatrix, viewMatrix, 512.0f))
+					{
+						float alpha = 1.0f - (distance / 512.0f);
+						lineRenderer->DrawAABBox(origin, Vector3f(-5, -5, -5), Vector3f(5, 5, 5), Vector4f(0, 1, 0, alpha));
+						screenPosition = Util::ScreenSpaceToPixelPosition(screenPosition, Vector4i(0, 0, _viewportWidth, _viewportHeight));
+						auto text = "node #" + std::to_string(i);
+						spriteBatch->DrawText(font.get(), text, screenPosition + Vector2f(2, 2), Vector4f(0, 0, 0, alpha), 0.25f);
+						spriteBatch->DrawText(font.get(), text, screenPosition, Vector4f(1, 1, 1, alpha), 0.25f);
+					}
 				}
 
 				glDisable(GL_DEPTH_TEST);

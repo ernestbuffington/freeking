@@ -3,7 +3,7 @@
 
 namespace Freeking
 {
-	void Mesh::Draw()
+	void BrushMesh::Draw()
 	{
 		if (_diffuse)
 		{
@@ -16,15 +16,20 @@ namespace Freeking
 		}
 
 		_vertexBinding->Bind();
-		glDrawElements(GL_TRIANGLES, _indices.size(), GL_UNSIGNED_INT, (void*)0);
+		glDrawElements(GL_TRIANGLES, Indices.size(), GL_UNSIGNED_INT, (void*)0);
 		_vertexBinding->Unbind();
 	}
 
-	void Mesh::Commit()
+	void BrushMesh::Commit()
 	{
+		if (Vertices.empty() || Indices.empty())
+		{
+			return;
+		}
+
 		static const int vertexSize = sizeof(Vertex);
-		_vertexBuffer = std::make_unique<VertexBuffer>(_vertices.data(), _vertices.size(), vertexSize, GL_STATIC_DRAW);
-		_indexBuffer = std::make_unique<IndexBuffer>(_indices.data(), _indices.size(), GL_UNSIGNED_INT);
+		_vertexBuffer = std::make_unique<VertexBuffer>(Vertices.data(), Vertices.size(), vertexSize, GL_STATIC_DRAW);
+		_indexBuffer = std::make_unique<IndexBuffer>(Indices.data(), Indices.size(), GL_UNSIGNED_INT);
 
 		ArrayElement vertexLayout[] =
 		{
@@ -37,26 +42,6 @@ namespace Freeking
 
 		_vertexBinding = std::make_unique<VertexBinding>();
 		_vertexBinding->Create(vertexLayout, 5, *_indexBuffer, ElementType::AE_UINT);
-	}
-
-	void Mesh::AddVertex(const Vertex& vertex)
-	{
-		_vertices.push_back(vertex);
-	}
-
-	void Mesh::AddIndex(uint32_t index)
-	{
-		_indices.push_back(index);
-	}
-
-	void Mesh::SetDiffuse(const std::shared_ptr<Texture2D>& texture)
-	{
-		_diffuse = texture;
-	}
-
-	void Mesh::SetLightmap(const std::shared_ptr<Texture2D>& texture)
-	{
-		_lightmap = texture;
 	}
 
 
