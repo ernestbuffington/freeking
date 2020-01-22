@@ -27,7 +27,7 @@ namespace Freeking
 		void Draw(Texture2D*, const Vector2f&, float, const Vector4f&);
 		void Draw(Texture2D*, const Vector2f&, const Vector2f&, const Vector4f&);
 		void Draw(Texture2D*, const Vector2f&, const Vector2f&, float, const Vector4f&);
-		void Draw(Texture2D*, const Vector2f&, const Vector2f&, const Vector2f&, const Vector2f&, const Vector4f&);
+		void Draw(Texture2D*, const Vector2f&, const Vector2f&, const Vector2f&, const Vector2f&, const Vector4f&, bool = false);
 		void Draw9Slice(Texture2D*, const Vector2f&, const Vector2f&, const Vector4f&, const Vector4f&, bool = true);
 		void Draw9Slice(Texture2D*, const Vector2f&, const Vector2f&, const Vector2f&, const Vector2f&, const Vector4f&, const Vector4f&, bool = true);
 
@@ -36,9 +36,10 @@ namespace Freeking
 
 		size_t GetDrawCallCount() const { return _drawCallCount; }
 
-		ShaderProgram& GetShader();
-
 	private:
+
+		static std::shared_ptr<ShaderProgram> GetSpriteShader();
+		static std::shared_ptr<ShaderProgram> GetTextShader();
 
 		struct Sprite
 		{
@@ -90,12 +91,14 @@ namespace Freeking
 			const Vector2f _drawSize;
 		};
 
+		void DrawSprites(const Matrix4x4&, float, const std::shared_ptr<ShaderProgram>&, std::vector<SpriteBatch::Sprite>&);
 		void DrawSlice(Texture2D*, const Slice&, const Vector4f&);
 		static void TransformUV(Vector2f&, const Vector2f&, const Vector2f&, const Vector2f&);
 		static void TransformUVs(Slice&, const Vector2f&, const Vector2f&, const Vector2f&);
 		bool IsSpriteInsideClippingRect(const Vector2f&, const Vector2f&);
 
 		std::vector<Sprite> _spritesToDraw;
+		std::vector<Sprite> _textToDraw;
 		bool _clipping;
 		Vector4f _clippingRect;
 		size_t _drawCallCount;

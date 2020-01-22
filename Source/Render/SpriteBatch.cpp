@@ -5,60 +5,20 @@
 #include "Texture2D.h"
 #include "Font.h"
 #include "Maths.h"
+#include "Util.h"
 
 namespace Freeking
 {
-	std::string SpriteBatchVertSrc = R"glsl(
-		#version 150 core
-
-		in vec2 vert_position;
-		in vec2 vert_texcoord;
-		in vec4 vert_color;
-
-		out vec2 frag_texcoord;
-		out vec4 frag_color;
-
-		uniform mat4 projMatrix;
-
-		void main()
-		{
-			frag_texcoord = vert_texcoord;
-			frag_color = vert_color;
-			gl_Position = projMatrix * vec4(vert_position.xy, 1.0, 1.0);
-		}
-	)glsl";
-
-	std::string SpriteBatchFragSrc = R"glsl(
-		#version 150 core
-
-		uniform sampler2D texture;
-
-		in vec2 frag_texcoord;
-		in vec4 frag_color;
-
-		out vec4 outColor;
-
-		const float smoothing = 1.0/4.0;
-
-		void main()
-		{
-			float distance = texture2D(texture, frag_texcoord).a;
-			float alpha = smoothstep(0.5 - smoothing, 0.5 + smoothing, distance);
-
-			outColor = vec4(frag_color.rgb, frag_color.a * alpha);
-		}
-	)glsl";
-
-	std::unique_ptr<ShaderProgram> SpriteBatch::Shader = nullptr;
-
-	ShaderProgram& SpriteBatch::GetShader()
+	std::shared_ptr<ShaderProgram> SpriteBatch::GetSpriteShader()
 	{
-		if (Shader == nullptr)
-		{
-			Shader = std::make_unique<ShaderProgram>(SpriteBatchVertSrc, SpriteBatchFragSrc);
-		}
+		static auto shader = Util::LoadShader("Shaders/Sprite.vert", "Shaders/Sprite.frag");
+		return shader;
+	}
 
-		return *Shader;
+	std::shared_ptr<ShaderProgram> SpriteBatch::GetTextShader()
+	{
+		static auto shader = Util::LoadShader("Shaders/Sprite.vert", "Shaders/Text.frag");
+		return shader;
 	}
 
 	SpriteBatch::Sprite::Sprite(
@@ -153,7 +113,8 @@ namespace Freeking
 				Vector2f(character.x / pageWidth, character.y / pageHeight),
 				Vector2f((character.x + character.width) / pageWidth, (character.y + character.height) / pageHeight),
 				Vector2f(character.width * scale, character.height * scale),
-				colour);
+				colour,
+				true);
 
 			curPosition += Vector2f((character.xadvance + 2) * scale, 0);
 		}
@@ -234,7 +195,8 @@ namespace Freeking
 		const Vector2f& uv1,
 		const Vector2f& uv2,
 		const Vector2f& size,
-		const Vector4f& colour)
+		const Vector4f& colour,
+		bool isText)
 	{
 		float u1 = uv1.x;
 		float v1 = uv1.y;
@@ -277,7 +239,14 @@ namespace Freeking
 			v2 = v2 + (vheight * difbottom);
 		}
 
-		_spritesToDraw.push_back(Sprite(texture, newPosition, newSize, Vector2f(u1, v1), Vector2f(u2, v2), colour));
+		if (isText)
+		{
+			_textToDraw.push_back(Sprite(texture, newPosition, newSize, Vector2f(u1, v1), Vector2f(u2, v2), colour));
+		}
+		else
+		{
+			_spritesToDraw.push_back(Sprite(texture, newPosition, newSize, Vector2f(u1, v1), Vector2f(u2, v2), colour));
+		}
 	}
 
 	SpriteBatch::NineSliceProperties::NineSliceProperties(
@@ -512,7 +481,7 @@ namespace Freeking
 
 	void SpriteBatch::Flush(const Matrix4x4& proj, float scale)
 	{
-		if (_spritesToDraw.empty())
+		if (_spritesToDraw.empty() && _textToDraw.empty())
 		{
 			return;
 		}
@@ -521,9 +490,29 @@ namespace Freeking
 
 		glDisable(GL_DEPTH_TEST);
 
-		ShaderProgram& shader = GetShader();
-		shader.Bind();
-		shader.SetUniformValue("projMatrix", proj);
+		_vertexBinding->Bind();
+
+		const auto& spriteShader = GetSpriteShader();
+		if (spriteShader)
+		{
+			DrawSprites(proj, scale, spriteShader, _spritesToDraw);
+		}
+
+		const auto& textShader = GetTextShader();
+		if (spriteShader)
+		{
+			DrawSprites(proj, scale, textShader, _textToDraw);
+		}
+
+		_vertexBinding->Unbind();
+
+		glEnable(GL_DEPTH_TEST);
+	}
+
+	void SpriteBatch::DrawSprites(const Matrix4x4& proj, float scale, const std::shared_ptr<ShaderProgram>& shader, std::vector<SpriteBatch::Sprite>& sprites)
+	{
+		shader->Bind();
+		shader->SetUniformValue("projMatrix", proj);
 
 		static const size_t vertSize = 8;
 		static const size_t faceVertCount = 6;
@@ -531,20 +520,18 @@ namespace Freeking
 		static const uint32_t faceIndices[] = { 0, 1, 2, 2, 3, 0 };
 
 		size_t basePos = 0;
-		size_t maxSpriteBatch = _spritesToDraw.size();
+		size_t maxSpriteBatch = sprites.size();
 		if (maxSpriteBatch > _maxSpriteCount)
 		{
 			maxSpriteBatch = _maxSpriteCount;
 		}
 
-		_vertexBinding->Bind();
-
-		while (basePos < _spritesToDraw.size() && maxSpriteBatch > 0)
+		while (basePos < sprites.size() && maxSpriteBatch > 0)
 		{
 			size_t searchPos = basePos;
-			auto batchTexture = _spritesToDraw[basePos]._texture;
+			auto batchTexture = sprites[basePos]._texture;
 
-			while (searchPos < _spritesToDraw.size() && (searchPos - basePos) < maxSpriteBatch && _spritesToDraw[searchPos]._texture == batchTexture)
+			while (searchPos < sprites.size() && (searchPos - basePos) < maxSpriteBatch && sprites[searchPos]._texture == batchTexture)
 			{
 				searchPos++;
 			}
@@ -557,7 +544,7 @@ namespace Freeking
 			for (size_t i = basePos; i < searchPos; ++i)
 			{
 				float* buffer = &_vertexData[(i - basePos) * faceVertCount * vertSize];
-				Sprite& sprite = _spritesToDraw[i];
+				const Sprite& sprite = sprites[i];
 
 				for (size_t j = 0; j < faceVertCount; ++j)
 				{
@@ -613,12 +600,9 @@ namespace Freeking
 			basePos = searchPos;
 		}
 
-		_vertexBinding->Unbind();
-		shader.Unbind();
+		shader->Unbind();
 
-		glEnable(GL_DEPTH_TEST);
-
-		_spritesToDraw.clear();
+		sprites.clear();
 	}
 
 	bool SpriteBatch::IsSpriteInsideClippingRect(const Vector2f& position, const Vector2f& size)
