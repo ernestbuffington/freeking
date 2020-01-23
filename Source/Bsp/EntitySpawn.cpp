@@ -1,306 +1,297 @@
-#include <array>
 #include <string>
+#include <unordered_map>
+#include <functional>
 
 namespace Freeking
 {
-	struct edict_t
+	void SP_item_health() {}
+	void SP_item_health_small() {}
+	void SP_item_health_large() {}
+	void SP_item_health_mega() {}
+	void SP_info_player_start() {}
+	void SP_info_player_deathmatch() {}
+	void SP_info_player_coop() {}
+	void SP_info_player_intermission() {}
+	void SP_func_plat() {}
+	void SP_func_button() {}
+	void SP_func_door() {}
+	void SP_func_door_secret() {}
+	void SP_func_door_rotating() {}
+	void SP_func_rotating() {}
+	void SP_func_train() {}
+	void SP_func_water() {}
+	void SP_func_conveyor() {}
+	void SP_func_areaportal() {}
+	void SP_func_clock() {}
+	void SP_func_wall() {}
+	void SP_func_object() {}
+	void SP_func_timer() {}
+	void SP_func_explosive() {}
+	void SP_func_killbox() {}
+	void SP_func_object_repair() {}
+	void SP_rotating_light() {}
+	void SP_trigger_always() {}
+	void SP_trigger_once() {}
+	void SP_trigger_multiple() {}
+	void SP_trigger_relay() {}
+	void SP_trigger_push() {}
+	void SP_trigger_hurt() {}
+	void SP_trigger_key() {}
+	void SP_trigger_counter() {}
+	void SP_trigger_elevator() {}
+	void SP_trigger_gravity() {}
+	void SP_trigger_monsterjump() {}
+	void SP_target_temp_entity() {}
+	void SP_target_speaker() {}
+	void SP_target_explosion() {}
+	void SP_target_changelevel() {}
+	void SP_target_secret() {}
+	void SP_target_goal() {}
+	void SP_target_splash() {}
+	void SP_target_spawner() {}
+	void SP_target_blaster() {}
+	void SP_target_crosslevel_trigger() {}
+	void SP_target_crosslevel_target() {}
+	void SP_target_laser() {}
+	void SP_target_lightramp() {}
+	void SP_target_earthquake() {}
+	void SP_target_character() {}
+	void SP_target_string() {}
+	void SP_target_mal_laser() {}
+	void SP_worldspawn() {}
+	void SP_viewthing() {}
+	void SP_light() {}
+	void SP_light_mine1() {}
+	void SP_light_mine2() {}
+	void SP_info_null() {}
+	void SP_func_group() {}
+	void SP_info_notnull() {}
+	void SP_path_corner() {}
+	void SP_junior() {}
+	void SP_misc_explobox() {}
+	void SP_misc_gib_arm() {}
+	void SP_misc_gib_leg() {}
+	void SP_misc_gib_head() {}
+	void SP_misc_teleporter() {}
+	void SP_misc_teleporter_dest() {}
+	void SP_misc_amb4() {}
+	void SP_cast_punk() {}
+	void SP_cast_thug() {}
+	void SP_cast_thug_sit() {}
+	void SP_cast_bitch() {}
+	void SP_cast_dog() {}
+	void SP_cast_runt() {}
+	void SP_cast_bum_sit() {}
+	void SP_cast_shorty() {}
+	void SP_cast_whore() {}
+	void SP_cast_punk_window() {}
+	void SP_cast_punk2() {}
+	void SP_cast_rosie() {}
+	void SP_ai_boundary() {}
+	void SP_ai_event_hostile() {}
+	void SP_ai_event_follow() {}
+	void SP_ai_guard() {}
+	void SP_ai_territory() {}
+	void SP_ai_trigger_character() {}
+	void SP_ai_locked_door() {}
+	void SP_misc_skidrow_radio() {}
+	void SP_misc_skidrow_ambush() {}
+	void SP_misc_skidrow_radio_repeater() {}
+	void SP_ai_ty_fuseblown() {}
+	void SP_ai_moker_notinoffice() {}
+	void SP_misc_grunt() {}
+	void SP_misc_fidelA() {}
+	void SP_misc_car() {}
+	void SP_misc_smoke() {}
+	void SP_elps() {}
+	void SP_misc_alarm() {}
+	void SP_trigger_hurt_electric() {}
+	void SP_pawn_o_matic() {}
+	void SP_ai_safespot() {}
+	void SP_misc_skidrow_ai_reset() {}
+	void SP_ai_combat_spot() {}
+	void SP_misc_skidrow_afraid() {}
+	void SP_misc_steeltown_afraid() {}
+	void SP_misc_kroker_afraid() {}
+	void SP_rc_initiation_observer() {}
+	void SP_rc_initiation_brush() {}
+	void SP_misc_pv_afraid() {}
+	void SP_misc_ty_afraid() {}
+	void SP_ai_ty_mo_boundry() {}
+	void SP_ai_sy_dykes_boundry() {}
+	void SP_misc_sy_afraid() {}
+	void SP_ep_skidrow_flag() {}
+	void SP_ai_sy_oilcan() {}
+	void SP_ai_ty_valvehandle() {}
+	void SP_ai_pv_fuseblown1() {}
+	void SP_ai_pv_fuseblown2() {}
+	void SP_ai_pv_deadlouie() {}
+	void SP_ai_sy_blefty() {}
+	void SP_misc_barry_bitch() {}
+	void SP_misc_corky_fidel_mdx_pcx() {}
+	void SP_misc_corky_fidel_mdx_tga() {}
+	void SP_misc_cut_scene() {}
+	void SP_light_fire_esm() {}
+	void SP_light_fire_sm() {}
+	void SP_light_fire_med() {}
+	void SP_light_fire_lg() {}
+	void SP_smoke_esm() {}
+	void SP_smoke_sm() {}
+	void SP_smoke_med() {}
+	void SP_smoke_lg() {}
+	void SP_func_train_rotating() {}
+	void SP_func_subdoor_base() {}
+	void SP_func_subdoor_handle1() {}
+	void SP_func_subdoor_handle2() {}
+	void SP_props_trashcanA() {}
+	void SP_props_trashcan_fall() {}
+	void SP_props_hydrant() {}
+	void SP_props_antenna1a() {}
+	void SP_props_antenna1b() {}
+	void SP_props_antenna1c() {}
+	void SP_props_antenna2a() {}
+	void SP_props_antenna2b() {}
+	void SP_props_antenna2c() {}
+	void SP_props_antenna3a() {}
+	void SP_props_antenna3b() {}
+	void SP_props_antenna3c() {}
+	void SP_props_fan() {}
+	void SP_props_phone() {}
+	void SP_props_aircon() {}
+	void SP_props_tablesetA() {}
+	void SP_props_radio() {}
+	void SP_cast_buma() {}
+	void SP_cast_bumb() {}
+	void SP_elements_raincloud() {}
+	void SP_elements_snowcloud() {}
+	void SP_misc_cutscene_trigger() {}
+	void SP_misc_cutscene_camera() {}
+	void SP_trigger_unlock() {}
+	void SP_props_chair() {}
+	void SP_props_extinguisherA() {}
+	void SP_props_extinguisherB() {}
+	void SP_light_sconce() {}
+	void SP_props_motorcycle() {}
+	void SP_props_ammocrate_bust() {}
+	void SP_props_shelf() {}
+	void SP_props_mattressA() {}
+	void SP_props_mattressB() {}
+	void SP_props_mattressC() {}
+	void SP_trigger_motorcycle() {}
+	void SP_props_tv() {}
+	void SP_props_steam_machine() {}
+	void SP_light_bulb() {}
+	void SP_props_trash() {}
+	void SP_props_wall_fall() {}
+	void SP_props_trashbottle() {}
+	void SP_props_trashwall() {}
+	void SP_props_trashpaper() {}
+	void SP_props_trashcorner() {}
+	void SP_props_trashbottle_vert() {}
+	void SP_props_blimp() {}
+	void SP_misc_use_cutscene() {}
+	void SP_props_motorcycle_runaway() {}
+	void SP_trigger_hurt_fire() {}
+	void SP_props_shelf_fall() {}
+	void SP_target_fire() {}
+	void SP_props_rat() {}
+	void SP_props_rat_spawner() {}
+	void SP_props_rat_spawner_node() {}
+	void SP_target_flamethrower() {}
+	void SP_light_deco_sconce() {}
+	void SP_light_pendant() {}
+	void SP_props_shelfB_fall() {}
+	void SP_func_lift() {}
+	void SP_props_roof_vent() {}
+	void SP_props_rat_trigger() {}
+	void SP_props2_truck_die() {}
+	void SP_props_cola_machine() {}
+	void SP_props_cig_machine() {}
+	void SP_props2_barrels_fallA() {}
+	void SP_props2_barrels_fallB() {}
+	void SP_props2_clubcouch() {}
+	void SP_props2_clubchair() {}
+	void SP_props2_vaseA() {}
+	void SP_props2_vaseB() {}
+	void SP_props2_chair_conf() {}
+	void SP_props2_shelf_metal_A_fall() {}
+	void SP_props2_shelf_metal_B_fall() {}
+	void SP_props2_deadguy() {}
+	void SP_props2_chair_push() {}
+	void SP_props_crate_bust_32() {}
+	void SP_props_crate_bust_48() {}
+	void SP_props_crate_bust_64() {}
+	void SP_props2_flag() {}
+	void SP_props2_fish() {}
+	void SP_props2_fish_trigger() {}
+	void SP_props2_fish_spawner() {}
+	void SP_props2_fish_spawner_node() {}
+	void SP_props2_wall_fish() {}
+	void SP_props2_barrels_fall_ST() {}
+	void SP_props2_sign() {}
+	void SP_props2_lighthouse_beam() {}
+	void SP_props2_boat() {}
+	void SP_props2_buoy() {}
+	void SP_props2_buoy_side() {}
+	void SP_props2_deadguy_underwater() {}
+	void SP_props2_buoy_animate() {}
+	void SP_props2_gargoyle() {}
+	void SP_props2_clothesline() {}
+	void SP_props2_plant_XL() {}
+	void SP_props2_plant_SM() {}
+	void SP_props2_boatphone() {}
+	void SP_props2_ashtray() {}
+	void SP_props2_lunch() {}
+	void SP_props2_deadgal_headless() {}
+	void SP_props2_plant_bush() {}
+	void SP_props2_boat_animate() {}
+	void SP_props2_helicopter_animate() {}
+	void SP_props2_car_animate() {}
+	void SP_props2_car_topdown() {}
+	void SP_props2_car_topup() {}
+	void SP_props2_plant_fern() {}
+	void SP_props2_pinball_machine() {}
+	void SP_props2_barrels_PV_A() {}
+	void SP_props2_barrels_PV_C() {}
+	void SP_props2_barrels_PV_D() {}
+	void SP_props2_barrels_PV_E() {}
+	void SP_props2_barrels_PV_F() {}
+	void SP_light_chandelier() {}
+	void SP_props2_air_train() {}
+	void SP_props3_dead_louie() {}
+	void SP_props3_cut_boss_player_animate() {}
+	void SP_props3_deco_fixture() {}
+	void SP_props3_cut_boss_chick_animate() {}
+	void SP_props3_cut_train_run_animate() {}
+	void SP_props3_cut_A_animate() {}
+	void SP_props3_cut_B_animate() {}
+	void SP_props3_cut_C_animate() {}
+	void SP_props3_cut_D_animate() {}
+	void SP_props3_cash_counter_animate() {}
+	void SP_props2_barrels_PV_B() {}
+	void SP_props3_decanter() {}
+	void SP_props3_whiskey_glass() {}
+	void SP_props3_barrels_fall_nikki_A() {}
+	void SP_props3_barrels_fall_nikki_B() {}
+	void SP_props3_cut_run_to_car_animate() {}
+	void SP_props3_cut_final_animate() {}
+	void SP_props3_cash() {}
+	void SP_props3_cut_truck_driver() {}
+	void SP_props3_cut_pinball_guy_animate() {}
+	void SP_lightflare() {}
+	void SP_path_corner_cast() {}
+	void SP_pistol_mod_damage() {}
+	void SP_pistol_mod_rof() {}
+	void SP_pistol_mod_reload() {}
+	void SP_hmg_mod_cooling() {}
+	void SP_sfx_beacon() {}
+	void SP_refl() {}
+	void SP_dm_cashspawn() {}
+	void SP_dm_safebag() {}
+	void SP_dm_props_banner() {}
+
+	static const std::unordered_map<std::string, void(*)()> spawns =
 	{
-	};
-
-	struct spawn_t
-	{
-		std::string name;
-		void (*spawn)(edict_t* ent);
-	};
-
-	void SP_item_health(edict_t* self) {}
-	void SP_item_health_small(edict_t* self) {}
-	void SP_item_health_large(edict_t* self) {}
-	void SP_item_health_mega(edict_t* self) {}
-	void SP_info_player_start(edict_t* self) {}
-	void SP_info_player_deathmatch(edict_t* self) {}
-	void SP_info_player_coop(edict_t* self) {}
-	void SP_info_player_intermission(edict_t* self) {}
-	void SP_func_plat(edict_t* self) {}
-	void SP_func_button(edict_t* self) {}
-	void SP_func_door(edict_t* self) {}
-	void SP_func_door_secret(edict_t* self) {}
-	void SP_func_door_rotating(edict_t* self) {}
-	void SP_func_rotating(edict_t* self) {}
-	void SP_func_train(edict_t* self) {}
-	void SP_func_water(edict_t* self) {}
-	void SP_func_conveyor(edict_t* self) {}
-	void SP_func_areaportal(edict_t* self) {}
-	void SP_func_clock(edict_t* self) {}
-	void SP_func_wall(edict_t* self) {}
-	void SP_func_object(edict_t* self) {}
-	void SP_func_timer(edict_t* self) {}
-	void SP_func_explosive(edict_t* self) {}
-	void SP_func_killbox(edict_t* self) {}
-	void SP_func_object_repair(edict_t* self) {}
-	void SP_rotating_light(edict_t* self) {}
-	void SP_trigger_always(edict_t* self) {}
-	void SP_trigger_once(edict_t* self) {}
-	void SP_trigger_multiple(edict_t* self) {}
-	void SP_trigger_relay(edict_t* self) {}
-	void SP_trigger_push(edict_t* self) {}
-	void SP_trigger_hurt(edict_t* self) {}
-	void SP_trigger_key(edict_t* self) {}
-	void SP_trigger_counter(edict_t* self) {}
-	void SP_trigger_elevator(edict_t* self) {}
-	void SP_trigger_gravity(edict_t* self) {}
-	void SP_trigger_monsterjump(edict_t* self) {}
-	void SP_target_temp_entity(edict_t* self) {}
-	void SP_target_speaker(edict_t* self) {}
-	void SP_target_explosion(edict_t* self) {}
-	void SP_target_changelevel(edict_t* self) {}
-	void SP_target_secret(edict_t* self) {}
-	void SP_target_goal(edict_t* self) {}
-	void SP_target_splash(edict_t* self) {}
-	void SP_target_spawner(edict_t* self) {}
-	void SP_target_blaster(edict_t* self) {}
-	void SP_target_crosslevel_trigger(edict_t* self) {}
-	void SP_target_crosslevel_target(edict_t* self) {}
-	void SP_target_laser(edict_t* self) {}
-	void SP_target_lightramp(edict_t* self) {}
-	void SP_target_earthquake(edict_t* self) {}
-	void SP_target_character(edict_t* self) {}
-	void SP_target_string(edict_t* self) {}
-	void SP_target_mal_laser(edict_t* self) {}
-	void SP_worldspawn(edict_t* self) {}
-	void SP_viewthing(edict_t* self) {}
-	void SP_light(edict_t* self) {}
-	void SP_light_mine1(edict_t* self) {}
-	void SP_light_mine2(edict_t* self) {}
-	void SP_info_null(edict_t* self) {}
-	void SP_func_group(edict_t* self) {}
-	void SP_info_notnull(edict_t* self) {}
-	void SP_path_corner(edict_t* self) {}
-	void SP_junior(edict_t* self) {}
-	void SP_misc_explobox(edict_t* self) {}
-	void SP_misc_gib_arm(edict_t* self) {}
-	void SP_misc_gib_leg(edict_t* self) {}
-	void SP_misc_gib_head(edict_t* self) {}
-	void SP_misc_teleporter(edict_t* self) {}
-	void SP_misc_teleporter_dest(edict_t* self) {}
-	void SP_misc_amb4(edict_t* self) {}
-	void SP_cast_punk(edict_t* self) {}
-	void SP_cast_thug(edict_t* self) {}
-	void SP_cast_thug_sit(edict_t* self) {}
-	void SP_cast_bitch(edict_t* self) {}
-	void SP_cast_dog(edict_t* self) {}
-	void SP_cast_runt(edict_t* self) {}
-	void SP_cast_bum_sit(edict_t* self) {}
-	void SP_cast_shorty(edict_t* self) {}
-	void SP_cast_whore(edict_t* self) {}
-	void SP_cast_punk_window(edict_t* self) {}
-	void SP_cast_punk2(edict_t* self) {}
-	void SP_cast_rosie(edict_t* self) {}
-	void SP_ai_boundary(edict_t* self) {}
-	void SP_ai_event_hostile(edict_t* self) {}
-	void SP_ai_event_follow(edict_t* self) {}
-	void SP_ai_guard(edict_t* self) {}
-	void SP_ai_territory(edict_t* self) {}
-	void SP_ai_trigger_character(edict_t* self) {}
-	void SP_ai_locked_door(edict_t* self) {}
-	void SP_misc_skidrow_radio(edict_t* self) {}
-	void SP_misc_skidrow_ambush(edict_t* self) {}
-	void SP_misc_skidrow_radio_repeater(edict_t* self) {}
-	void SP_ai_ty_fuseblown(edict_t* self) {}
-	void SP_ai_moker_notinoffice(edict_t* self) {}
-	void SP_misc_grunt(edict_t* self) {}
-	void SP_misc_fidelA(edict_t* self) {}
-	void SP_misc_car(edict_t* self) {}
-	void SP_misc_smoke(edict_t* self) {}
-	void SP_elps(edict_t* self) {}
-	void SP_misc_alarm(edict_t* self) {}
-	void SP_trigger_hurt_electric(edict_t* self) {}
-	void SP_pawn_o_matic(edict_t* self) {}
-	void SP_ai_safespot(edict_t* self) {}
-	void SP_misc_skidrow_ai_reset(edict_t* self) {}
-	void SP_ai_combat_spot(edict_t* self) {}
-	void SP_misc_skidrow_afraid(edict_t* self) {}
-	void SP_misc_steeltown_afraid(edict_t* self) {}
-	void SP_misc_kroker_afraid(edict_t* self) {}
-	void SP_rc_initiation_observer(edict_t* self) {}
-	void SP_rc_initiation_brush(edict_t* self) {}
-	void SP_misc_pv_afraid(edict_t* self) {}
-	void SP_misc_ty_afraid(edict_t* self) {}
-	void SP_ai_ty_mo_boundry(edict_t* self) {}
-	void SP_ai_sy_dykes_boundry(edict_t* self) {}
-	void SP_misc_sy_afraid(edict_t* self) {}
-	void SP_ep_skidrow_flag(edict_t* self) {}
-	void SP_ai_sy_oilcan(edict_t* self) {}
-	void SP_ai_ty_valvehandle(edict_t* self) {}
-	void SP_ai_pv_fuseblown1(edict_t* self) {}
-	void SP_ai_pv_fuseblown2(edict_t* self) {}
-	void SP_ai_pv_deadlouie(edict_t* self) {}
-	void SP_ai_sy_blefty(edict_t* self) {}
-	void SP_misc_barry_bitch(edict_t* self) {}
-	void SP_misc_corky_fidel_mdx_pcx(edict_t* self) {}
-	void SP_misc_corky_fidel_mdx_tga(edict_t* self) {}
-	void SP_misc_cut_scene(edict_t* self) {}
-	void SP_light_fire_esm(edict_t* self) {}
-	void SP_light_fire_sm(edict_t* self) {}
-	void SP_light_fire_med(edict_t* self) {}
-	void SP_light_fire_lg(edict_t* self) {}
-	void SP_smoke_esm(edict_t* self) {}
-	void SP_smoke_sm(edict_t* self) {}
-	void SP_smoke_med(edict_t* self) {}
-	void SP_smoke_lg(edict_t* self) {}
-	void SP_func_train_rotating(edict_t* self) {}
-	void SP_func_subdoor_base(edict_t* self) {}
-	void SP_func_subdoor_handle1(edict_t* self) {}
-	void SP_func_subdoor_handle2(edict_t* self) {}
-	void SP_props_trashcanA(edict_t* self) {}
-	void SP_props_trashcan_fall(edict_t* self) {}
-	void SP_props_hydrant(edict_t* self) {}
-	void SP_props_antenna1a(edict_t* self) {}
-	void SP_props_antenna1b(edict_t* self) {}
-	void SP_props_antenna1c(edict_t* self) {}
-	void SP_props_antenna2a(edict_t* self) {}
-	void SP_props_antenna2b(edict_t* self) {}
-	void SP_props_antenna2c(edict_t* self) {}
-	void SP_props_antenna3a(edict_t* self) {}
-	void SP_props_antenna3b(edict_t* self) {}
-	void SP_props_antenna3c(edict_t* self) {}
-	void SP_props_fan(edict_t* self) {}
-	void SP_props_phone(edict_t* self) {}
-	void SP_props_aircon(edict_t* self) {}
-	void SP_props_tablesetA(edict_t* self) {}
-	void SP_props_radio(edict_t* self) {}
-	void SP_cast_buma(edict_t* self) {}
-	void SP_cast_bumb(edict_t* self) {}
-	void SP_elements_raincloud(edict_t* self) {}
-	void SP_elements_snowcloud(edict_t* self) {}
-	void SP_misc_cutscene_trigger(edict_t* self) {}
-	void SP_misc_cutscene_camera(edict_t* self) {}
-	void SP_trigger_unlock(edict_t* self) {}
-	void SP_props_chair(edict_t* self) {}
-	void SP_props_extinguisherA(edict_t* self) {}
-	void SP_props_extinguisherB(edict_t* self) {}
-	void SP_light_sconce(edict_t* self) {}
-	void SP_props_motorcycle(edict_t* self) {}
-	void SP_props_ammocrate_bust(edict_t* self) {}
-	void SP_props_shelf(edict_t* self) {}
-	void SP_props_mattressA(edict_t* self) {}
-	void SP_props_mattressB(edict_t* self) {}
-	void SP_props_mattressC(edict_t* self) {}
-	void SP_trigger_motorcycle(edict_t* self) {}
-	void SP_props_tv(edict_t* self) {}
-	void SP_props_steam_machine(edict_t* self) {}
-	void SP_light_bulb(edict_t* self) {}
-	void SP_props_trash(edict_t* self) {}
-	void SP_props_wall_fall(edict_t* self) {}
-	void SP_props_trashbottle(edict_t* self) {}
-	void SP_props_trashwall(edict_t* self) {}
-	void SP_props_trashpaper(edict_t* self) {}
-	void SP_props_trashcorner(edict_t* self) {}
-	void SP_props_trashbottle_vert(edict_t* self) {}
-	void SP_props_blimp(edict_t* self) {}
-	void SP_misc_use_cutscene(edict_t* self) {}
-	void SP_props_motorcycle_runaway(edict_t* self) {}
-	void SP_trigger_hurt_fire(edict_t* self) {}
-	void SP_props_shelf_fall(edict_t* self) {}
-	void SP_target_fire(edict_t* self) {}
-	void SP_props_rat(edict_t* self) {}
-	void SP_props_rat_spawner(edict_t* self) {}
-	void SP_props_rat_spawner_node(edict_t* self) {}
-	void SP_target_flamethrower(edict_t* self) {}
-	void SP_light_deco_sconce(edict_t* self) {}
-	void SP_light_pendant(edict_t* self) {}
-	void SP_props_shelfB_fall(edict_t* self) {}
-	void SP_func_lift(edict_t* self) {}
-	void SP_props_roof_vent(edict_t* self) {}
-	void SP_props_rat_trigger(edict_t* self) {}
-	void SP_props2_truck_die(edict_t* self) {}
-	void SP_props_cola_machine(edict_t* self) {}
-	void SP_props_cig_machine(edict_t* self) {}
-	void SP_props2_barrels_fallA(edict_t* self) {}
-	void SP_props2_barrels_fallB(edict_t* self) {}
-	void SP_props2_clubcouch(edict_t* self) {}
-	void SP_props2_clubchair(edict_t* self) {}
-	void SP_props2_vaseA(edict_t* self) {}
-	void SP_props2_vaseB(edict_t* self) {}
-	void SP_props2_chair_conf(edict_t* self) {}
-	void SP_props2_shelf_metal_A_fall(edict_t* self) {}
-	void SP_props2_shelf_metal_B_fall(edict_t* self) {}
-	void SP_props2_deadguy(edict_t* self) {}
-	void SP_props2_chair_push(edict_t* self) {}
-	void SP_props_crate_bust_32(edict_t* self) {}
-	void SP_props_crate_bust_48(edict_t* self) {}
-	void SP_props_crate_bust_64(edict_t* self) {}
-	void SP_props2_flag(edict_t* self) {}
-	void SP_props2_fish(edict_t* self) {}
-	void SP_props2_fish_trigger(edict_t* self) {}
-	void SP_props2_fish_spawner(edict_t* self) {}
-	void SP_props2_fish_spawner_node(edict_t* self) {}
-	void SP_props2_wall_fish(edict_t* self) {}
-	void SP_props2_barrels_fall_ST(edict_t* self) {}
-	void SP_props2_sign(edict_t* self) {}
-	void SP_props2_lighthouse_beam(edict_t* self) {}
-	void SP_props2_boat(edict_t* self) {}
-	void SP_props2_buoy(edict_t* self) {}
-	void SP_props2_buoy_side(edict_t* self) {}
-	void SP_props2_deadguy_underwater(edict_t* self) {}
-	void SP_props2_buoy_animate(edict_t* self) {}
-	void SP_props2_gargoyle(edict_t* self) {}
-	void SP_props2_clothesline(edict_t* self) {}
-	void SP_props2_plant_XL(edict_t* self) {}
-	void SP_props2_plant_SM(edict_t* self) {}
-	void SP_props2_boatphone(edict_t* self) {}
-	void SP_props2_ashtray(edict_t* self) {}
-	void SP_props2_lunch(edict_t* self) {}
-	void SP_props2_deadgal_headless(edict_t* self) {}
-	void SP_props2_plant_bush(edict_t* self) {}
-	void SP_props2_boat_animate(edict_t* self) {}
-	void SP_props2_helicopter_animate(edict_t* self) {}
-	void SP_props2_car_animate(edict_t* self) {}
-	void SP_props2_car_topdown(edict_t* self) {}
-	void SP_props2_car_topup(edict_t* self) {}
-	void SP_props2_plant_fern(edict_t* self) {}
-	void SP_props2_pinball_machine(edict_t* self) {}
-	void SP_props2_barrels_PV_A(edict_t* self) {}
-	void SP_props2_barrels_PV_C(edict_t* self) {}
-	void SP_props2_barrels_PV_D(edict_t* self) {}
-	void SP_props2_barrels_PV_E(edict_t* self) {}
-	void SP_props2_barrels_PV_F(edict_t* self) {}
-	void SP_light_chandelier(edict_t* self) {}
-	void SP_props2_air_train(edict_t* self) {}
-	void SP_props3_dead_louie(edict_t* self) {}
-	void SP_props3_cut_boss_player_animate(edict_t* self) {}
-	void SP_props3_deco_fixture(edict_t* self) {}
-	void SP_props3_cut_boss_chick_animate(edict_t* self) {}
-	void SP_props3_cut_train_run_animate(edict_t* self) {}
-	void SP_props3_cut_A_animate(edict_t* self) {}
-	void SP_props3_cut_B_animate(edict_t* self) {}
-	void SP_props3_cut_C_animate(edict_t* self) {}
-	void SP_props3_cut_D_animate(edict_t* self) {}
-	void SP_props3_cash_counter_animate(edict_t* self) {}
-	void SP_props2_barrels_PV_B(edict_t* self) {}
-	void SP_props3_decanter(edict_t* self) {}
-	void SP_props3_whiskey_glass(edict_t* self) {}
-	void SP_props3_barrels_fall_nikki_A(edict_t* self) {}
-	void SP_props3_barrels_fall_nikki_B(edict_t* self) {}
-	void SP_props3_cut_run_to_car_animate(edict_t* self) {}
-	void SP_props3_cut_final_animate(edict_t* self) {}
-	void SP_props3_cash(edict_t* self) {}
-	void SP_props3_cut_truck_driver(edict_t* self) {}
-	void SP_props3_cut_pinball_guy_animate(edict_t* self) {}
-	void SP_lightflare(edict_t* self) {}
-	void SP_path_corner_cast(edict_t* self) {}
-	void SP_pistol_mod_damage(edict_t* self) {}
-	void SP_pistol_mod_rof(edict_t* self) {}
-	void SP_pistol_mod_reload(edict_t* self) {}
-	void SP_hmg_mod_cooling(edict_t* self) {}
-	void SP_sfx_beacon(edict_t* self) {}
-	void SP_refl(edict_t* self) {}
-	void SP_dm_cashspawn(edict_t* self) {}
-	void SP_dm_safebag(edict_t* self) {}
-	void SP_dm_props_banner(edict_t* self) {}
-
-	std::array<spawn_t, 285> spawns =
-	{{
 		{"item_health", SP_item_health},
 		{"item_health_small", SP_item_health_small},
 		{"item_health_large", SP_item_health_large},
@@ -586,5 +577,5 @@ namespace Freeking
 		{"dm_cashspawn", SP_dm_cashspawn},
 		{"dm_safebag", SP_dm_safebag},
 		{"dm_props_banner", SP_dm_props_banner}
-	}};
+	};
 }
