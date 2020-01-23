@@ -3,12 +3,6 @@
 
 namespace Freeking
 {
-	struct FrameVertex
-	{
-		Vector3f Position;
-		Vector3f Normal;
-	};
-
 	void MDXFile::Build(std::shared_ptr<KeyframeMesh>& mesh) const
 	{
 		if (!IsValid())

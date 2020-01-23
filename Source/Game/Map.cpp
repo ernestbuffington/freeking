@@ -173,11 +173,6 @@ namespace Freeking
 
 		for (int modelIndex = 0; modelIndex < models.Num(); ++modelIndex)
 		{
-			if (modelIndex > 0)
-			{
-				//break;
-			}
-
 			const auto& model = models[modelIndex];
 			auto brushModel = std::make_shared<BrushModel>();
 			brushModel->BoundsMin = model.BoundsMin;
