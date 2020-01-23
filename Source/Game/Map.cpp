@@ -361,11 +361,14 @@ namespace Freeking
 			}
 			else if (classname == "func_button" ||
 					 classname == "func_door" ||
-					 classname == "func_door_rotating" ||
 					 classname == "func_explosive" ||
 					 classname == "func_wall")
 			{
 				newEntity = std::make_shared<BrushModelEntity>(this);
+			}
+			else if (classname == "func_door_rotating")
+			{
+				newEntity = std::make_shared<DoorRotatingEntity>(this);
 			}
 
 			if (newEntity)
@@ -377,7 +380,7 @@ namespace Freeking
 
 					if (e.angle > 0)
 					{
-						rotation = Quaternion::FromDegreeAngles(Vector3f(0, Math::DegreesToRadians(e.angle), 0));
+						rotation = Quaternion::FromDegreeAngles(Vector3f(0, e.angle, 0));
 					}
 
 					newEntity->SetPosition(origin);

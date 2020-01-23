@@ -139,6 +139,57 @@ namespace Freeking
 		float _speed;
 	};
 
+	class DoorRotatingEntity : public BrushModelEntity
+	{
+	public:
+
+		DoorRotatingEntity(Map* map) : BrushModelEntity(map),
+			_speed(100.0f),
+			_angle(0.0f),
+			_distance(0.0f),
+			_time(0.0f)
+		{
+		}
+
+		virtual void Tick(double dt) override
+		{
+			BrushModelEntity::Tick(dt);
+
+			_time += dt;
+			_time = std::fmodf(_time, Math::TWO_PI);
+
+			float t = (std::sinf(_time * 5.0f) + 1.0f) * 0.5f;
+
+			_rotation = Quaternion::FromDegreeAngles(Vector3f(0, _distance * (t * -1.0f), 0));
+		}
+
+		virtual bool SetProperty(const EntityKeyValue& keyValue) override
+		{
+			if (keyValue.Key == "speed")
+			{
+				return keyValue.ValueAsFloat(_speed);
+			}
+			else if (keyValue.Key == "distance")
+			{
+				return keyValue.ValueAsFloat(_distance);
+			}
+			else if (keyValue.Key == "angle")
+			{
+				_rotation = Quaternion(0, 0, 0, 1);
+				return keyValue.ValueAsFloat(_angle);
+			}
+
+			return BrushModelEntity::SetProperty(keyValue);
+		}
+
+	private:
+
+		float _speed;
+		float _angle;
+		float _distance;
+		float _time;
+	};
+
 	class BrushModel
 	{
 	public:
