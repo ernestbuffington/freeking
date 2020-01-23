@@ -71,7 +71,6 @@ namespace Freeking
 
 		void Draw();
 		void Commit();
-		void AddIndex(uint32_t index);
 		void SetDiffuse(const std::shared_ptr<Texture2D>& texture);
 
 		inline uint32_t GetFrameCount() const { return _frameCount; }
@@ -80,6 +79,7 @@ namespace Freeking
 		inline void SetFrameVertexCount(uint32_t frameVertexCount) { _frameVertexCount = frameVertexCount; }
 
 		std::vector<Vertex> Vertices;
+		std::vector<uint32_t> Indices;
 		std::vector<FrameVertex> FrameVertices;
 		std::vector<FrameTransform> FrameTransforms;
 		std::vector<std::string> Skins;
@@ -88,9 +88,6 @@ namespace Freeking
 
 		uint32_t _frameCount;
 		uint32_t _frameVertexCount;
-
-		std::vector<uint32_t> _indices;
-
 		std::unique_ptr<VertexBinding> _vertexBinding;
 		std::unique_ptr<VertexBuffer> _vertexBuffer;
 		std::unique_ptr<IndexBuffer> _indexBuffer;

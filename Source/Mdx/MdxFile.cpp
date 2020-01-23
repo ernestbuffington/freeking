@@ -76,21 +76,21 @@ namespace Freeking
 			{
 				if (command->TrisTypeNum < 0)
 				{
-					mesh->AddIndex(vertexOffset + (vertexIndex + 2));
-					mesh->AddIndex(vertexOffset + (vertexIndex + 1));
-					mesh->AddIndex(vertexOffset);
+					mesh->Indices.emplace_back(vertexOffset + (vertexIndex + 2));
+					mesh->Indices.emplace_back(vertexOffset + (vertexIndex + 1));
+					mesh->Indices.emplace_back(vertexOffset);
 				}
 				else if ((vertexIndex % 2) == 0)
 				{
-					mesh->AddIndex(vertexOffset + (vertexIndex + 2));
-					mesh->AddIndex(vertexOffset + (vertexIndex + 1));
-					mesh->AddIndex(vertexOffset + vertexIndex);
+					mesh->Indices.emplace_back(vertexOffset + (vertexIndex + 2));
+					mesh->Indices.emplace_back(vertexOffset + (vertexIndex + 1));
+					mesh->Indices.emplace_back(vertexOffset + vertexIndex);
 				}
 				else
 				{
-					mesh->AddIndex(vertexOffset + vertexIndex);
-					mesh->AddIndex(vertexOffset + (vertexIndex + 1));
-					mesh->AddIndex(vertexOffset + (vertexIndex + 2));
+					mesh->Indices.emplace_back(vertexOffset + vertexIndex);
+					mesh->Indices.emplace_back(vertexOffset + (vertexIndex + 1));
+					mesh->Indices.emplace_back(vertexOffset + (vertexIndex + 2));
 				}
 			}
 

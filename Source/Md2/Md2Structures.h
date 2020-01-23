@@ -54,4 +54,15 @@ namespace Freeking
     {
         std::array<char, 64> Path;
     };
+
+    struct MD2CommandVertex
+    {
+        std::array<float, 2> TextureCoordinates;
+        int VertexIndex;
+    };
+
+    struct MD2Command
+    {
+        int TrisTypeNum;
+    };
 }

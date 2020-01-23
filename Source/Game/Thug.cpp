@@ -1,5 +1,6 @@
 #include "Thug.h"
 #include "MdxFile.h"
+#include "Md2/Md2File.h"
 #include "Util.h"
 #include "FileSystem.h"
 #include "Input.h"

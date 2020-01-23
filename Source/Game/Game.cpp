@@ -11,6 +11,7 @@
 #include "BspFile.h"
 #include "BspFlags.h"
 #include "MdxFile.h"
+#include "Md2/Md2File.h"
 #include "EntityLump.h"
 #include "FpsTimer.h"
 #include "FreeCamera.h"
@@ -131,6 +132,15 @@ namespace Freeking
 			}
 		}
 
+
+		auto md2Shader = Util::LoadShader("Shaders/VertexSkinnedMesh.vert", "Shaders/VertexSkinnedMesh.frag");
+		auto md2Buffer = FileSystem::GetFileData("models/weapons/g_tomgun/tris.md2");
+		auto& md2File = MD2File::Create(md2Buffer.data());
+		auto md2Mesh = std::make_shared<KeyframeMesh>();
+		md2File.Build(md2Mesh);
+		md2Mesh->SetDiffuse(Util::LoadTexture(md2Mesh->Skins[0]));
+		md2Mesh->Commit();
+
 		while (running)
 		{
 			last = now;
@@ -204,6 +214,28 @@ namespace Freeking
 			for (const auto& thug : thugs)
 			{
 				thug->Render(viewProjectionMatrix, deltaTime);
+			}
+
+			if (md2Mesh)
+			{
+				int md2Frame = 0;
+
+				md2Shader->Bind();
+				md2Shader->SetUniformValue("diffuse", 0);
+				md2Shader->SetUniformValue("frameVertexBuffer", 1);
+				md2Shader->SetUniformValue("normalBuffer", 2);
+				md2Shader->SetUniformValue("delta", 0);
+				md2Shader->SetUniformValue("viewProj", viewProjectionMatrix * Matrix4x4::Translation(Vector3f(0, 50, 0)));
+
+				md2Shader->SetUniformValue("frames[0].index", (int)(md2Frame * md2Mesh->GetFrameVertexCount()));
+				md2Shader->SetUniformValue("frames[0].translate", md2Mesh->FrameTransforms[md2Frame].translate);
+				md2Shader->SetUniformValue("frames[0].scale", md2Mesh->FrameTransforms[md2Frame].scale);
+
+				md2Shader->SetUniformValue("frames[1].index", (int)(md2Frame * md2Mesh->GetFrameVertexCount()));
+				md2Shader->SetUniformValue("frames[1].translate", md2Mesh->FrameTransforms[md2Frame].translate);
+				md2Shader->SetUniformValue("frames[1].scale", md2Mesh->FrameTransforms[md2Frame].scale);
+
+				md2Mesh->Draw();
 			}
 
 			if (debug)
