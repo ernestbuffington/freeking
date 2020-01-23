@@ -20,6 +20,8 @@ namespace Freeking
 
 	EntityLump::EntityLump(const std::string& string)
 	{
+		FuncTest();
+
 		size_t pos = 0;
 		while (pos < string.size())
 		{

@@ -1,10 +1,11 @@
+#include "EntityLump.h"
 #include <string>
 #include <unordered_map>
-#include <functional>
+#include <iostream>
 
 namespace Freeking
 {
-	void SP_item_health() {}
+	void SP_item_health() { std::cout << "SP_item_health" << std::endl; }
 	void SP_item_health_small() {}
 	void SP_item_health_large() {}
 	void SP_item_health_mega() {}
@@ -578,4 +579,9 @@ namespace Freeking
 		{"dm_safebag", SP_dm_safebag},
 		{"dm_props_banner", SP_dm_props_banner}
 	};
+
+	void EntityLump::FuncTest()
+	{
+		spawns.at("item_health")();
+	}
 }

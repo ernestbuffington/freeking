@@ -21,6 +21,8 @@ namespace Freeking
 	{
 	public:
 
+		static void FuncTest();
+
 		EntityLump(const std::string& string);
 
 		class EntityDef
