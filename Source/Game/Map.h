@@ -22,8 +22,8 @@ namespace Freeking
 	{
 	public:
 
-		BaseEntity(Map* map) :
-			_map(map),
+		BaseEntity() :
+			_map(nullptr),
 			_position(0),
 			_rotation(0, 0, 0, 1)
 		{
@@ -53,13 +53,15 @@ namespace Freeking
 		Vector3f _position;
 		Quaternion _rotation;
 		Matrix4x4 _transform;
+
+		friend class Map;
 	};
 
 	class BrushModelEntity : public BaseEntity
 	{
 	public:
 
-		BrushModelEntity(Map* map) : BaseEntity(map),
+		BrushModelEntity() :
 			_modelIndex(-1)
 		{
 		}
@@ -97,7 +99,7 @@ namespace Freeking
 	{
 	public:
 
-		WorldSpawnEntity(Map* map) : BrushModelEntity(map)
+		WorldSpawnEntity()
 		{
 		}
 
@@ -112,7 +114,7 @@ namespace Freeking
 	{
 	public:
 
-		RotatingEntity(Map* map) : BrushModelEntity(map),
+		RotatingEntity() :
 			_speed(0.0f)
 		{
 		}
@@ -143,7 +145,7 @@ namespace Freeking
 	{
 	public:
 
-		DoorRotatingEntity(Map* map) : BrushModelEntity(map),
+		DoorRotatingEntity() :
 			_speed(100.0f),
 			_angle(0.0f),
 			_distance(0.0f),
@@ -194,7 +196,7 @@ namespace Freeking
 	{
 	public:
 
-		DoorEntity(Map* map) : BrushModelEntity(map),
+		DoorEntity() :
 			_speed(100.0f),
 			_angle(0.0f),
 			_time(0.0f)

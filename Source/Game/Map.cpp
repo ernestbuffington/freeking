@@ -175,9 +175,9 @@ namespace Freeking
 		{
 			const auto& model = models[modelIndex];
 			auto brushModel = std::make_shared<BrushModel>();
-			brushModel->BoundsMin = model.BoundsMin;
-			brushModel->BoundsMax = model.BoundsMax;
-			brushModel->Origin = model.Origin;
+			brushModel->BoundsMin = Vector3f(model.BoundsMin.x, model.BoundsMin.z, -model.BoundsMin.y);
+			brushModel->BoundsMax = Vector3f(model.BoundsMax.x, model.BoundsMax.z, -model.BoundsMax.y);
+			brushModel->Origin = Vector3f(model.Origin.x, model.Origin.z, -model.Origin.y);
 
 			for (int faceIndex = model.FirstFace; faceIndex < (model.FirstFace + model.NumFaces); ++faceIndex)
 			{
@@ -364,29 +364,31 @@ namespace Freeking
 
 			if (classname == "worldspawn")
 			{
-				newEntity = std::make_shared<WorldSpawnEntity>(this);
+				newEntity = std::make_shared<WorldSpawnEntity>();
 			}
 			else if (classname == "func_rotating")
 			{
-				newEntity = std::make_shared<RotatingEntity>(this);
+				newEntity = std::make_shared<RotatingEntity>();
 			}
 			else if (classname == "func_button" ||
 					 classname == "func_explosive" ||
 					 classname == "func_wall")
 			{
-				newEntity = std::make_shared<BrushModelEntity>(this);
+				newEntity = std::make_shared<BrushModelEntity>();
 			}
 			else if (classname == "func_door")
 			{
-				newEntity = std::make_shared<DoorEntity>(this);
+				newEntity = std::make_shared<DoorEntity>();
 			}
 			else if (classname == "func_door_rotating")
 			{
-				newEntity = std::make_shared<DoorRotatingEntity>(this);
+				newEntity = std::make_shared<DoorRotatingEntity>();
 			}
 
 			if (newEntity)
 			{
+				newEntity->_map = this;
+
 				if (!e.logic)
 				{
 					Vector3f origin(e.origin.x, e.origin.z, -e.origin.y);
