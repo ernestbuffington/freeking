@@ -38,6 +38,19 @@ namespace Freeking
 		}
 	}
 
+	void DoorEntity::Tick(double dt)
+	{
+		BrushModelEntity::Tick(dt);
+
+		_time += (dt * Math::DegreesToRadians(_speed));
+		_time = std::fmodf(_time, Math::TWO_PI);
+
+		float t = (std::sinf(_time) + 1.0f) * 0.5f;
+		float distance = (_model->BoundsMax - _model->BoundsMin).y - 8.0f;
+
+		_position = _initialPosition + Vector3f(0, distance * (t * 1.0f), 0);
+	}
+
 	void BrushModel::RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<ShaderProgram>& shader)
 	{
 		for (const auto& mesh : Meshes)
@@ -167,6 +180,9 @@ namespace Freeking
 
 			const auto& model = models[modelIndex];
 			auto brushModel = std::make_shared<BrushModel>();
+			brushModel->BoundsMin = model.BoundsMin;
+			brushModel->BoundsMax = model.BoundsMax;
+			brushModel->Origin = model.Origin;
 
 			for (int faceIndex = model.FirstFace; faceIndex < (model.FirstFace + model.NumFaces); ++faceIndex)
 			{
@@ -360,11 +376,14 @@ namespace Freeking
 				newEntity = std::make_shared<RotatingEntity>(this);
 			}
 			else if (classname == "func_button" ||
-					 classname == "func_door" ||
 					 classname == "func_explosive" ||
 					 classname == "func_wall")
 			{
 				newEntity = std::make_shared<BrushModelEntity>(this);
+			}
+			else if (classname == "func_door")
+			{
+				newEntity = std::make_shared<DoorEntity>(this);
 			}
 			else if (classname == "func_door_rotating")
 			{

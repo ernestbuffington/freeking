@@ -155,10 +155,10 @@ namespace Freeking
 		{
 			BrushModelEntity::Tick(dt);
 
-			_time += dt;
+			_time += (dt * Math::DegreesToRadians(_speed));
 			_time = std::fmodf(_time, Math::TWO_PI);
 
-			float t = (std::sinf(_time * 5.0f) + 1.0f) * 0.5f;
+			float t = (std::sinf(_time) + 1.0f) * 0.5f;
 
 			_rotation = Quaternion::FromDegreeAngles(Vector3f(0, _distance * (t * -1.0f), 0));
 		}
@@ -190,6 +190,47 @@ namespace Freeking
 		float _time;
 	};
 
+	class DoorEntity : public BrushModelEntity
+	{
+	public:
+
+		DoorEntity(Map* map) : BrushModelEntity(map),
+			_speed(100.0f),
+			_angle(0.0f),
+			_time(0.0f)
+		{
+		}
+
+		virtual void Initialize() override
+		{
+			BrushModelEntity::Initialize();
+		}
+
+		virtual void Tick(double dt) override;
+
+		virtual bool SetProperty(const EntityKeyValue& keyValue) override
+		{
+			if (keyValue.Key == "speed")
+			{
+				return keyValue.ValueAsFloat(_speed);
+			}
+			else if (keyValue.Key == "angle")
+			{
+				_rotation = Quaternion(0, 0, 0, 1);
+				return keyValue.ValueAsFloat(_angle);
+			}
+
+			return BrushModelEntity::SetProperty(keyValue);
+		}
+
+	private:
+
+		float _speed;
+		float _angle;
+		float _time;
+		Vector3f _initialPosition;
+	};
+
 	class BrushModel
 	{
 	public:
@@ -198,6 +239,10 @@ namespace Freeking
 		void RenderTranslucent(const Matrix4x4& viewProjection, const std::shared_ptr<ShaderProgram>& shader);
 
 		std::map<std::string, std::shared_ptr<BrushMesh>> Meshes;
+
+		Vector3f BoundsMin;
+		Vector3f BoundsMax;
+		Vector3f Origin;
 	};
 
 	class Map
