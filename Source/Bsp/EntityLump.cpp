@@ -33,7 +33,12 @@ namespace Freeking
 			{
 				entityDef.TryGetString("targetname", entityDef.targetname);
 				entityDef.TryGetString("target", entityDef.target);
-				entityDef.TryGetFloat("angle", entityDef.angle);
+
+				if (!entityDef.TryGetFloat("angle", entityDef.angle))
+				{
+					entityDef.angle = 0;
+				}
+
 				entityDef.logic = !entityDef.TryGetVector("origin", entityDef.origin);
 
 				Entities.push_back(entityDef);
