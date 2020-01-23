@@ -3,6 +3,21 @@
 
 namespace Freeking
 {
+	bool EntityKeyValue::ValueAsVector(Vector3f& v) const
+	{
+		return EntityLump::TryParseVector(Value, v);
+	}
+
+	bool EntityKeyValue::ValueAsFloat(float& v) const
+	{
+		return EntityLump::TryParseFloat(Value, v);
+	}
+
+	bool EntityKeyValue::ValueAsInt(int& v) const
+	{
+		return EntityLump::TryParseInt(Value, v);
+	}
+
 	EntityLump::EntityLump(const std::string& string)
 	{
 		size_t pos = 0;

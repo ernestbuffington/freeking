@@ -12,6 +12,68 @@
 
 namespace Freeking
 {
+	void BrushModelEntity::Initialize()
+	{
+		if (_modelIndex < 0)
+		{
+			return;
+		}
+
+		_model = _map->GetBrushModel(_modelIndex);
+	}
+
+	void BrushModelEntity::RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<ShaderProgram>& shader)
+	{
+		if (_model)
+		{
+			_model->RenderOpaque(viewProjection, shader);
+		}
+	}
+
+	void BrushModelEntity::RenderTranslucent(const Matrix4x4& viewProjection, const std::shared_ptr<ShaderProgram>& shader)
+	{
+		if (_model)
+		{
+			_model->RenderTranslucent(viewProjection, shader);
+		}
+	}
+
+	void BrushModel::RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<ShaderProgram>& shader)
+	{
+		for (const auto& mesh : Meshes)
+		{
+			if (mesh.second->Translucent)
+			{
+				continue;
+			}
+
+			shader->SetUniformValue("alphaCutOff", mesh.second->AlphaCutOff);
+			mesh.second->Draw();
+		}
+	}
+
+	void BrushModel::RenderTranslucent(const Matrix4x4& viewProjection, const std::shared_ptr<ShaderProgram>& shader)
+	{
+		for (auto& mesh : Meshes)
+		{
+			if (!mesh.second->Translucent)
+			{
+				continue;
+			}
+
+			shader->SetUniformValue("alphaMultiply", mesh.second->AlphaMultiply);
+			mesh.second->Draw();
+		}
+	}
+
+	void Map::Tick(double dt)
+	{
+		for (const auto& entity : _entities)
+		{
+			entity->Tick(dt);
+		}
+	}
+
 	void Map::Render(const Matrix4x4& viewProjection)
 	{
 		_shader->Bind();
@@ -27,36 +89,22 @@ namespace Freeking
 
 		_shader->SetUniformValue("alphaMultiply", 1.0f);
 
-		for (const auto& brushModel : _models)
+		for (const auto& entity : _entities)
 		{
-			for (auto& mesh : brushModel->Meshes)
-			{
-				if (mesh.second->Translucent)
-				{
-					continue;
-				}
-
-				_shader->SetUniformValue("alphaCutOff", mesh.second->AlphaCutOff);
-				mesh.second->Draw();
-			}
+			auto mvp = viewProjection * entity->GetTransform();
+			_shader->SetUniformValue("viewProj", mvp);
+			entity->RenderOpaque(mvp, _shader);
 		}
 
 		glEnable(GL_BLEND);
 
 		_shader->SetUniformValue("alphaCutOff", 0.0f);
 
-		for (const auto& brushModel : _models)
+		for (const auto& entity : _entities)
 		{
-			for (auto& mesh : brushModel->Meshes)
-			{
-				if (!mesh.second->Translucent)
-				{
-					continue;
-				}
-
-				_shader->SetUniformValue("alphaMultiply", mesh.second->AlphaMultiply);
-				mesh.second->Draw();
-			}
+			auto mvp = viewProjection * entity->GetTransform();
+			_shader->SetUniformValue("viewProj", mvp);
+			entity->RenderTranslucent(mvp, _shader);
 		}
 
 		_shader->Unbind();
@@ -295,5 +343,44 @@ namespace Freeking
 		_shader = Util::LoadShader("Shaders/Mesh.vert", "Shaders/Mesh.frag");
 		_textureSampler = std::make_shared<TextureSampler>(WrapMode::WRAPMODE_REPEAT, FilterMode::FILTERMODE_LINEAR);
 		_lightmapSampler = std::make_shared<TextureSampler>(WrapMode::WRAPMODE_CLAMP_EDGE, FilterMode::FILTERMODE_LINEAR_NO_MIP);
+		
+		pf.Start();
+
+		for (const auto& e : _entityLump->Entities)
+		{
+			const auto& classname = e.classname;
+			std::shared_ptr<BaseEntity> newEntity;
+
+			if (classname == "worldspawn")
+			{
+				newEntity = std::make_shared<WorldSpawnEntity>(this);
+			}
+			else if (classname == "func_rotating")
+			{
+				newEntity = std::make_shared<RotatingEntity>(this);
+			}
+
+			if (newEntity)
+			{
+				Vector3f origin(e.origin.x, e.origin.z, -e.origin.y);
+				Quaternion rotation = Quaternion::FromDegreeAngles(Vector3f(0, Math::DegreesToRadians(e.angle), 0));
+
+				if (!e.logic)
+				{
+					newEntity->SetPosition(origin);
+					newEntity->SetRotation(rotation);
+				}
+
+				for (const auto& keyValue : e.keyValues)
+				{
+					newEntity->SetProperty({ keyValue.first, keyValue.second });
+				}
+
+				newEntity->Initialize();
+				_entities.push_back(std::move(newEntity));
+			}
+		}
+
+		pf.Stop("Create entities");
 	}
 }

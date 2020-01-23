@@ -29,7 +29,7 @@ void main()
 	vec3 lightmapColor1 = texture(lightmap, vert.uv2).rgb * brightness;
 	vec3 lightmapColor = lightmapColor0 + lightmapColor1;
 
-	float gamma = 1.5;
+	float gamma = 2.0;
 	vec3 finalColor = textureColor.rgb * lightmapColor.rgb * lightmapColor.rgb;
 	finalColor.rgb = pow(finalColor.rgb, vec3(1.0 / gamma));
 

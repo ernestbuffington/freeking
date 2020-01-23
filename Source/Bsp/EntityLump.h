@@ -7,6 +7,16 @@
 
 namespace Freeking
 {
+	struct EntityKeyValue
+	{
+		std::string Key;
+		std::string Value;
+
+		bool ValueAsVector(Vector3f& v) const;
+		bool ValueAsFloat(float& v) const;
+		bool ValueAsInt(int& v) const;
+	};
+
 	class EntityLump
 	{
 	public:
@@ -44,5 +54,7 @@ namespace Freeking
 
 		static std::vector<std::string> SplitString(const std::string& s, const std::string& delimiter);
 		static std::string ParseSubString(const std::string& string, size_t& pos);
+
+		friend struct EntityKeyValue;
 	};
 }

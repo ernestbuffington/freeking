@@ -198,6 +198,7 @@ namespace Freeking
 			Matrix4x4 viewMatrix = camera.GetViewMatrix();
 			Matrix4x4 viewProjectionMatrix = projectionMatrix * viewMatrix;
 
+			map->Tick(deltaTime);
 			map->Render(viewProjectionMatrix);
 
 			for (const auto& thug : thugs)
