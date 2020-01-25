@@ -1,5 +1,5 @@
 #include "EntityLump.h"
-#include <charconv>
+#include "Util.h"
 
 namespace Freeking
 {
@@ -10,18 +10,16 @@ namespace Freeking
 
 	bool EntityKeyValue::ValueAsFloat(float& v) const
 	{
-		return EntityLump::TryParseFloat(Value, v);
+		return Util::TryParseFloat(Value, v);
 	}
 
 	bool EntityKeyValue::ValueAsInt(int& v) const
 	{
-		return EntityLump::TryParseInt(Value, v);
+		return Util::TryParseInt(Value, v);
 	}
 
 	EntityLump::EntityLump(const std::string& string)
 	{
-		FuncTest();
-
 		size_t pos = 0;
 		while (pos < string.size())
 		{
@@ -82,7 +80,7 @@ namespace Freeking
 			return false;
 		}
 
-		return TryParseInt(s, value);
+		return Util::TryParseInt(s, value);
 	}
 
 	bool EntityLump::EntityDef::TryGetFloat(const std::string& key, float& value) const
@@ -93,7 +91,7 @@ namespace Freeking
 			return false;
 		}
 
-		return TryParseFloat(s, value);
+		return Util::TryParseFloat(s, value);
 	}
 
 	bool EntityLump::EntityDef::TryGetVector(const std::string& key, Vector3f& value) const
@@ -116,9 +114,9 @@ namespace Freeking
 		}
 
 		float x, y, z;
-		if (!TryParseFloat(xyz[0], x) ||
-			!TryParseFloat(xyz[1], y) ||
-			!TryParseFloat(xyz[2], z))
+		if (!Util::TryParseFloat(xyz[0], x) ||
+			!Util::TryParseFloat(xyz[1], y) ||
+			!Util::TryParseFloat(xyz[2], z))
 		{
 			return false;
 		}
@@ -126,16 +124,6 @@ namespace Freeking
 		v = Vector3f(x, y, z);
 
 		return true;
-	}
-
-	bool EntityLump::TryParseFloat(const std::string& s, float& v)
-	{
-		return std::from_chars(s.data(), s.data() + s.size(), v, std::chars_format::general).ec == std::errc();
-	}
-
-	bool EntityLump::TryParseInt(const std::string& s, int& v)
-	{
-		return std::from_chars(s.data(), s.data() + s.size(), v).ec == std::errc();
 	}
 
 	std::vector<std::string> EntityLump::SplitString(const std::string& s, const std::string& delimiter)

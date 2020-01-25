@@ -129,4 +129,14 @@ namespace Freeking
 
 		return true;
 	}
+
+	bool Util::TryParseFloat(const std::string& s, float& v)
+	{
+		return std::from_chars(s.data(), s.data() + s.size(), v, std::chars_format::general).ec == std::errc();
+	}
+
+	bool Util::TryParseInt(const std::string& s, int& v)
+	{
+		return std::from_chars(s.data(), s.data() + s.size(), v).ec == std::errc();
+	}
 }

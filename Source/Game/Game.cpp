@@ -132,7 +132,6 @@ namespace Freeking
 			}
 		}
 
-
 		auto md2Shader = Util::LoadShader("Shaders/VertexSkinnedMesh.vert", "Shaders/VertexSkinnedMesh.frag");
 		auto md2Buffer = FileSystem::GetFileData("models/weapons/g_tomgun/tris.md2");
 		auto& md2File = MD2File::Create(md2Buffer.data());
@@ -262,6 +261,22 @@ namespace Freeking
 						auto text = e.classname + " (" + name + ")";
 						spriteBatch->DrawText(font.get(), text, screenPosition + Vector2f(2, 2), Vector4f(0, 0, 0, alpha), 0.25f);
 						spriteBatch->DrawText(font.get(), text, screenPosition, Vector4f(1, 1, 1, alpha), 0.25f);
+
+						if (e.classname == "junior")
+						{
+							float light;
+							Vector3f color;
+							if (!e.TryGetFloat("light", light))
+							{
+								light = 300.0f;
+							}
+							if (!e.TryGetVector("_color", color))
+							{
+								color = Vector3(0, 0, 0);
+							}
+
+							lineRenderer->DrawSphere(origin, light * 0.5f, 8, 8, Vector4f(color.x, color.y, color.z, alpha));
+						}
 					}
 				}
 

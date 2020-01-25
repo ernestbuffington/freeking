@@ -12,45 +12,6 @@
 
 namespace Freeking
 {
-	void BrushModelEntity::Initialize()
-	{
-		if (_modelIndex < 0)
-		{
-			return;
-		}
-
-		_model = _map->GetBrushModel(_modelIndex);
-	}
-
-	void BrushModelEntity::RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<ShaderProgram>& shader)
-	{
-		if (_model)
-		{
-			_model->RenderOpaque(viewProjection, shader);
-		}
-	}
-
-	void BrushModelEntity::RenderTranslucent(const Matrix4x4& viewProjection, const std::shared_ptr<ShaderProgram>& shader)
-	{
-		if (_model)
-		{
-			_model->RenderTranslucent(viewProjection, shader);
-		}
-	}
-
-	void DoorEntity::Tick(double dt)
-	{
-		BrushModelEntity::Tick(dt);
-
-		_time += (dt * Math::DegreesToRadians(_speed));
-		_time = std::fmodf(_time, Math::TWO_PI);
-
-		float t = (std::sinf(_time) + 1.0f) * 0.5f;
-		float distance = (_model->BoundsMax - _model->BoundsMin).y - 8.0f;
-
-		_position = _initialPosition + Vector3f(0, distance * (t * 1.0f), 0);
-	}
-
 	void BrushModel::RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<ShaderProgram>& shader)
 	{
 		for (const auto& mesh : Meshes)
@@ -191,27 +152,19 @@ namespace Freeking
 					continue;
 				}
 
+				std::string textureName(faceTextureInfo.TextureName);
 				auto masked = (faceTextureInfo.Flags & BspSurfaceFlags::Masked);
 				auto trans = (faceTextureInfo.Flags & BspSurfaceFlags::Trans33) || (faceTextureInfo.Flags & BspSurfaceFlags::Trans66);
 
-				BrushMesh* mesh = nullptr;
-				auto textureName = std::string(faceTextureInfo.TextureName);
-
-				if (brushModel->Meshes.find(textureName) == brushModel->Meshes.end())
+				auto [meshIt, meshInserted] = brushModel->Meshes.try_emplace(textureName, nullptr);
+				auto mesh = meshInserted ? std::make_shared<BrushMesh>() : meshIt->second;
+				if (meshInserted)
 				{
-					auto newMesh = std::make_shared<BrushMesh>();
-					newMesh->SetDiffuse(_textures[textureName]);
-					newMesh->AlphaMultiply = trans ? ((faceTextureInfo.Flags & BspSurfaceFlags::Trans33) ? 0.33f : 0.66f) : 1.0f;
-					newMesh->AlphaCutOff = masked ? 0.67f : 0.0f;
-					newMesh->Translucent = trans;
-					brushModel->Meshes.emplace(textureName, std::move(newMesh));
-				}
-
-				mesh = brushModel->Meshes[textureName].get();
-
-				if (mesh == nullptr)
-				{
-					continue;
+					meshIt->second = mesh;
+					mesh->SetDiffuse(_textures[textureName]);
+					mesh->AlphaMultiply = trans ? ((faceTextureInfo.Flags & BspSurfaceFlags::Trans33) ? 0.33f : 0.66f) : 1.0f;
+					mesh->AlphaCutOff = masked ? 0.67f : 0.0f;
+					mesh->Translucent = trans;
 				}
 
 				const auto& faceTexture = _textures[textureName];

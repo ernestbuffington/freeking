@@ -1,23 +1,13 @@
-#include "EntityLump.h"
+#include "IEntity.h"
 #include <string>
 #include <unordered_map>
-#include <iostream>
+#include <memory>
 
 namespace Freeking
 {
-	class IEntity
-	{
-
-	};
-
-	class ItemHealth : public IEntity
-	{
-
-	};
-
 	typedef std::shared_ptr<IEntity> shared_ptr_entity;
 
-	shared_ptr_entity make_item_health() { return std::make_shared<ItemHealth>(); }
+	shared_ptr_entity make_item_health() { return nullptr; }
 	shared_ptr_entity make_item_health_small() { return nullptr; }
 	shared_ptr_entity make_item_health_large() { return nullptr; }
 	shared_ptr_entity make_item_health_mega() { return nullptr; }
@@ -303,7 +293,7 @@ namespace Freeking
 	shared_ptr_entity make_dm_safebag() { return nullptr; }
 	shared_ptr_entity make_dm_props_banner() { return nullptr; }
 
-	static const std::unordered_map<std::string, shared_ptr_entity(*)()> spawns =
+	static const std::unordered_map<std::string_view, shared_ptr_entity(*)()> classes =
 	{
 		{ "item_health", make_item_health },
 		{ "item_health_small", make_item_health_small },
@@ -591,9 +581,4 @@ namespace Freeking
 		{ "dm_safebag", make_dm_safebag },
 		{ "dm_props_banner", make_dm_props_banner }
 	};
-
-	void EntityLump::FuncTest()
-	{
-		auto e = spawns.at("item_health")();
-	}
 }
