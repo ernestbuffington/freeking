@@ -14,6 +14,7 @@ namespace Freeking
 	public:
 
 		AssetLoader() {}
+		virtual ~AssetLoader() {}
 
 		using AssetPtr = std::shared_ptr<T>;
 
@@ -32,10 +33,11 @@ namespace Freeking
 		using AssetPtr = std::shared_ptr<T>;
 		using AssetLoaderPtr = std::unique_ptr<AssetLoader<T>>;
 
+		AssetLibrary() {}
+		virtual ~AssetLibrary() {}
+
 		AssetLibrary(const AssetLibrary&) = delete;
 		AssetLibrary& operator=(const AssetLibrary&) = delete;
-
-		AssetLibrary() {}
 
 		AssetPtr Get(const std::string& name)
 		{
