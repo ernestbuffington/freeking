@@ -1,21 +1,27 @@
 #pragma once
 
+#include "AssetLibrary.h"
 #include <unordered_map>
 #include <memory>
 #include <vector>
 
-namespace json
-{
-	class JSON;
-}
-
 namespace Freeking
 {
+	class Font;
 	class Texture2D;
+
+	class FontLibrary : public AssetLibrary<Font>
+	{
+	protected:
+
+		virtual void UpdateLoaders() override;
+	};
 
 	class Font
 	{
 	public:
+
+		static FontLibrary Library;
 
 		struct Character
 		{
@@ -30,9 +36,7 @@ namespace Freeking
 			uint32_t page;
 		};
 
-		Font(float lineHeight,
-			 std::vector<std::shared_ptr<Texture2D>> pageTextures,
-			 std::unordered_map<int32_t, Character> characters);
+		Font(float lineHeight, std::vector<std::shared_ptr<Texture2D>> pageTextures, std::unordered_map<int32_t, Character> characters);
 
 		bool TryGetCharacter(int32_t id, Character& character) const;
 

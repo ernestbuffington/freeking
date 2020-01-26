@@ -1,14 +1,16 @@
 #include "Font.h"
-#include "Util.h"
-#include "ThirdParty/json/json.hpp"
-
-using json::JSON;
+#include "FontLoader.h"
 
 namespace Freeking
 {
-	Font::Font(float lineHeight,
-			   std::vector<std::shared_ptr<Texture2D>> pageTextures,
-			   std::unordered_map<int32_t, Character> characters) :
+	void FontLibrary::UpdateLoaders()
+	{
+		AddLoader<FontLoader>();
+	}
+
+	FontLibrary Font::Library;
+
+	Font::Font(float lineHeight, std::vector<std::shared_ptr<Texture2D>> pageTextures, std::unordered_map<int32_t, Character> characters) :
 		_lineHeight(lineHeight),
 		_pageTextures(std::move(pageTextures)),
 		_characters(std::move(characters))

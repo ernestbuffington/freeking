@@ -107,7 +107,7 @@ namespace Freeking
 		auto spriteBatch = std::make_unique<SpriteBatch>(1000);
 		FreeCamera camera;
 		bool debug = true;
-		auto font = Util::LoadFont("Fonts/Roboto-Bold.json");
+		auto font = Font::Library.Get("Fonts/Roboto-Bold.json");
 		auto map = std::make_shared<Map>(BspFile::Create(FileSystem::GetFileData("maps/" + mapName + ".bsp").data()));
 
 		auto navData = FileSystem::GetFileData("navdata/" + mapName + ".nav");
