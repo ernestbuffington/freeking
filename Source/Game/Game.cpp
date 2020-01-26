@@ -107,7 +107,7 @@ namespace Freeking
 		auto spriteBatch = std::make_unique<SpriteBatch>(1000);
 		FreeCamera camera;
 		bool debug = true;
-		auto font = Util::LoadFont("Fonts/roboto-bold.json");
+		auto font = Util::LoadFont("Fonts/Roboto-Bold.json");
 		auto map = std::make_shared<Map>(BspFile::Create(FileSystem::GetFileData("maps/" + mapName + ".bsp").data()));
 
 		auto navData = FileSystem::GetFileData("navdata/" + mapName + ".nav");
@@ -260,8 +260,8 @@ namespace Freeking
 						lineRenderer->DrawSphere(origin, 4.0f, 4, 4, Vector4f(0, 1, 1, alpha));
 						screenPosition = Util::ScreenSpaceToPixelPosition(screenPosition, Vector4i(0, 0, _viewportWidth, _viewportHeight));
 						auto text = e.classname + " (" + name + ")";
-						spriteBatch->DrawText(font.get(), text, screenPosition + Vector2f(2, 2), Vector4f(0, 0, 0, alpha), 0.25f);
-						spriteBatch->DrawText(font.get(), text, screenPosition, Vector4f(1, 1, 1, alpha), 0.25f);
+						spriteBatch->DrawText(font.get(), text, screenPosition + Vector2f(2, 2), Vector4f(0, 0, 0, alpha), 0.5f);
+						spriteBatch->DrawText(font.get(), text, screenPosition, Vector4f(1, 1, 1, alpha), 0.5f);
 
 						//if (e.classname == "junior")
 						//{
@@ -300,8 +300,8 @@ namespace Freeking
 						lineRenderer->DrawAABBox(origin, Vector3f(-5, -5, -5), Vector3f(5, 5, 5), Vector4f(0, 1, 0, alpha));
 						screenPosition = Util::ScreenSpaceToPixelPosition(screenPosition, Vector4i(0, 0, _viewportWidth, _viewportHeight));
 						auto text = "node #" + std::to_string(i);
-						spriteBatch->DrawText(font.get(), text, screenPosition + Vector2f(2, 2), Vector4f(0, 0, 0, alpha), 0.25f);
-						spriteBatch->DrawText(font.get(), text, screenPosition, Vector4f(1, 1, 1, alpha), 0.25f);
+						spriteBatch->DrawText(font.get(), text, screenPosition + Vector2f(2, 2), Vector4f(0, 0, 0, alpha), 0.5f);
+						spriteBatch->DrawText(font.get(), text, screenPosition, Vector4f(1, 1, 1, alpha), 0.5f);
 					}
 				}
 
@@ -322,8 +322,8 @@ namespace Freeking
 				}
 
 				auto orthoProjection = Matrix4x4::Ortho(0, (float)_viewportWidth, (float)_viewportHeight, 0, -1.0f, 1.0f);
-				spriteBatch->DrawText(font.get(), std::to_string(fps), Vector2f(10, 2), Vector4f(0, 0, 0, 1), 0.75f);
-				spriteBatch->DrawText(font.get(), std::to_string(fps), Vector2f(8, 0), fpsColor, 0.75f);
+				spriteBatch->DrawText(font.get(), std::to_string(fps), Vector2f(10, 2), Vector4f(0, 0, 0, 1), 1.0f);
+				spriteBatch->DrawText(font.get(), std::to_string(fps), Vector2f(8, 0), fpsColor, 1.0f);
 				spriteBatch->Flush(orthoProjection);
 			}
 

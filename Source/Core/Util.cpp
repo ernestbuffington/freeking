@@ -58,18 +58,18 @@ namespace Freeking
 				Font::Character
 				{
 					(uint32_t)c["id"].ToInt(),
-					(float)c["x"].ToInt(),
-					(float)c["y"].ToInt(),
-					(float)c["width"].ToInt(),
-					(float)c["height"].ToInt(),
-					(float)c["xoffset"].ToInt(),
-					(float)c["yoffset"].ToInt(),
-					(float)c["xadvance"].ToInt(),
+					(float)c["x"].ToNumber(),
+					(float)c["y"].ToNumber(),
+					(float)c["width"].ToNumber(),
+					(float)c["height"].ToNumber(),
+					(float)c["xoffset"].ToNumber(),
+					(float)c["yoffset"].ToNumber(),
+					(float)c["xadvance"].ToNumber(),
 					(uint32_t)c["page"].ToInt(),
 				});
 		}
 
-		float lineHeight = (float)fontJson["common"]["lineHeight"].ToInt();
+		float lineHeight = (float)fontJson["common"]["lineHeight"].ToNumber();
 
 		return std::make_shared<Font>(lineHeight, pageTextures, characters);
 	}

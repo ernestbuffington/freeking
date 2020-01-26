@@ -309,6 +309,12 @@ class JSON
             return ok ? Internal.Bool : false;
         }
 
+        double ToNumber() const { bool b; return ToNumber(b); }
+        double ToNumber(bool& ok) const {
+            ok = (Type == Class::Integral) || (Type == Class::Floating);
+            return ok ? ((Type == Class::Integral) ? Internal.Int : Internal.Float) : 0;
+        }
+
         JSONWrapper<map<string,JSON>> ObjectRange() {
             if( Type == Class::Object )
                 return JSONWrapper<map<string,JSON>>( Internal.Map );

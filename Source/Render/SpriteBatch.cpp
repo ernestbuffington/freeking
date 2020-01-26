@@ -88,6 +88,7 @@ namespace Freeking
 		Font::Character character;
 		Vector2f curPosition = position;
 		float lineHeight = font->GetLineHeight() * scale;
+		curPosition.y += lineHeight;
 
 		for (const char& c : text)
 		{
@@ -116,7 +117,7 @@ namespace Freeking
 				colour,
 				true);
 
-			curPosition += Vector2f((character.xadvance + 2) * scale, 0);
+			curPosition += Vector2f((character.xadvance) * scale, 0);
 		}
 	}
 
