@@ -50,11 +50,14 @@ target_link_libraries(${PROJECT_NAME}
 include_directories(ThirdParty/glad/include)
 include_directories(Bsp)
 include_directories(Core)
-include_directories(FileSystems)
+include_directories(Entity)
+include_directories(FileSystem)
 include_directories(Game)
 include_directories(Input)
 include_directories(Math)
+include_directories(Md2)
 include_directories(Mdx)
+include_directories(Nav)
 include_directories(Render)
 
 # configure filesystem for slightly older compilers

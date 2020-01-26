@@ -12,6 +12,8 @@
 
 namespace Freeking
 {
+	Map* Map::Current = nullptr;
+
 	void BrushModel::RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<ShaderProgram>& shader)
 	{
 		for (const auto& mesh : Meshes)
@@ -63,7 +65,7 @@ namespace Freeking
 
 		_shader->SetUniformValue("alphaMultiply", 1.0f);
 
-		for (const auto& entity : _entities)
+		for (const auto& entity : _worldEntities)
 		{
 			auto mvp = viewProjection * entity->GetTransform();
 			_shader->SetUniformValue("viewProj", mvp);
@@ -74,7 +76,7 @@ namespace Freeking
 
 		_shader->SetUniformValue("alphaCutOff", 0.0f);
 
-		for (const auto& entity : _entities)
+		for (const auto& entity : _worldEntities)
 		{
 			auto mvp = viewProjection * entity->GetTransform();
 			_shader->SetUniformValue("viewProj", mvp);
@@ -86,6 +88,8 @@ namespace Freeking
 
 	Map::Map(const BspFile& bspFile)
 	{
+		Map::Current = this;
+
 		Profiler pf;
 
 		auto entities = bspFile.GetLumpArray<char>(bspFile.Header.Entities);
@@ -313,56 +317,22 @@ namespace Freeking
 		for (const auto& e : _entityLump->Entities)
 		{
 			const auto& classname = e.classname;
-			std::shared_ptr<BaseEntity> newEntity;
-
-			if (classname == "worldspawn")
+			if (classname.empty())
 			{
-				newEntity = std::make_shared<WorldSpawnEntity>();
-			}
-			else if (classname == "func_rotating")
-			{
-				newEntity = std::make_shared<RotatingEntity>();
-			}
-			else if (classname == "func_button" ||
-					 classname == "func_explosive" ||
-					 classname == "func_wall")
-			{
-				newEntity = std::make_shared<BrushModelEntity>();
-			}
-			else if (classname == "func_door")
-			{
-				newEntity = std::make_shared<DoorEntity>();
-			}
-			else if (classname == "func_door_rotating")
-			{
-				newEntity = std::make_shared<DoorRotatingEntity>();
+				continue;
 			}
 
-			if (newEntity)
+			if (auto newEntity = IEntity::Make(classname))
 			{
-				newEntity->_map = this;
-
-				if (!e.logic)
-				{
-					Vector3f origin(e.origin.x, e.origin.z, -e.origin.y);
-					Quaternion rotation = Quaternion(0, 0, 0, 1);
-
-					if (e.angle > 0)
-					{
-						rotation = Quaternion::FromDegreeAngles(Vector3f(0, e.angle, 0));
-					}
-
-					newEntity->SetPosition(origin);
-					newEntity->SetRotation(rotation);
-				}
-
-				for (const auto& keyValue : e.keyValues)
-				{
-					newEntity->SetProperty({ keyValue.first, keyValue.second });
-				}
-
+				newEntity->PreInitialize(e);
 				newEntity->Initialize();
-				_entities.push_back(std::move(newEntity));
+
+				_entities.push_back(newEntity);
+
+				if (auto worldEntity = std::dynamic_pointer_cast<BaseWorldEntity>(newEntity))
+				{
+					_worldEntities.push_back(worldEntity);
+				}
 			}
 		}
 

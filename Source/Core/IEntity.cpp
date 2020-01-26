@@ -4,16 +4,37 @@
 
 namespace Freeking
 {
-	BaseEntity::BaseEntity() :
-		_map(nullptr),
+	BaseWorldEntity::BaseWorldEntity() :
 		_position(0),
 		_rotation(0, 0, 0, 1)
 	{
 	}
 
-	void BaseEntity::Tick(double dt)
+	void BaseWorldEntity::Tick(double dt)
 	{
 		_transform = Matrix4x4::Translation(_position) * _rotation.ToMatrix4x4();
+	}
+
+	void BaseWorldEntity::PreInitialize(const EntityLump::EntityDef& def)
+	{
+		if (!def.logic)
+		{
+			Vector3f origin(def.origin.x, def.origin.z, -def.origin.y);
+			Quaternion rotation = Quaternion(0, 0, 0, 1);
+
+			if (def.angle > 0)
+			{
+				rotation = Quaternion::FromDegreeAngles(Vector3f(0, def.angle, 0));
+			}
+
+			SetPosition(origin);
+			SetRotation(rotation);
+		}
+
+		for (const auto& [key, value] : def.keyValues)
+		{
+			SetProperty({ key, value });
+		}
 	}
 
 	BrushModelEntity::BrushModelEntity() :
@@ -23,7 +44,7 @@ namespace Freeking
 
 	void BrushModelEntity::Tick(double dt)
 	{
-		BaseEntity::Tick(dt);
+		BaseWorldEntity::Tick(dt);
 	}
 
 	void BrushModelEntity::Initialize()
@@ -33,7 +54,7 @@ namespace Freeking
 			return;
 		}
 
-		_model = _map->GetBrushModel(_modelIndex);
+		_model = Map::Current->GetBrushModel(_modelIndex);
 	}
 
 	void BrushModelEntity::RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<ShaderProgram>& shader)

@@ -19,7 +19,6 @@ namespace Freeking
 	class LightmapNode;
 	class LightmapImage;
 
-
 	class BrushModel
 	{
 	public:
@@ -46,6 +45,8 @@ namespace Freeking
 		const std::vector<EntityLump::EntityDef>& Entities() const { return _entityLump->Entities; }
 		const std::shared_ptr<BrushModel>& GetBrushModel(uint32_t index) const { return _models.at(index); }
 
+		static Map* Current;
+
 	private:
 
 		std::vector<std::shared_ptr<BrushModel>> _models;
@@ -55,6 +56,7 @@ namespace Freeking
 		std::unique_ptr<EntityLump> _entityLump;
 		std::shared_ptr<TextureSampler> _textureSampler;
 		std::shared_ptr<TextureSampler> _lightmapSampler;
-		std::vector<std::shared_ptr<BaseEntity>> _entities;
+		std::vector<std::shared_ptr<IEntity>> _entities;
+		std::vector<std::shared_ptr<BaseWorldEntity>> _worldEntities;
 	};
 }

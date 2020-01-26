@@ -11,24 +11,38 @@ namespace Freeking
 	class Map;
 	class BrushModel;
 
+	typedef std::shared_ptr<class IEntity> shared_ptr_entity;
+
 	class IEntity
-	{
-
-	};
-
-	class BaseEntity : public IEntity
 	{
 	public:
 
-		BaseEntity();
-		virtual ~BaseEntity() {}
+		IEntity() {}
+		virtual ~IEntity() {}
 
+		virtual void PreInitialize(const EntityLump::EntityDef& def) = 0;
 		virtual void Initialize() = 0;
-		virtual void Tick(double dt);
+		virtual void Tick(double dt) = 0;
+
+		static shared_ptr_entity Make(const std::string_view& classname);
+
+	protected:
+
+		virtual bool SetProperty(const EntityKeyValue& keyValue) = 0;
+	};
+
+	class BaseWorldEntity : public IEntity
+	{
+	public:
+
+		BaseWorldEntity();
+		virtual ~BaseWorldEntity() {}
+
+		virtual void PreInitialize(const EntityLump::EntityDef& def) override;
+		virtual void Tick(double dt) override;
 
 		virtual void RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<ShaderProgram>& shader) = 0;
 		virtual void RenderTranslucent(const Matrix4x4& viewProjection, const std::shared_ptr<ShaderProgram>& shader) = 0;
-		virtual bool SetProperty(const EntityKeyValue& keyValue) = 0;
 
 		inline void SetPosition(const Vector3f& position) { _position = position; }
 		inline void SetRotation(const Quaternion& rotation) { _rotation = rotation; }
@@ -39,15 +53,12 @@ namespace Freeking
 
 	protected:
 
-		Map* _map;
 		Vector3f _position;
 		Quaternion _rotation;
 		Matrix4x4 _transform;
-
-		friend class Map;
 	};
 
-	class BrushModelEntity : public BaseEntity
+	class BrushModelEntity : public BaseWorldEntity
 	{
 	public:
 
@@ -58,6 +69,8 @@ namespace Freeking
 
 		virtual void RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<ShaderProgram>& shader) override;
 		virtual void RenderTranslucent(const Matrix4x4& viewProjection, const std::shared_ptr<ShaderProgram>& shader) override;
+
+	protected:
 
 		virtual bool SetProperty(const EntityKeyValue& keyValue) override;
 
@@ -81,6 +94,9 @@ namespace Freeking
 		RotatingEntity();
 
 		virtual void Tick(double dt) override;
+
+	protected:
+
 		virtual bool SetProperty(const EntityKeyValue& keyValue) override;
 
 	private:
@@ -95,6 +111,9 @@ namespace Freeking
 		DoorRotatingEntity();
 
 		virtual void Tick(double dt) override;
+
+	protected:
+
 		virtual bool SetProperty(const EntityKeyValue& keyValue) override;
 
 	private:
@@ -113,6 +132,9 @@ namespace Freeking
 
 		virtual void Initialize() override;
 		virtual void Tick(double dt) override;
+
+	protected:
+
 		virtual bool SetProperty(const EntityKeyValue& keyValue) override;
 
 	private:

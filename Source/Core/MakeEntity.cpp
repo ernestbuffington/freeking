@@ -5,8 +5,6 @@
 
 namespace Freeking
 {
-	typedef std::shared_ptr<IEntity> shared_ptr_entity;
-
 	shared_ptr_entity make_item_health() { return nullptr; }
 	shared_ptr_entity make_item_health_small() { return nullptr; }
 	shared_ptr_entity make_item_health_large() { return nullptr; }
@@ -16,20 +14,20 @@ namespace Freeking
 	shared_ptr_entity make_info_player_coop() { return nullptr; }
 	shared_ptr_entity make_info_player_intermission() { return nullptr; }
 	shared_ptr_entity make_func_plat() { return nullptr; }
-	shared_ptr_entity make_func_button() { return nullptr; }
-	shared_ptr_entity make_func_door() { return nullptr; }
+	shared_ptr_entity make_func_button() { return std::make_shared<BrushModelEntity>(); }
+	shared_ptr_entity make_func_door() { return std::make_shared<DoorEntity>(); }
 	shared_ptr_entity make_func_door_secret() { return nullptr; }
-	shared_ptr_entity make_func_door_rotating() { return nullptr; }
-	shared_ptr_entity make_func_rotating() { return nullptr; }
+	shared_ptr_entity make_func_door_rotating() { return std::make_shared<DoorRotatingEntity>(); }
+	shared_ptr_entity make_func_rotating() { return std::make_shared<RotatingEntity>(); }
 	shared_ptr_entity make_func_train() { return nullptr; }
 	shared_ptr_entity make_func_water() { return nullptr; }
 	shared_ptr_entity make_func_conveyor() { return nullptr; }
 	shared_ptr_entity make_func_areaportal() { return nullptr; }
 	shared_ptr_entity make_func_clock() { return nullptr; }
-	shared_ptr_entity make_func_wall() { return nullptr; }
+	shared_ptr_entity make_func_wall() { return std::make_shared<BrushModelEntity>(); }
 	shared_ptr_entity make_func_object() { return nullptr; }
 	shared_ptr_entity make_func_timer() { return nullptr; }
-	shared_ptr_entity make_func_explosive() { return nullptr; }
+	shared_ptr_entity make_func_explosive() { return std::make_shared<BrushModelEntity>(); }
 	shared_ptr_entity make_func_killbox() { return nullptr; }
 	shared_ptr_entity make_func_object_repair() { return nullptr; }
 	shared_ptr_entity make_rotating_light() { return nullptr; }
@@ -61,7 +59,7 @@ namespace Freeking
 	shared_ptr_entity make_target_character() { return nullptr; }
 	shared_ptr_entity make_target_string() { return nullptr; }
 	shared_ptr_entity make_target_mal_laser() { return nullptr; }
-	shared_ptr_entity make_worldspawn() { return nullptr; }
+	shared_ptr_entity make_worldspawn() { return std::make_shared<WorldSpawnEntity>(); }
 	shared_ptr_entity make_viewthing() { return nullptr; }
 	shared_ptr_entity make_light() { return nullptr; }
 	shared_ptr_entity make_light_mine1() { return nullptr; }
@@ -581,4 +579,14 @@ namespace Freeking
 		{ "dm_safebag", make_dm_safebag },
 		{ "dm_props_banner", make_dm_props_banner }
 	};
+
+	shared_ptr_entity IEntity::Make(const std::string_view& classname)
+	{
+		if (auto it = classes.find(classname); it != classes.end())
+		{
+			return it->second();
+		}
+
+		return nullptr;
+	}
 }
