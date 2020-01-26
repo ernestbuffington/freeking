@@ -35,7 +35,7 @@ namespace Freeking
 {
 	Game::Game(int argc, char** argv)
 	{
-		FileSystem::AddFileSystem(PhysicalFileSystem::Create(std::filesystem::current_path()));
+		FileSystem::AddFileSystem(PhysicalFileSystem::Create(std::filesystem::current_path() / "Assets"));
 		FileSystem::AddFileSystem(PhysicalFileSystem::Create(Paths::KingpinDir() / "main"));
 		FileSystem::AddFileSystem(PakFileSystem::Create(Paths::KingpinDir() / "main/Pak0.pak"));
 
@@ -107,7 +107,7 @@ namespace Freeking
 		auto spriteBatch = std::make_unique<SpriteBatch>(1000);
 		FreeCamera camera;
 		bool debug = true;
-		auto font = Util::LoadFont("Assets/roboto-bold.json");
+		auto font = Util::LoadFont("Fonts/roboto-bold.json");
 		auto map = std::make_shared<Map>(BspFile::Create(FileSystem::GetFileData("maps/" + mapName + ".bsp").data()));
 
 		auto navData = FileSystem::GetFileData("navdata/" + mapName + ".nav");

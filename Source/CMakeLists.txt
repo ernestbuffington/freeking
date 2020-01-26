@@ -79,11 +79,10 @@ if (MSVC)
     string(REPLACE "/" "\\\\" DEST_DIR ${DEST_DIR})
     add_custom_command(TARGET ${TARGET} POST_BUILD
       COMMAND if not exist ${DEST_DIR} mkdir ${DEST_DIR} 2> nul
-      COMMAND robocopy ${SOURCE_DIR} ${DEST_DIR} ${ARGN} /NJH /NJS /NDL /NFL /NC /NS /NP || cmd /c "exit /b 0"
+      COMMAND robocopy ${SOURCE_DIR} ${DEST_DIR} ${ARGN} /NJH /NJS /NDL /NFL /NC /NS /NP /E || cmd /c "exit /b 0"
     )
   endfunction()
 
     windows_copy_files(${PROJECT_NAME} ${SDL2_DLL_DIR} "${CMAKE_BINARY_DIR}/bin/$<CONFIG>/" SDL2.dll)
     windows_copy_files(${PROJECT_NAME} "${CMAKE_SOURCE_DIR}/Assets/" "${CMAKE_BINARY_DIR}/bin/$<CONFIG>/Assets")
-    windows_copy_files(${PROJECT_NAME} "${CMAKE_SOURCE_DIR}/Shaders/" "${CMAKE_BINARY_DIR}/bin/$<CONFIG>/Shaders")
 endif()

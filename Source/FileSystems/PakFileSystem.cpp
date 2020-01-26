@@ -34,11 +34,7 @@ namespace Freeking
 			{
 				_fileItems.emplace(
 					std::string(fileItem.name),
-					FileItem
-					{ 
-						fileItem.offset,
-						fileItem.size
-					});
+					FileItem{ fileItem.offset, fileItem.size });
 			}
 		}
 		else
