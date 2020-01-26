@@ -4,7 +4,7 @@
 #include "BspFile.h"
 #include "BspFlags.h"
 #include "Util.h"
-#include "Mesh.h"
+#include "KeyframeModel.h"
 #include "Paths.h"
 #include "Profiler.h"
 #include <array>
@@ -13,6 +13,47 @@
 namespace Freeking
 {
 	Map* Map::Current = nullptr;
+
+	void BrushMesh::Draw()
+	{
+		if (_diffuse)
+		{
+			_diffuse->Bind(0);
+		}
+
+		if (_lightmap)
+		{
+			_lightmap->Bind(1);
+		}
+
+		_vertexBinding->Bind();
+		glDrawElements(GL_TRIANGLES, Indices.size(), GL_UNSIGNED_INT, (void*)0);
+		_vertexBinding->Unbind();
+	}
+
+	void BrushMesh::Commit()
+	{
+		if (Vertices.empty() || Indices.empty())
+		{
+			return;
+		}
+
+		static const int vertexSize = sizeof(Vertex);
+		_vertexBuffer = std::make_unique<VertexBuffer>(Vertices.data(), Vertices.size(), vertexSize, GL_STATIC_DRAW);
+		_indexBuffer = std::make_unique<IndexBuffer>(Indices.data(), Indices.size(), GL_UNSIGNED_INT);
+
+		ArrayElement vertexLayout[] =
+		{
+			ArrayElement(_vertexBuffer.get(), 0, 3, ElementType::AE_FLOAT, vertexSize, 0),
+			ArrayElement(_vertexBuffer.get(), 1, 3, ElementType::AE_FLOAT, vertexSize, 3 * sizeof(float)),
+			ArrayElement(_vertexBuffer.get(), 2, 2, ElementType::AE_FLOAT, vertexSize, 6 * sizeof(float)),
+			ArrayElement(_vertexBuffer.get(), 3, 2, ElementType::AE_FLOAT, vertexSize, 8 * sizeof(float)),
+			ArrayElement(_vertexBuffer.get(), 4, 2, ElementType::AE_FLOAT, vertexSize, 10 * sizeof(float)),
+		};
+
+		_vertexBinding = std::make_unique<VertexBinding>();
+		_vertexBinding->Create(vertexLayout, 5, *_indexBuffer, ElementType::AE_UINT);
+	}
 
 	void BrushModel::RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<ShaderProgram>& shader)
 	{
@@ -117,7 +158,7 @@ namespace Freeking
 			if (_textures.find(textureName) == _textures.end())
 			{
 				auto path = "textures/" + (textureName + std::string(".tga"));
-				_textures.emplace(textureName, Util::LoadTexture(path));
+				_textures.emplace(textureName, Texture2D::Library.Get(path));
 			}
 		}
 		std::cout << _textures.size() << " map textures" << std::endl;
@@ -308,7 +349,7 @@ namespace Freeking
 
 		pf.Stop("Map commit");
 
-		_shader = Util::LoadShader("Shaders/Mesh.vert", "Shaders/Mesh.frag");
+		_shader = Util::LoadShader("Shaders/Lightmapped.vert", "Shaders/Lightmapped.frag");
 		_textureSampler = std::make_shared<TextureSampler>(WrapMode::WRAPMODE_REPEAT, FilterMode::FILTERMODE_LINEAR);
 		_lightmapSampler = std::make_shared<TextureSampler>(WrapMode::WRAPMODE_CLAMP_EDGE, FilterMode::FILTERMODE_LINEAR_NO_MIP);
 		

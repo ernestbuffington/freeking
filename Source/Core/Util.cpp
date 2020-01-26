@@ -15,34 +15,6 @@ using json::JSON;
 
 namespace Freeking
 {
-	std::shared_ptr<Texture2D> Util::LoadTexture(const std::string& path)
-	{
-		auto buffer = FileSystem::GetFileData(path);
-		if (buffer.empty())
-		{
-			return nullptr;
-		}
-
-		auto data = buffer.data();
-
-		int imageWidth;
-		int imageHeight;
-		int imageChannels;
-		uint8_t* image = stbi_load_from_memory((uint8_t*)data, (std::int32_t)buffer.size(), &imageWidth, &imageHeight, &imageChannels, 0);
-
-		auto texture = std::make_shared<Texture2D>(
-			imageWidth,
-			imageHeight,
-			GL_RGBA,
-			imageChannels == 3 ? GL_RGB : GL_RGBA,
-			GL_UNSIGNED_BYTE,
-			image);
-
-		stbi_image_free(image);
-
-		return texture;
-	}
-
 	std::shared_ptr<ShaderProgram> Util::LoadShader(const std::string& vertPath, const std::string& fragPath)
 	{
 		auto vertSource = FileSystem::GetFileData(vertPath);
@@ -77,7 +49,7 @@ namespace Freeking
 		{
 			std::filesystem::path fontPath(path);
 			fontPath = fontPath.remove_filename();
-			pageTextures.push_back(Util::LoadTexture(fontPath.append(pages[i].ToString()).string()));
+			pageTextures.push_back(Texture2D::Library.Get(fontPath.append(pages[i].ToString()).string()));
 		}
 
 		auto chars = fontJson["chars"];

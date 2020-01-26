@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Mesh.h"
+#include "KeyframeModel.h"
 #include "EntityLump.h"
 #include <unordered_map>
 

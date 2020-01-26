@@ -17,7 +17,7 @@
 #include "FreeCamera.h"
 #include "SpriteBatch.h"
 #include "Font.h"
-#include "Mesh.h"
+#include "KeyframeModel.h"
 #include "Util.h"
 #include "Map.h"
 #include "Paths.h"
@@ -132,12 +132,12 @@ namespace Freeking
 			}
 		}
 
-		auto md2Shader = Util::LoadShader("Shaders/VertexSkinnedMesh.vert", "Shaders/VertexSkinnedMesh.frag");
+		auto md2Shader = Util::LoadShader("Shaders/KeyframeMesh.vert", "Shaders/KeyframeMesh.frag");
 		auto md2Buffer = FileSystem::GetFileData("models/weapons/g_tomgun/tris.md2");
 		auto& md2File = MD2File::Create(md2Buffer.data());
 		auto md2Mesh = std::make_shared<KeyframeMesh>();
 		md2File.Build(md2Mesh);
-		md2Mesh->SetDiffuse(Util::LoadTexture(md2Mesh->Skins[0]));
+		md2Mesh->SetDiffuse(Texture2D::Library.Get(md2Mesh->Skins[0]));
 		md2Mesh->Commit();
 
 		while (running)

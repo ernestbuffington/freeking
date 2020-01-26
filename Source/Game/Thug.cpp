@@ -45,7 +45,7 @@ namespace Freeking
 			auto& mdxFile = MDXFile::Create(mdxBuffer.data());
 			auto mesh = std::make_shared<KeyframeMesh>();
 			mdxFile.Build(mesh);
-			mesh->SetDiffuse(Util::LoadTexture("models/actors/" + skinFolder[bodyPartIndex] + "/" + bodyPart + "_" + artSkins[bodyPartIndex] + ".tga"));
+			mesh->SetDiffuse(Texture2D::Library.Get("models/actors/" + skinFolder[bodyPartIndex] + "/" + bodyPart + "_" + artSkins[bodyPartIndex] + ".tga"));
 			mesh->Commit();
 
 			_meshes.push_back(mesh);
@@ -73,7 +73,7 @@ namespace Freeking
 				auto& mdxFile = MDXFile::Create(mdxBuffer.data());
 				auto mesh = std::make_shared<KeyframeMesh>();
 				mdxFile.Build(mesh);
-				mesh->SetDiffuse(Util::LoadTexture(mesh->Skins[0]));
+				mesh->SetDiffuse(Texture2D::Library.Get(mesh->Skins[0]));
 				mesh->Commit();
 
 				_meshes.push_back(mesh);
@@ -100,7 +100,7 @@ namespace Freeking
 			currentFrameIndex++;
 		}
 
-		_shader = Util::LoadShader("Shaders/VertexSkinnedMesh.vert", "Shaders/VertexSkinnedMesh.frag");
+		_shader = Util::LoadShader("Shaders/KeyframeMesh.vert", "Shaders/KeyframeMesh.frag");
 	}
 
 	void Thug::Render(const Matrix4x4& viewProjection, double dt)

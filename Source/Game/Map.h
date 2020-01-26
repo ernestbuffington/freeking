@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Mesh.h"
+#include "KeyframeModel.h"
 #include "EntityLump.h"
 #include "TextureSampler.h"
 #include "Vector.h"
@@ -18,6 +18,41 @@ namespace Freeking
 	class BrushModel;
 	class LightmapNode;
 	class LightmapImage;
+
+	class BrushMesh
+	{
+	public:
+
+		struct Vertex
+		{
+			Vector3f Position;
+			Vector3f Normal;
+			Vector2f UV[3];
+		};
+
+		void Draw();
+		void Commit();
+		inline void SetDiffuse(const std::shared_ptr<Texture2D>& texture) { _diffuse = texture; }
+		inline void SetLightmap(const std::shared_ptr<Texture2D>& texture) { _lightmap = texture; }
+
+		inline size_t GetNumVertices() const { return Vertices.size(); }
+		inline size_t GetNumIndices() const { return Indices.size(); }
+
+		std::vector<Vertex> Vertices;
+		std::vector<uint32_t> Indices;
+
+		float AlphaCutOff;
+		float AlphaMultiply;
+		bool Translucent;
+
+	private:
+
+		std::unique_ptr<VertexBinding> _vertexBinding;
+		std::unique_ptr<VertexBuffer> _vertexBuffer;
+		std::unique_ptr<IndexBuffer> _indexBuffer;
+		std::shared_ptr<Texture2D> _diffuse;
+		std::shared_ptr<Texture2D> _lightmap;
+	};
 
 	class BrushModel
 	{

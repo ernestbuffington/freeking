@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MdxStructures.h"
-#include "Mesh.h"
+#include "KeyframeModel.h"
 #include <array>
 #include <stdint.h>
 
