@@ -20,7 +20,7 @@ namespace Freeking
 		IEntity() {}
 		virtual ~IEntity() {}
 
-		virtual void PreInitialize(const EntityLump::EntityDef& def) = 0;
+		virtual void PreInitialize(const EntityLump::EntityDef& def) {};
 		virtual void Initialize() = 0;
 		virtual void Tick(double dt) = 0;
 
