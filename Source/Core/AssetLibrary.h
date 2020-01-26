@@ -21,8 +21,8 @@ namespace Freeking
 		AssetLoader(const AssetLoader&) = delete;
 		AssetLoader& operator=(const AssetLoader&) = delete;
 
-		virtual AssetPtr Load(const std::string& name) const { return nullptr; }
-		virtual bool CanLoadExtension(const std::string& extension) const { return false; };
+		virtual AssetPtr Load(const std::string&) const { return nullptr; }
+		virtual bool CanLoadExtension(const std::string&) const { return false; };
 	};
 
 	template <typename T>
