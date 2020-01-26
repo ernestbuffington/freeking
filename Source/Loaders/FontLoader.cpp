@@ -21,40 +21,69 @@ namespace Freeking
 		}
 
 		auto fontString = std::string(buffer.data(), buffer.size());
+		if (fontString.empty())
+		{
+			return nullptr;
+		}
+
 		auto fontJson = json::JSON::JSON::Load(fontString);
+		if (!fontJson.hasKey("pages") ||
+			!fontJson.hasKey("chars") ||
+			!fontJson.hasKey("common"))
+		{
+			return nullptr;
+		}
 
 		std::vector<std::shared_ptr<Texture2D>> pageTextures;
 		std::unordered_map<int32_t, Font::Character> characters;
 
-		auto pages = fontJson["pages"];
+		const auto& pages = fontJson.at("pages");
 		for (int i = 0; i < pages.size(); ++i)
 		{
 			std::filesystem::path fontPath(name);
-			fontPath = fontPath.remove_filename();
-			pageTextures.push_back(Texture2D::Library.Get(fontPath.append(pages[i].ToString()).string()));
+			if (auto texture = Texture2D::Library.Get(fontPath.remove_filename().append(pages.at(i).ToString()).string()))
+			{
+				pageTextures.push_back(texture);
+			}
+			else
+			{
+				return nullptr;
+			}
 		}
 
-		auto chars = fontJson["chars"];
-		for (int i = 0; i < chars.size(); ++i)
+		const auto& charsJson = fontJson.at("chars");
+		for (int i = 0; i < charsJson.size(); ++i)
 		{
-			auto& c = chars[i];
+			const auto& c = charsJson.at(i);
+
+			if (!c.hasKey("id") ||
+				!c.hasKey("x") || !c.hasKey("y") ||
+				!c.hasKey("width") || !c.hasKey("height") ||
+				!c.hasKey("xoffset") || !c.hasKey("yoffset") ||
+				!c.hasKey("xadvance") ||
+				!c.hasKey("page"))
+			{
+				continue;
+			}
+
 			characters.emplace(
-				c["id"].ToInt(),
+				c.at("id").ToInt(),
 				Font::Character
 				{
-					(uint32_t)c["id"].ToInt(),
-					(float)c["x"].ToNumber(),
-					(float)c["y"].ToNumber(),
-					(float)c["width"].ToNumber(),
-					(float)c["height"].ToNumber(),
-					(float)c["xoffset"].ToNumber(),
-					(float)c["yoffset"].ToNumber(),
-					(float)c["xadvance"].ToNumber(),
-					(uint32_t)c["page"].ToInt(),
+					(uint32_t)c.at("id").ToInt(),
+					(float)c.at("x").ToNumber(),
+					(float)c.at("y").ToNumber(),
+					(float)c.at("width").ToNumber(),
+					(float)c.at("height").ToNumber(),
+					(float)c.at("xoffset").ToNumber(),
+					(float)c.at("yoffset").ToNumber(),
+					(float)c.at("xadvance").ToNumber(),
+					(uint32_t)c.at("page").ToInt(),
 				});
 		}
 
-		float lineHeight = (float)fontJson["common"]["lineHeight"].ToNumber();
+		const auto& commonJson = fontJson.at("common");
+		float lineHeight = commonJson.hasKey("lineHeight") ? (float)commonJson.at("lineHeight").ToNumber() : 0.0f;
 
 		return std::make_shared<Font>(lineHeight, pageTextures, characters);
 	}
