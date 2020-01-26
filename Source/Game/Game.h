@@ -3,7 +3,6 @@
 #include <memory>
 #include <string>
 #include <filesystem>
-#include "PakFile.h"
 
 namespace Freeking
 {

@@ -21,14 +21,14 @@ namespace Freeking
 		int size;
 	};
 
-	class PakFile : public IFileSystem
+	class PakFileSystem : public IFileSystem
 	{
 	public:
 
-		static std::unique_ptr<PakFile> Create(const std::filesystem::path& path);
+		static std::unique_ptr<PakFileSystem> Create(const std::filesystem::path& path);
 
-		PakFile(const std::filesystem::path& path);
-		~PakFile();
+		PakFileSystem(const std::filesystem::path& path);
+		~PakFileSystem();
 
 		virtual bool FileExists(const std::string& filename) override;
 		virtual std::vector<char> GetFileData(const std::string& filename) override;

@@ -23,6 +23,7 @@
 #include "Paths.h"
 #include "Thug.h"
 #include "Nav/NavFile.h"
+#include "PakFileSystem.h"
 #include <glad/glad.h>
 #include <iostream>
 #include <fstream>
@@ -36,7 +37,7 @@ namespace Freeking
 	{
 		FileSystem::AddFileSystem(PhysicalFileSystem::Create(std::filesystem::current_path()));
 		FileSystem::AddFileSystem(PhysicalFileSystem::Create(Paths::KingpinDir() / "main"));
-		FileSystem::AddFileSystem(PakFile::Create(Paths::KingpinDir() / "main/Pak0.pak"));	
+		FileSystem::AddFileSystem(PakFileSystem::Create(Paths::KingpinDir() / "main/Pak0.pak"));
 
 		static const std::string windowTitle = "Kingpin";
 		_viewportWidth = 2880;

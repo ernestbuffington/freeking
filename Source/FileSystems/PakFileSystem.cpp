@@ -1,18 +1,18 @@
-#include "PakFile.h"
+#include "PakFileSystem.h"
 
 namespace Freeking
 {
-	std::unique_ptr<PakFile> PakFile::Create(const std::filesystem::path& path)
+	std::unique_ptr<PakFileSystem> PakFileSystem::Create(const std::filesystem::path& path)
 	{
 		if (std::filesystem::exists(path))
 		{
-			return std::make_unique<PakFile>(path);
+			return std::make_unique<PakFileSystem>(path);
 		}
 
 		return nullptr;
 	}
 
-	PakFile::PakFile(const std::filesystem::path& path)
+	PakFileSystem::PakFileSystem(const std::filesystem::path& path)
 	{
 		_stream.open(path, std::ios::binary | std::ios::ate);
 
@@ -47,7 +47,7 @@ namespace Freeking
 		}
 	}
 
-	PakFile::~PakFile()
+	PakFileSystem::~PakFileSystem()
 	{
 		if (_stream.is_open())
 		{
@@ -55,7 +55,7 @@ namespace Freeking
 		}
 	}
 
-	bool PakFile::FileExists(const std::string& filename)
+	bool PakFileSystem::FileExists(const std::string& filename)
 	{
 		if (!_stream.is_open())
 		{
@@ -65,7 +65,7 @@ namespace Freeking
 		return _fileItems.find(filename) != _fileItems.end();
 	}
 
-	std::vector<char> PakFile::GetFileData(const std::string& filename)
+	std::vector<char> PakFileSystem::GetFileData(const std::string& filename)
 	{
 		if (!_stream.is_open())
 		{
