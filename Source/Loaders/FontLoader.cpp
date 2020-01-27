@@ -1,7 +1,8 @@
 #include "FontLoader.h"
 #include "Font.h"
 #include "Texture2D.h"
-#include "json.hpp"
+#include "simdjson.h"
+#include "Profiler.h"
 
 namespace Freeking
 {
@@ -12,8 +13,19 @@ namespace Freeking
 		return false;
 	};
 
+	static double get_number(const simdjson::ParsedJson::Iterator& it)
+	{
+		if (it.is_double()) return it.get_double();
+		else if (it.is_integer()) return static_cast<double>(it.get_integer());
+		else if (it.is_unsigned_integer()) return static_cast<double>(it.get_unsigned_integer());
+		else return 0.0;
+	}
+
 	FontLoader::AssetPtr FontLoader::Load(const std::string& name) const
 	{
+		Profiler pf;
+		pf.Start();
+
 		auto buffer = FileSystem::GetFileData(name);
 		if (buffer.empty())
 		{
@@ -26,64 +38,99 @@ namespace Freeking
 			return nullptr;
 		}
 
-		auto fontJson = json::JSON::JSON::Load(fontString);
-		if (!fontJson.hasKey("pages") ||
-			!fontJson.hasKey("chars") ||
-			!fontJson.hasKey("common"))
+		auto pj = simdjson::build_parsed_json(fontString);
+		if (!pj.is_valid()) return nullptr;
+
+		simdjson::ParsedJson::Iterator pjh(pj);
+		if (!pjh.is_object()) return nullptr;
+
+		if (pjh.move_to_key("pages") && pjh.is_array()) pjh.up();
+		else return nullptr;
+
+		if (pjh.move_to_key("chars") && pjh.is_array()) pjh.up();
+		else return nullptr;
+
+		if (pjh.move_to_key("common") && pjh.is_object()) pjh.up();
+		else return nullptr;
+
+		std::vector<std::shared_ptr<Texture2D>> pageTextures;
+
+		if (pjh.move_to_key("pages"))
+		{
+			if (pjh.down())
+			{
+				do 
+				{
+					auto page = pjh.get_string();
+					if (auto texture = Texture2D::Library.Get(std::filesystem::path(name).remove_filename().append(page).string()))
+					{
+						pageTextures.push_back(texture);
+					}
+				} 
+				while (pjh.next() && pjh.is_string());
+
+				pjh.up();
+			}
+
+			pjh.up();
+		}
+		else
 		{
 			return nullptr;
 		}
 
-		std::vector<std::shared_ptr<Texture2D>> pageTextures;
 		std::unordered_map<int32_t, Font::Character> characters;
 
-		const auto& pages = fontJson.at("pages");
-		for (int i = 0; i < pages.size(); ++i)
+		if (pjh.move_to_key("chars"))
 		{
-			std::filesystem::path fontPath(name);
-			if (auto texture = Texture2D::Library.Get(fontPath.remove_filename().append(pages.at(i).ToString()).string()))
+			if (pjh.down())
 			{
-				pageTextures.push_back(texture);
-			}
-			else
-			{
-				return nullptr;
-			}
-		}
-
-		const auto& charsJson = fontJson.at("chars");
-		for (int i = 0; i < charsJson.size(); ++i)
-		{
-			const auto& c = charsJson.at(i);
-
-			if (!c.hasKey("id") ||
-				!c.hasKey("x") || !c.hasKey("y") ||
-				!c.hasKey("width") || !c.hasKey("height") ||
-				!c.hasKey("xoffset") || !c.hasKey("yoffset") ||
-				!c.hasKey("xadvance") ||
-				!c.hasKey("page"))
-			{
-				continue;
-			}
-
-			characters.emplace(
-				c.at("id").ToInt(),
-				Font::Character
+				do
 				{
-					(uint32_t)c.at("id").ToInt(),
-					(float)c.at("x").ToNumber(),
-					(float)c.at("y").ToNumber(),
-					(float)c.at("width").ToNumber(),
-					(float)c.at("height").ToNumber(),
-					(float)c.at("xoffset").ToNumber(),
-					(float)c.at("yoffset").ToNumber(),
-					(float)c.at("xadvance").ToNumber(),
-					(uint32_t)c.at("page").ToInt(),
-				});
+					Font::Character c;
+
+					if (pjh.move_to_key("id") && pjh.is_integer()) c.id = pjh.get_integer(); pjh.up();
+					if (pjh.move_to_key("x") && pjh.is_number()) c.x = get_number(pjh); pjh.up();
+					if (pjh.move_to_key("y") && pjh.is_number()) c.y = get_number(pjh); pjh.up();
+					if (pjh.move_to_key("width") && pjh.is_number()) c.width = get_number(pjh); pjh.up();
+					if (pjh.move_to_key("height") && pjh.is_number()) c.height = get_number(pjh); pjh.up();
+					if (pjh.move_to_key("xoffset") && pjh.is_number()) c.xoffset = get_number(pjh); pjh.up();
+					if (pjh.move_to_key("yoffset") && pjh.is_number()) c.yoffset = get_number(pjh); pjh.up();
+					if (pjh.move_to_key("xadvance") && pjh.is_number()) c.xadvance = get_number(pjh); pjh.up();
+					if (pjh.move_to_key("page") && pjh.is_integer()) c.page = pjh.get_integer(); pjh.up();
+
+					characters.emplace(c.id, std::move(c));
+				}
+				while (pjh.next() && pjh.is_object());
+
+				pjh.up();
+			}
+
+			pjh.up();
+		}
+		else
+		{
+			return nullptr;
 		}
 
-		const auto& commonJson = fontJson.at("common");
-		float lineHeight = commonJson.hasKey("lineHeight") ? (float)commonJson.at("lineHeight").ToNumber() : 0.0f;
+		float lineHeight = 0.0f;
+		if (pjh.move_to_key("common"))
+		{
+			if (pjh.down())
+			{
+				if (pjh.move_to_key("lineHeight") && pjh.is_number())
+				{
+					lineHeight = get_number(pjh);
+					pjh.up();
+				}
+
+				pjh.up();
+			}
+
+			pjh.up();
+		}
+
+		pf.Stop("Load Font (" + name + ")");
 
 		return std::make_shared<Font>(lineHeight, pageTextures, characters);
 	}
