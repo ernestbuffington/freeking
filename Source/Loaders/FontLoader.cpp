@@ -32,13 +32,7 @@ namespace Freeking
 			return nullptr;
 		}
 
-		auto fontString = std::string(buffer.data(), buffer.size());
-		if (fontString.empty())
-		{
-			return nullptr;
-		}
-
-		auto pj = simdjson::build_parsed_json(fontString);
+		auto pj = simdjson::build_parsed_json(buffer.data(), buffer.size());
 		if (!pj.is_valid()) return nullptr;
 
 		simdjson::ParsedJson::Iterator pjh(pj);
