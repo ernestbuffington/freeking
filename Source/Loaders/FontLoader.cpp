@@ -110,14 +110,9 @@ namespace Freeking
 		float lineHeight = 0.0f;
 		if (pjh.move_to_key("common"))
 		{
-			if (pjh.down())
+			if (pjh.move_to_key("lineHeight") && pjh.is_number())
 			{
-				if (pjh.move_to_key("lineHeight") && pjh.is_number())
-				{
-					lineHeight = get_number(pjh);
-					pjh.up();
-				}
-
+				lineHeight = get_number(pjh);
 				pjh.up();
 			}
 
