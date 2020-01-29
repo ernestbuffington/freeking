@@ -22,7 +22,7 @@ namespace Freeking
 	void DynamicModel::Draw()
 	{
 		_vertexBinding->Bind();
-		glDrawElements(GL_TRIANGLES, Indices.size(), GL_UNSIGNED_INT, (void*)0);
+		glDrawElements(GL_TRIANGLES, _vertexBinding->GetNumElements(), GL_UNSIGNED_INT, (void*)0);
 		_vertexBinding->Unbind();
 	}
 
@@ -36,12 +36,12 @@ namespace Freeking
 
 		ArrayElement vertexLayout[] =
 		{
-			ArrayElement(_vertexBuffer.get(), 0, 2, ElementType::AE_FLOAT, vertexSize, 0),
-			ArrayElement(_vertexBuffer.get(), 1, 1, ElementType::AE_INT, vertexSize, 2 * sizeof(float)),
+			ArrayElement(_vertexBuffer.get(), 0, 2, ElementType::Float, vertexSize, 0),
+			ArrayElement(_vertexBuffer.get(), 1, 1, ElementType::Int, vertexSize, 2 * sizeof(float)),
 		};
 
 		_vertexBinding = std::make_unique<VertexBinding>();
-		_vertexBinding->Create(vertexLayout, 2, *_indexBuffer, ElementType::AE_UINT);
+		_vertexBinding->Create(vertexLayout, 2, *_indexBuffer, ElementType::UInt);
 	}
 
 	void DynamicModel::SetDiffuse(const std::shared_ptr<Texture2D>& texture)

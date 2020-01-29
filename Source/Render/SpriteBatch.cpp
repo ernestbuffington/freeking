@@ -67,9 +67,9 @@ namespace Freeking
 
 		ArrayElement vertexLayout[] =
 		{
-			ArrayElement(_vertexBuffer.get(), 0, 2, ElementType::AE_FLOAT, vertStride, 0),
-			ArrayElement(_vertexBuffer.get(), 1, 2, ElementType::AE_FLOAT, vertStride, 2 * sizeof(float)),
-			ArrayElement(_vertexBuffer.get(), 2, 4, ElementType::AE_FLOAT, vertStride, 4 * sizeof(float)),
+			ArrayElement(_vertexBuffer.get(), 0, 2, ElementType::Float, vertStride, 0),
+			ArrayElement(_vertexBuffer.get(), 1, 2, ElementType::Float, vertStride, 2 * sizeof(float)),
+			ArrayElement(_vertexBuffer.get(), 2, 4, ElementType::Float, vertStride, 4 * sizeof(float)),
 		};
 
 		_vertexBinding = std::make_unique<VertexBinding>();

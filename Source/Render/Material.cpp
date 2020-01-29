@@ -1,5 +1,6 @@
 #include "Material.h"
-#include "Texture2D.h"
+#include "ShaderProgram.h"
+#include "Texture.h"
 
 namespace Freeking
 {

@@ -1,14 +1,16 @@
 #pragma once
 
-#include "ShaderProgram.h"
+#include "Vector.h"
+#include "Matrix3x3.h"
+#include "Matrix4x4.h"
 #include <glad/glad.h>
-#include <vector>
 #include <unordered_map>
 #include <memory>
 
 namespace Freeking
 {
 	class Texture;
+	class ShaderProgram;
 
 	class Material
 	{

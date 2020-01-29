@@ -55,6 +55,7 @@ namespace Freeking
 		inline void SetFrameCount(uint32_t frameCount) { _frameCount = frameCount; }
 		inline void SetFrameVertexCount(uint32_t frameVertexCount) { _frameVertexCount = frameVertexCount; }
 
+		inline const std::unique_ptr<VertexBinding>& GetBinding() const { return _vertexBinding; }
 		inline const std::shared_ptr<Texture2D>& GetDiffuse() const { return _diffuse; }
 		inline const std::shared_ptr<TextureBuffer>& GetFrameVertexBuffer() const { return _frameVertexBuffer; }
 		static const std::unique_ptr<TextureBuffer>& GetNormalBuffer();

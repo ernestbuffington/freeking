@@ -11,11 +11,11 @@ namespace Freeking
 
 	enum class ElementType
 	{
-		AE_FLOAT = GL_FLOAT,
-		AE_INT = GL_INT,
-		AE_UBYTE = GL_UNSIGNED_BYTE,
-		AE_UINT = GL_UNSIGNED_INT,
-		AE_USHORT = GL_UNSIGNED_SHORT,
+		Float = GL_FLOAT,
+		Int = GL_INT,
+		UByte = GL_UNSIGNED_BYTE,
+		UInt = GL_UNSIGNED_INT,
+		UShort = GL_UNSIGNED_SHORT,
 	};
 
 	struct ArrayElement
@@ -50,6 +50,10 @@ namespace Freeking
 		void Dispose();
 		void Bind();
 		void Unbind();
+
+		inline int GetNumElements() const { return _numElements; }
+		inline bool HasIndices() const { return _hasIndices; }
+		inline ElementType GetIndexType() const { return _indicesType; }
 
 	private:
 

@@ -25,6 +25,7 @@
 #include "Nav/NavFile.h"
 #include "PakFileSystem.h"
 #include "Material.h"
+#include "Renderer.h"
 #include <glad/glad.h>
 #include <iostream>
 #include <fstream>
@@ -101,6 +102,9 @@ namespace Freeking
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		_window->Swap();
+
+
+		Renderer renderer;
 
 		std::string mapName("sr1");
 
@@ -236,8 +240,12 @@ namespace Freeking
 				md2Material->SetParameterValue("frames[1].scale", md2Mesh->FrameTransforms[md2Frame].scale);
 				md2Material->Apply();
 
-				md2Mesh->Draw();
+				renderer.Draw(md2Mesh->GetBinding().get(), md2Material.get());
+
+				//md2Mesh->Draw();
 			}
+
+			renderer.Flush();
 
 			if (debug)
 			{

@@ -27,7 +27,7 @@ namespace Freeking
 		}
 
 		_vertexBinding->Bind();
-		glDrawElements(GL_TRIANGLES, Indices.size(), GL_UNSIGNED_INT, (void*)0);
+		glDrawElements(GL_TRIANGLES, _vertexBinding->GetNumElements(), GL_UNSIGNED_INT, (void*)0);
 		_vertexBinding->Unbind();
 	}
 
@@ -44,15 +44,15 @@ namespace Freeking
 
 		ArrayElement vertexLayout[] =
 		{
-			ArrayElement(_vertexBuffer.get(), 0, 3, ElementType::AE_FLOAT, vertexSize, 0),
-			ArrayElement(_vertexBuffer.get(), 1, 3, ElementType::AE_FLOAT, vertexSize, 3 * sizeof(float)),
-			ArrayElement(_vertexBuffer.get(), 2, 2, ElementType::AE_FLOAT, vertexSize, 6 * sizeof(float)),
-			ArrayElement(_vertexBuffer.get(), 3, 2, ElementType::AE_FLOAT, vertexSize, 8 * sizeof(float)),
-			ArrayElement(_vertexBuffer.get(), 4, 2, ElementType::AE_FLOAT, vertexSize, 10 * sizeof(float)),
+			ArrayElement(_vertexBuffer.get(), 0, 3, ElementType::Float, vertexSize, 0),
+			ArrayElement(_vertexBuffer.get(), 1, 3, ElementType::Float, vertexSize, 3 * sizeof(float)),
+			ArrayElement(_vertexBuffer.get(), 2, 2, ElementType::Float, vertexSize, 6 * sizeof(float)),
+			ArrayElement(_vertexBuffer.get(), 3, 2, ElementType::Float, vertexSize, 8 * sizeof(float)),
+			ArrayElement(_vertexBuffer.get(), 4, 2, ElementType::Float, vertexSize, 10 * sizeof(float)),
 		};
 
 		_vertexBinding = std::make_unique<VertexBinding>();
-		_vertexBinding->Create(vertexLayout, 5, *_indexBuffer, ElementType::AE_UINT);
+		_vertexBinding->Create(vertexLayout, 5, *_indexBuffer, ElementType::UInt);
 	}
 
 	void BrushModel::RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<ShaderProgram>& shader)

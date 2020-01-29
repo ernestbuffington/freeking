@@ -24,7 +24,7 @@ namespace Freeking
 
 	VertexBinding::VertexBinding() :
 		_handle(0),
-		_indicesType(ElementType::AE_UBYTE),
+		_indicesType(ElementType::UByte),
 		_hasIndices(false)
 	{
 	}
@@ -77,7 +77,7 @@ namespace Freeking
 		}
 
 		_hasIndices = false;
-		_indicesType = ElementType::AE_UBYTE;
+		_indicesType = ElementType::UByte;
 	}
 
 	void VertexBinding::Bind()
@@ -118,11 +118,11 @@ namespace Freeking
 
 			GLenum type = GL_FLOAT;
 
-			if (element.type == ElementType::AE_FLOAT)
+			if (element.type == ElementType::Float)
 			{
 				type = GL_FLOAT;
 			}
-			else if (element.type == ElementType::AE_INT)
+			else if (element.type == ElementType::Int)
 			{
 				type = GL_INT;
 			}
