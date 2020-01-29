@@ -20,7 +20,7 @@ namespace Freeking
 		_vertexBinding = std::make_unique<VertexBinding>();
 		_vertexBinding->Create(vertexLayout, 2, *_vertexBuffer);
 
-		_shader = Util::LoadShader("Shaders/DebugLine.vert", "Shaders/DebugLine.frag");
+		_shader = Util::LoadShader("Shaders/DebugLine.shader");
 	}
 
 	void LineRenderer::Flush(Matrix4x4& viewProj)

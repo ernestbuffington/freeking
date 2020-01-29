@@ -8,19 +8,16 @@
 
 namespace Freeking
 {
-	std::shared_ptr<ShaderProgram> Util::LoadShader(const std::string& vertPath, const std::string& fragPath)
+	std::shared_ptr<ShaderProgram> Util::LoadShader(const std::string& path)
 	{
-		auto vertSource = FileSystem::GetFileData(vertPath);
-		auto fragSource = FileSystem::GetFileData(fragPath);
+		auto source = FileSystem::GetFileData(path);
 
-		if (vertSource.empty() || fragSource.empty())
+		if (source.empty() || source.empty())
 		{
 			return nullptr;
 		}
 
-		return std::make_shared<ShaderProgram>(
-			std::string(vertSource.data(), vertSource.size()),
-			std::string(fragSource.data(), fragSource.size()));
+		return std::make_shared<ShaderProgram>(std::string(source.data(), source.size()));
 	}
 
 	Vector2f Util::ScreenSpaceToPixelPosition(const Vector2f& point, const Vector4i& viewport)

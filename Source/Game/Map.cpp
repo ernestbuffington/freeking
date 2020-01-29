@@ -346,7 +346,7 @@ namespace Freeking
 
 		pf.Stop("Map commit");
 
-		_shader = Util::LoadShader("Shaders/Lightmapped.vert", "Shaders/Lightmapped.frag");
+		_shader = Util::LoadShader("Shaders/Lightmapped.shader");
 
 		pf.Start();
 

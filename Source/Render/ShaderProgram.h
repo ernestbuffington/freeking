@@ -3,18 +3,30 @@
 #include "Vector.h"
 #include "Matrix3x3.h"
 #include "Matrix4x4.h"
+#include "AssetLibrary.h"
 #include <glad/glad.h>
 #include <map>
 #include <string>
 
 namespace Freeking
 {
+	class ShaderProgram;
+
+	class ShaderLibrary : public AssetLibrary<ShaderProgram>
+	{
+	protected:
+
+		virtual void UpdateLoaders() override;
+	};
+
 	class ShaderProgram
 	{
 	public:
 
+		static ShaderLibrary Library;
+
 		ShaderProgram() = delete;
-		ShaderProgram(const std::string&, const std::string&);
+		ShaderProgram(const std::string&);
 		~ShaderProgram();
 
 		void Bind();
@@ -30,7 +42,7 @@ namespace Freeking
 
 	private:
 
-		static GLuint CreateSubShader(GLenum, const std::string&);
+		static GLuint CreateSubShader(GLenum, const std::string&, const std::string&);
 
 		struct Uniform
 		{

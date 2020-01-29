@@ -1,4 +1,5 @@
 #include "ShaderProgram.h"
+#include "ShaderLoader.h"
 #include <cassert>
 #include <cstdio>
 #include <cstdlib>
@@ -6,14 +7,21 @@
 
 namespace Freeking
 {
-	ShaderProgram::ShaderProgram(const std::string& vertexSource, const std::string& fragmentSource)
+	void ShaderLibrary::UpdateLoaders()
+	{
+		AddLoader<ShaderLoader>();
+	}
+
+	ShaderLibrary ShaderProgram::Library;
+
+	ShaderProgram::ShaderProgram(const std::string& source)
 	{
 		_program = glCreateProgram();
 
 		assert(_program != 0);
 
-		GLuint vertexShader = CreateSubShader(GL_VERTEX_SHADER, vertexSource.c_str());
-		GLuint fragmentShader = CreateSubShader(GL_FRAGMENT_SHADER, fragmentSource.c_str());
+		GLuint vertexShader = CreateSubShader(GL_VERTEX_SHADER, source.c_str(), "#define VERTEX\n");
+		GLuint fragmentShader = CreateSubShader(GL_FRAGMENT_SHADER, source.c_str(), "#define FRAGMENT\n");
 
 		assert(vertexShader != 0 && fragmentShader != 0);
 
@@ -119,12 +127,14 @@ namespace Freeking
 		glUniformMatrix4fv(_uniforms[uniformName].location, 1, GL_FALSE, v.Base());
 	}
 
-	GLuint ShaderProgram::CreateSubShader(GLenum type, const std::string& source)
+	GLuint ShaderProgram::CreateSubShader(GLenum type, const std::string& source, const std::string& defines)
 	{
 		GLuint shader = glCreateShader(type);
 
-		const GLchar* glsource = (const GLchar*)source.c_str();
-		glShaderSource(shader, 1, &glsource, nullptr);
+		static const std::string version("#version 460\n");
+		const GLchar* sources[] = { version.c_str(), defines.c_str(), source.c_str() };
+		const GLint lengths[] = { version.size(), defines.size(), source.size() };
+		glShaderSource(shader, 3, sources, lengths);
 		glCompileShader(shader);
 
 		GLint compileStatus = GL_FALSE;

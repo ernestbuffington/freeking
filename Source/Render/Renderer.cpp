@@ -90,6 +90,7 @@ namespace Freeking
 				}
 			}
 
+			drawCall.binding->Unbind();
 			drawCall.material->Unbind();
 		}
 

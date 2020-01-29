@@ -1,4 +1,4 @@
-#version 460
+#ifdef VERTEX
 
 layout(location = 0) in vec2 vert_position;
 layout(location = 1) in vec2 vert_texcoord;
@@ -18,3 +18,25 @@ void main()
 	vert.color = vert_color;
 	gl_Position = projMatrix * vec4(vert_position.xy, 1.0, 1.0);
 }
+
+#endif
+
+#ifdef FRAGMENT
+
+uniform sampler2D texture;
+
+in VertexData
+{
+	vec2 texcoord;
+	vec4 color;
+} vert;
+
+out vec4 fragColor;
+
+void main()
+{
+	vec4 textureColor = texture2D(texture, vert.texcoord);
+	fragColor = textureColor * vert.color;
+}
+
+#endif
