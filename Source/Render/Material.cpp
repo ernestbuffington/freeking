@@ -108,7 +108,7 @@ namespace Freeking
 		}
 	}
 
-	void Material::Bind()
+	void Material::Apply()
 	{
 		if (!_shader)
 		{

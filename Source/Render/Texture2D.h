@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Texture.h"
 #include "AssetLibrary.h"
 #include <glad/glad.h>
 
@@ -14,13 +15,6 @@ namespace Freeking
 		virtual void UpdateLoaders() override;
 	};
 
-	class Texture
-	{
-	public:
-
-		virtual const GLuint GetHandle() const = 0;
-	};
-
 	class Texture2D : public Texture
 	{
 	public:
@@ -32,7 +26,7 @@ namespace Freeking
 		~Texture2D();
 
 		void Bind() const;
-		void Bind(unsigned char slot) const;
+		void Bind(int slot) const;
 
 		virtual const GLuint GetHandle() const override { return _handle; }
 		const GLsizei GetWidth() const { return _width; }

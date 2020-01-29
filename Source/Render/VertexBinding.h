@@ -60,5 +60,6 @@ namespace Freeking
 		GLuint _handle;
 		ElementType _indicesType;
 		bool _hasIndices;
+		int _numElements;
 	};
 }

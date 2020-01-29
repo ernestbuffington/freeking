@@ -38,7 +38,7 @@ namespace Freeking
 		glBindTexture(GL_TEXTURE_2D, _handle);
 	}
 
-	void Texture2D::Bind(unsigned char slot) const
+	void Texture2D::Bind(int slot) const
 	{
 		glActiveTexture(GL_TEXTURE0 + slot);
 		glBindTexture(GL_TEXTURE_2D, _handle);

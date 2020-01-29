@@ -137,7 +137,7 @@ namespace Freeking
 			_material->SetParameterValue("frames[1].index", (int)(nextFrame * mesh->GetFrameVertexCount()));
 			_material->SetParameterValue("frames[1].translate", mesh->FrameTransforms[nextFrame].translate);
 			_material->SetParameterValue("frames[1].scale", mesh->FrameTransforms[nextFrame].scale);
-			_material->Bind();
+			_material->Apply();
 
 			mesh->Draw();
 		}

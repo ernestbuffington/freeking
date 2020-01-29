@@ -17,7 +17,7 @@ namespace Freeking
 		Material() = delete;
 		Material(std::shared_ptr<ShaderProgram>);
 
-		void Bind();
+		void Apply();
 
 		void SetParameterValue(const char*, int);
 		void SetParameterValue(const char*, float);

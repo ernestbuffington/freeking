@@ -1,4 +1,6 @@
 #include "TextureBuffer.h"
+#include "NormalTable.h"
+#include <memory>
 
 namespace Freeking
 {
@@ -31,16 +33,5 @@ namespace Freeking
 			glDeleteTextures(1, &_handle);
 			_handle = 0;
 		}
-	}
-
-	void TextureBuffer::Bind(uint32_t slot)
-	{
-		glActiveTexture(GL_TEXTURE0 + slot);
-		glBindTexture(GL_TEXTURE_BUFFER, _handle);
-	}
-
-	void TextureBuffer::Unbind()
-	{
-		glBindTexture(GL_TEXTURE_BUFFER, 0);
 	}
 }

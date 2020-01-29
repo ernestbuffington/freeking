@@ -234,7 +234,7 @@ namespace Freeking
 				md2Material->SetParameterValue("frames[1].index", (int)(md2Frame * md2Mesh->GetFrameVertexCount()));
 				md2Material->SetParameterValue("frames[1].translate", md2Mesh->FrameTransforms[md2Frame].translate);
 				md2Material->SetParameterValue("frames[1].scale", md2Mesh->FrameTransforms[md2Frame].scale);
-				md2Material->Bind();
+				md2Material->Apply();
 
 				md2Mesh->Draw();
 			}

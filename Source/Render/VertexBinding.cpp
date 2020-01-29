@@ -43,6 +43,8 @@ namespace Freeking
 
 		CreateVAO();
 
+		_numElements = vertices.GetVertexCount();
+
 		Bind();
 		SetupVertices(elements, elementCount);
 		Unbind();
@@ -56,6 +58,8 @@ namespace Freeking
 		}
 
 		CreateVAO();
+
+		_numElements = indices.GetCount();
 
 		Bind();
 		SetupVertices(elements, elementCount);
