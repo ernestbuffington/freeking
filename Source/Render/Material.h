@@ -31,7 +31,8 @@ namespace Freeking
 	private:
 
 		void InitializeParameters();
-		void ApplyVectorParameters();
+		void ApplyFloatParameters();
+		void ApplyIntParameters();
 		void ApplyMatrixParameters();
 		void ApplyTextureParameters();
 
@@ -42,7 +43,7 @@ namespace Freeking
 
 		enum class IntUniformType : uint8_t
 		{
-			Int, IVec2, IVec3, IVec4, Invalid
+			Int, Vec2, Vec3, Vec4, Invalid
 		};
 
 		enum class MatrixUniformType : uint8_t
@@ -91,10 +92,10 @@ namespace Freeking
 			bool unset;
 		};
 
-		static Material::FloatUniformType ToFloatUniformType(GLenum type);
-		static Material::IntUniformType ToIntUniformType(GLenum type);
-		static Material::MatrixUniformType ToMatrixUniformType(GLenum type);
-		static Material::TextureUniformType ToTextureUniformType(GLenum type);
+		static Material::FloatUniformType ToFloatUniformType(GLenum);
+		static Material::IntUniformType ToIntUniformType(GLenum);
+		static Material::MatrixUniformType ToMatrixUniformType(GLenum);
+		static Material::TextureUniformType ToTextureUniformType(GLenum);
 
 		std::shared_ptr<ShaderProgram> _shader;
 		std::unordered_map<std::string, FloatParameter> _floatParameters;

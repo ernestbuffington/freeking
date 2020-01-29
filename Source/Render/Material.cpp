@@ -21,9 +21,9 @@ namespace Freeking
 		switch (type)
 		{
 		case GL_INT: return IntUniformType::Int;
-		case GL_INT_VEC2: return IntUniformType::IVec2;
-		case GL_INT_VEC3: return IntUniformType::IVec3;
-		case GL_INT_VEC4: return IntUniformType::IVec4;
+		case GL_INT_VEC2: return IntUniformType::Vec2;
+		case GL_INT_VEC3: return IntUniformType::Vec3;
+		case GL_INT_VEC4: return IntUniformType::Vec4;
 		}
 
 		return IntUniformType::Invalid;
@@ -117,12 +117,13 @@ namespace Freeking
 
 		_shader->Bind();
 
-		ApplyVectorParameters();
+		ApplyFloatParameters();
+		ApplyIntParameters();
 		ApplyMatrixParameters();
 		ApplyTextureParameters();
 	}
 
-	void Material::ApplyVectorParameters()
+	void Material::ApplyFloatParameters()
 	{
 		for (auto [name, p] : _floatParameters)
 		{
@@ -157,7 +158,10 @@ namespace Freeking
 
 			p.dirty = false;
 		}
+	}
 
+	void Material::ApplyIntParameters()
+	{
 		for (auto [name, p] : _intParameters)
 		{
 			if (!p.dirty || p.unset)
@@ -172,17 +176,17 @@ namespace Freeking
 				glUniform1i(p.location, p.value[0]);
 				break;
 			}
-			case IntUniformType::IVec2:
+			case IntUniformType::Vec2:
 			{
 				glUniform2i(p.location, p.value[0], p.value[1]);
 				break;
 			}
-			case IntUniformType::IVec3:
+			case IntUniformType::Vec3:
 			{
 				glUniform3i(p.location, p.value[0], p.value[1], p.value[2]);
 				break;
 			}
-			case IntUniformType::IVec4:
+			case IntUniformType::Vec4:
 			{
 				glUniform4i(p.location, p.value[0], p.value[1], p.value[2], p.value[3]);
 				break;
