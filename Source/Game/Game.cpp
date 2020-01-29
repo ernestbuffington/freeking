@@ -17,13 +17,14 @@
 #include "FreeCamera.h"
 #include "SpriteBatch.h"
 #include "Font.h"
-#include "KeyframeModel.h"
+#include "DynamicModel.h"
 #include "Util.h"
 #include "Map.h"
 #include "Paths.h"
 #include "Thug.h"
 #include "Nav/NavFile.h"
 #include "PakFileSystem.h"
+#include "Material.h"
 #include <glad/glad.h>
 #include <iostream>
 #include <fstream>
@@ -133,13 +134,14 @@ namespace Freeking
 			}
 		}
 
-		auto md2Shader = Util::LoadShader("Shaders/KeyframeMesh.vert", "Shaders/KeyframeMesh.frag");
-		auto md2Buffer = FileSystem::GetFileData("models/weapons/g_tomgun/tris.md2");
-		auto& md2File = MD2File::Create(md2Buffer.data());
-		auto md2Mesh = std::make_shared<KeyframeMesh>();
-		md2File.Build(md2Mesh);
-		md2Mesh->SetDiffuse(Texture2D::Library.Get(md2Mesh->Skins[0]));
-		md2Mesh->Commit();
+		auto md2Shader = Util::LoadShader("Shaders/DynamicModel.vert", "Shaders/DynamicModel.frag");
+		auto md2Material = std::make_unique<Material>(md2Shader);
+
+		auto md2Mesh = DynamicModel::Library.Get("models/weapons/g_tomgun/tris.md2");
+		if (md2Mesh)
+		{
+			md2Mesh->SetDiffuse(Texture2D::Library.Get(md2Mesh->Skins[0]));
+		}
 
 		while (running)
 		{
@@ -216,24 +218,23 @@ namespace Freeking
 				thug->Render(viewProjectionMatrix, deltaTime);
 			}
 
+			md2Material->SetParameterValue("viewProj", viewProjectionMatrix * Matrix4x4::Translation(Vector3f(0, 50, 0)));
+			md2Material->SetParameterValue("delta", 0);
+			md2Material->SetParameterValue("normalBuffer", DynamicModel::GetNormalBuffer().get());
+
 			if (md2Mesh)
 			{
 				int md2Frame = 0;
-
-				md2Shader->Bind();
-				md2Shader->SetUniformValue("diffuse", 0);
-				md2Shader->SetUniformValue("frameVertexBuffer", 1);
-				md2Shader->SetUniformValue("normalBuffer", 2);
-				md2Shader->SetUniformValue("delta", 0);
-				md2Shader->SetUniformValue("viewProj", viewProjectionMatrix * Matrix4x4::Translation(Vector3f(0, 50, 0)));
-
-				md2Shader->SetUniformValue("frames[0].index", (int)(md2Frame * md2Mesh->GetFrameVertexCount()));
-				md2Shader->SetUniformValue("frames[0].translate", md2Mesh->FrameTransforms[md2Frame].translate);
-				md2Shader->SetUniformValue("frames[0].scale", md2Mesh->FrameTransforms[md2Frame].scale);
-
-				md2Shader->SetUniformValue("frames[1].index", (int)(md2Frame * md2Mesh->GetFrameVertexCount()));
-				md2Shader->SetUniformValue("frames[1].translate", md2Mesh->FrameTransforms[md2Frame].translate);
-				md2Shader->SetUniformValue("frames[1].scale", md2Mesh->FrameTransforms[md2Frame].scale);
+				md2Material->SetParameterValue("diffuse", md2Mesh->GetDiffuse().get());
+				md2Material->SetParameterValue("frameVertexBuffer", md2Mesh->GetFrameVertexBuffer().get());
+				md2Material->SetParameterValue("normalBuffer", md2Mesh->GetNormalBuffer().get());
+				md2Material->SetParameterValue("frames[0].index", (int)(md2Frame * md2Mesh->GetFrameVertexCount()));
+				md2Material->SetParameterValue("frames[0].translate", md2Mesh->FrameTransforms[md2Frame].translate);
+				md2Material->SetParameterValue("frames[0].scale", md2Mesh->FrameTransforms[md2Frame].scale);
+				md2Material->SetParameterValue("frames[1].index", (int)(md2Frame * md2Mesh->GetFrameVertexCount()));
+				md2Material->SetParameterValue("frames[1].translate", md2Mesh->FrameTransforms[md2Frame].translate);
+				md2Material->SetParameterValue("frames[1].scale", md2Mesh->FrameTransforms[md2Frame].scale);
+				md2Material->Bind();
 
 				md2Mesh->Draw();
 			}

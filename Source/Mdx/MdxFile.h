@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MdxStructures.h"
-#include "KeyframeModel.h"
+#include "DynamicModel.h"
 #include <array>
 #include <stdint.h>
 
@@ -27,8 +27,6 @@ namespace Freeking
 
 			return ptr;
 		}
-
-		void Build(std::shared_ptr<KeyframeMesh>& mesh) const;
 
 		static const int MagicNumber = 0x58504449;
 		static const int Version = 4;

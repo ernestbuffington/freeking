@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Md2Structures.h"
-#include "KeyframeModel.h"
+#include "DynamicModel.h"
 #include <array>
 #include <stdint.h>
 
@@ -27,8 +27,6 @@ namespace Freeking
 
 			return ptr;
 		}
-
-		void Build(std::shared_ptr<KeyframeMesh>& mesh) const;
 
 		static const int Ident = 0x32504449;
 		static const int Version = 8;

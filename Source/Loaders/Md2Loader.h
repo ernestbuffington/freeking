@@ -4,9 +4,9 @@
 
 namespace Freeking
 {
-	class KeyframeMesh;
+	class DynamicModel;
 
-	class MD2Loader : public AssetLoader<KeyframeMesh>
+	class MD2Loader : public AssetLoader<DynamicModel>
 	{
 	public:
 

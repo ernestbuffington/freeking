@@ -48,13 +48,21 @@ namespace Freeking
 		glGetProgramiv(_program, GL_ACTIVE_UNIFORMS, &uniformCount);
 		for (int i = 0; i < uniformCount; i++)
 		{
-			int name_len = -1, num = -1;
+			int name_len = -1;
+			int num = -1;
 			GLenum type = GL_ZERO;
 			char name[64];
 			glGetActiveUniform(_program, GLuint(i), sizeof(name) - 1, &name_len, &num, &type, name);
 			name[name_len] = 0;
+			auto nameString = std::string(name);
 
-			_uniforms[std::string(name)] = glGetUniformLocation(_program, name);
+			_uniforms.emplace(nameString, Uniform
+				{
+					nameString,
+					glGetUniformLocation(_program, name),
+					type,
+					num
+				});
 		}
 	}
 
@@ -78,42 +86,37 @@ namespace Freeking
 
 	void ShaderProgram::SetUniformValue(const char* uniformName, int value)
 	{
-		glUniform1i(_uniforms[uniformName], value);
+		glUniform1i(_uniforms[uniformName].location, value);
 	}
 
 	void ShaderProgram::SetUniformValue(const char* uniformName, float value)
 	{
-		glUniform1f(_uniforms[uniformName], value);
+		glUniform1f(_uniforms[uniformName].location, value);
 	}
 
 	void ShaderProgram::SetUniformValue(const char* uniformName, const Vector2f& v)
 	{
-		glUniform2fv(_uniforms[uniformName], 1, v.Base());
+		glUniform2fv(_uniforms[uniformName].location, 1, v.Base());
 	}
 
 	void ShaderProgram::SetUniformValue(const char* uniformName, const Vector3f& v)
 	{
-		glUniform3fv(_uniforms[uniformName], 1, v.Base());
+		glUniform3fv(_uniforms[uniformName].location, 1, v.Base());
 	}
 
 	void ShaderProgram::SetUniformValue(const char* uniformName, const Vector4f& v)
 	{
-		glUniform4fv(_uniforms[uniformName], 1, v.Base());
+		glUniform4fv(_uniforms[uniformName].location, 1, v.Base());
 	}
 
-	void ShaderProgram::SetUniformValue(const char* uniformName, const Matrix3x3& m)
+	void ShaderProgram::SetUniformValue(const char* uniformName, const Matrix3x3& v)
 	{
-		glUniformMatrix3fv(_uniforms[uniformName], 1, GL_FALSE, m.Base());
+		glUniformMatrix3fv(_uniforms[uniformName].location, 1, GL_FALSE, v.Base());
 	}
 
-	void ShaderProgram::SetUniformValue(const char* uniformName, const Matrix4x4& m)
+	void ShaderProgram::SetUniformValue(const char* uniformName, const Matrix4x4& v)
 	{
-		glUniformMatrix4fv(_uniforms[uniformName], 1, GL_FALSE, m.Base());
-	}
-
-	void ShaderProgram::SetUniformValue(const char* uniformName, std::size_t count, const Matrix4x4* m)
-	{
-		glUniformMatrix4fv(_uniforms[uniformName], (GLsizei)count, GL_FALSE, m[0].Base());
+		glUniformMatrix4fv(_uniforms[uniformName].location, 1, GL_FALSE, v.Base());
 	}
 
 	GLuint ShaderProgram::CreateSubShader(GLenum type, const std::string& source)

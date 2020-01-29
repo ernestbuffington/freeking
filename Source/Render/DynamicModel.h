@@ -1,5 +1,6 @@
 #pragma once
 
+#include "AssetLibrary.h"
 #include "Vector.h"
 #include "VertexBinding.h"
 #include "VertexBuffer.h"
@@ -12,9 +13,20 @@
 
 namespace Freeking
 {
-	class KeyframeMesh
+	class DynamicModel;
+
+	class DynamicModelLibrary : public AssetLibrary<DynamicModel>
+	{
+	protected:
+
+		virtual void UpdateLoaders() override;
+	};
+
+	class DynamicModel
 	{
 	public:
+
+		static DynamicModelLibrary Library;
 
 		struct Vertex
 		{
@@ -42,6 +54,10 @@ namespace Freeking
 		inline uint32_t GetFrameVertexCount() const { return _frameVertexCount; }
 		inline void SetFrameCount(uint32_t frameCount) { _frameCount = frameCount; }
 		inline void SetFrameVertexCount(uint32_t frameVertexCount) { _frameVertexCount = frameVertexCount; }
+
+		inline const std::shared_ptr<Texture2D>& GetDiffuse() const { return _diffuse; }
+		inline const std::shared_ptr<TextureBuffer>& GetFrameVertexBuffer() const { return _frameVertexBuffer; }
+		static const std::unique_ptr<TextureBuffer>& GetNormalBuffer();
 
 		std::vector<Vertex> Vertices;
 		std::vector<uint32_t> Indices;

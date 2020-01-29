@@ -14,7 +14,14 @@ namespace Freeking
 		virtual void UpdateLoaders() override;
 	};
 
-	class Texture2D
+	class Texture
+	{
+	public:
+
+		virtual const GLuint GetHandle() const = 0;
+	};
+
+	class Texture2D : public Texture
 	{
 	public:
 
@@ -27,7 +34,7 @@ namespace Freeking
 		void Bind() const;
 		void Bind(unsigned char slot) const;
 
-		const GLuint GetHandle() const { return _handle; }
+		virtual const GLuint GetHandle() const override { return _handle; }
 		const GLsizei GetWidth() const { return _width; }
 		const GLsizei GetHeight() const { return _height; }
 

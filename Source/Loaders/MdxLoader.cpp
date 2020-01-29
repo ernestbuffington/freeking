@@ -1,5 +1,5 @@
 #include "MdxLoader.h"
-#include "KeyframeModel.h"
+#include "DynamicModel.h"
 #include "MdxFile.h"
 
 namespace Freeking
@@ -21,7 +21,7 @@ namespace Freeking
 				return nullptr;
 			}
 
-			auto mesh = std::make_shared<KeyframeMesh>();
+			auto mesh = std::make_shared<DynamicModel>();
 
 			uint32_t pos = file.Header.OffsetFrames;
 			for (int frameIndex = 0; frameIndex < file.Header.NumFrames; ++frameIndex)
@@ -111,6 +111,8 @@ namespace Freeking
 				std::string skinName((char*)skin->Path.data());
 				mesh->Skins.push_back(skinName);
 			}
+
+			mesh->Commit();
 
 			return mesh;
 		}

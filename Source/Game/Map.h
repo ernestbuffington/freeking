@@ -1,6 +1,6 @@
 #pragma once
 
-#include "KeyframeModel.h"
+#include "DynamicModel.h"
 #include "EntityLump.h"
 #include "TextureSampler.h"
 #include "Vector.h"

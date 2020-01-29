@@ -1,34 +1,32 @@
-#include "KeyframeModel.h"
+#include "DynamicModel.h"
 #include "NormalTable.h"
+#include "Md2Loader.h"
+#include "MdxLoader.h"
 
 namespace Freeking
 {
-	static const std::unique_ptr<TextureBuffer>& GetNormalBuffer()
+	void DynamicModelLibrary::UpdateLoaders()
+	{
+		AddLoader<MD2Loader>();
+		AddLoader<MDXLoader>();
+	}
+
+	DynamicModelLibrary DynamicModel::Library;
+
+	const std::unique_ptr<TextureBuffer>& DynamicModel::GetNormalBuffer()
 	{
 		static auto normalBuffer = std::make_unique<TextureBuffer>((void*)&NormalTable[0][0], (162 * 3) * sizeof(float), GL_RGB32F);
 		return normalBuffer;
 	}
 
-	void KeyframeMesh::Draw()
+	void DynamicModel::Draw()
 	{
-		if (_diffuse)
-		{
-			_diffuse->Bind(0);
-		}
-
-		if (_frameVertexBuffer)
-		{
-			_frameVertexBuffer->Bind(1);
-		}
-
-		GetNormalBuffer()->Bind(2);
-
 		_vertexBinding->Bind();
 		glDrawElements(GL_TRIANGLES, Indices.size(), GL_UNSIGNED_INT, (void*)0);
 		_vertexBinding->Unbind();
 	}
 
-	void KeyframeMesh::Commit()
+	void DynamicModel::Commit()
 	{
 		static const int vertexSize = sizeof(Vertex);
 
@@ -46,7 +44,7 @@ namespace Freeking
 		_vertexBinding->Create(vertexLayout, 2, *_indexBuffer, ElementType::AE_UINT);
 	}
 
-	void KeyframeMesh::SetDiffuse(const std::shared_ptr<Texture2D>& texture)
+	void DynamicModel::SetDiffuse(const std::shared_ptr<Texture2D>& texture)
 	{
 		_diffuse = texture;
 	}

@@ -4,6 +4,7 @@
 #include "Util.h"
 #include "FileSystem.h"
 #include "Input.h"
+#include "Material.h"
 #include <charconv>
 
 namespace Freeking
@@ -41,14 +42,12 @@ namespace Freeking
 		int bodyPartIndex = 0;
 		for (const auto& bodyPart : bodyParts)
 		{
-			auto mdxBuffer = FileSystem::GetFileData("models/actors/" + actorName + "/" + bodyPart + ".mdx");
-			auto& mdxFile = MDXFile::Create(mdxBuffer.data());
-			auto mesh = std::make_shared<KeyframeMesh>();
-			mdxFile.Build(mesh);
-			mesh->SetDiffuse(Texture2D::Library.Get("models/actors/" + skinFolder[bodyPartIndex] + "/" + bodyPart + "_" + artSkins[bodyPartIndex] + ".tga"));
-			mesh->Commit();
-
-			_meshes.push_back(mesh);
+			auto mesh = DynamicModel::Library.Get("models/actors/" + actorName + "/" + bodyPart + ".mdx");
+			if (mesh)
+			{
+				mesh->SetDiffuse(Texture2D::Library.Get("models/actors/" + skinFolder[bodyPartIndex] + "/" + bodyPart + "_" + artSkins[bodyPartIndex] + ".tga"));
+				_meshes.push_back(mesh);
+			}
 
 			bodyPartIndex++;
 		}
@@ -64,19 +63,12 @@ namespace Freeking
 
 			for (const auto& attachment : attachments)
 			{
-				auto mdxBuffer = FileSystem::GetFileData("models/actors/" + actorName + "/" + attachment + ".mdx");
-				if (mdxBuffer.empty())
+				auto mesh = DynamicModel::Library.Get("models/actors/" + actorName + "/" + attachment + ".mdx");
+				if (mesh)
 				{
-					continue;
+					mesh->SetDiffuse(Texture2D::Library.Get(mesh->Skins[0]));
+					_meshes.push_back(mesh);
 				}
-
-				auto& mdxFile = MDXFile::Create(mdxBuffer.data());
-				auto mesh = std::make_shared<KeyframeMesh>();
-				mdxFile.Build(mesh);
-				mesh->SetDiffuse(Texture2D::Library.Get(mesh->Skins[0]));
-				mesh->Commit();
-
-				_meshes.push_back(mesh);
 			}
 		}
 
@@ -100,7 +92,8 @@ namespace Freeking
 			currentFrameIndex++;
 		}
 
-		_shader = Util::LoadShader("Shaders/KeyframeMesh.vert", "Shaders/KeyframeMesh.frag");
+		auto shader = Util::LoadShader("Shaders/DynamicModel.vert", "Shaders/DynamicModel.frag");
+		_material = std::make_shared<Material>(shader);
 	}
 
 	void Thug::Render(const Matrix4x4& viewProjection, double dt)
@@ -116,11 +109,6 @@ namespace Freeking
 
 		_animIndex = Math::Clamp(_animIndex, 0, (int)_animFrameIndex.size() - 1);
 
-		_shader->Bind();
-		_shader->SetUniformValue("diffuse", 0);
-		_shader->SetUniformValue("frameVertexBuffer", 1);
-		_shader->SetUniformValue("normalBuffer", 2);
-
 		auto animFrameIndex = _animFrameIndex[_animIndex];
 		auto frameCount = animFrameIndex.numFrames;
 		_frameTime += (10.0 * dt);
@@ -135,18 +123,21 @@ namespace Freeking
 		frame += animFrameIndex.firstFrame;
 		nextFrame += animFrameIndex.firstFrame;
 
-		_shader->SetUniformValue("delta", delta);
-		_shader->SetUniformValue("viewProj", viewProjection * ModelMatrix);
+		_material->SetParameterValue("delta", delta);
+		_material->SetParameterValue("viewProj", viewProjection * ModelMatrix);
+		_material->SetParameterValue("normalBuffer", DynamicModel::GetNormalBuffer().get());
 
 		for (const auto& mesh : _meshes)
 		{
-			_shader->SetUniformValue("frames[0].index", (int)(frame * mesh->GetFrameVertexCount()));
-			_shader->SetUniformValue("frames[0].translate", mesh->FrameTransforms[frame].translate);
-			_shader->SetUniformValue("frames[0].scale", mesh->FrameTransforms[frame].scale);
-
-			_shader->SetUniformValue("frames[1].index", (int)(nextFrame * mesh->GetFrameVertexCount()));
-			_shader->SetUniformValue("frames[1].translate", mesh->FrameTransforms[nextFrame].translate);
-			_shader->SetUniformValue("frames[1].scale", mesh->FrameTransforms[nextFrame].scale);
+			_material->SetParameterValue("diffuse", mesh->GetDiffuse().get());
+			_material->SetParameterValue("frameVertexBuffer", mesh->GetFrameVertexBuffer().get());
+			_material->SetParameterValue("frames[0].index", (int)(frame * mesh->GetFrameVertexCount()));
+			_material->SetParameterValue("frames[0].translate", mesh->FrameTransforms[frame].translate);
+			_material->SetParameterValue("frames[0].scale", mesh->FrameTransforms[frame].scale);
+			_material->SetParameterValue("frames[1].index", (int)(nextFrame * mesh->GetFrameVertexCount()));
+			_material->SetParameterValue("frames[1].translate", mesh->FrameTransforms[nextFrame].translate);
+			_material->SetParameterValue("frames[1].scale", mesh->FrameTransforms[nextFrame].scale);
+			_material->Bind();
 
 			mesh->Draw();
 		}

@@ -1,11 +1,12 @@
 #pragma once
 
+#include "Texture2D.h"
 #include <glad/glad.h>
 #include <vector>
 
 namespace Freeking
 {
-	class TextureBuffer
+	class TextureBuffer : public Texture
 	{
 
 	public:
@@ -15,6 +16,8 @@ namespace Freeking
 
 		void Bind(uint32_t slot);
 		void Unbind();
+
+		virtual const GLuint GetHandle() const override { return _handle; }
 
 	protected:
 

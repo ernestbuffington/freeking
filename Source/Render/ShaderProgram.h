@@ -14,29 +14,35 @@ namespace Freeking
 	public:
 
 		ShaderProgram() = delete;
-		ShaderProgram(const std::string& vertexSource, const std::string& fragmentSource);
+		ShaderProgram(const std::string&, const std::string&);
 		~ShaderProgram();
 
 		void Bind();
 		void Unbind();
 
-		void SetUniformValue(const char* uniformName, int value);
-		void SetUniformValue(const char* uniformName, float value);
-		void SetUniformValue(const char* uniformName, const Vector2f& v);
-		void SetUniformValue(const char* uniformName, const Vector3f& v);
-		void SetUniformValue(const char* uniformName, const Vector4f& v);
-		void SetUniformValue(const char* uniformName, const Matrix3x3& m);
-		void SetUniformValue(const char* uniformName, const Matrix4x4& m);
-		void SetUniformValue(const char* uniformName, std::size_t count, const Matrix4x4* m);
-
-		GLuint GetRawHandle() const { return _program; }
+		void SetUniformValue(const char*, int);
+		void SetUniformValue(const char*, float);
+		void SetUniformValue(const char*, const Vector2f&);
+		void SetUniformValue(const char*, const Vector3f&);
+		void SetUniformValue(const char*, const Vector4f&);
+		void SetUniformValue(const char*, const Matrix3x3&);
+		void SetUniformValue(const char*, const Matrix4x4&);
 
 	private:
 
+		static GLuint CreateSubShader(GLenum, const std::string&);
+
+		struct Uniform
+		{
+			std::string name;
+			GLint location;
+			GLenum type;
+			int count;
+		};
+
 		GLuint _program;
-		std::map<std::string, GLint> _uniforms;
+		std::map<std::string, Uniform> _uniforms;
 
-		GLuint CreateSubShader(GLenum type, const std::string& source);
+		friend class Material;
 	};
-
 }

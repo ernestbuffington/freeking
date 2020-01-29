@@ -4,7 +4,7 @@
 #include "BspFile.h"
 #include "BspFlags.h"
 #include "Util.h"
-#include "KeyframeModel.h"
+#include "DynamicModel.h"
 #include "Paths.h"
 #include "Profiler.h"
 #include <array>

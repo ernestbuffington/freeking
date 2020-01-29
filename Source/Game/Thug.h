@@ -1,12 +1,12 @@
 #pragma once
 
-#include "KeyframeModel.h"
+#include "DynamicModel.h"
 #include "EntityLump.h"
 #include <unordered_map>
 
 namespace Freeking
 {
-	class ShaderProgram;
+	class Material;
 
 	class Thug
 	{
@@ -26,9 +26,9 @@ namespace Freeking
 			size_t numFrames;
 		};
 
-		std::vector<std::shared_ptr<KeyframeMesh>> _meshes;
+		std::vector<std::shared_ptr<DynamicModel>> _meshes;
 		std::vector<AnimFrameIndex> _animFrameIndex;
-		std::shared_ptr<ShaderProgram> _shader;
+		std::shared_ptr<Material> _material;
 		double _frameTime;
 		int _animIndex;
 	};
