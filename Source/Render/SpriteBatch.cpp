@@ -11,13 +11,13 @@ namespace Freeking
 {
 	std::shared_ptr<ShaderProgram> SpriteBatch::GetSpriteShader()
 	{
-		static auto shader = Util::LoadShader("Shaders/Sprite.shader");
+		static auto shader = ShaderProgram::Library.Get("Shaders/Sprite.shader");
 		return shader;
 	}
 
 	std::shared_ptr<ShaderProgram> SpriteBatch::GetTextShader()
 	{
-		static auto shader = Util::LoadShader("Shaders/Text.shader");
+		static auto shader = ShaderProgram::Library.Get("Shaders/Text.shader");
 		return shader;
 	}
 

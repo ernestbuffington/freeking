@@ -8,18 +8,6 @@
 
 namespace Freeking
 {
-	std::shared_ptr<ShaderProgram> Util::LoadShader(const std::string& path)
-	{
-		auto source = FileSystem::GetFileData(path);
-
-		if (source.empty() || source.empty())
-		{
-			return nullptr;
-		}
-
-		return std::make_shared<ShaderProgram>(std::string(source.data(), source.size()));
-	}
-
 	Vector2f Util::ScreenSpaceToPixelPosition(const Vector2f& point, const Vector4i& viewport)
 	{
 		return Vector2f(

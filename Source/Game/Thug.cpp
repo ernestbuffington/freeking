@@ -92,7 +92,7 @@ namespace Freeking
 			currentFrameIndex++;
 		}
 
-		auto shader = Util::LoadShader("Shaders/DynamicModel.shader");
+		auto shader = ShaderProgram::Library.Get("Shaders/DynamicModel.shader");
 		_material = std::make_shared<Material>(shader);
 	}
 

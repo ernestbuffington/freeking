@@ -12,6 +12,13 @@ namespace Freeking
 
 	ShaderLoader::AssetPtr ShaderLoader::Load(const std::string& name) const
 	{
-		return nullptr;
+		auto source = FileSystem::GetFileData(name);
+
+		if (source.empty() || source.empty())
+		{
+			return nullptr;
+		}
+
+		return std::make_shared<ShaderProgram>(std::string(source.data(), source.size()));
 	}
 }
