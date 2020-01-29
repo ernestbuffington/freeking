@@ -6,6 +6,7 @@
 #include "Font.h"
 #include "Maths.h"
 #include "Util.h"
+#include "TextureSampler.h"
 
 namespace Freeking
 {
@@ -492,6 +493,7 @@ namespace Freeking
 		glDisable(GL_DEPTH_TEST);
 
 		_vertexBinding->Bind();
+		TextureSampler::GetDefault()->Bind(0);
 
 		const auto& spriteShader = GetSpriteShader();
 		if (spriteShader)
@@ -505,9 +507,11 @@ namespace Freeking
 			DrawSprites(proj, scale, textShader, _textToDraw);
 		}
 
+		glBindSampler(0, 0);
 		_vertexBinding->Unbind();
 
 		glEnable(GL_DEPTH_TEST);
+
 	}
 
 	void SpriteBatch::DrawSprites(const Matrix4x4& proj, float scale, const std::shared_ptr<ShaderProgram>& shader, std::vector<SpriteBatch::Sprite>& sprites)
@@ -601,7 +605,7 @@ namespace Freeking
 			basePos = searchPos;
 		}
 
-		shader->Unbind();
+		shader->Unbind();	
 
 		sprites.clear();
 	}

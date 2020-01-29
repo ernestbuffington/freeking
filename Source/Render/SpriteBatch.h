@@ -15,6 +15,7 @@ namespace Freeking
 	class VertexBuffer;
 	class ShaderProgram;
 	class Font;
+	class TextureSampler;
 
 	class SpriteBatch
 	{

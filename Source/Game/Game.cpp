@@ -265,25 +265,11 @@ namespace Freeking
 						float alpha = 1.0f - (distance / 512.0f);
 						lineRenderer->DrawSphere(origin, 4.0f, 4, 4, Vector4f(0, 1, 1, alpha));
 						screenPosition = Util::ScreenSpaceToPixelPosition(screenPosition, Vector4i(0, 0, _viewportWidth, _viewportHeight));
+						screenPosition.x = (int)screenPosition.x;
+						screenPosition.y = (int)screenPosition.y;
 						auto text = e.classname + " (" + name + ")";
 						spriteBatch->DrawText(font.get(), text, screenPosition + Vector2f(2, 2), Vector4f(0, 0, 0, alpha), 0.5f);
 						spriteBatch->DrawText(font.get(), text, screenPosition, Vector4f(1, 1, 1, alpha), 0.5f);
-
-						//if (e.classname == "junior")
-						//{
-						//	float light;
-						//	Vector3f color;
-						//	if (!e.TryGetFloat("light", light))
-						//	{
-						//		light = 300.0f;
-						//	}
-						//	if (!e.TryGetVector("_color", color))
-						//	{
-						//		color = Vector3(0, 0, 0);
-						//	}
-
-						//	lineRenderer->DrawSphere(origin, light * 0.5f, 8, 8, Vector4f(color.x, color.y, color.z, alpha));
-						//}
 					}
 				}
 
@@ -305,6 +291,8 @@ namespace Freeking
 						float alpha = 1.0f - (distance / 512.0f);
 						lineRenderer->DrawAABBox(origin, Vector3f(-5, -5, -5), Vector3f(5, 5, 5), Vector4f(0, 1, 0, alpha));
 						screenPosition = Util::ScreenSpaceToPixelPosition(screenPosition, Vector4i(0, 0, _viewportWidth, _viewportHeight));
+						screenPosition.x = (int)screenPosition.x;
+						screenPosition.y = (int)screenPosition.y;
 						auto text = "node #" + std::to_string(i);
 						spriteBatch->DrawText(font.get(), text, screenPosition + Vector2f(2, 2), Vector4f(0, 0, 0, alpha), 0.5f);
 						spriteBatch->DrawText(font.get(), text, screenPosition, Vector4f(1, 1, 1, alpha), 0.5f);
