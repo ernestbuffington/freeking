@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props
 {
-	ATrashcanFall::ATrashcanFall() : IEntity()
+	ATrashcanFall::ATrashcanFall() : BaseEntity()
 	{
 	}
 

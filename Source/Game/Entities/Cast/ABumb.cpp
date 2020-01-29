@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Cast
 {
-	ABumb::ABumb() : IEntity()
+	ABumb::ABumb() : BaseEntity()
 	{
 	}
 

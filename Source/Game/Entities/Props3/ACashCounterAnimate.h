@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props3
 {
-    class ACashCounterAnimate : public IEntity
+    class ACashCounterAnimate : public BaseEntity
     {
     public:
 

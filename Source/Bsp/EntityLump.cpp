@@ -18,7 +18,7 @@ namespace Freeking
 		return Util::TryParseInt(Value, v);
 	}
 
-	EntityLump::EntityLump(const std::string& string)
+	bool EntityLump::Parse(const std::string& string)
 	{
 		size_t pos = 0;
 		while (pos < string.size())
@@ -26,7 +26,7 @@ namespace Freeking
 			EntityDef entityDef;
 			if (!TryParseEntityDef(string, pos, entityDef))
 			{
-				break;
+				return false;
 			}
 
 			if (entityDef.TryGetString("classname", entityDef.classname))
@@ -44,6 +44,8 @@ namespace Freeking
 				Entities.push_back(entityDef);
 			}
 		}
+
+		return true;
 	}
 
 	bool EntityLump::EntityDef::TryGetString(const std::string& key, std::string& value) const

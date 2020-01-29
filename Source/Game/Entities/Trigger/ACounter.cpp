@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Trigger
 {
-	ACounter::ACounter() : IEntity()
+	ACounter::ACounter() : BaseEntity()
 	{
 	}
 

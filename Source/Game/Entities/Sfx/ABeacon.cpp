@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Sfx
 {
-	ABeacon::ABeacon() : IEntity()
+	ABeacon::ABeacon() : BaseEntity()
 	{
 	}
 

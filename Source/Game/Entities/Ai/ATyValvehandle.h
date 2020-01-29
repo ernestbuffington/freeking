@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Ai
 {
-    class ATyValvehandle : public IEntity
+    class ATyValvehandle : public BaseEntity
     {
     public:
 

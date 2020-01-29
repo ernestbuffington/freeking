@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Light
 {
-	AFireEsm::AFireEsm() : IEntity()
+	AFireEsm::AFireEsm() : BaseEntity()
 	{
 	}
 

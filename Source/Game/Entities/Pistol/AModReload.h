@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Pistol
 {
-    class AModReload : public IEntity
+    class AModReload : public BaseEntity
     {
     public:
 

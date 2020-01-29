@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props
 {
-	AChair::AChair() : IEntity()
+	AChair::AChair() : BaseEntity()
 	{
 	}
 

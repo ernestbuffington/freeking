@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Cast
 {
-    class AThug : public IEntity
+    class AThug : public BaseEntity
     {
     public:
 

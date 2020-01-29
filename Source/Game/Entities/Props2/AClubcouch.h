@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props2
 {
-    class AClubcouch : public IEntity
+    class AClubcouch : public BaseEntity
     {
     public:
 

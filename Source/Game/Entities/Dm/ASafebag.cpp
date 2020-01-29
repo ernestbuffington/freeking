@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Dm
 {
-	ASafebag::ASafebag() : IEntity()
+	ASafebag::ASafebag() : BaseEntity()
 	{
 	}
 

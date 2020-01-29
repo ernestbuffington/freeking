@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Dm
 {
-    class ACashspawn : public IEntity
+    class ACashspawn : public BaseEntity
     {
     public:
 

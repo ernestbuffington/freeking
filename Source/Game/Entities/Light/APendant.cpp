@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Light
 {
-	APendant::APendant() : IEntity()
+	APendant::APendant() : BaseEntity()
 	{
 	}
 

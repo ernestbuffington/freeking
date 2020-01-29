@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props2
 {
-    class ACarTopup : public IEntity
+    class ACarTopup : public BaseEntity
     {
     public:
 

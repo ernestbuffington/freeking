@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props
 {
-	ARoofVent::ARoofVent() : IEntity()
+	ARoofVent::ARoofVent() : BaseEntity()
 	{
 	}
 

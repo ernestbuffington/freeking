@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Elements
 {
-    class ARaincloud : public IEntity
+    class ARaincloud : public BaseEntity
     {
     public:
 

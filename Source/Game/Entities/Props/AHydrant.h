@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props
 {
-    class AHydrant : public IEntity
+    class AHydrant : public BaseEntity
     {
     public:
 

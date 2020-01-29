@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Func
 {
-	ATrainRotating::ATrainRotating() : IEntity()
+	ATrainRotating::ATrainRotating() : BaseEntity()
 	{
 	}
 

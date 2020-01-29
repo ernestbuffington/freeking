@@ -99,9 +99,6 @@ namespace Freeking
 		_shader->SetUniformValue("lightmap", 1);
 		_shader->SetUniformValue("brightness", 2.0f);
 
-		_textureSampler->Bind(0);
-		_lightmapSampler->Bind(1);
-
 		glDisable(GL_BLEND);
 
 		_shader->SetUniformValue("alphaMultiply", 1.0f);
@@ -145,7 +142,7 @@ namespace Freeking
 
 		pf.Start();
 		std::string entityString(entities.Data(), entities.Num());
-		_entityLump = std::make_unique<EntityLump>(entityString);
+		_entityLump.Parse(entityString);
 		pf.Stop("EntityLump");
 
 		pf.Start();
@@ -350,12 +347,10 @@ namespace Freeking
 		pf.Stop("Map commit");
 
 		_shader = Util::LoadShader("Shaders/Lightmapped.vert", "Shaders/Lightmapped.frag");
-		_textureSampler = std::make_shared<TextureSampler>(WrapMode::WRAPMODE_REPEAT, FilterMode::FILTERMODE_LINEAR);
-		_lightmapSampler = std::make_shared<TextureSampler>(WrapMode::WRAPMODE_CLAMP_EDGE, FilterMode::FILTERMODE_LINEAR_NO_MIP);
-		
+
 		pf.Start();
 
-		for (const auto& e : _entityLump->Entities)
+		for (const auto& e : _entityLump.Entities)
 		{
 			const auto& classname = e.classname;
 			if (classname.empty())
@@ -367,6 +362,7 @@ namespace Freeking
 			{
 				newEntity->PreInitialize(e);
 				newEntity->Initialize();
+				newEntity->Spawn();
 
 				_entities.push_back(newEntity);
 

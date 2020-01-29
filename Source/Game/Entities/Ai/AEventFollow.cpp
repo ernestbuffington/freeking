@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Ai
 {
-	AEventFollow::AEventFollow() : IEntity()
+	AEventFollow::AEventFollow() : BaseEntity()
 	{
 	}
 

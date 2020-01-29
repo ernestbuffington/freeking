@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Ai
 {
-    class AEventHostile : public IEntity
+    class AEventHostile : public BaseEntity
     {
     public:
 

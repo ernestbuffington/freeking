@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Func
 {
-	AObjectRepair::AObjectRepair() : IEntity()
+	AObjectRepair::AObjectRepair() : BaseEntity()
 	{
 	}
 

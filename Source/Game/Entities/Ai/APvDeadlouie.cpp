@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Ai
 {
-	APvDeadlouie::APvDeadlouie() : IEntity()
+	APvDeadlouie::APvDeadlouie() : BaseEntity()
 	{
 	}
 

@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Misc
 {
-	ACar::ACar() : IEntity()
+	ACar::ACar() : BaseEntity()
 	{
 	}
 

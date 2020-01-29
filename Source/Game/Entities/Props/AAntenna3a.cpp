@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props
 {
-	AAntenna3a::AAntenna3a() : IEntity()
+	AAntenna3a::AAntenna3a() : BaseEntity()
 	{
 	}
 

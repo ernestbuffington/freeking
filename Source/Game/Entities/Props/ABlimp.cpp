@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props
 {
-	ABlimp::ABlimp() : IEntity()
+	ABlimp::ABlimp() : BaseEntity()
 	{
 	}
 

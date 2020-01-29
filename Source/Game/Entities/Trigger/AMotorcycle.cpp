@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Trigger
 {
-	AMotorcycle::AMotorcycle() : IEntity()
+	AMotorcycle::AMotorcycle() : BaseEntity()
 	{
 	}
 

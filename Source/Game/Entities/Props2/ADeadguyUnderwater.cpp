@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props2
 {
-	ADeadguyUnderwater::ADeadguyUnderwater() : IEntity()
+	ADeadguyUnderwater::ADeadguyUnderwater() : BaseEntity()
 	{
 	}
 

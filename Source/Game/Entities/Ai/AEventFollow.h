@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Ai
 {
-    class AEventFollow : public IEntity
+    class AEventFollow : public BaseEntity
     {
     public:
 

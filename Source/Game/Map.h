@@ -77,7 +77,7 @@ namespace Freeking
 		void Tick(double dt);
 		void Render(const Matrix4x4& viewProjection);
 
-		const std::vector<EntityLump::EntityDef>& Entities() const { return _entityLump->Entities; }
+		const EntityLump& GetEntityLump() { return _entityLump; }
 		const std::shared_ptr<BrushModel>& GetBrushModel(uint32_t index) const { return _models.at(index); }
 
 		static Map* Current;
@@ -88,9 +88,7 @@ namespace Freeking
 		std::shared_ptr<Texture2D> _lightmapTexture;
 		std::map<std::string, std::shared_ptr<Texture2D>> _textures;
 		std::shared_ptr<ShaderProgram> _shader;
-		std::unique_ptr<EntityLump> _entityLump;
-		std::shared_ptr<TextureSampler> _textureSampler;
-		std::shared_ptr<TextureSampler> _lightmapSampler;
+		EntityLump _entityLump;
 		std::vector<std::shared_ptr<IEntity>> _entities;
 		std::vector<std::shared_ptr<BaseWorldEntity>> _worldEntities;
 	};

@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Elements
 {
-	ASnowcloud::ASnowcloud() : IEntity()
+	ASnowcloud::ASnowcloud() : BaseEntity()
 	{
 	}
 

@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props2
 {
-	AHelicopterAnimate::AHelicopterAnimate() : IEntity()
+	AHelicopterAnimate::AHelicopterAnimate() : BaseEntity()
 	{
 	}
 

@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Ai
 {
-    class ASafespot : public IEntity
+    class ASafespot : public BaseEntity
     {
     public:
 

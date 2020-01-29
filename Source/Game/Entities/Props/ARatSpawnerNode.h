@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props
 {
-    class ARatSpawnerNode : public IEntity
+    class ARatSpawnerNode : public BaseEntity
     {
     public:
 

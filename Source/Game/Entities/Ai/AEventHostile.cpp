@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Ai
 {
-	AEventHostile::AEventHostile() : IEntity()
+	AEventHostile::AEventHostile() : BaseEntity()
 	{
 	}
 

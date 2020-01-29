@@ -1,6 +1,7 @@
 #include "Material.h"
 #include "ShaderProgram.h"
 #include "Texture.h"
+#include "TextureSampler.h"
 
 namespace Freeking
 {
@@ -116,12 +117,24 @@ namespace Freeking
 			return;
 		}
 
-		_shader->Bind();
+		glUseProgram(_shader->_program);
 
 		ApplyFloatParameters();
 		ApplyIntParameters();
 		ApplyMatrixParameters();
 		ApplyTextureParameters();
+	}
+
+	void Material::Unbind()
+	{
+		glUseProgram(0);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		for (auto i = 0; i < _textureParameters.size(); ++i)
+		{
+			glBindSampler(i, 0);
+		}
 	}
 
 	void Material::ApplyFloatParameters()
@@ -250,6 +263,7 @@ namespace Freeking
 
 			if (textureType != GL_INVALID_ENUM)
 			{
+				glBindSampler(textureIndex, p.sampler);
 				glActiveTexture(GL_TEXTURE0 + textureIndex);
 				glBindTexture(textureType, p.value);
 				glUniform1i(p.location, textureIndex);
@@ -359,6 +373,11 @@ namespace Freeking
 
 	void Material::SetParameterValue(const char* name, const Texture* value)
 	{
+		SetParameterValue(name, value, TextureSampler::GetDefault().get());
+	}
+
+	void Material::SetParameterValue(const char* name, const Texture* value, const TextureSampler* sampler)
+	{
 		if (!value)
 		{
 			return;
@@ -368,10 +387,12 @@ namespace Freeking
 		{
 			auto& p = it->second;
 			auto handle = value->GetHandle();
+			auto samplerHandle = sampler != nullptr ? sampler->GetHandle() : TextureSampler::GetDefault()->GetHandle();
 
-			if (p.unset || p.value != handle)
+			if (p.unset || p.value != handle || p.sampler != samplerHandle)
 			{
 				p.value = handle;
+				p.sampler = samplerHandle;
 				p.unset = false;
 				p.dirty = true;
 			}

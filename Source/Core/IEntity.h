@@ -23,6 +23,7 @@ namespace Freeking
 		virtual void PreInitialize(const EntityLump::EntityDef& def) {};
 		virtual void Initialize() = 0;
 		virtual void Tick(double dt) = 0;
+		virtual void Spawn() = 0;
 
 		static shared_ptr_entity Make(const std::string_view& classname);
 
@@ -31,12 +32,18 @@ namespace Freeking
 		virtual bool SetProperty(const EntityKeyValue& keyValue) = 0;
 	};
 
-	class BaseWorldEntity : public IEntity
+	class BaseEntity : public IEntity
+	{
+	public:
+
+		virtual void Spawn() override {}
+	};
+
+	class BaseWorldEntity : public BaseEntity
 	{
 	public:
 
 		BaseWorldEntity();
-		virtual ~BaseWorldEntity() {}
 
 		virtual void PreInitialize(const EntityLump::EntityDef& def) override;
 		virtual void Tick(double dt) override;

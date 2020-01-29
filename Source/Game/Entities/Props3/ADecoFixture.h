@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props3
 {
-    class ADecoFixture : public IEntity
+    class ADecoFixture : public BaseEntity
     {
     public:
 

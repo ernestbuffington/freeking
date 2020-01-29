@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Target
 {
-    class AEarthquake : public IEntity
+    class AEarthquake : public BaseEntity
     {
     public:
 

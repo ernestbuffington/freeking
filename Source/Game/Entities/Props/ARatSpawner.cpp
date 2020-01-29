@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props
 {
-	ARatSpawner::ARatSpawner() : IEntity()
+	ARatSpawner::ARatSpawner() : BaseEntity()
 	{
 	}
 

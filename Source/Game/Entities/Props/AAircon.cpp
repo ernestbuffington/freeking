@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props
 {
-	AAircon::AAircon() : IEntity()
+	AAircon::AAircon() : BaseEntity()
 	{
 	}
 

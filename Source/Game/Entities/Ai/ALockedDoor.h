@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Ai
 {
-    class ALockedDoor : public IEntity
+    class ALockedDoor : public BaseEntity
     {
     public:
 

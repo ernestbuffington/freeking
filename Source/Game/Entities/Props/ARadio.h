@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props
 {
-    class ARadio : public IEntity
+    class ARadio : public BaseEntity
     {
     public:
 

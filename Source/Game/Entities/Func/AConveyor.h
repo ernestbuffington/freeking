@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Func
 {
-    class AConveyor : public IEntity
+    class AConveyor : public BaseEntity
     {
     public:
 

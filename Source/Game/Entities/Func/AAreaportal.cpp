@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Func
 {
-	AAreaportal::AAreaportal() : IEntity()
+	AAreaportal::AAreaportal() : BaseEntity()
 	{
 	}
 

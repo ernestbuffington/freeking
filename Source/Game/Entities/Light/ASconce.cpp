@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Light
 {
-	ASconce::ASconce() : IEntity()
+	ASconce::ASconce() : BaseEntity()
 	{
 	}
 

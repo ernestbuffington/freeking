@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Trigger
 {
-    class ARelay : public IEntity
+    class ARelay : public BaseEntity
     {
     public:
 

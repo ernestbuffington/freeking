@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Func
 {
-	AWater::AWater() : IEntity()
+	AWater::AWater() : BaseEntity()
 	{
 	}
 

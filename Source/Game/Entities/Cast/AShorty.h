@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Cast
 {
-    class AShorty : public IEntity
+    class AShorty : public BaseEntity
     {
     public:
 

@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Misc
 {
-    class ACorkyFidelMdxPcx : public IEntity
+    class ACorkyFidelMdxPcx : public BaseEntity
     {
     public:
 

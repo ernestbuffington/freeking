@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props2
 {
-	AVaseb::AVaseb() : IEntity()
+	AVaseb::AVaseb() : BaseEntity()
 	{
 	}
 

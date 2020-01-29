@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props2
 {
-	ABoatAnimate::ABoatAnimate() : IEntity()
+	ABoatAnimate::ABoatAnimate() : BaseEntity()
 	{
 	}
 

@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Light
 {
-	AChandelier::AChandelier() : IEntity()
+	AChandelier::AChandelier() : BaseEntity()
 	{
 	}
 

@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props
 {
-	AWallFall::AWallFall() : IEntity()
+	AWallFall::AWallFall() : BaseEntity()
 	{
 	}
 

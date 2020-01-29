@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Misc
 {
-    class AAlarm : public IEntity
+    class AAlarm : public BaseEntity
     {
     public:
 

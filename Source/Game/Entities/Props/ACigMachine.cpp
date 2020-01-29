@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props
 {
-	ACigMachine::ACigMachine() : IEntity()
+	ACigMachine::ACigMachine() : BaseEntity()
 	{
 	}
 

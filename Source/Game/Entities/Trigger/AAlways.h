@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Trigger
 {
-    class AAlways : public IEntity
+    class AAlways : public BaseEntity
     {
     public:
 

@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props3
 {
-	ACash::ACash() : IEntity()
+	ACash::ACash() : BaseEntity()
 	{
 	}
 

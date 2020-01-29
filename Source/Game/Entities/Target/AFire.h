@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Target
 {
-    class AFire : public IEntity
+    class AFire : public BaseEntity
     {
     public:
 

@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Func
 {
-    class AClock : public IEntity
+    class AClock : public BaseEntity
     {
     public:
 

@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props3
 {
-	ABarrelsFallNikkiA::ABarrelsFallNikkiA() : IEntity()
+	ABarrelsFallNikkiA::ABarrelsFallNikkiA() : BaseEntity()
 	{
 	}
 

@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Ai
 {
-    class ASyDykesBoundry : public IEntity
+    class ASyDykesBoundry : public BaseEntity
     {
     public:
 

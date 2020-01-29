@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Info
 {
-	APlayerStart::APlayerStart() : IEntity()
+	APlayerStart::APlayerStart() : BaseEntity()
 	{
 	}
 

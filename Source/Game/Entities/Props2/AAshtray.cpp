@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props2
 {
-	AAshtray::AAshtray() : IEntity()
+	AAshtray::AAshtray() : BaseEntity()
 	{
 	}
 

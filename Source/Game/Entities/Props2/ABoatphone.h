@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props2
 {
-    class ABoatphone : public IEntity
+    class ABoatphone : public BaseEntity
     {
     public:
 

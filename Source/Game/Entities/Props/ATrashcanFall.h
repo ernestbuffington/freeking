@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props
 {
-    class ATrashcanFall : public IEntity
+    class ATrashcanFall : public BaseEntity
     {
     public:
 

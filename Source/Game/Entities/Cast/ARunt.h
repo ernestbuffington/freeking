@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Cast
 {
-    class ARunt : public IEntity
+    class ARunt : public BaseEntity
     {
     public:
 

@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Smoke
 {
-	ALg::ALg() : IEntity()
+	ALg::ALg() : BaseEntity()
 	{
 	}
 

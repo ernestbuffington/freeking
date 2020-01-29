@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Misc
 {
-    class ASkidrowRadioRepeater : public IEntity
+    class ASkidrowRadioRepeater : public BaseEntity
     {
     public:
 

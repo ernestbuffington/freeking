@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props2
 {
-    class AVaseb : public IEntity
+    class AVaseb : public BaseEntity
     {
     public:
 

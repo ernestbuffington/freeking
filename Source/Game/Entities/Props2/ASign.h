@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props2
 {
-    class ASign : public IEntity
+    class ASign : public BaseEntity
     {
     public:
 

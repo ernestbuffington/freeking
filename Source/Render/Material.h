@@ -10,6 +10,7 @@
 namespace Freeking
 {
 	class Texture;
+	class TextureSampler;
 	class ShaderProgram;
 
 	class Material
@@ -20,6 +21,7 @@ namespace Freeking
 		Material(std::shared_ptr<ShaderProgram>);
 
 		void Apply();
+		void Unbind();
 
 		void SetParameterValue(const char*, int);
 		void SetParameterValue(const char*, float);
@@ -29,6 +31,7 @@ namespace Freeking
 		void SetParameterValue(const char*, const Matrix3x3&);
 		void SetParameterValue(const char*, const Matrix4x4&);
 		void SetParameterValue(const char*, const Texture*);
+		void SetParameterValue(const char*, const Texture*, const TextureSampler*);
 
 	private:
 
@@ -89,6 +92,7 @@ namespace Freeking
 		{
 			GLint location;
 			GLuint value;
+			GLuint sampler;
 			TextureUniformType type;
 			bool dirty;
 			bool unset;

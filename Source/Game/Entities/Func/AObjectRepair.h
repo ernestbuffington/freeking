@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Func
 {
-    class AObjectRepair : public IEntity
+    class AObjectRepair : public BaseEntity
     {
     public:
 

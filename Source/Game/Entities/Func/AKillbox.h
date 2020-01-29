@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Func
 {
-    class AKillbox : public IEntity
+    class AKillbox : public BaseEntity
     {
     public:
 

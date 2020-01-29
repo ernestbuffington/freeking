@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props2
 {
-    class AHelicopterAnimate : public IEntity
+    class AHelicopterAnimate : public BaseEntity
     {
     public:
 

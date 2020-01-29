@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props3
 {
-	ACashCounterAnimate::ACashCounterAnimate() : IEntity()
+	ACashCounterAnimate::ACashCounterAnimate() : BaseEntity()
 	{
 	}
 

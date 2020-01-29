@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Target
 {
-    class AExplosion : public IEntity
+    class AExplosion : public BaseEntity
     {
     public:
 

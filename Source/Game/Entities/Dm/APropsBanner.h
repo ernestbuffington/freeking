@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Dm
 {
-    class APropsBanner : public IEntity
+    class APropsBanner : public BaseEntity
     {
     public:
 

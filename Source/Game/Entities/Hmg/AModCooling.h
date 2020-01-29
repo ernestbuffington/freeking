@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Hmg
 {
-    class AModCooling : public IEntity
+    class AModCooling : public BaseEntity
     {
     public:
 

@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Light
 {
-	ABulb::ABulb() : IEntity()
+	ABulb::ABulb() : BaseEntity()
 	{
 	}
 

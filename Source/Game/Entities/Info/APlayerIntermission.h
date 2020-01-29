@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Info
 {
-    class APlayerIntermission : public IEntity
+    class APlayerIntermission : public BaseEntity
     {
     public:
 

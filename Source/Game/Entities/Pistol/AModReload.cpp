@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Pistol
 {
-	AModReload::AModReload() : IEntity()
+	AModReload::AModReload() : BaseEntity()
 	{
 	}
 

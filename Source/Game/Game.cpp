@@ -120,7 +120,7 @@ namespace Freeking
 
 		std::vector<std::shared_ptr<Thug>> thugs;
 
-		for (const auto& e : map->Entities())
+		for (const auto& e : map->GetEntityLump().Entities)
 		{
 			if (e.classname.substr(0, 5) == "cast_")
 			{
@@ -249,7 +249,7 @@ namespace Freeking
 
 			if (debug)
 			{
-				for (const auto& e : map->Entities())
+				for (const auto& e : map->GetEntityLump().Entities)
 				{
 					Vector3f origin(e.origin.x, e.origin.z, -e.origin.y);
 					float distance = origin.LengthBetween(camera.GetPosition());

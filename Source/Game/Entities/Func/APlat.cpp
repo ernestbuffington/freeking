@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Func
 {
-	APlat::APlat() : IEntity()
+	APlat::APlat() : BaseEntity()
 	{
 	}
 

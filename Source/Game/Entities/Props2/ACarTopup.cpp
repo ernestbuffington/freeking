@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props2
 {
-	ACarTopup::ACarTopup() : IEntity()
+	ACarTopup::ACarTopup() : BaseEntity()
 	{
 	}
 

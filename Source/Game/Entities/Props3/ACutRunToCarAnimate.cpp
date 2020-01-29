@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props3
 {
-	ACutRunToCarAnimate::ACutRunToCarAnimate() : IEntity()
+	ACutRunToCarAnimate::ACutRunToCarAnimate() : BaseEntity()
 	{
 	}
 

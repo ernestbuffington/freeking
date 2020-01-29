@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Dm
 {
-	APropsBanner::APropsBanner() : IEntity()
+	APropsBanner::APropsBanner() : BaseEntity()
 	{
 	}
 

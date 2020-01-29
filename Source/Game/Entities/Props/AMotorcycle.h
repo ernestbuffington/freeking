@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props
 {
-    class AMotorcycle : public IEntity
+    class AMotorcycle : public BaseEntity
     {
     public:
 

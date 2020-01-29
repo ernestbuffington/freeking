@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props2
 {
-	APlantFern::APlantFern() : IEntity()
+	APlantFern::APlantFern() : BaseEntity()
 	{
 	}
 

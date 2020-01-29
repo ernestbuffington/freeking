@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Ai
 {
-	ASyBlefty::ASyBlefty() : IEntity()
+	ASyBlefty::ASyBlefty() : BaseEntity()
 	{
 	}
 

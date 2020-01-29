@@ -89,6 +89,8 @@ namespace Freeking
 					glDrawArrays(mode, drawCall.offset, drawCall.count);
 				}
 			}
+
+			drawCall.material->Unbind();
 		}
 
 		_drawCalls.clear();

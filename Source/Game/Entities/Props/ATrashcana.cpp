@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props
 {
-	ATrashcana::ATrashcana() : IEntity()
+	ATrashcana::ATrashcana() : BaseEntity()
 	{
 	}
 

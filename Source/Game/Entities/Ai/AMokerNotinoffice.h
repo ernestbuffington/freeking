@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Ai
 {
-    class AMokerNotinoffice : public IEntity
+    class AMokerNotinoffice : public BaseEntity
     {
     public:
 

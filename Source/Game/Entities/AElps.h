@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity
 {
-    class AElps : public IEntity
+    class AElps : public BaseEntity
     {
     public:
 

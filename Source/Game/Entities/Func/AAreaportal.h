@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Func
 {
-    class AAreaportal : public IEntity
+    class AAreaportal : public BaseEntity
     {
     public:
 

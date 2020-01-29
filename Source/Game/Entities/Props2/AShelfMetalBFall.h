@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props2
 {
-    class AShelfMetalBFall : public IEntity
+    class AShelfMetalBFall : public BaseEntity
     {
     public:
 

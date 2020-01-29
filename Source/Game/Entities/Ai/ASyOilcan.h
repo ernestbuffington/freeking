@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Ai
 {
-    class ASyOilcan : public IEntity
+    class ASyOilcan : public BaseEntity
     {
     public:
 

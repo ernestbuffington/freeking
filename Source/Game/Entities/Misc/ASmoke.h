@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Misc
 {
-    class ASmoke : public IEntity
+    class ASmoke : public BaseEntity
     {
     public:
 

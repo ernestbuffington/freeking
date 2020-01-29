@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Func
 {
-    class ATrain : public IEntity
+    class ATrain : public BaseEntity
     {
     public:
 

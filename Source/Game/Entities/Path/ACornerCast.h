@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Path
 {
-    class ACornerCast : public IEntity
+    class ACornerCast : public BaseEntity
     {
     public:
 

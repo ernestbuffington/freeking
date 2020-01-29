@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props2
 {
-    class ADeadgalHeadless : public IEntity
+    class ADeadgalHeadless : public BaseEntity
     {
     public:
 

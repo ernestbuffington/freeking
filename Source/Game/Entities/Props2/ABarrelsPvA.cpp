@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props2
 {
-	ABarrelsPvA::ABarrelsPvA() : IEntity()
+	ABarrelsPvA::ABarrelsPvA() : BaseEntity()
 	{
 	}
 

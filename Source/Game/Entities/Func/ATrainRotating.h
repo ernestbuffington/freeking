@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Func
 {
-    class ATrainRotating : public IEntity
+    class ATrainRotating : public BaseEntity
     {
     public:
 

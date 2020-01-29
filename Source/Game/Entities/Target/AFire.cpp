@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Target
 {
-	AFire::AFire() : IEntity()
+	AFire::AFire() : BaseEntity()
 	{
 	}
 

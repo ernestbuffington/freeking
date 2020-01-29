@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Ai
 {
-    class ATriggerCharacter : public IEntity
+    class ATriggerCharacter : public BaseEntity
     {
     public:
 

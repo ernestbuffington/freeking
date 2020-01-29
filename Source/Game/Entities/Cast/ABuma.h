@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Cast
 {
-    class ABuma : public IEntity
+    class ABuma : public BaseEntity
     {
     public:
 
