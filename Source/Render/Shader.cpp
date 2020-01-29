@@ -1,4 +1,4 @@
-#include "ShaderProgram.h"
+#include "Shader.h"
 #include "ShaderLoader.h"
 #include <cassert>
 #include <cstdio>
@@ -12,9 +12,9 @@ namespace Freeking
 		AddLoader<ShaderLoader>();
 	}
 
-	ShaderLibrary ShaderProgram::Library;
+	ShaderLibrary Shader::Library;
 
-	ShaderProgram::ShaderProgram(const std::string& source)
+	Shader::Shader(const std::string& source)
 	{
 		_program = glCreateProgram();
 
@@ -39,7 +39,7 @@ namespace Freeking
 
 			char* infoLog = new char[infoLogLen];
 			glGetProgramInfoLog(_program, infoLogLen, &infoLogLen, infoLog);
-			std::fprintf(stderr, "ShaderProgram linking errors:\n%s\n", infoLog);
+			std::fprintf(stderr, "Shader linking errors:\n%s\n", infoLog);
 			delete[] infoLog;
 
 			glDeleteProgram(_program);
@@ -74,7 +74,7 @@ namespace Freeking
 		}
 	}
 
-	ShaderProgram::~ShaderProgram()
+	Shader::~Shader()
 	{
 		if (_program != 0)
 		{
@@ -82,52 +82,52 @@ namespace Freeking
 		}
 	}
 
-	void ShaderProgram::Bind()
+	void Shader::Bind()
 	{
 		glUseProgram(_program);
 	}
 
-	void ShaderProgram::Unbind()
+	void Shader::Unbind()
 	{
 		glUseProgram(0);
 	}
 
-	void ShaderProgram::SetUniformValue(const char* uniformName, int value)
+	void Shader::SetUniformValue(const char* uniformName, int value)
 	{
 		glUniform1i(_uniforms[uniformName].location, value);
 	}
 
-	void ShaderProgram::SetUniformValue(const char* uniformName, float value)
+	void Shader::SetUniformValue(const char* uniformName, float value)
 	{
 		glUniform1f(_uniforms[uniformName].location, value);
 	}
 
-	void ShaderProgram::SetUniformValue(const char* uniformName, const Vector2f& v)
+	void Shader::SetUniformValue(const char* uniformName, const Vector2f& v)
 	{
 		glUniform2fv(_uniforms[uniformName].location, 1, v.Base());
 	}
 
-	void ShaderProgram::SetUniformValue(const char* uniformName, const Vector3f& v)
+	void Shader::SetUniformValue(const char* uniformName, const Vector3f& v)
 	{
 		glUniform3fv(_uniforms[uniformName].location, 1, v.Base());
 	}
 
-	void ShaderProgram::SetUniformValue(const char* uniformName, const Vector4f& v)
+	void Shader::SetUniformValue(const char* uniformName, const Vector4f& v)
 	{
 		glUniform4fv(_uniforms[uniformName].location, 1, v.Base());
 	}
 
-	void ShaderProgram::SetUniformValue(const char* uniformName, const Matrix3x3& v)
+	void Shader::SetUniformValue(const char* uniformName, const Matrix3x3& v)
 	{
 		glUniformMatrix3fv(_uniforms[uniformName].location, 1, GL_FALSE, v.Base());
 	}
 
-	void ShaderProgram::SetUniformValue(const char* uniformName, const Matrix4x4& v)
+	void Shader::SetUniformValue(const char* uniformName, const Matrix4x4& v)
 	{
 		glUniformMatrix4fv(_uniforms[uniformName].location, 1, GL_FALSE, v.Base());
 	}
 
-	GLuint ShaderProgram::CreateSubShader(GLenum type, const std::string& source, const std::string& defines)
+	GLuint Shader::CreateSubShader(GLenum type, const std::string& source, const std::string& defines)
 	{
 		GLuint shader = glCreateShader(type);
 
@@ -147,7 +147,7 @@ namespace Freeking
 
 			char* infoLog = new char[infoLogLen];
 			glGetShaderInfoLog(shader, infoLogLen, &infoLogLen, infoLog);
-			std::fprintf(stderr, "ShaderProgram compile errors:\n%s\n", infoLog);
+			std::fprintf(stderr, "Shader compile errors:\n%s\n", infoLog);
 			delete[] infoLog;
 
 			glDeleteShader(shader);

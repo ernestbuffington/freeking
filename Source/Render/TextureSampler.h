@@ -43,21 +43,13 @@ namespace Freeking
 	{
 	public:
 
-		const std::shared_ptr<TextureSampler>& Get(TextureSamplerSettings settings)
-		{
-			if (auto it = _samplers.find(settings); it != _samplers.end())
-			{
-				return it->second;
-			}
-			else
-			{
-				return _samplers.emplace(settings, std::make_shared<TextureSampler>(settings)).first->second;
-			}
-		}
+		using TextureSamplerPtr = std::shared_ptr<TextureSampler>;
+
+		const TextureSamplerPtr& Get(const TextureSamplerSettings& settings);
 
 	private:
 
-		std::unordered_map<TextureSamplerSettings, std::shared_ptr<TextureSampler>, TextureSamplerSettings> _samplers;
+		std::unordered_map<TextureSamplerSettings, TextureSamplerPtr, TextureSamplerSettings> _samplers;
 	};
 
 	class TextureSampler

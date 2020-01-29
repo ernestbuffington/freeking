@@ -55,7 +55,7 @@ namespace Freeking
 		_vertexBinding->Create(vertexLayout, 5, *_indexBuffer, ElementType::UInt);
 	}
 
-	void BrushModel::RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<ShaderProgram>& shader)
+	void BrushModel::RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<Shader>& shader)
 	{
 		for (const auto& mesh : Meshes)
 		{
@@ -69,7 +69,7 @@ namespace Freeking
 		}
 	}
 
-	void BrushModel::RenderTranslucent(const Matrix4x4& viewProjection, const std::shared_ptr<ShaderProgram>& shader)
+	void BrushModel::RenderTranslucent(const Matrix4x4& viewProjection, const std::shared_ptr<Shader>& shader)
 	{
 		for (auto& mesh : Meshes)
 		{
@@ -346,7 +346,7 @@ namespace Freeking
 
 		pf.Stop("Map commit");
 
-		_shader = ShaderProgram::Library.Get("Shaders/Lightmapped.shader");
+		_shader = Shader::Library.Get("Shaders/Lightmapped.shader");
 
 		pf.Start();
 

@@ -1,5 +1,5 @@
 #include "Material.h"
-#include "ShaderProgram.h"
+#include "Shader.h"
 #include "Texture.h"
 #include "TextureSampler.h"
 
@@ -57,7 +57,7 @@ namespace Freeking
 		return TextureUniformType::Invalid;
 	}
 
-	Material::Material(std::shared_ptr<ShaderProgram> shader) :
+	Material::Material(std::shared_ptr<Shader> shader) :
 		_shader(shader)
 	{
 		InitializeParameters();

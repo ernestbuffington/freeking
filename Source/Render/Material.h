@@ -11,14 +11,14 @@ namespace Freeking
 {
 	class Texture;
 	class TextureSampler;
-	class ShaderProgram;
+	class Shader;
 
 	class Material
 	{
 	public:
 
 		Material() = delete;
-		Material(std::shared_ptr<ShaderProgram>);
+		Material(std::shared_ptr<Shader>);
 
 		void Apply();
 		void Unbind();
@@ -103,7 +103,7 @@ namespace Freeking
 		static Material::MatrixUniformType ToMatrixUniformType(GLenum);
 		static Material::TextureUniformType ToTextureUniformType(GLenum);
 
-		std::shared_ptr<ShaderProgram> _shader;
+		std::shared_ptr<Shader> _shader;
 		std::unordered_map<std::string, FloatParameter> _floatParameters;
 		std::unordered_map<std::string, IntParameter> _intParameters;
 		std::unordered_map<std::string, MatrixParameter> _matrixParameters;

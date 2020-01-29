@@ -32,14 +32,26 @@ namespace Freeking
 		return sampler;
 	}
 
+	const TextureSamplerLibrary::TextureSamplerPtr& TextureSamplerLibrary::Get(const TextureSamplerSettings& settings)
+	{
+		if (auto it = _samplers.find(settings); it != _samplers.end())
+		{
+			return it->second;
+		}
+		else
+		{
+			return _samplers.emplace(settings, std::make_shared<TextureSampler>(settings)).first->second;
+		}
+	}
+
 	TextureSampler::TextureSampler(const TextureSamplerSettings& settings) :
 		_handle(0)
 	{
 		glGenSamplers(1, &_handle);
-		glSamplerParameteri(_handle, GL_TEXTURE_MIN_FILTER, FilterModesMin[(int)settings.filter]);
-		glSamplerParameteri(_handle, GL_TEXTURE_MAG_FILTER, FilterModesMag[(int)settings.filter]);
-		glSamplerParameteri(_handle, GL_TEXTURE_WRAP_S, WrapModes[(int)settings.wrap]);
-		glSamplerParameteri(_handle, GL_TEXTURE_WRAP_T, WrapModes[(int)settings.wrap]);
+		glSamplerParameteri(_handle, GL_TEXTURE_MIN_FILTER, FilterModesMin[static_cast<int>(settings.filter)]);
+		glSamplerParameteri(_handle, GL_TEXTURE_MAG_FILTER, FilterModesMag[static_cast<int>(settings.filter)]);
+		glSamplerParameteri(_handle, GL_TEXTURE_WRAP_S, WrapModes[static_cast<int>(settings.wrap)]);
+		glSamplerParameteri(_handle, GL_TEXTURE_WRAP_T, WrapModes[static_cast<int>(settings.wrap)]);
 		glSamplerParameterf(_handle, GL_TEXTURE_MAX_ANISOTROPY, 16);
 	}
 

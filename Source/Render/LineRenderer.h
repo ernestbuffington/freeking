@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ShaderProgram.h"
+#include "Shader.h"
 #include "VertexBinding.h"
 #include "VertexBuffer.h"
 #include "Quaternion.h"
@@ -37,6 +37,6 @@ namespace Freeking
 		std::unique_ptr<VertexBuffer> _vertexBuffer;
 		std::unique_ptr<VertexBinding> _vertexBinding;
 		std::vector<uint8_t> _buffer;
-		std::shared_ptr<ShaderProgram> _shader;
+		std::shared_ptr<Shader> _shader;
 	};
 }

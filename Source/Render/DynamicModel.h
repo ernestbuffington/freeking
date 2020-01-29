@@ -7,7 +7,7 @@
 #include "IndexBuffer.h"
 #include "TextureBuffer.h"
 #include "Texture2D.h"
-#include "ShaderProgram.h"
+#include "Shader.h"
 #include <vector>
 #include <memory>
 

@@ -4,9 +4,9 @@
 
 namespace Freeking
 {
-	class ShaderProgram;
+	class Shader;
 
-	class ShaderLoader : public AssetLoader<ShaderProgram>
+	class ShaderLoader : public AssetLoader<Shader>
 	{
 	public:
 

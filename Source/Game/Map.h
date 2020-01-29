@@ -58,8 +58,8 @@ namespace Freeking
 	{
 	public:
 
-		void RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<ShaderProgram>& shader);
-		void RenderTranslucent(const Matrix4x4& viewProjection, const std::shared_ptr<ShaderProgram>& shader);
+		void RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<Shader>& shader);
+		void RenderTranslucent(const Matrix4x4& viewProjection, const std::shared_ptr<Shader>& shader);
 
 		std::map<std::string, std::shared_ptr<BrushMesh>> Meshes;
 
@@ -87,7 +87,7 @@ namespace Freeking
 		std::vector<std::shared_ptr<BrushModel>> _models;
 		std::shared_ptr<Texture2D> _lightmapTexture;
 		std::map<std::string, std::shared_ptr<Texture2D>> _textures;
-		std::shared_ptr<ShaderProgram> _shader;
+		std::shared_ptr<Shader> _shader;
 		EntityLump _entityLump;
 		std::vector<std::shared_ptr<IEntity>> _entities;
 		std::vector<std::shared_ptr<BaseWorldEntity>> _worldEntities;

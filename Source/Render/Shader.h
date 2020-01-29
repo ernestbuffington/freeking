@@ -10,24 +10,24 @@
 
 namespace Freeking
 {
-	class ShaderProgram;
+	class Shader;
 
-	class ShaderLibrary : public AssetLibrary<ShaderProgram>
+	class ShaderLibrary : public AssetLibrary<Shader>
 	{
 	protected:
 
 		virtual void UpdateLoaders() override;
 	};
 
-	class ShaderProgram
+	class Shader
 	{
 	public:
 
 		static ShaderLibrary Library;
 
-		ShaderProgram() = delete;
-		ShaderProgram(const std::string&);
-		~ShaderProgram();
+		Shader() = delete;
+		Shader(const std::string&);
+		~Shader();
 
 		void Bind();
 		void Unbind();

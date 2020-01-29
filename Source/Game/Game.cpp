@@ -138,7 +138,7 @@ namespace Freeking
 			}
 		}
 
-		auto md2Shader = ShaderProgram::Library.Get("Shaders/DynamicModel.shader");
+		auto md2Shader = Shader::Library.Get("Shaders/DynamicModel.shader");
 		auto md2Material = std::make_unique<Material>(md2Shader);
 
 		auto md2Mesh = DynamicModel::Library.Get("models/weapons/g_tomgun/tris.md2");
@@ -238,8 +238,6 @@ namespace Freeking
 				md2Material->Apply();
 
 				renderer.Draw(md2Mesh->GetBinding().get(), md2Material.get());
-
-				//md2Mesh->Draw();
 			}
 
 			renderer.Flush();

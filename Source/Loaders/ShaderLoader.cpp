@@ -1,5 +1,5 @@
 #include "ShaderLoader.h"
-#include "ShaderProgram.h"
+#include "Shader.h"
 
 namespace Freeking
 {
@@ -19,6 +19,6 @@ namespace Freeking
 			return nullptr;
 		}
 
-		return std::make_shared<ShaderProgram>(std::string(source.data(), source.size()));
+		return std::make_shared<Shader>(std::string(source.data(), source.size()));
 	}
 }

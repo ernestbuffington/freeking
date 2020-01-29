@@ -1,5 +1,5 @@
 #include "SpriteBatch.h"
-#include "ShaderProgram.h"
+#include "Shader.h"
 #include "VertexBinding.h"
 #include "VertexBuffer.h"
 #include "Texture2D.h"
@@ -10,15 +10,15 @@
 
 namespace Freeking
 {
-	std::shared_ptr<ShaderProgram> SpriteBatch::GetSpriteShader()
+	std::shared_ptr<Shader> SpriteBatch::GetSpriteShader()
 	{
-		static auto shader = ShaderProgram::Library.Get("Shaders/Sprite.shader");
+		static auto shader = Shader::Library.Get("Shaders/Sprite.shader");
 		return shader;
 	}
 
-	std::shared_ptr<ShaderProgram> SpriteBatch::GetTextShader()
+	std::shared_ptr<Shader> SpriteBatch::GetTextShader()
 	{
-		static auto shader = ShaderProgram::Library.Get("Shaders/Text.shader");
+		static auto shader = Shader::Library.Get("Shaders/Text.shader");
 		return shader;
 	}
 
@@ -514,7 +514,7 @@ namespace Freeking
 
 	}
 
-	void SpriteBatch::DrawSprites(const Matrix4x4& proj, float scale, const std::shared_ptr<ShaderProgram>& shader, std::vector<SpriteBatch::Sprite>& sprites)
+	void SpriteBatch::DrawSprites(const Matrix4x4& proj, float scale, const std::shared_ptr<Shader>& shader, std::vector<SpriteBatch::Sprite>& sprites)
 	{
 		shader->Bind();
 		shader->SetUniformValue("projMatrix", proj);

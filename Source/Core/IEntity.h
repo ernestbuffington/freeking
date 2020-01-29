@@ -4,7 +4,7 @@
 #include "Vector.h"
 #include "Matrix4x4.h"
 #include "Quaternion.h"
-#include "ShaderProgram.h"
+#include "Shader.h"
 
 namespace Freeking
 {
@@ -48,8 +48,8 @@ namespace Freeking
 		virtual void PreInitialize(const EntityLump::EntityDef& def) override;
 		virtual void Tick(double dt) override;
 
-		virtual void RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<ShaderProgram>& shader) = 0;
-		virtual void RenderTranslucent(const Matrix4x4& viewProjection, const std::shared_ptr<ShaderProgram>& shader) = 0;
+		virtual void RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<Shader>& shader) = 0;
+		virtual void RenderTranslucent(const Matrix4x4& viewProjection, const std::shared_ptr<Shader>& shader) = 0;
 
 		inline void SetPosition(const Vector3f& position) { _position = position; }
 		inline void SetRotation(const Quaternion& rotation) { _rotation = rotation; }
@@ -74,8 +74,8 @@ namespace Freeking
 		virtual void Initialize() override;
 		virtual void Tick(double dt) override;
 
-		virtual void RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<ShaderProgram>& shader) override;
-		virtual void RenderTranslucent(const Matrix4x4& viewProjection, const std::shared_ptr<ShaderProgram>& shader) override;
+		virtual void RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<Shader>& shader) override;
+		virtual void RenderTranslucent(const Matrix4x4& viewProjection, const std::shared_ptr<Shader>& shader) override;
 
 	protected:
 
