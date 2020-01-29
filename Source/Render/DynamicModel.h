@@ -48,7 +48,6 @@ namespace Freeking
 
 		void Draw();
 		void Commit();
-		void SetDiffuse(const std::shared_ptr<Texture2D>& texture);
 
 		inline uint32_t GetFrameCount() const { return _frameCount; }
 		inline uint32_t GetFrameVertexCount() const { return _frameVertexCount; }
@@ -56,7 +55,6 @@ namespace Freeking
 		inline void SetFrameVertexCount(uint32_t frameVertexCount) { _frameVertexCount = frameVertexCount; }
 
 		inline const std::unique_ptr<VertexBinding>& GetBinding() const { return _vertexBinding; }
-		inline const std::shared_ptr<Texture2D>& GetDiffuse() const { return _diffuse; }
 		inline const std::shared_ptr<TextureBuffer>& GetFrameVertexBuffer() const { return _frameVertexBuffer; }
 		static const std::unique_ptr<TextureBuffer>& GetNormalBuffer();
 
@@ -74,6 +72,5 @@ namespace Freeking
 		std::unique_ptr<VertexBuffer> _vertexBuffer;
 		std::unique_ptr<IndexBuffer> _indexBuffer;
 		std::shared_ptr<TextureBuffer> _frameVertexBuffer;
-		std::shared_ptr<Texture2D> _diffuse;
 	};
 }

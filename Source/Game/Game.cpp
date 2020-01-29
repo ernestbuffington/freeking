@@ -142,10 +142,7 @@ namespace Freeking
 		auto md2Material = std::make_unique<Material>(md2Shader);
 
 		auto md2Mesh = DynamicModel::Library.Get("models/weapons/g_tomgun/tris.md2");
-		if (md2Mesh)
-		{
-			md2Mesh->SetDiffuse(Texture2D::Library.Get(md2Mesh->Skins[0]));
-		}
+		auto md2Texture = Texture2D::Library.Get(md2Mesh->Skins[0]);
 
 		while (running)
 		{
@@ -229,7 +226,7 @@ namespace Freeking
 			if (md2Mesh)
 			{
 				int md2Frame = 0;
-				md2Material->SetParameterValue("diffuse", md2Mesh->GetDiffuse().get());
+				md2Material->SetParameterValue("diffuse", md2Texture.get());
 				md2Material->SetParameterValue("frameVertexBuffer", md2Mesh->GetFrameVertexBuffer().get());
 				md2Material->SetParameterValue("normalBuffer", md2Mesh->GetNormalBuffer().get());
 				md2Material->SetParameterValue("frames[0].index", (int)(md2Frame * md2Mesh->GetFrameVertexCount()));

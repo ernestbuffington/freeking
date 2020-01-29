@@ -27,6 +27,7 @@ namespace Freeking
 		};
 
 		std::vector<std::shared_ptr<DynamicModel>> _meshes;
+		std::vector<std::shared_ptr<Texture2D>> _meshTextures;
 		std::vector<AnimFrameIndex> _animFrameIndex;
 		std::shared_ptr<Material> _material;
 		double _frameTime;

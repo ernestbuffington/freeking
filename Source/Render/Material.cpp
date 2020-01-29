@@ -51,6 +51,7 @@ namespace Freeking
 		case GL_SAMPLER_3D: return TextureUniformType::Tex3D;
 		case GL_SAMPLER_BUFFER: return TextureUniformType::TexBuffer;
 		case GL_INT_SAMPLER_BUFFER: return TextureUniformType::TexBuffer;
+		case GL_UNSIGNED_INT_SAMPLER_BUFFER: return TextureUniformType::TexBuffer;
 		}
 
 		return TextureUniformType::Invalid;

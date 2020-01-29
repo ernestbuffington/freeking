@@ -43,9 +43,4 @@ namespace Freeking
 		_vertexBinding = std::make_unique<VertexBinding>();
 		_vertexBinding->Create(vertexLayout, 2, *_indexBuffer, ElementType::UInt);
 	}
-
-	void DynamicModel::SetDiffuse(const std::shared_ptr<Texture2D>& texture)
-	{
-		_diffuse = texture;
-	}
 }

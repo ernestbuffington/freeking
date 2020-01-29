@@ -19,7 +19,7 @@ namespace Freeking
 		{
 			"head",
 			"body",
-			"legs",
+			"legs"
 		};
 
 		static std::unordered_map<std::string, std::array<std::string, 3>> skinFolders =
@@ -45,7 +45,7 @@ namespace Freeking
 			auto mesh = DynamicModel::Library.Get("models/actors/" + actorName + "/" + bodyPart + ".mdx");
 			if (mesh)
 			{
-				mesh->SetDiffuse(Texture2D::Library.Get("models/actors/" + skinFolder[bodyPartIndex] + "/" + bodyPart + "_" + artSkins[bodyPartIndex] + ".tga"));
+				_meshTextures.push_back(Texture2D::Library.Get("models/actors/" + skinFolder[bodyPartIndex] + "/" + bodyPart + "_" + artSkins[bodyPartIndex] + ".tga"));
 				_meshes.push_back(mesh);
 			}
 
@@ -66,7 +66,7 @@ namespace Freeking
 				auto mesh = DynamicModel::Library.Get("models/actors/" + actorName + "/" + attachment + ".mdx");
 				if (mesh)
 				{
-					mesh->SetDiffuse(Texture2D::Library.Get(mesh->Skins[0]));
+					_meshTextures.push_back(Texture2D::Library.Get(mesh->Skins[0]));
 					_meshes.push_back(mesh);
 				}
 			}
@@ -127,9 +127,11 @@ namespace Freeking
 		_material->SetParameterValue("viewProj", viewProjection * ModelMatrix);
 		_material->SetParameterValue("normalBuffer", DynamicModel::GetNormalBuffer().get());
 
-		for (const auto& mesh : _meshes)
+		for (auto i = 0; i < _meshes.size(); ++i)
 		{
-			_material->SetParameterValue("diffuse", mesh->GetDiffuse().get());
+			auto& mesh = _meshes.at(i);
+			auto& meshTexture = _meshTextures.at(i);
+			_material->SetParameterValue("diffuse", meshTexture.get());
 			_material->SetParameterValue("frameVertexBuffer", mesh->GetFrameVertexBuffer().get());
 			_material->SetParameterValue("frames[0].index", (int)(frame * mesh->GetFrameVertexCount()));
 			_material->SetParameterValue("frames[0].translate", mesh->FrameTransforms[frame].translate);
