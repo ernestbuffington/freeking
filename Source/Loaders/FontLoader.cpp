@@ -3,6 +3,7 @@
 #include "Texture2D.h"
 #include "json.hpp"
 #include "Profiler.h"
+#include <array>
 
 namespace Freeking
 {
@@ -100,24 +101,31 @@ namespace Freeking
 				return nullptr;
 			}
 
-			if (auto page = jChar["page"].get<uint32_t>();
+			if (const auto& page = jChar["page"].get<uint32_t>();
 				page >= numPages)
 			{
 				return nullptr;
 			}
 		}
 
+		auto path = std::filesystem::path(name).remove_filename();
 		std::vector<std::shared_ptr<Texture2D>> pageTextures;
 
 		for (const auto& jPage : jPages)
 		{
-			if (auto texture = Texture2D::Library.Get(
-				std::filesystem::path(name).
-				remove_filename().
-				append(jPage.get<std::string>()).
-				string()))
+			auto pagePath = path.append(jPage.get<std::string>()).string();
+			if (!FileSystem::FileExists(pagePath))
+			{
+				return nullptr;
+			}
+
+			if (auto texture = Texture2D::Library.Get(pagePath))
 			{
 				pageTextures.push_back(texture);
+			}
+			else
+			{
+				return nullptr;
 			}
 		}
 
