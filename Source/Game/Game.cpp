@@ -138,8 +138,6 @@ namespace Freeking
 			}
 		}
 
-		Matrix4x4 viewProj;
-
 		auto globals = std::make_shared<Material::PropertyGlobals>();
 		auto md2Shader = Shader::Library.Get("Shaders/DynamicModel.shader");
 		auto md2Material = std::make_unique<Material>(md2Shader, globals.get());

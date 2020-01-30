@@ -9,7 +9,6 @@
 
 namespace Freeking
 {
-	class Texture;
 	class Texture2D;
 	class TextureBuffer;
 	class TextureSampler;
@@ -37,6 +36,22 @@ namespace Freeking
 		void SetParameterValue(const char*, const Texture2D*);
 		void SetParameterValue(const char*, const Texture2D*, const TextureSampler*);
 		void SetParameterValue(const char*, const TextureBuffer*);
+
+		void SetParameterValue(int, int);
+		void SetParameterValue(int, float);
+		void SetParameterValue(int, const Vector2f&);
+		void SetParameterValue(int, const Vector3f&);
+		void SetParameterValue(int, const Vector4f&);
+		void SetParameterValue(int, const Matrix3x3&);
+		void SetParameterValue(int, const Matrix4x4&);
+		void SetParameterValue(int, const Texture2D*);
+		void SetParameterValue(int, const Texture2D*, const TextureSampler*);
+		void SetParameterValue(int, const TextureBuffer*);
+
+		int GetFloatParameterId(const std::string& name) { return _floatParameters.GetId(name); }
+		int GetIntParameterId(const std::string& name) { return _intParameters.GetId(name); }
+		int GetMatrixParameterId(const std::string& name) { return _matrixParameters.GetId(name); }
+		int GetTextureParameterId(const std::string& name) { return _textureParameters.GetId(name); }
 
 		struct FloatParameter
 		{
@@ -181,14 +196,14 @@ namespace Freeking
 			int unit;
 		};
 
+		using FloatPropertyType = FloatParameter::Property::Type;
+		using IntPropertyType = IntParameter::Property::Type;
+		using MatrixPropertyType = MatrixParameter::Property::Type;
+		using TexturePropertyType = TextureParameter::Property::Type;
+
 		class PropertyGlobals
 		{
 		public:
-
-			using FloatPropertyType = FloatParameter::Property::Type;
-			using IntPropertyType = IntParameter::Property::Type;
-			using MatrixPropertyType = MatrixParameter::Property::Type;
-			using TexturePropertyType = TextureParameter::Property::Type;
 
 			void SetValue(const char*, int);
 			void SetValue(const char*, float);
@@ -201,10 +216,15 @@ namespace Freeking
 			void SetValue(const char*, const Texture2D*, const TextureSampler*);
 			void SetValue(const char*, const TextureBuffer*);
 
-			int GetFloatId(const std::string& name, FloatPropertyType type) { return _floatProperties.GetId(name, type); }
-			int GetIntId(const std::string& name, IntPropertyType type) { return _intProperties.GetId(name, type); }
-			int GetMatrixId(const std::string& name, MatrixPropertyType type) { return _matrixProperties.GetId(name, type); }
-			int GetTextureId(const std::string& name, TexturePropertyType type) { return _textureProperties.GetId(name, type); }
+			int GetFloatId(const std::string& name) { return _floatProperties.GetId(name); }
+			int GetIntId(const std::string& name) { return _intProperties.GetId(name); }
+			int GetMatrixId(const std::string& name) { return _matrixProperties.GetId(name); }
+			int GetTextureId(const std::string& name) { return _textureProperties.GetId(name); }
+
+			int AddFloatProperty(const std::string& name, FloatPropertyType type) { return _floatProperties.AddProperty(name, type); }
+			int AddIntProperty(const std::string& name, IntPropertyType type) { return _intProperties.AddProperty(name, type); }
+			int AddMatrixProperty(const std::string& name, MatrixPropertyType type) { return _matrixProperties.AddProperty(name, type); }
+			int AddTextureProperty(const std::string& name, TexturePropertyType type) { return _textureProperties.AddProperty(name, type); }
 
 			FloatParameter::Property* GetFloatProperty(int id) { return _floatProperties.GetProperty(id); }
 			IntParameter::Property* GetIntProperty(int id) { return _intProperties.GetProperty(id); }
@@ -216,12 +236,12 @@ namespace Freeking
 			template <typename T>
 			struct Properties
 			{
-				int GetId(const std::string& name, const enum class T::Type& type)
+				int AddProperty(const std::string& name, const enum class T::Type& type)
 				{
 					if (auto it = _propertyNameIds.find(name);
 						it != _propertyNameIds.end())
 					{
-						return it->second;
+						return (type == _properties.at(it->second).type) ? it->second : -1;
 					}
 
 					int id = _properties.size();
@@ -233,6 +253,17 @@ namespace Freeking
 					_propertyNameIds.emplace(name, id);
 
 					return id;
+				}
+
+				int GetId(const std::string& name)
+				{
+					if (auto it = _propertyNameIds.find(name);
+						it != _propertyNameIds.end())
+					{
+						return  it->second;
+					}
+
+					return -1;
 				}
 
 				T* GetProperty(int id)
@@ -263,11 +294,61 @@ namespace Freeking
 		void ApplyMatrixParameters();
 		void ApplyTextureParameters();
 
+		template <typename T>
+		struct Parameters
+		{
+			T& AddParameter(const std::string& name)
+			{
+				if (auto it = _parameterNameIds.find(name);
+					it != _parameterNameIds.end())
+				{
+					return _parameters.at(it->second);
+				}
+
+				int id = _parameters.size();
+				auto& param = _parameters.emplace_back();
+				_parameterNameIds.emplace(name, id);
+
+				return param;
+			}
+
+			int GetId(const std::string& name)
+			{
+				if (auto it = _parameterNameIds.find(name);
+					it != _parameterNameIds.end())
+				{
+					return it->second;
+				}
+
+				return -1;
+			}
+
+			T* GetParameter(const std::string& name)
+			{
+				return GetParameter(GetId(name));
+			}
+
+			T* GetParameter(int id)
+			{
+				if (id < 0 || id > _parameters.size())
+				{
+					return nullptr;
+				}
+
+				return &_parameters.at(id);
+			}
+
+			size_t GetCount() const { return _parameters.size(); }
+
+			std::vector<T> _parameters;
+			std::unordered_map<std::string, int> _parameterNameIds;
+		};
+
 		std::shared_ptr<Shader> _shader;
-		std::unordered_map<std::string, FloatParameter> _floatParameters;
-		std::unordered_map<std::string, IntParameter> _intParameters;
-		std::unordered_map<std::string, MatrixParameter> _matrixParameters;
-		std::unordered_map<std::string, TextureParameter> _textureParameters;
+		Parameters<FloatParameter> _floatParameters;
+		Parameters<IntParameter> _intParameters;
+		Parameters<MatrixParameter> _matrixParameters;
+		Parameters<TextureParameter> _textureParameters;
 		PropertyGlobals* _globals;
 	};
 }
