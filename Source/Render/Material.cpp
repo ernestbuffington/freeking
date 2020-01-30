@@ -1,6 +1,8 @@
 #include "Material.h"
 #include "Shader.h"
 #include "Texture.h"
+#include "Texture2D.h"
+#include "TextureBuffer.h"
 #include "TextureSampler.h"
 
 namespace Freeking
@@ -299,9 +301,7 @@ namespace Freeking
 	{
 		if (auto it = _intParameters.find(name); it != _intParameters.end())
 		{
-			auto& p = it->second;
-			p.prop.value[0] = value;
-			p.prop.unset = false;
+			it->second.prop.SetInt(value);
 		}
 	}
 
@@ -309,9 +309,7 @@ namespace Freeking
 	{
 		if (auto it = _floatParameters.find(name); it != _floatParameters.end())
 		{
-			auto& p = it->second;
-			p.prop.value[0] = value;
-			p.prop.unset = false;
+			it->second.prop.SetFloat(value);
 		}
 	}
 
@@ -319,9 +317,7 @@ namespace Freeking
 	{
 		if (auto it = _floatParameters.find(name); it != _floatParameters.end())
 		{
-			auto& p = it->second;
-			std::memcpy(&p.prop.value[0], value.Base(), 8);
-			p.prop.unset = false;
+			it->second.prop.SetVec2(value);
 		}
 	}
 
@@ -329,9 +325,7 @@ namespace Freeking
 	{
 		if (auto it = _floatParameters.find(name); it != _floatParameters.end())
 		{
-			auto& p = it->second;
-			std::memcpy(&p.prop.value[0], value.Base(), 12);
-			p.prop.unset = false;
+			it->second.prop.SetVec3(value);
 		}
 	}
 
@@ -339,9 +333,7 @@ namespace Freeking
 	{
 		if (auto it = _floatParameters.find(name); it != _floatParameters.end())
 		{
-			auto& p = it->second;
-			std::memcpy(&p.prop.value[0], value.Base(), 16);
-			p.prop.unset = false;
+			it->second.prop.SetVec4(value);
 		}
 	}
 
@@ -349,9 +341,7 @@ namespace Freeking
 	{
 		if (auto it = _matrixParameters.find(name); it != _matrixParameters.end())
 		{
-			auto& p = it->second;
-			std::memcpy(&p.prop.value[0], value.Base(), 36);
-			p.prop.unset = false;
+			it->second.prop.SetMat3(value);
 		}
 	}
 
@@ -359,9 +349,7 @@ namespace Freeking
 	{
 		if (auto it = _matrixParameters.find(name); it != _matrixParameters.end())
 		{
-			auto& p = it->second;
-			std::memcpy(&p.prop.value[0], value.Base(), 64);
-			p.prop.unset = false;
+			it->second.prop.SetMat4(value);
 		}
 	}
 
@@ -370,19 +358,190 @@ namespace Freeking
 		SetParameterValue(name, value, TextureSampler::GetDefault().get());
 	}
 
-	void Material::SetParameterValue(const char* name, const Texture* value, const TextureSampler* sampler)
+	void Material::SetParameterValue(const char* name, const Texture* texture, const TextureSampler* sampler)
 	{
-		if (!value)
+		if (!texture)
 		{
 			return;
 		}
 
 		if (auto it = _textureParameters.find(name); it != _textureParameters.end())
 		{
-			auto& p = it->second;
-			p.prop.texture = value->GetHandle();
-			p.prop.sampler = sampler != nullptr ? sampler->GetHandle() : TextureSampler::GetDefault()->GetHandle();
-			p.prop.unset = false;
+			it->second.prop.SetTexture(texture, sampler);
+		}
+	}
+
+
+
+
+
+
+	void Material::FloatParameter::Property::SetFloat(float value)
+	{
+		if (type == Type::Float)
+		{
+			this->value[0] = value;
+			unset = false;
+		}
+	}
+
+	void Material::FloatParameter::Property::SetVec2(const Vector2f& value)
+	{
+		if (type == Type::Vec2)
+		{
+			std::memcpy(&this->value[0], value.Base(), 8);
+			unset = false;
+		}
+	}
+
+	void Material::FloatParameter::Property::SetVec3(const Vector3f& value)
+	{
+		if (type == Type::Vec3)
+		{
+			std::memcpy(&this->value[0], value.Base(), 12);
+			unset = false;
+		}
+	}
+
+	void Material::FloatParameter::Property::SetVec4(const Vector4f& value)
+	{
+		if (type == Type::Vec4)
+		{
+			std::memcpy(&this->value[0], value.Base(), 16);
+			unset = false;
+		}
+	}
+
+	void Material::IntParameter::Property::SetInt(int value)
+	{
+		if (type == Type::Int)
+		{
+			this->value[0] = value;
+			unset = false;
+		}
+	}
+
+	void Material::MatrixParameter::Property::SetMat3(const Matrix3x3& value)
+	{
+		if (type == Type::Mat3)
+		{
+			std::memcpy(&this->value[0], value.Base(), 36);
+			unset = false;
+		}
+	}
+
+	void Material::MatrixParameter::Property::SetMat4(const Matrix4x4& value)
+	{
+		if (type == Type::Mat4)
+		{
+			std::memcpy(&this->value[0], value.Base(), 64);
+			unset = false;
+		}
+	}
+
+	void Material::TextureParameter::Property::SetTexture(const Texture* texture, const TextureSampler* sampler)
+	{
+		if (!texture)
+		{
+			return;
+		}
+
+		this->texture = texture->GetHandle();
+		this->sampler = sampler != nullptr ? sampler->GetHandle() : TextureSampler::GetDefault()->GetHandle();
+		unset = false;
+	}
+
+
+
+
+
+	void Material::PropertyGlobals::SetValue(const char* name, int value)
+	{
+		if (auto p = GetIntProperty(GetIntId(name, IntPropertyType::Int)); p != nullptr)
+		{
+			p->SetInt(value);
+		}
+	}
+
+	void Material::PropertyGlobals::SetValue(const char* name, float value)
+	{
+		if (auto p = GetFloatProperty(GetFloatId(name, FloatPropertyType::Float)); p != nullptr)
+		{
+			p->SetFloat(value);
+		}
+	}
+
+	void Material::PropertyGlobals::SetValue(const char* name, const Vector2f& value)
+	{
+		if (auto p = GetFloatProperty(GetFloatId(name, FloatPropertyType::Vec2)); p != nullptr)
+		{
+			p->SetVec2(value);
+		}
+	}
+
+	void Material::PropertyGlobals::SetValue(const char* name, const Vector3f& value)
+	{
+		if (auto p = GetFloatProperty(GetFloatId(name, FloatPropertyType::Vec3)); p != nullptr)
+		{
+			p->SetVec3(value);
+		}
+	}
+
+	void Material::PropertyGlobals::SetValue(const char* name, const Vector4f& value)
+	{
+		if (auto p = GetFloatProperty(GetFloatId(name, FloatPropertyType::Vec4)); p != nullptr)
+		{
+			p->SetVec4(value);
+		}
+	}
+
+	void Material::PropertyGlobals::SetValue(const char* name, const Matrix3x3& value)
+	{
+		if (auto p = GetMatrixProperty(GetMatrixId(name, MatrixPropertyType::Mat3)); p != nullptr)
+		{
+			p->SetMat3(value);
+		}
+	}
+
+	void Material::PropertyGlobals::SetValue(const char* name, const Matrix4x4& value)
+	{
+		if (auto p = GetMatrixProperty(GetMatrixId(name, MatrixPropertyType::Mat4)); p != nullptr)
+		{
+			p->SetMat4(value);
+		}
+	}
+
+	void Material::PropertyGlobals::SetValue(const char* name, const Texture2D* texture)
+	{
+		if (texture != nullptr)
+		{
+			SetValue(name, texture, TextureSampler::GetDefault().get());
+		}
+	}
+
+	void Material::PropertyGlobals::SetValue(const char* name, const Texture2D* texture, const TextureSampler* sampler)
+	{
+		if (texture == nullptr)
+		{
+			return;
+		}
+
+		if (auto p = GetTextureProperty(GetTextureId(name, TexturePropertyType::Tex2D)); p != nullptr)
+		{
+			p->SetTexture(texture, sampler);
+		}
+	}
+
+	void Material::PropertyGlobals::SetValue(const char* name, const TextureBuffer* texture)
+	{
+		if (texture == nullptr)
+		{
+			return;
+		}
+
+		if (auto p = GetTextureProperty(GetTextureId(name, TexturePropertyType::TexBuffer)); p != nullptr)
+		{
+			p->SetTexture(texture, nullptr);
 		}
 	}
 }

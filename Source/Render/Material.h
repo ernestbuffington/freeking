@@ -10,6 +10,8 @@
 namespace Freeking
 {
 	class Texture;
+	class Texture2D;
+	class TextureBuffer;
 	class TextureSampler;
 	class Shader;
 
@@ -65,6 +67,11 @@ namespace Freeking
 					return Type::Invalid;
 				}
 
+				void SetFloat(float);
+				void SetVec2(const Vector2f&);
+				void SetVec3(const Vector3f&);
+				void SetVec4(const Vector4f&);
+
 				Type type;
 				float value[4];
 				bool unset;
@@ -97,6 +104,8 @@ namespace Freeking
 					return Type::Invalid;
 				}
 
+				void SetInt(int);
+
 				Type type;
 				int value[4];
 				bool unset;
@@ -126,6 +135,9 @@ namespace Freeking
 
 					return Type::Invalid;
 				}
+
+				void SetMat3(const Matrix3x3&);
+				void SetMat4(const Matrix4x4&);
 
 				Type type;
 				float value[16];
@@ -161,6 +173,8 @@ namespace Freeking
 					return Type::Invalid;
 				}
 
+				void SetTexture(const Texture*, const TextureSampler*);
+
 				Type type;
 				GLuint texture;
 				GLuint sampler;
@@ -181,6 +195,17 @@ namespace Freeking
 			using IntPropertyType = IntParameter::Property::Type;
 			using MatrixPropertyType = MatrixParameter::Property::Type;
 			using TexturePropertyType = TextureParameter::Property::Type;
+
+			void SetValue(const char*, int);
+			void SetValue(const char*, float);
+			void SetValue(const char*, const Vector2f&);
+			void SetValue(const char*, const Vector3f&);
+			void SetValue(const char*, const Vector4f&);
+			void SetValue(const char*, const Matrix3x3&);
+			void SetValue(const char*, const Matrix4x4&);
+			void SetValue(const char*, const Texture2D*);
+			void SetValue(const char*, const Texture2D*, const TextureSampler*);
+			void SetValue(const char*, const TextureBuffer*);
 
 			int GetFloatId(const std::string& name, FloatPropertyType type) { return _floatProperties.GetId(name, type); }
 			int GetIntId(const std::string& name, IntPropertyType type) { return _intProperties.GetId(name, type); }
@@ -209,6 +234,7 @@ namespace Freeking
 
 					T prop;
 					prop.type = type;
+					prop.unset = true;
 					_properties.push_back(prop);
 					_propertyNameIds.emplace(name, id);
 
