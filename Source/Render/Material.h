@@ -34,8 +34,9 @@ namespace Freeking
 		void SetParameterValue(const char*, const Vector4f&);
 		void SetParameterValue(const char*, const Matrix3x3&);
 		void SetParameterValue(const char*, const Matrix4x4&);
-		void SetParameterValue(const char*, const Texture*);
-		void SetParameterValue(const char*, const Texture*, const TextureSampler*);
+		void SetParameterValue(const char*, const Texture2D*);
+		void SetParameterValue(const char*, const Texture2D*, const TextureSampler*);
+		void SetParameterValue(const char*, const TextureBuffer*);
 
 		struct FloatParameter
 		{
@@ -165,7 +166,8 @@ namespace Freeking
 					return Type::Invalid;
 				}
 
-				void SetTexture(const Texture*, const TextureSampler*);
+				void SetTexture(const Texture2D*, const TextureSampler*);
+				void SetTexture(const TextureBuffer*);
 
 				Type type;
 				GLuint texture;

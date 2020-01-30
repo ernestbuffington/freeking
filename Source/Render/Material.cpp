@@ -290,7 +290,7 @@ namespace Freeking
 
 			if (textureType != GL_INVALID_ENUM)
 			{
-				glBindSampler(p.unit, prop->sampler);
+				glBindSampler(p.unit, prop->sampler != GL_INVALID_INDEX ? prop->sampler : 0);
 				glActiveTexture(GL_TEXTURE0 + p.unit);
 				glBindTexture(textureType, prop->texture);
 				glUniform1i(p.location, p.unit);
@@ -354,12 +354,12 @@ namespace Freeking
 		}
 	}
 
-	void Material::SetParameterValue(const char* name, const Texture* value)
+	void Material::SetParameterValue(const char* name, const Texture2D* value)
 	{
 		SetParameterValue(name, value, TextureSampler::GetDefault().get());
 	}
 
-	void Material::SetParameterValue(const char* name, const Texture* texture, const TextureSampler* sampler)
+	void Material::SetParameterValue(const char* name, const Texture2D* texture, const TextureSampler* sampler)
 	{
 		if (!texture)
 		{
@@ -372,10 +372,18 @@ namespace Freeking
 		}
 	}
 
+	void Material::SetParameterValue(const char* name, const TextureBuffer* texture)
+	{
+		if (!texture)
+		{
+			return;
+		}
 
-
-
-
+		if (auto it = _textureParameters.find(name); it != _textureParameters.end())
+		{
+			it->second.prop.SetTexture(texture);
+		}
+	}
 
 	void Material::FloatParameter::Property::SetFloat(float value)
 	{
@@ -440,25 +448,30 @@ namespace Freeking
 		}
 	}
 
-	void Material::TextureParameter::Property::SetTexture(const Texture* texture, const TextureSampler* sampler)
+	void Material::TextureParameter::Property::SetTexture(const Texture2D* texture, const TextureSampler* sampler)
 	{
-		if (!texture)
+		if (type == Type::Tex2D && texture)
 		{
-			return;
+			this->texture = texture->GetHandle();
+			this->sampler = sampler != nullptr ? sampler->GetHandle() : TextureSampler::GetDefault()->GetHandle();
+			unset = false;
 		}
-
-		this->texture = texture->GetHandle();
-		this->sampler = sampler != nullptr ? sampler->GetHandle() : TextureSampler::GetDefault()->GetHandle();
-		unset = false;
 	}
 
-
-
-
+	void Material::TextureParameter::Property::SetTexture(const TextureBuffer* texture)
+	{
+		if (type == Type::TexBuffer && texture)
+		{
+			this->texture = texture->GetHandle();
+			this->sampler = GL_INVALID_INDEX;
+			unset = false;
+		}
+	}
 
 	void Material::PropertyGlobals::SetValue(const char* name, int value)
 	{
-		if (auto p = GetIntProperty(GetIntId(name, IntPropertyType::Int)); p != nullptr)
+		if (auto p = GetIntProperty(GetIntId(name, IntPropertyType::Int));
+			p != nullptr && p->type == IntPropertyType::Int)
 		{
 			p->SetInt(value);
 		}
@@ -466,7 +479,8 @@ namespace Freeking
 
 	void Material::PropertyGlobals::SetValue(const char* name, float value)
 	{
-		if (auto p = GetFloatProperty(GetFloatId(name, FloatPropertyType::Float)); p != nullptr)
+		if (auto p = GetFloatProperty(GetFloatId(name, FloatPropertyType::Float));
+			p != nullptr && p->type == FloatPropertyType::Float)
 		{
 			p->SetFloat(value);
 		}
@@ -474,7 +488,8 @@ namespace Freeking
 
 	void Material::PropertyGlobals::SetValue(const char* name, const Vector2f& value)
 	{
-		if (auto p = GetFloatProperty(GetFloatId(name, FloatPropertyType::Vec2)); p != nullptr)
+		if (auto p = GetFloatProperty(GetFloatId(name, FloatPropertyType::Vec2));
+			p != nullptr && p->type == FloatPropertyType::Vec2)
 		{
 			p->SetVec2(value);
 		}
@@ -482,7 +497,8 @@ namespace Freeking
 
 	void Material::PropertyGlobals::SetValue(const char* name, const Vector3f& value)
 	{
-		if (auto p = GetFloatProperty(GetFloatId(name, FloatPropertyType::Vec3)); p != nullptr)
+		if (auto p = GetFloatProperty(GetFloatId(name, FloatPropertyType::Vec3));
+			p != nullptr && p->type == FloatPropertyType::Vec3)
 		{
 			p->SetVec3(value);
 		}
@@ -490,7 +506,8 @@ namespace Freeking
 
 	void Material::PropertyGlobals::SetValue(const char* name, const Vector4f& value)
 	{
-		if (auto p = GetFloatProperty(GetFloatId(name, FloatPropertyType::Vec4)); p != nullptr)
+		if (auto p = GetFloatProperty(GetFloatId(name, FloatPropertyType::Vec4));
+			p != nullptr && p->type == FloatPropertyType::Vec4)
 		{
 			p->SetVec4(value);
 		}
@@ -498,7 +515,8 @@ namespace Freeking
 
 	void Material::PropertyGlobals::SetValue(const char* name, const Matrix3x3& value)
 	{
-		if (auto p = GetMatrixProperty(GetMatrixId(name, MatrixPropertyType::Mat3)); p != nullptr)
+		if (auto p = GetMatrixProperty(GetMatrixId(name, MatrixPropertyType::Mat3));
+			p != nullptr && p->type == MatrixPropertyType::Mat3)
 		{
 			p->SetMat3(value);
 		}
@@ -506,7 +524,8 @@ namespace Freeking
 
 	void Material::PropertyGlobals::SetValue(const char* name, const Matrix4x4& value)
 	{
-		if (auto p = GetMatrixProperty(GetMatrixId(name, MatrixPropertyType::Mat4)); p != nullptr)
+		if (auto p = GetMatrixProperty(GetMatrixId(name, MatrixPropertyType::Mat4));
+			p != nullptr && p->type == MatrixPropertyType::Mat4)
 		{
 			p->SetMat4(value);
 		}
@@ -527,7 +546,8 @@ namespace Freeking
 			return;
 		}
 
-		if (auto p = GetTextureProperty(GetTextureId(name, TexturePropertyType::Tex2D)); p != nullptr)
+		if (auto p = GetTextureProperty(GetTextureId(name, TexturePropertyType::Tex2D));
+			p != nullptr && p->type == TexturePropertyType::Tex2D)
 		{
 			p->SetTexture(texture, sampler);
 		}
@@ -540,9 +560,10 @@ namespace Freeking
 			return;
 		}
 
-		if (auto p = GetTextureProperty(GetTextureId(name, TexturePropertyType::TexBuffer)); p != nullptr)
+		if (auto p = GetTextureProperty(GetTextureId(name, TexturePropertyType::TexBuffer));
+			p != nullptr && p->type == TexturePropertyType::TexBuffer)
 		{
-			p->SetTexture(texture, nullptr);
+			p->SetTexture(texture);
 		}
 	}
 }
