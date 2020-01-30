@@ -5,65 +5,13 @@
 
 namespace Freeking
 {
-	Material::FloatUniformType Material::ToFloatUniformType(GLenum type)
-	{
-		switch (type)
-		{
-		case GL_FLOAT: return FloatUniformType::Float;
-		case GL_FLOAT_VEC2: return FloatUniformType::Vec2;
-		case GL_FLOAT_VEC3: return FloatUniformType::Vec3;
-		case GL_FLOAT_VEC4: return FloatUniformType::Vec4;
-		}
-
-		return FloatUniformType::Invalid;
-	}
-
-	Material::IntUniformType Material::ToIntUniformType(GLenum type)
-	{
-		switch (type)
-		{
-		case GL_INT: return IntUniformType::Int;
-		case GL_INT_VEC2: return IntUniformType::Vec2;
-		case GL_INT_VEC3: return IntUniformType::Vec3;
-		case GL_INT_VEC4: return IntUniformType::Vec4;
-		}
-
-		return IntUniformType::Invalid;
-	}
-
-	Material::MatrixUniformType Material::ToMatrixUniformType(GLenum type)
-	{
-		switch (type)
-		{
-		case GL_FLOAT_MAT3: return MatrixUniformType::Mat3;
-		case GL_FLOAT_MAT4: return MatrixUniformType::Mat4;
-		}
-
-		return MatrixUniformType::Invalid;
-	}
-
-	Material::TextureUniformType Material::ToTextureUniformType(GLenum type)
-	{
-		switch (type)
-		{
-		case GL_SAMPLER_1D: return TextureUniformType::Tex1D;
-		case GL_SAMPLER_2D: return TextureUniformType::Tex2D;
-		case GL_SAMPLER_3D: return TextureUniformType::Tex3D;
-		case GL_SAMPLER_BUFFER: return TextureUniformType::TexBuffer;
-		case GL_INT_SAMPLER_BUFFER: return TextureUniformType::TexBuffer;
-		case GL_UNSIGNED_INT_SAMPLER_BUFFER: return TextureUniformType::TexBuffer;
-		}
-
-		return TextureUniformType::Invalid;
-	}
-
-	Material::Material(std::shared_ptr<Shader> shader) :
+	Material::Material(std::shared_ptr<Shader> shader, PropertyGlobals* globals) :
 		_shader(shader)
 	{
-		InitializeParameters();
+		InitializeParameters(globals);
 	}
 
-	void Material::InitializeParameters()
+	void Material::InitializeParameters(PropertyGlobals* globals)
 	{
 		if (!_shader)
 		{
@@ -72,42 +20,51 @@ namespace Freeking
 
 		for (auto& [name, uniform] : _shader->_uniforms)
 		{
-			if (auto type = ToFloatUniformType(uniform.type); type != FloatUniformType::Invalid)
+			if (auto type = FloatParameter::Property::CastType(uniform.type);
+				type != FloatParameter::Property::Type::Invalid)
 			{
 				FloatParameter p;
-				p.type = type;
+				p.prop.type = type;
 				p.location = uniform.location;
-				p.unset = true;
+				p.prop.unset = true;
+				p.globalId = globals != nullptr ? globals->GetFloatId(name, type) : -1;
 				_floatParameters.emplace(uniform.name, p);
 			}
-			else if (auto type = ToIntUniformType(uniform.type); type != IntUniformType::Invalid)
+			else if (auto type = IntParameter::Property::CastType(uniform.type);
+				type != IntParameter::Property::Type::Invalid)
 			{
 				IntParameter p;
-				p.type = type;
+				p.prop.type = type;
 				p.location = uniform.location;
-				p.unset = true;
+				p.prop.unset = true;
+				p.globalId = globals != nullptr ? globals->GetIntId(name, type) : -1;
 				_intParameters.emplace(uniform.name, p);
 			}
-			else if (auto type = ToMatrixUniformType(uniform.type); type != MatrixUniformType::Invalid)
+			else if (auto type = MatrixParameter::Property::CastType(uniform.type);
+				type != MatrixParameter::Property::Type::Invalid)
 			{
 				MatrixParameter p;
-				p.type = type;
+				p.prop.type = type;
 				p.location = uniform.location;
-				p.unset = true;
+				p.prop.unset = true;
+				p.globalId = globals != nullptr ? globals->GetMatrixId(name, type) : -1;
 				_matrixParameters.emplace(uniform.name, p);
 			}
-			else if (auto type = ToTextureUniformType(uniform.type); type != TextureUniformType::Invalid)
+			else if (auto type = TextureParameter::Property::CastType(uniform.type);
+				type != TextureParameter::Property::Type::Invalid)
 			{
 				TextureParameter p;
-				p.type = type;
+				p.prop.type = type;
 				p.location = uniform.location;
-				p.unset = true;
+				p.prop.unset = true;
+				p.globalId = globals != nullptr ? globals->GetTextureId(name, type) : -1;
+				p.unit = _textureParameters.size();
 				_textureParameters.emplace(uniform.name, p);
 			}
 		}
 	}
 
-	void Material::Apply()
+	void Material::Apply(PropertyGlobals* globals)
 	{
 		if (!_shader)
 		{
@@ -116,10 +73,10 @@ namespace Freeking
 
 		glUseProgram(_shader->_program);
 
-		ApplyFloatParameters();
-		ApplyIntParameters();
-		ApplyMatrixParameters();
-		ApplyTextureParameters();
+		ApplyFloatParameters(globals);
+		ApplyIntParameters(globals);
+		ApplyMatrixParameters(globals);
+		ApplyTextureParameters(globals);
 	}
 
 	void Material::Unbind()
@@ -134,130 +91,206 @@ namespace Freeking
 		}
 	}
 
-	void Material::ApplyFloatParameters()
+	void Material::ApplyFloatParameters(PropertyGlobals* globals)
 	{
+		using Property = FloatParameter::Property;
+		using PropertyType = Property::Type;
+
 		for (auto [name, p] : _floatParameters)
 		{
-			if (p.unset)
+			Property* prop = nullptr;
+
+			if (p.prop.unset)
 			{
-				continue;
+				if (globals == nullptr)
+				{
+					continue;
+				}
+
+				if (prop = globals->GetFloatProperty(p.globalId);
+					prop == nullptr ||
+					prop->unset ||
+					prop->type != p.prop.type)
+				{
+					continue;
+				}
+			}
+			else
+			{
+				prop = &p.prop;
 			}
 
-			switch (p.type)
+			switch (prop->type)
 			{
-			case FloatUniformType::Float:
+			case PropertyType::Float:
 			{
-				glUniform1f(p.location, p.value[0]);
+				glUniform1f(p.location, prop->value[0]);
 				break;
 			}
-			case FloatUniformType::Vec2:
+			case PropertyType::Vec2:
 			{
-				glUniform2f(p.location, p.value[0], p.value[1]);
+				glUniform2f(p.location, prop->value[0], prop->value[1]);
 				break;
 			}
-			case FloatUniformType::Vec3:
+			case PropertyType::Vec3:
 			{
-				glUniform3f(p.location, p.value[0], p.value[1], p.value[2]);
+				glUniform3f(p.location, prop->value[0], prop->value[1], prop->value[2]);
 				break;
 			}
-			case FloatUniformType::Vec4:
+			case PropertyType::Vec4:
 			{
-				glUniform4f(p.location, p.value[0], p.value[1], p.value[2], p.value[3]);
+				glUniform4f(p.location, prop->value[0], prop->value[1], prop->value[2], prop->value[3]);
 				break;
 			}
 			}
 		}
 	}
 
-	void Material::ApplyIntParameters()
+	void Material::ApplyIntParameters(PropertyGlobals* globals)
 	{
+		using Property = IntParameter::Property;
+		using PropertyType = Property::Type;
+
 		for (auto [name, p] : _intParameters)
 		{
-			if (p.unset)
+			Property* prop = nullptr;
+
+			if (p.prop.unset)
 			{
-				continue;
+				if (globals == nullptr)
+				{
+					continue;
+				}
+
+				if (prop = globals->GetIntProperty(p.globalId);
+					prop == nullptr ||
+					prop->unset ||
+					prop->type != p.prop.type)
+				{
+					continue;
+				}
+			}
+			else
+			{
+				prop = &p.prop;
 			}
 
-			switch (p.type)
+			switch (prop->type)
 			{
-			case IntUniformType::Int:
+			case PropertyType::Int:
 			{
-				glUniform1i(p.location, p.value[0]);
+				glUniform1i(p.location, prop->value[0]);
 				break;
 			}
-			case IntUniformType::Vec2:
+			case PropertyType::Vec2:
 			{
-				glUniform2i(p.location, p.value[0], p.value[1]);
+				glUniform2i(p.location, prop->value[0], prop->value[1]);
 				break;
 			}
-			case IntUniformType::Vec3:
+			case PropertyType::Vec3:
 			{
-				glUniform3i(p.location, p.value[0], p.value[1], p.value[2]);
+				glUniform3i(p.location, prop->value[0], prop->value[1], prop->value[2]);
 				break;
 			}
-			case IntUniformType::Vec4:
+			case PropertyType::Vec4:
 			{
-				glUniform4i(p.location, p.value[0], p.value[1], p.value[2], p.value[3]);
+				glUniform4i(p.location, prop->value[0], prop->value[1], prop->value[2], prop->value[3]);
 				break;
 			}
 			}
 		}
 	}
 
-	void Material::ApplyMatrixParameters()
+	void Material::ApplyMatrixParameters(PropertyGlobals* globals)
 	{
+		using Property = MatrixParameter::Property;
+		using PropertyType = Property::Type;
+
 		for (auto [name, p] : _matrixParameters)
 		{
-			if (p.unset)
+			Property* prop = nullptr;
+
+			if (p.prop.unset)
 			{
-				continue;
+				if (globals == nullptr)
+				{
+					continue;
+				}
+
+				if (prop = globals->GetMatrixProperty(p.globalId);
+					prop == nullptr ||
+					prop->unset ||
+					prop->type != p.prop.type)
+				{
+					continue;
+				}
+			}
+			else
+			{
+				prop = &p.prop;
 			}
 
-			switch (p.type)
+			switch (prop->type)
 			{
-			case MatrixUniformType::Mat3:
+			case PropertyType::Mat3:
 			{
-				glUniformMatrix3fv(p.location, 1, GL_FALSE, &p.value[0]);
+				glUniformMatrix3fv(p.location, 1, GL_FALSE, &prop->value[0]);
 				break;
 			}
-			case MatrixUniformType::Mat4:
+			case PropertyType::Mat4:
 			{
-				glUniformMatrix4fv(p.location, 1, GL_FALSE, &p.value[0]);
+				glUniformMatrix4fv(p.location, 1, GL_FALSE, &prop->value[0]);
 				break;
 			}
 			}
 		}
 	}
 
-	void Material::ApplyTextureParameters()
+	void Material::ApplyTextureParameters(PropertyGlobals* globals)
 	{
-		int textureIndex = -1;
+		using Property = TextureParameter::Property;
+		using PropertyType = Property::Type;
 
 		for (auto [name, p] : _textureParameters)
 		{
-			textureIndex++;
+			Property* prop = nullptr;
 
-			if (p.unset)
+			if (p.prop.unset)
 			{
-				continue;
+				if (globals == nullptr)
+				{
+					continue;
+				}
+
+				if (prop = globals->GetTextureProperty(p.globalId);
+					prop == nullptr ||
+					prop->unset ||
+					prop->type != p.prop.type)
+				{
+					continue;
+				}
+			}
+			else
+			{
+				prop = &p.prop;
 			}
 
 			GLenum textureType = GL_INVALID_ENUM;
 
-			switch (p.type)
+			switch (prop->type)
 			{
-			case TextureUniformType::Tex1D: textureType = GL_TEXTURE_1D; break;
-			case TextureUniformType::Tex2D: textureType = GL_TEXTURE_2D; break;
-			case TextureUniformType::Tex3D: textureType = GL_TEXTURE_3D; break;
-			case TextureUniformType::TexBuffer: textureType = GL_TEXTURE_BUFFER; break;
+			case PropertyType::Tex1D: textureType = GL_TEXTURE_1D; break;
+			case PropertyType::Tex2D: textureType = GL_TEXTURE_2D; break;
+			case PropertyType::Tex3D: textureType = GL_TEXTURE_3D; break;
+			case PropertyType::TexBuffer: textureType = GL_TEXTURE_BUFFER; break;
 			}
 
 			if (textureType != GL_INVALID_ENUM)
 			{
-				glBindSampler(textureIndex, p.sampler);
-				glActiveTexture(GL_TEXTURE0 + textureIndex);
-				glBindTexture(textureType, p.texture);
-				glUniform1i(p.location, textureIndex);
+				glBindSampler(p.unit, prop->sampler);
+				glActiveTexture(GL_TEXTURE0 + p.unit);
+				glBindTexture(textureType, prop->texture);
+				glUniform1i(p.location, p.unit);
 			}
 		}
 	}
@@ -267,8 +300,8 @@ namespace Freeking
 		if (auto it = _intParameters.find(name); it != _intParameters.end())
 		{
 			auto& p = it->second;
-			p.value[0] = value;
-			p.unset = false;
+			p.prop.value[0] = value;
+			p.prop.unset = false;
 		}
 	}
 
@@ -277,8 +310,8 @@ namespace Freeking
 		if (auto it = _floatParameters.find(name); it != _floatParameters.end())
 		{
 			auto& p = it->second;
-			p.value[0] = value;
-			p.unset = false;
+			p.prop.value[0] = value;
+			p.prop.unset = false;
 		}
 	}
 
@@ -287,8 +320,8 @@ namespace Freeking
 		if (auto it = _floatParameters.find(name); it != _floatParameters.end())
 		{
 			auto& p = it->second;
-			std::memcpy(&p.value[0], value.Base(), 8);
-			p.unset = false;
+			std::memcpy(&p.prop.value[0], value.Base(), 8);
+			p.prop.unset = false;
 		}
 	}
 
@@ -297,8 +330,8 @@ namespace Freeking
 		if (auto it = _floatParameters.find(name); it != _floatParameters.end())
 		{
 			auto& p = it->second;
-			std::memcpy(&p.value[0], value.Base(), 12);
-			p.unset = false;
+			std::memcpy(&p.prop.value[0], value.Base(), 12);
+			p.prop.unset = false;
 		}
 	}
 
@@ -307,8 +340,8 @@ namespace Freeking
 		if (auto it = _floatParameters.find(name); it != _floatParameters.end())
 		{
 			auto& p = it->second;
-			std::memcpy(&p.value[0], value.Base(), 16);
-			p.unset = false;
+			std::memcpy(&p.prop.value[0], value.Base(), 16);
+			p.prop.unset = false;
 		}
 	}
 
@@ -317,8 +350,8 @@ namespace Freeking
 		if (auto it = _matrixParameters.find(name); it != _matrixParameters.end())
 		{
 			auto& p = it->second;
-			std::memcpy(&p.value[0], value.Base(), 36);
-			p.unset = false;
+			std::memcpy(&p.prop.value[0], value.Base(), 36);
+			p.prop.unset = false;
 		}
 	}
 
@@ -327,8 +360,8 @@ namespace Freeking
 		if (auto it = _matrixParameters.find(name); it != _matrixParameters.end())
 		{
 			auto& p = it->second;
-			std::memcpy(&p.value[0], value.Base(), 64);
-			p.unset = false;
+			std::memcpy(&p.prop.value[0], value.Base(), 64);
+			p.prop.unset = false;
 		}
 	}
 
@@ -347,9 +380,9 @@ namespace Freeking
 		if (auto it = _textureParameters.find(name); it != _textureParameters.end())
 		{
 			auto& p = it->second;
-			p.texture = value->GetHandle();
-			p.sampler = sampler != nullptr ? sampler->GetHandle() : TextureSampler::GetDefault()->GetHandle();
-			p.unset = false;
+			p.prop.texture = value->GetHandle();
+			p.prop.sampler = sampler != nullptr ? sampler->GetHandle() : TextureSampler::GetDefault()->GetHandle();
+			p.prop.unset = false;
 		}
 	}
 }
