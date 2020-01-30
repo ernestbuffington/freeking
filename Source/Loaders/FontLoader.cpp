@@ -113,7 +113,7 @@ namespace Freeking
 
 		for (const auto& jPage : jPages)
 		{
-			auto pagePath = path.append(jPage.get<std::string>()).string();
+			auto pagePath = (path / jPage.get<std::string>()).string();
 			if (!FileSystem::FileExists(pagePath))
 			{
 				return nullptr;
