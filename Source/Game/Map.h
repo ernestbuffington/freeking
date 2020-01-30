@@ -18,6 +18,7 @@ namespace Freeking
 	class BrushModel;
 	class LightmapNode;
 	class LightmapImage;
+	class Material;
 
 	class BrushMesh
 	{
@@ -32,8 +33,12 @@ namespace Freeking
 
 		void Draw();
 		void Commit();
+
 		inline void SetDiffuse(const std::shared_ptr<Texture2D>& texture) { _diffuse = texture; }
 		inline void SetLightmap(const std::shared_ptr<Texture2D>& texture) { _lightmap = texture; }
+
+		inline const std::shared_ptr<Texture2D>& GetDiffuse() const { return _diffuse; }
+		inline const std::shared_ptr<Texture2D>& GetLightmap() const { return _lightmap; }
 
 		inline size_t GetNumVertices() const { return Vertices.size(); }
 		inline size_t GetNumIndices() const { return Indices.size(); }
@@ -58,8 +63,8 @@ namespace Freeking
 	{
 	public:
 
-		void RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<Shader>& shader);
-		void RenderTranslucent(const Matrix4x4& viewProjection, const std::shared_ptr<Shader>& shader);
+		void RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<Material>& material);
+		void RenderTranslucent(const Matrix4x4& viewProjection, const std::shared_ptr<Material>& material);
 
 		std::map<std::string, std::shared_ptr<BrushMesh>> Meshes;
 
@@ -87,7 +92,7 @@ namespace Freeking
 		std::vector<std::shared_ptr<BrushModel>> _models;
 		std::shared_ptr<Texture2D> _lightmapTexture;
 		std::map<std::string, std::shared_ptr<Texture2D>> _textures;
-		std::shared_ptr<Shader> _shader;
+		std::shared_ptr<Material> _material;
 		EntityLump _entityLump;
 		std::vector<std::shared_ptr<IEntity>> _entities;
 		std::vector<std::shared_ptr<BaseWorldEntity>> _worldEntities;

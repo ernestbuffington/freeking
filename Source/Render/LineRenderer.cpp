@@ -1,5 +1,6 @@
 #include "LineRenderer.h"
-#include "Util.h"
+#include "Shader.h"
+#include "Material.h"
 
 namespace Freeking
 {
@@ -20,7 +21,7 @@ namespace Freeking
 		_vertexBinding = std::make_unique<VertexBinding>();
 		_vertexBinding->Create(vertexLayout, 2, *_vertexBuffer);
 
-		_shader = Shader::Library.Get("Shaders/DebugLine.shader");
+		_material = std::make_shared<Material>(Shader::Library.Get("Shaders/DebugLine.shader"));
 	}
 
 	void LineRenderer::Flush(Matrix4x4& viewProj)
@@ -32,14 +33,16 @@ namespace Freeking
 
 		_vertexBuffer->UpdateBuffer(_buffer.data(), 0, _vertexCount * VertexSize);
 
-		_shader->Bind();
-		_shader->SetUniformValue("viewProj", viewProj);
+		_material->SetParameterValue("viewProj", viewProj);
+		_material->Apply();
 
 		_vertexBinding->Bind();
 		glDrawArrays(GL_LINES, 0, static_cast<GLsizei>(_vertexCount));
 		_vertexBinding->Unbind();
 
 		_vertexCount = 0;
+
+		_material->Unbind();
 	}
 
 	void LineRenderer::DrawLine(const Vector3f& p1, const Vector3f& p2, const Vector4f& colour)

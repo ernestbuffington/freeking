@@ -82,51 +82,6 @@ namespace Freeking
 		}
 	}
 
-	void Shader::Bind()
-	{
-		glUseProgram(_program);
-	}
-
-	void Shader::Unbind()
-	{
-		glUseProgram(0);
-	}
-
-	void Shader::SetUniformValue(const char* uniformName, int value)
-	{
-		glUniform1i(_uniforms[uniformName].location, value);
-	}
-
-	void Shader::SetUniformValue(const char* uniformName, float value)
-	{
-		glUniform1f(_uniforms[uniformName].location, value);
-	}
-
-	void Shader::SetUniformValue(const char* uniformName, const Vector2f& v)
-	{
-		glUniform2fv(_uniforms[uniformName].location, 1, v.Base());
-	}
-
-	void Shader::SetUniformValue(const char* uniformName, const Vector3f& v)
-	{
-		glUniform3fv(_uniforms[uniformName].location, 1, v.Base());
-	}
-
-	void Shader::SetUniformValue(const char* uniformName, const Vector4f& v)
-	{
-		glUniform4fv(_uniforms[uniformName].location, 1, v.Base());
-	}
-
-	void Shader::SetUniformValue(const char* uniformName, const Matrix3x3& v)
-	{
-		glUniformMatrix3fv(_uniforms[uniformName].location, 1, GL_FALSE, v.Base());
-	}
-
-	void Shader::SetUniformValue(const char* uniformName, const Matrix4x4& v)
-	{
-		glUniformMatrix4fv(_uniforms[uniformName].location, 1, GL_FALSE, v.Base());
-	}
-
 	GLuint Shader::CreateSubShader(GLenum type, const std::string& source, const std::string& defines)
 	{
 		GLuint shader = glCreateShader(type);

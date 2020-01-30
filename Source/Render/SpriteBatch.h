@@ -14,6 +14,7 @@ namespace Freeking
 	class VertexBinding;
 	class VertexBuffer;
 	class Shader;
+	class Material;
 	class Font;
 	class TextureSampler;
 
@@ -39,8 +40,8 @@ namespace Freeking
 
 	private:
 
-		static std::shared_ptr<Shader> GetSpriteShader();
-		static std::shared_ptr<Shader> GetTextShader();
+		static std::shared_ptr<Material> GetSpriteMaterial();
+		static std::shared_ptr<Material> GetTextMaterial();
 
 		struct Sprite
 		{
@@ -92,7 +93,7 @@ namespace Freeking
 			const Vector2f _drawSize;
 		};
 
-		void DrawSprites(const Matrix4x4&, float, const std::shared_ptr<Shader>&, std::vector<SpriteBatch::Sprite>&);
+		void DrawSprites(const Matrix4x4&, float, const std::shared_ptr<Material>&, std::vector<SpriteBatch::Sprite>&);
 		void DrawSlice(Texture2D*, const Slice&, const Vector4f&);
 		static void TransformUV(Vector2f&, const Vector2f&, const Vector2f&, const Vector2f&);
 		static void TransformUVs(Slice&, const Vector2f&, const Vector2f&, const Vector2f&);

@@ -29,17 +29,6 @@ namespace Freeking
 		Shader(const std::string&);
 		~Shader();
 
-		void Bind();
-		void Unbind();
-
-		void SetUniformValue(const char*, int);
-		void SetUniformValue(const char*, float);
-		void SetUniformValue(const char*, const Vector2f&);
-		void SetUniformValue(const char*, const Vector3f&);
-		void SetUniformValue(const char*, const Vector4f&);
-		void SetUniformValue(const char*, const Matrix3x3&);
-		void SetUniformValue(const char*, const Matrix4x4&);
-
 	private:
 
 		static GLuint CreateSubShader(GLenum, const std::string&, const std::string&);

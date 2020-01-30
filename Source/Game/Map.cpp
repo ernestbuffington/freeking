@@ -1,14 +1,14 @@
 #include "Map.h"
 #include "Lightmap.h"
 #include "Texture2D.h"
+#include "Shader.h"
 #include "BspFile.h"
 #include "BspFlags.h"
-#include "Util.h"
 #include "DynamicModel.h"
 #include "Paths.h"
 #include "Profiler.h"
-#include <array>
 #include "ThirdParty/rectpack2d/finders_interface.h"
+#include <array>
 
 namespace Freeking
 {
@@ -16,16 +16,6 @@ namespace Freeking
 
 	void BrushMesh::Draw()
 	{
-		if (_diffuse)
-		{
-			_diffuse->Bind(0);
-		}
-
-		if (_lightmap)
-		{
-			_lightmap->Bind(1);
-		}
-
 		_vertexBinding->Bind();
 		glDrawElements(GL_TRIANGLES, _vertexBinding->GetNumElements(), GL_UNSIGNED_INT, (void*)0);
 		_vertexBinding->Unbind();
@@ -55,7 +45,7 @@ namespace Freeking
 		_vertexBinding->Create(vertexLayout, 5, *_indexBuffer, ElementType::UInt);
 	}
 
-	void BrushModel::RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<Shader>& shader)
+	void BrushModel::RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<Material>& material)
 	{
 		for (const auto& mesh : Meshes)
 		{
@@ -64,12 +54,16 @@ namespace Freeking
 				continue;
 			}
 
-			shader->SetUniformValue("alphaCutOff", mesh.second->AlphaCutOff);
+			material->SetParameterValue("alphaCutOff", mesh.second->AlphaCutOff);
+			material->SetParameterValue("diffuse", mesh.second->GetDiffuse().get());
+			material->SetParameterValue("lightmap", mesh.second->GetLightmap().get());
+			material->Apply();
+
 			mesh.second->Draw();
 		}
 	}
 
-	void BrushModel::RenderTranslucent(const Matrix4x4& viewProjection, const std::shared_ptr<Shader>& shader)
+	void BrushModel::RenderTranslucent(const Matrix4x4& viewProjection, const std::shared_ptr<Material>& material)
 	{
 		for (auto& mesh : Meshes)
 		{
@@ -78,7 +72,11 @@ namespace Freeking
 				continue;
 			}
 
-			shader->SetUniformValue("alphaMultiply", mesh.second->AlphaMultiply);
+			material->SetParameterValue("alphaMultiply", mesh.second->AlphaMultiply);
+			material->SetParameterValue("diffuse", mesh.second->GetDiffuse().get());
+			material->SetParameterValue("lightmap", mesh.second->GetLightmap().get());
+			material->Apply();
+
 			mesh.second->Draw();
 		}
 	}
@@ -93,35 +91,34 @@ namespace Freeking
 
 	void Map::Render(const Matrix4x4& viewProjection)
 	{
-		_shader->Bind();
-		_shader->SetUniformValue("viewProj", viewProjection);
-		_shader->SetUniformValue("diffuse", 0);
-		_shader->SetUniformValue("lightmap", 1);
-		_shader->SetUniformValue("brightness", 2.0f);
+		_material->SetParameterValue("viewProj", viewProjection);
+		_material->SetParameterValue("diffuse", 0);
+		_material->SetParameterValue("lightmap", 1);
+		_material->SetParameterValue("brightness", 2.0f);
 
 		glDisable(GL_BLEND);
 
-		_shader->SetUniformValue("alphaMultiply", 1.0f);
+		_material->SetParameterValue("alphaMultiply", 1.0f);
 
 		for (const auto& entity : _worldEntities)
 		{
 			auto mvp = viewProjection * entity->GetTransform();
-			_shader->SetUniformValue("viewProj", mvp);
-			entity->RenderOpaque(mvp, _shader);
+			_material->SetParameterValue("viewProj", mvp);
+			entity->RenderOpaque(mvp, _material);
 		}
 
 		glEnable(GL_BLEND);
 
-		_shader->SetUniformValue("alphaCutOff", 0.0f);
+		_material->SetParameterValue("alphaCutOff", 0.0f);
 
 		for (const auto& entity : _worldEntities)
 		{
 			auto mvp = viewProjection * entity->GetTransform();
-			_shader->SetUniformValue("viewProj", mvp);
-			entity->RenderTranslucent(mvp, _shader);
+			_material->SetParameterValue("viewProj", mvp);
+			entity->RenderTranslucent(mvp, _material);
 		}
 
-		_shader->Unbind();
+		_material->Unbind();
 	}
 
 	Map::Map(const BspFile& bspFile)
@@ -346,7 +343,7 @@ namespace Freeking
 
 		pf.Stop("Map commit");
 
-		_shader = Shader::Library.Get("Shaders/Lightmapped.shader");
+		_material = std::make_shared<Material>(Shader::Library.Get("Shaders/Lightmapped.shader"));
 
 		pf.Start();
 

@@ -57,19 +57,19 @@ namespace Freeking
 		_model = Map::Current->GetBrushModel(_modelIndex);
 	}
 
-	void BrushModelEntity::RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<Shader>& shader)
+	void BrushModelEntity::RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<Material>& material)
 	{
 		if (_model)
 		{
-			_model->RenderOpaque(viewProjection, shader);
+			_model->RenderOpaque(viewProjection, material);
 		}
 	}
 
-	void BrushModelEntity::RenderTranslucent(const Matrix4x4& viewProjection, const std::shared_ptr<Shader>& shader)
+	void BrushModelEntity::RenderTranslucent(const Matrix4x4& viewProjection, const std::shared_ptr<Material>& material)
 	{
 		if (_model)
 		{
-			_model->RenderTranslucent(viewProjection, shader);
+			_model->RenderTranslucent(viewProjection, material);
 		}
 	}
 
