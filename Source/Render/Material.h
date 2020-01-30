@@ -24,7 +24,7 @@ namespace Freeking
 		Material() = delete;
 		Material(std::shared_ptr<Shader>, PropertyGlobals* globals = nullptr);
 
-		void Apply(PropertyGlobals* globals = nullptr);
+		void Apply();
 		void Unbind();
 
 		void SetParameterValue(const char*, int);
@@ -36,14 +36,6 @@ namespace Freeking
 		void SetParameterValue(const char*, const Matrix4x4&);
 		void SetParameterValue(const char*, const Texture*);
 		void SetParameterValue(const char*, const Texture*, const TextureSampler*);
-
-	private:
-
-		void InitializeParameters(PropertyGlobals* globals);
-		void ApplyFloatParameters(PropertyGlobals* globals);
-		void ApplyIntParameters(PropertyGlobals* globals);
-		void ApplyMatrixParameters(PropertyGlobals* globals);
-		void ApplyTextureParameters(PropertyGlobals* globals);
 
 		struct FloatParameter
 		{
@@ -261,11 +253,19 @@ namespace Freeking
 			Properties<TextureParameter::Property> _textureProperties;
 		};
 
+	private:
+
+		void InitializeParameters();
+		void ApplyFloatParameters();
+		void ApplyIntParameters();
+		void ApplyMatrixParameters();
+		void ApplyTextureParameters();
 
 		std::shared_ptr<Shader> _shader;
 		std::unordered_map<std::string, FloatParameter> _floatParameters;
 		std::unordered_map<std::string, IntParameter> _intParameters;
 		std::unordered_map<std::string, MatrixParameter> _matrixParameters;
 		std::unordered_map<std::string, TextureParameter> _textureParameters;
+		PropertyGlobals* _globals;
 	};
 }

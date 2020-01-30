@@ -138,8 +138,11 @@ namespace Freeking
 			}
 		}
 
+		Matrix4x4 viewProj;
+
+		auto globals = std::make_shared<Material::PropertyGlobals>();
 		auto md2Shader = Shader::Library.Get("Shaders/DynamicModel.shader");
-		auto md2Material = std::make_unique<Material>(md2Shader);
+		auto md2Material = std::make_unique<Material>(md2Shader, globals.get());
 
 		auto md2Mesh = DynamicModel::Library.Get("models/weapons/g_tomgun/tris.md2");
 		auto md2Texture = Texture2D::Library.Get(md2Mesh->Skins[0]);
@@ -219,7 +222,7 @@ namespace Freeking
 				thug->Render(viewProjectionMatrix, deltaTime);
 			}
 
-			md2Material->SetParameterValue("viewProj", viewProjectionMatrix * Matrix4x4::Translation(Vector3f(0, 50, 0)));
+			globals->SetValue("viewProj", viewProjectionMatrix * Matrix4x4::Translation(Vector3f(0, 50, 0)));
 			md2Material->SetParameterValue("delta", 0);
 			md2Material->SetParameterValue("normalBuffer", DynamicModel::GetNormalBuffer().get());
 

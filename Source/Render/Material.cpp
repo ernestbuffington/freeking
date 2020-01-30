@@ -8,12 +8,13 @@
 namespace Freeking
 {
 	Material::Material(std::shared_ptr<Shader> shader, PropertyGlobals* globals) :
-		_shader(shader)
+		_shader(shader),
+		_globals(globals)
 	{
-		InitializeParameters(globals);
+		InitializeParameters();
 	}
 
-	void Material::InitializeParameters(PropertyGlobals* globals)
+	void Material::InitializeParameters()
 	{
 		if (!_shader)
 		{
@@ -29,7 +30,7 @@ namespace Freeking
 				p.prop.type = type;
 				p.location = uniform.location;
 				p.prop.unset = true;
-				p.globalId = globals != nullptr ? globals->GetFloatId(name, type) : -1;
+				p.globalId = _globals != nullptr ? _globals->GetFloatId(name, type) : -1;
 				_floatParameters.emplace(uniform.name, p);
 			}
 			else if (auto type = IntParameter::Property::CastType(uniform.type);
@@ -39,7 +40,7 @@ namespace Freeking
 				p.prop.type = type;
 				p.location = uniform.location;
 				p.prop.unset = true;
-				p.globalId = globals != nullptr ? globals->GetIntId(name, type) : -1;
+				p.globalId = _globals != nullptr ? _globals->GetIntId(name, type) : -1;
 				_intParameters.emplace(uniform.name, p);
 			}
 			else if (auto type = MatrixParameter::Property::CastType(uniform.type);
@@ -49,7 +50,7 @@ namespace Freeking
 				p.prop.type = type;
 				p.location = uniform.location;
 				p.prop.unset = true;
-				p.globalId = globals != nullptr ? globals->GetMatrixId(name, type) : -1;
+				p.globalId = _globals != nullptr ? _globals->GetMatrixId(name, type) : -1;
 				_matrixParameters.emplace(uniform.name, p);
 			}
 			else if (auto type = TextureParameter::Property::CastType(uniform.type);
@@ -59,14 +60,14 @@ namespace Freeking
 				p.prop.type = type;
 				p.location = uniform.location;
 				p.prop.unset = true;
-				p.globalId = globals != nullptr ? globals->GetTextureId(name, type) : -1;
+				p.globalId = _globals != nullptr ? _globals->GetTextureId(name, type) : -1;
 				p.unit = _textureParameters.size();
 				_textureParameters.emplace(uniform.name, p);
 			}
 		}
 	}
 
-	void Material::Apply(PropertyGlobals* globals)
+	void Material::Apply()
 	{
 		if (!_shader)
 		{
@@ -75,10 +76,10 @@ namespace Freeking
 
 		glUseProgram(_shader->_program);
 
-		ApplyFloatParameters(globals);
-		ApplyIntParameters(globals);
-		ApplyMatrixParameters(globals);
-		ApplyTextureParameters(globals);
+		ApplyFloatParameters();
+		ApplyIntParameters();
+		ApplyMatrixParameters();
+		ApplyTextureParameters();
 	}
 
 	void Material::Unbind()
@@ -93,7 +94,7 @@ namespace Freeking
 		}
 	}
 
-	void Material::ApplyFloatParameters(PropertyGlobals* globals)
+	void Material::ApplyFloatParameters()
 	{
 		using Property = FloatParameter::Property;
 		using PropertyType = Property::Type;
@@ -104,12 +105,12 @@ namespace Freeking
 
 			if (p.prop.unset)
 			{
-				if (globals == nullptr)
+				if (_globals == nullptr)
 				{
 					continue;
 				}
 
-				if (prop = globals->GetFloatProperty(p.globalId);
+				if (prop = _globals->GetFloatProperty(p.globalId);
 					prop == nullptr ||
 					prop->unset ||
 					prop->type != p.prop.type)
@@ -148,7 +149,7 @@ namespace Freeking
 		}
 	}
 
-	void Material::ApplyIntParameters(PropertyGlobals* globals)
+	void Material::ApplyIntParameters()
 	{
 		using Property = IntParameter::Property;
 		using PropertyType = Property::Type;
@@ -159,12 +160,12 @@ namespace Freeking
 
 			if (p.prop.unset)
 			{
-				if (globals == nullptr)
+				if (_globals == nullptr)
 				{
 					continue;
 				}
 
-				if (prop = globals->GetIntProperty(p.globalId);
+				if (prop = _globals->GetIntProperty(p.globalId);
 					prop == nullptr ||
 					prop->unset ||
 					prop->type != p.prop.type)
@@ -203,7 +204,7 @@ namespace Freeking
 		}
 	}
 
-	void Material::ApplyMatrixParameters(PropertyGlobals* globals)
+	void Material::ApplyMatrixParameters()
 	{
 		using Property = MatrixParameter::Property;
 		using PropertyType = Property::Type;
@@ -214,12 +215,12 @@ namespace Freeking
 
 			if (p.prop.unset)
 			{
-				if (globals == nullptr)
+				if (_globals == nullptr)
 				{
 					continue;
 				}
 
-				if (prop = globals->GetMatrixProperty(p.globalId);
+				if (prop = _globals->GetMatrixProperty(p.globalId);
 					prop == nullptr ||
 					prop->unset ||
 					prop->type != p.prop.type)
@@ -248,7 +249,7 @@ namespace Freeking
 		}
 	}
 
-	void Material::ApplyTextureParameters(PropertyGlobals* globals)
+	void Material::ApplyTextureParameters()
 	{
 		using Property = TextureParameter::Property;
 		using PropertyType = Property::Type;
@@ -259,12 +260,12 @@ namespace Freeking
 
 			if (p.prop.unset)
 			{
-				if (globals == nullptr)
+				if (_globals == nullptr)
 				{
 					continue;
 				}
 
-				if (prop = globals->GetTextureProperty(p.globalId);
+				if (prop = _globals->GetTextureProperty(p.globalId);
 					prop == nullptr ||
 					prop->unset ||
 					prop->type != p.prop.type)
