@@ -494,7 +494,6 @@ namespace Freeking
 		glDisable(GL_DEPTH_TEST);
 
 		_vertexBinding->Bind();
-		TextureSampler::GetDefault()->Bind(0);
 
 		const auto& spriteMaterial = GetSpriteMaterial();
 		if (spriteMaterial)
@@ -518,7 +517,6 @@ namespace Freeking
 	void SpriteBatch::DrawSprites(const Matrix4x4& proj, float scale, const std::shared_ptr<Material>& material, std::vector<SpriteBatch::Sprite>& sprites)
 	{
 		material->SetParameterValue("projMatrix", proj);
-		material->Apply();
 
 		static const size_t vertSize = 8;
 		static const size_t faceVertCount = 6;
@@ -544,7 +542,8 @@ namespace Freeking
 
 			if (batchTexture != nullptr)
 			{
-				batchTexture->Bind(0);
+				material->SetParameterValue("texture", batchTexture);
+				material->Apply();
 			}
 
 			for (size_t i = basePos; i < searchPos; ++i)
