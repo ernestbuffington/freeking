@@ -141,6 +141,8 @@ namespace Freeking
 		auto globals = std::make_shared<Material::PropertyGlobals>();
 		auto md2Shader = Shader::Library.Get("Shaders/DynamicModel.shader");
 		auto md2Material = std::make_unique<Material>(md2Shader, globals.get());
+		auto diffuseId = md2Material->GetTextureParameterId("diffuse");
+		auto frameVertexBufferId = md2Material->GetTextureParameterId("frameVertexBuffer");
 
 		auto md2Mesh = DynamicModel::Library.Get("models/weapons/g_tomgun/tris.md2");
 		auto md2Texture = Texture2D::Library.Get(md2Mesh->Skins[0]);
@@ -227,9 +229,8 @@ namespace Freeking
 			if (md2Mesh)
 			{
 				int md2Frame = 0;
-				md2Material->SetParameterValue("diffuse", md2Texture.get());
-				md2Material->SetParameterValue("frameVertexBuffer", md2Mesh->GetFrameVertexBuffer().get());
-				md2Material->SetParameterValue("normalBuffer", md2Mesh->GetNormalBuffer().get());
+				md2Material->SetParameterValue(diffuseId, md2Texture.get());
+				md2Material->SetParameterValue(frameVertexBufferId, md2Mesh->GetFrameVertexBuffer().get());
 				md2Material->SetParameterValue("frames[0].index", (int)(md2Frame * md2Mesh->GetFrameVertexCount()));
 				md2Material->SetParameterValue("frames[0].translate", md2Mesh->FrameTransforms[md2Frame].translate);
 				md2Material->SetParameterValue("frames[0].scale", md2Mesh->FrameTransforms[md2Frame].scale);
