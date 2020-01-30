@@ -221,17 +221,19 @@ namespace Freeking
 			int GetMatrixId(const std::string& name) { return _matrixProperties.GetId(name); }
 			int GetTextureId(const std::string& name) { return _textureProperties.GetId(name); }
 
-			int AddFloatProperty(const std::string& name, FloatPropertyType type) { return _floatProperties.AddProperty(name, type); }
-			int AddIntProperty(const std::string& name, IntPropertyType type) { return _intProperties.AddProperty(name, type); }
-			int AddMatrixProperty(const std::string& name, MatrixPropertyType type) { return _matrixProperties.AddProperty(name, type); }
-			int AddTextureProperty(const std::string& name, TexturePropertyType type) { return _textureProperties.AddProperty(name, type); }
-
 			FloatParameter::Property* GetFloatProperty(int id) { return _floatProperties.GetProperty(id); }
 			IntParameter::Property* GetIntProperty(int id) { return _intProperties.GetProperty(id); }
 			MatrixParameter::Property* GetMatrixProperty(int id) { return _matrixProperties.GetProperty(id); }
 			TextureParameter::Property* GetTextureProperty(int id) { return _textureProperties.GetProperty(id); }
 
 		private:
+
+			friend class Material;
+
+			int AddFloatProperty(const std::string& name, FloatPropertyType type) { return _floatProperties.AddProperty(name, type); }
+			int AddIntProperty(const std::string& name, IntPropertyType type) { return _intProperties.AddProperty(name, type); }
+			int AddMatrixProperty(const std::string& name, MatrixPropertyType type) { return _matrixProperties.AddProperty(name, type); }
+			int AddTextureProperty(const std::string& name, TexturePropertyType type) { return _textureProperties.AddProperty(name, type); }
 
 			template <typename T>
 			struct Properties
