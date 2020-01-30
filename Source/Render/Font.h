@@ -25,7 +25,6 @@ namespace Freeking
 
 		struct Character
 		{
-			uint32_t id;
 			float x;
 			float y;
 			float width;

@@ -1,25 +1,19 @@
 #include "FontLoader.h"
 #include "Font.h"
 #include "Texture2D.h"
-#include "simdjson.h"
+#include "json.hpp"
 #include "Profiler.h"
 
 namespace Freeking
 {
+	using json = nlohmann::json;
+
 	bool FontLoader::CanLoadExtension(const std::string& extension) const
 	{
 		if (extension == ".json") return true;
 
 		return false;
 	};
-
-	static double get_number(const simdjson::ParsedJson::Iterator& it)
-	{
-		if (it.is_double()) return it.get_double();
-		else if (it.is_integer()) return static_cast<double>(it.get_integer());
-		else if (it.is_unsigned_integer()) return static_cast<double>(it.get_unsigned_integer());
-		else return 0.0;
-	}
 
 	FontLoader::AssetPtr FontLoader::Load(const std::string& name) const
 	{
@@ -32,92 +26,120 @@ namespace Freeking
 			return nullptr;
 		}
 
-		auto pj = simdjson::build_parsed_json(buffer.data(), buffer.size());
-		if (!pj.is_valid()) return nullptr;
-
-		simdjson::ParsedJson::Iterator pjh(pj);
-		if (!pjh.is_object()) return nullptr;
-
-		if (pjh.move_to_key("pages") && pjh.is_array()) pjh.up();
-		else return nullptr;
-
-		if (pjh.move_to_key("chars") && pjh.is_array()) pjh.up();
-		else return nullptr;
-
-		if (pjh.move_to_key("common") && pjh.is_object()) pjh.up();
-		else return nullptr;
-
-		std::vector<std::shared_ptr<Texture2D>> pageTextures;
-
-		if (pjh.move_to_key("pages"))
+		auto j = json::parse(buffer);
+		if (!j.is_object())
 		{
-			if (pjh.down())
-			{
-				do 
-				{
-					auto page = pjh.get_string();
-					if (auto texture = Texture2D::Library.Get(std::filesystem::path(name).remove_filename().append(page).string()))
-					{
-						pageTextures.push_back(texture);
-					}
-				} 
-				while (pjh.next() && pjh.is_string());
+			return nullptr;
+		}
 
-				pjh.up();
-			}
+		if (!j.contains("pages") ||
+			!j.contains("chars") ||
+			!j.contains("common"))
+		{
+			return nullptr;
+		}
 
-			pjh.up();
+		const auto& jPages = j["pages"];
+		const auto& jChars = j["chars"];
+		const auto& jCommon = j["common"];
+
+		if (!jPages.is_array() ||
+			!jChars.is_array() ||
+			!jCommon.is_object())
+		{
+			return nullptr;
+		}
+
+		if (!jCommon.contains("lineHeight"))
+		{
+			return nullptr;
 		}
 		else
 		{
-			return nullptr;
+			if (!jCommon["lineHeight"].is_number())
+			{
+				return nullptr;
+			}
+		}
+
+		for (const auto& jPage : jPages)
+		{
+			if (!jPage.is_string())
+			{
+				return nullptr;
+			}
+		}
+
+		auto numPages = jPages.size();
+
+		for (const auto& jChar : jChars)
+		{
+			if (!jChar.contains("id") ||
+				!jChar.contains("x") ||
+				!jChar.contains("y") ||
+				!jChar.contains("width") ||
+				!jChar.contains("height") ||
+				!jChar.contains("xoffset") ||
+				!jChar.contains("yoffset") ||
+				!jChar.contains("xadvance") ||
+				!jChar.contains("page"))
+			{
+				return nullptr;
+			}
+
+			if (!jChar["id"].is_number_unsigned() ||
+				!jChar["x"].is_number() ||
+				!jChar["y"].is_number() ||
+				!jChar["width"].is_number() ||
+				!jChar["height"].is_number() ||
+				!jChar["xoffset"].is_number() ||
+				!jChar["yoffset"].is_number() ||
+				!jChar["xadvance"].is_number() ||
+				!jChar["page"].is_number_unsigned())
+			{
+				return nullptr;
+			}
+
+			if (auto page = jChar["page"].get<uint32_t>();
+				page >= numPages)
+			{
+				return nullptr;
+			}
+		}
+
+		std::vector<std::shared_ptr<Texture2D>> pageTextures;
+
+		for (const auto& jPage : jPages)
+		{
+			if (auto texture = Texture2D::Library.Get(
+				std::filesystem::path(name).
+				remove_filename().
+				append(jPage.get<std::string>()).
+				string()))
+			{
+				pageTextures.push_back(texture);
+			}
 		}
 
 		std::unordered_map<int32_t, Font::Character> characters;
 
-		if (pjh.move_to_key("chars"))
+		for (const auto& jChar : jChars)
 		{
-			if (pjh.down())
-			{
-				do
+			characters.emplace(jChar["id"].get<uint32_t>(),
+				Font::Character
 				{
-					Font::Character c;
-
-					if (pjh.move_to_key("id") && pjh.is_integer()) c.id = pjh.get_integer(); pjh.up();
-					if (pjh.move_to_key("x") && pjh.is_number()) c.x = get_number(pjh); pjh.up();
-					if (pjh.move_to_key("y") && pjh.is_number()) c.y = get_number(pjh); pjh.up();
-					if (pjh.move_to_key("width") && pjh.is_number()) c.width = get_number(pjh); pjh.up();
-					if (pjh.move_to_key("height") && pjh.is_number()) c.height = get_number(pjh); pjh.up();
-					if (pjh.move_to_key("xoffset") && pjh.is_number()) c.xoffset = get_number(pjh); pjh.up();
-					if (pjh.move_to_key("yoffset") && pjh.is_number()) c.yoffset = get_number(pjh); pjh.up();
-					if (pjh.move_to_key("xadvance") && pjh.is_number()) c.xadvance = get_number(pjh); pjh.up();
-					if (pjh.move_to_key("page") && pjh.is_integer()) c.page = pjh.get_integer(); pjh.up();
-
-					characters.emplace(c.id, std::move(c));
-				}
-				while (pjh.next() && pjh.is_object());
-
-				pjh.up();
-			}
-
-			pjh.up();
-		}
-		else
-		{
-			return nullptr;
+					jChar["x"].get<float>(),
+					jChar["y"].get<float>(),
+					jChar["width"].get<float>(),
+					jChar["height"].get<float>(),
+					jChar["xoffset"].get<float>(),
+					jChar["yoffset"].get<float>(),
+					jChar["xadvance"].get<float>(),
+					jChar["page"].get<uint32_t>(),
+				});
 		}
 
-		float lineHeight = 0.0f;
-		if (pjh.move_to_key("common"))
-		{
-			if (pjh.move_to_key("lineHeight") && pjh.is_number())
-			{
-				lineHeight = get_number(pjh);
-				pjh.up();
-			}
-
-			pjh.up();
-		}
+		float lineHeight = jCommon["lineHeight"].get<float>();
 
 		pf.Stop("Load Font (" + name + ")");
 
