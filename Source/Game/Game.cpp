@@ -141,6 +141,7 @@ namespace Freeking
 		auto globals = std::make_shared<Material::PropertyGlobals>();
 		auto md2Shader = Shader::Library.Get("Shaders/DynamicModel.shader");
 		auto md2Material = std::make_unique<Material>(md2Shader, globals);
+		auto viewProjId = globals->GetMatrixId("viewProj");
 		auto diffuseId = md2Material->GetTextureParameterId("diffuse");
 		auto frameVertexBufferId = md2Material->GetTextureParameterId("frameVertexBuffer");
 
@@ -222,7 +223,7 @@ namespace Freeking
 				thug->Render(viewProjectionMatrix, deltaTime);
 			}
 
-			globals->SetValue("viewProj", viewProjectionMatrix * Matrix4x4::Translation(Vector3f(0, 50, 0)));
+			globals->SetValue(viewProjId, viewProjectionMatrix * Matrix4x4::Translation(Vector3f(0, 50, 0)));
 			md2Material->SetParameterValue("delta", 0);
 			md2Material->SetParameterValue("normalBuffer", DynamicModel::GetNormalBuffer().get());
 

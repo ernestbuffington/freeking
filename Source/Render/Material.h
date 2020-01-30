@@ -216,6 +216,17 @@ namespace Freeking
 			void SetValue(const char*, const Texture2D*, const TextureSampler*);
 			void SetValue(const char*, const TextureBuffer*);
 
+			void SetValue(int, int);
+			void SetValue(int, float);
+			void SetValue(int, const Vector2f&);
+			void SetValue(int, const Vector3f&);
+			void SetValue(int, const Vector4f&);
+			void SetValue(int, const Matrix3x3&);
+			void SetValue(int, const Matrix4x4&);
+			void SetValue(int, const Texture2D*);
+			void SetValue(int, const Texture2D*, const TextureSampler*);
+			void SetValue(int, const TextureBuffer*);
+
 			int GetFloatId(const std::string& name) { return _floatProperties.GetId(name); }
 			int GetIntId(const std::string& name) { return _intProperties.GetId(name); }
 			int GetMatrixId(const std::string& name) { return _matrixProperties.GetId(name); }
