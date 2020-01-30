@@ -21,7 +21,7 @@ namespace Freeking
 		class PropertyGlobals;
 
 		Material() = delete;
-		Material(std::shared_ptr<Shader>, PropertyGlobals* globals = nullptr);
+		Material(std::shared_ptr<Shader>, std::shared_ptr<PropertyGlobals> globals = nullptr);
 
 		void Apply();
 		void Unbind();
@@ -351,6 +351,6 @@ namespace Freeking
 		Parameters<IntParameter> _intParameters;
 		Parameters<MatrixParameter> _matrixParameters;
 		Parameters<TextureParameter> _textureParameters;
-		PropertyGlobals* _globals;
+		std::shared_ptr<PropertyGlobals> _globals;
 	};
 }

@@ -140,7 +140,7 @@ namespace Freeking
 
 		auto globals = std::make_shared<Material::PropertyGlobals>();
 		auto md2Shader = Shader::Library.Get("Shaders/DynamicModel.shader");
-		auto md2Material = std::make_unique<Material>(md2Shader, globals.get());
+		auto md2Material = std::make_unique<Material>(md2Shader, globals);
 		auto diffuseId = md2Material->GetTextureParameterId("diffuse");
 		auto frameVertexBufferId = md2Material->GetTextureParameterId("frameVertexBuffer");
 

@@ -6,7 +6,7 @@
 
 namespace Freeking
 {
-	Material::Material(std::shared_ptr<Shader> shader, PropertyGlobals* globals) :
+	Material::Material(std::shared_ptr<Shader> shader, std::shared_ptr<PropertyGlobals> globals) :
 		_shader(shader),
 		_globals(globals)
 	{
