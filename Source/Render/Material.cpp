@@ -75,36 +75,32 @@ namespace Freeking
 			if (auto type = ToFloatUniformType(uniform.type); type != FloatUniformType::Invalid)
 			{
 				FloatParameter p;
-				p.location = uniform.location;
 				p.type = type;
-				p.dirty = false;
+				p.location = uniform.location;
 				p.unset = true;
 				_floatParameters.emplace(uniform.name, p);
 			}
 			else if (auto type = ToIntUniformType(uniform.type); type != IntUniformType::Invalid)
 			{
 				IntParameter p;
-				p.location = uniform.location;
 				p.type = type;
-				p.dirty = false;
+				p.location = uniform.location;
 				p.unset = true;
 				_intParameters.emplace(uniform.name, p);
 			}
 			else if (auto type = ToMatrixUniformType(uniform.type); type != MatrixUniformType::Invalid)
 			{
 				MatrixParameter p;
-				p.location = uniform.location;
 				p.type = type;
-				p.dirty = false;
+				p.location = uniform.location;
 				p.unset = true;
 				_matrixParameters.emplace(uniform.name, p);
 			}
 			else if (auto type = ToTextureUniformType(uniform.type); type != TextureUniformType::Invalid)
 			{
 				TextureParameter p;
-				p.location = uniform.location;
 				p.type = type;
-				p.dirty = false;
+				p.location = uniform.location;
 				p.unset = true;
 				_textureParameters.emplace(uniform.name, p);
 			}
@@ -142,7 +138,7 @@ namespace Freeking
 	{
 		for (auto [name, p] : _floatParameters)
 		{
-			if (!p.dirty || p.unset)
+			if (p.unset)
 			{
 				continue;
 			}
@@ -170,8 +166,6 @@ namespace Freeking
 				break;
 			}
 			}
-
-			p.dirty = false;
 		}
 	}
 
@@ -179,7 +173,7 @@ namespace Freeking
 	{
 		for (auto [name, p] : _intParameters)
 		{
-			if (!p.dirty || p.unset)
+			if (p.unset)
 			{
 				continue;
 			}
@@ -207,8 +201,6 @@ namespace Freeking
 				break;
 			}
 			}
-
-			p.dirty = false;
 		}
 	}
 
@@ -216,7 +208,7 @@ namespace Freeking
 	{
 		for (auto [name, p] : _matrixParameters)
 		{
-			if (!p.dirty || p.unset)
+			if (p.unset)
 			{
 				continue;
 			}
@@ -234,8 +226,6 @@ namespace Freeking
 				break;
 			}
 			}
-
-			p.dirty = false;
 		}
 	}
 
@@ -247,7 +237,7 @@ namespace Freeking
 		{
 			textureIndex++;
 
-			if (!p.dirty || p.unset)
+			if (p.unset)
 			{
 				continue;
 			}
@@ -266,11 +256,9 @@ namespace Freeking
 			{
 				glBindSampler(textureIndex, p.sampler);
 				glActiveTexture(GL_TEXTURE0 + textureIndex);
-				glBindTexture(textureType, p.value);
+				glBindTexture(textureType, p.texture);
 				glUniform1i(p.location, textureIndex);
 			}
-
-			p.dirty = false;
 		}
 	}
 
@@ -279,12 +267,8 @@ namespace Freeking
 		if (auto it = _intParameters.find(name); it != _intParameters.end())
 		{
 			auto& p = it->second;
-			if (p.unset || value != p.value[0])
-			{
-				p.value[0] = value;
-				p.unset = false;
-				p.dirty = true;
-			}
+			p.value[0] = value;
+			p.unset = false;
 		}
 	}
 
@@ -293,12 +277,8 @@ namespace Freeking
 		if (auto it = _floatParameters.find(name); it != _floatParameters.end())
 		{
 			auto& p = it->second;
-			if (p.unset || value != p.value[0])
-			{
-				p.value[0] = value;
-				p.unset = false;
-				p.dirty = true;
-			}
+			p.value[0] = value;
+			p.unset = false;
 		}
 	}
 
@@ -307,12 +287,8 @@ namespace Freeking
 		if (auto it = _floatParameters.find(name); it != _floatParameters.end())
 		{
 			auto& p = it->second;
-			if (p.unset || std::memcmp(&p.value[0], value.Base(), 8) != 0)
-			{
-				std::memcpy(&p.value[0], value.Base(), 8);
-				p.unset = false;
-				p.dirty = true;
-			}
+			std::memcpy(&p.value[0], value.Base(), 8);
+			p.unset = false;
 		}
 	}
 
@@ -321,12 +297,8 @@ namespace Freeking
 		if (auto it = _floatParameters.find(name); it != _floatParameters.end())
 		{
 			auto& p = it->second;
-			if (p.unset || std::memcmp(&p.value[0], value.Base(), 12) != 0)
-			{
-				std::memcpy(&p.value[0], value.Base(), 12);
-				p.unset = false;
-				p.dirty = true;
-			}
+			std::memcpy(&p.value[0], value.Base(), 12);
+			p.unset = false;
 		}
 	}
 
@@ -335,12 +307,8 @@ namespace Freeking
 		if (auto it = _floatParameters.find(name); it != _floatParameters.end())
 		{
 			auto& p = it->second;
-			if (p.unset || std::memcmp(&p.value[0], value.Base(), 16) != 0)
-			{
-				std::memcpy(&p.value[0], value.Base(), 16);
-				p.unset = false;
-				p.dirty = true;
-			}
+			std::memcpy(&p.value[0], value.Base(), 16);
+			p.unset = false;
 		}
 	}
 
@@ -349,12 +317,8 @@ namespace Freeking
 		if (auto it = _matrixParameters.find(name); it != _matrixParameters.end())
 		{
 			auto& p = it->second;
-			if (p.unset || std::memcmp(&p.value[0], value.Base(), 36) != 0)
-			{
-				std::memcpy(&p.value[0], value.Base(), 36);
-				p.unset = false;
-				p.dirty = true;
-			}
+			std::memcpy(&p.value[0], value.Base(), 36);
+			p.unset = false;
 		}
 	}
 
@@ -363,12 +327,8 @@ namespace Freeking
 		if (auto it = _matrixParameters.find(name); it != _matrixParameters.end())
 		{
 			auto& p = it->second;
-			if (p.unset || std::memcmp(&p.value[0], value.Base(), 64) != 0)
-			{
-				std::memcpy(&p.value[0], value.Base(), 64);
-				p.unset = false;
-				p.dirty = true;
-			}
+			std::memcpy(&p.value[0], value.Base(), 64);
+			p.unset = false;
 		}
 	}
 
@@ -387,16 +347,9 @@ namespace Freeking
 		if (auto it = _textureParameters.find(name); it != _textureParameters.end())
 		{
 			auto& p = it->second;
-			auto handle = value->GetHandle();
-			auto samplerHandle = sampler != nullptr ? sampler->GetHandle() : TextureSampler::GetDefault()->GetHandle();
-
-			if (p.unset || p.value != handle || p.sampler != samplerHandle)
-			{
-				p.value = handle;
-				p.sampler = samplerHandle;
-				p.unset = false;
-				p.dirty = true;
-			}
+			p.texture = value->GetHandle();
+			p.sampler = sampler != nullptr ? sampler->GetHandle() : TextureSampler::GetDefault()->GetHandle();
+			p.unset = false;
 		}
 	}
 }

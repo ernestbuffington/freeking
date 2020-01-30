@@ -63,38 +63,34 @@ namespace Freeking
 
 		struct FloatParameter
 		{
-			GLint location;
-			float value[4];
 			FloatUniformType type;
-			bool dirty;
+			float value[4];
+			GLint location;
 			bool unset;
 		};
 
 		struct IntParameter
 		{
-			GLint location;
-			int value[4];
 			IntUniformType type;
-			bool dirty;
+			int value[4];
+			GLint location;
 			bool unset;
 		};
 
 		struct MatrixParameter
 		{
-			GLint location;
-			float value[16];
 			MatrixUniformType type;
-			bool dirty;
+			float value[16];
+			GLint location;
 			bool unset;
 		};
 
 		struct TextureParameter
 		{
-			GLint location;
-			GLuint value;
-			GLuint sampler;
 			TextureUniformType type;
-			bool dirty;
+			GLuint texture;
+			GLuint sampler;
+			GLint location;
 			bool unset;
 		};
 
