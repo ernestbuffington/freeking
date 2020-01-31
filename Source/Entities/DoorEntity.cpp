@@ -25,8 +25,8 @@ namespace Freeking
 	{
 		BrushModelEntity::Tick(dt);
 
-		_time = std::fmodf(_time + (dt * Math::DegreesToRadians(_speed)), Math::TwoPi);
-		SetPosition(_initialPosition + Vector3f(0, _distance * ((std::sinf(_time) + 1.0f) * 0.5f), 0));
+		_time = Math::Mod(_time + ((float)dt * Math::DegreesToRadians(_speed)), Math::TwoPi);
+		SetPosition(_initialPosition + Vector3f(0, _distance * ((Math::Sin(_time) + 1.0f) * 0.5f), 0));
 	}
 
 	bool DoorEntity::SetProperty(const EntityKeyValue& keyValue)

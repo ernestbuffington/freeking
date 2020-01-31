@@ -114,9 +114,9 @@ namespace Freeking
 		_frameTime += (10.0 * dt);
 		_frameTime = fmod(_frameTime, (float)frameCount);
 
-		uint32_t frame = (uint32_t)floor(_frameTime);
+		size_t frame = (size_t)floor(_frameTime);
 		frame %= frameCount;
-		uint32_t nextFrame = (frame + 1) % frameCount;
+		size_t nextFrame = (frame + 1) % frameCount;
 		float delta = (float)_frameTime - (float)frame;
 		delta = Math::Clamp(delta, 0.0f, 1.0f);
 

@@ -88,7 +88,7 @@ namespace Freeking
 
 		static const std::string version("#version 460\n");
 		const GLchar* sources[] = { version.c_str(), defines.c_str(), source.c_str() };
-		const GLint lengths[] = { version.size(), defines.size(), source.size() };
+		const GLint lengths[] = { (GLint)version.size(), (GLint)defines.size(), (GLint)source.size() };
 		glShaderSource(shader, 3, sources, lengths);
 		glCompileShader(shader);
 

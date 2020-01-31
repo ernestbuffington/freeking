@@ -185,8 +185,8 @@ namespace Freeking
 				void SetTexture(const TextureBuffer*);
 
 				Type type;
-				GLuint texture;
-				GLuint sampler;
+				GLuint textureId;
+				GLuint samplerId;
 				bool unset;
 			};
 
@@ -257,7 +257,7 @@ namespace Freeking
 						return (type == _properties.at(it->second).type) ? it->second : -1;
 					}
 
-					int id = _properties.size();
+					int id = static_cast<int>(_properties.size());
 
 					T prop;
 					prop.type = type;
@@ -318,7 +318,7 @@ namespace Freeking
 					return _parameters.at(it->second);
 				}
 
-				int id = _parameters.size();
+				int id = static_cast<int>(_parameters.size());
 				auto& param = _parameters.emplace_back();
 				_parameterNameIds.emplace(name, id);
 

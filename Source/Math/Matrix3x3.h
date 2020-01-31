@@ -33,7 +33,7 @@ namespace Freeking
 		Vector3f ToRadianAngles() const;
 		Vector3f ToDegreeAngles() const;
 		Vector3f Transform(const Vector3f& v) const;
-		inline Vector3f Row(size_t index) const { return Vector3f(m[0][index], m[1][index], m[2][index]); }
+		inline Vector3f Row(int index) const { return Vector3f(m[0][index], m[1][index], m[2][index]); }
 		Matrix4x4 ToMatrix4x4() const;
 
 		Matrix3x3 operator+(const Matrix3x3& matrix) const;

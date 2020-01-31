@@ -120,18 +120,18 @@ namespace Freeking
 
 		std::vector<std::shared_ptr<Thug>> thugs;
 
-		for (const auto& e : map->GetEntityLump().Entities)
+		for (const auto& entDef : map->GetEntityLump().Entities)
 		{
-			if (e.classname.substr(0, 5) == "cast_")
+			if (entDef.classname.substr(0, 5) == "cast_")
 			{
-				if (e.classname == "cast_dog")
+				if (entDef.classname == "cast_dog")
 				{
 					continue;
 				}
 
-				auto thug = std::make_shared<Thug>(e);
-				Vector3f origin(e.origin.x, e.origin.z, -e.origin.y);
-				thug->ModelMatrix = Matrix4x4::Translation(origin) * Matrix3x3::RotationY(Math::DegreesToRadians(e.angle));
+				auto thug = std::make_shared<Thug>(entDef);
+				Vector3f origin(entDef.origin.x, entDef.origin.z, -entDef.origin.y);
+				thug->ModelMatrix = Matrix4x4::Translation(origin) * Matrix3x3::RotationY(Math::DegreesToRadians(entDef.angle));
 				camera.MoveTo(origin);
 
 				thugs.push_back(std::move(thug));
@@ -247,9 +247,9 @@ namespace Freeking
 
 			if (debug)
 			{
-				for (const auto& e : map->GetEntityLump().Entities)
+				for (const auto& entDef : map->GetEntityLump().Entities)
 				{
-					Vector3f origin(e.origin.x, e.origin.z, -e.origin.y);
+					Vector3f origin(entDef.origin.x, entDef.origin.z, -entDef.origin.y);
 					float distance = origin.LengthBetween(camera.GetPosition());
 
 					if (distance >= 512.0f)
@@ -258,7 +258,7 @@ namespace Freeking
 					}
 
 					std::string name;
-					e.TryGetString("name", name);
+					entDef.TryGetString("name", name);
 
 					Vector2f screenPosition;
 					if (Util::WorldPointToNormalisedScreenPoint(origin, screenPosition, projectionMatrix, viewMatrix, 512.0f))
@@ -266,9 +266,9 @@ namespace Freeking
 						float alpha = 1.0f - (distance / 512.0f);
 						lineRenderer->DrawSphere(origin, 4.0f, 4, 4, Vector4f(0, 1, 1, alpha));
 						screenPosition = Util::ScreenSpaceToPixelPosition(screenPosition, Vector4i(0, 0, _viewportWidth, _viewportHeight));
-						screenPosition.x = (int)screenPosition.x;
-						screenPosition.y = (int)screenPosition.y;
-						auto text = e.classname + " (" + name + ")";
+						screenPosition.x = Math::Round(screenPosition.x);
+						screenPosition.y = Math::Round(screenPosition.y);
+						auto text = entDef.classname + " (" + name + ")";
 						spriteBatch->DrawText(font.get(), text, screenPosition + Vector2f(2, 2), Vector4f(0, 0, 0, alpha), 0.5f);
 						spriteBatch->DrawText(font.get(), text, screenPosition, Vector4f(1, 1, 1, alpha), 0.5f);
 					}
@@ -292,8 +292,8 @@ namespace Freeking
 						float alpha = 1.0f - (distance / 512.0f);
 						lineRenderer->DrawAABBox(origin, Vector3f(-5, -5, -5), Vector3f(5, 5, 5), Vector4f(0, 1, 0, alpha));
 						screenPosition = Util::ScreenSpaceToPixelPosition(screenPosition, Vector4i(0, 0, _viewportWidth, _viewportHeight));
-						screenPosition.x = (int)screenPosition.x;
-						screenPosition.y = (int)screenPosition.y;
+						screenPosition.x = Math::Round(screenPosition.x);
+						screenPosition.y = Math::Round(screenPosition.y);
 						auto text = "node #" + std::to_string(i);
 						spriteBatch->DrawText(font.get(), text, screenPosition + Vector2f(2, 2), Vector4f(0, 0, 0, alpha), 0.5f);
 						spriteBatch->DrawText(font.get(), text, screenPosition, Vector4f(1, 1, 1, alpha), 0.5f);

@@ -14,8 +14,8 @@ namespace Freeking
 	{
 		BrushModelEntity::Tick(dt);
 
-		_time = std::fmodf(_time + (dt * Math::DegreesToRadians(_speed)), Math::TwoPi);
-		SetRotation(Quaternion::FromDegreeYaw(_distance * (((std::sinf(_time) + 1.0f) * 0.5f) * -1.0f)));
+		_time = Math::Mod(_time + ((float)dt * Math::DegreesToRadians(_speed)), Math::TwoPi);
+		SetRotation(Quaternion::FromDegreeYaw(_distance * (((Math::Sin(_time) + 1.0f) * 0.5f) * -1.0f)));
 	}
 
 	bool DoorRotatingEntity::SetProperty(const EntityKeyValue& keyValue)

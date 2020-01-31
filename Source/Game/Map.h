@@ -28,8 +28,15 @@ namespace Freeking
 		{
 			Vector3f Position;
 			Vector3f Normal;
-			Vector2f UV[3];
+			Vector2f UV[3] = {};
 		};
+
+		BrushMesh() :
+			AlphaCutOff(0.0f),
+			AlphaMultiply(0.0f),
+			Translucent(false)
+		{
+		}
 
 		void Draw();
 		void Commit();

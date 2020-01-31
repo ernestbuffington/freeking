@@ -25,7 +25,8 @@ namespace Freeking
 	VertexBinding::VertexBinding() :
 		_handle(0),
 		_indicesType(ElementType::UByte),
-		_hasIndices(false)
+		_hasIndices(false),
+		_numElements(0)
 	{
 	}
 
@@ -43,7 +44,7 @@ namespace Freeking
 
 		CreateVAO();
 
-		_numElements = vertices.GetVertexCount();
+		_numElements = static_cast<int>(vertices.GetVertexCount());
 
 		Bind();
 		SetupVertices(elements, elementCount);
@@ -59,7 +60,7 @@ namespace Freeking
 
 		CreateVAO();
 
-		_numElements = indices.GetCount();
+		_numElements = static_cast<int>(indices.GetCount());
 
 		Bind();
 		SetupVertices(elements, elementCount);

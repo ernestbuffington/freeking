@@ -216,7 +216,7 @@ namespace Freeking
 				float umax = std::numeric_limits<float>::lowest();
 				float vmax = std::numeric_limits<float>::lowest();
 
-				int baseVertex = mesh->GetNumVertices();
+				int baseVertex = static_cast<int>(mesh->GetNumVertices());
 
 				std::vector<BrushMesh::Vertex> faceVertices;
 				faceVertices.resize(face.NumEdges);

@@ -1,29 +1,32 @@
 #pragma once
 
+#include <math.h>
+
 namespace Freeking
 {
-	namespace Math
+	struct Math
 	{
-		const float Pi = 3.1415926f;
-		const float HalfPi = Pi / 2.0f;
-		const float QuarterPi = Pi / 4.0f;
-		const float TwoPi = Pi * 2.0f;
-		const float Epsilon = 0.00001f;
-		const float GoldenRatio = 1.61803398875f;
-		const float GoldenRatioConjugate = 1.0f / GoldenRatio;
-		const double Log2E = 1.4426950408889634074;
+		static const float Pi;
+		static const float HalfPi;
+		static const float QuarterPi;
+		static const float TwoPi;
+		static const float Epsilon;
+		static const float GoldenRatio;
+		static const float GoldenRatioConjugate;
+		static const double Log2E;
 
-		inline float RadiansToDegrees(float radians) { return radians * 180.0f / Pi; }
-		inline float DegreesToRadians(float degrees) { return degrees * Pi / 180.0f; }
+		static inline float RadiansToDegrees(float radians) { return radians * (180.0f / Pi); }
+		static inline float DegreesToRadians(float degrees) { return degrees * (Pi / 180.0f); }
 
-		inline bool FloatEqual(float a, float b)
-		{
-			const float c = a - b;
+		static inline float Abs(float v) { return fabsf(v); }
+		static inline bool Mod(float a, float b) { return fmodf(a, b); }
+		static inline bool Sin(float a) { return sinf(a); }
+		static inline bool Cos(float a) { return cosf(a); }
+		static inline float Round(float a) { return roundf(a); }
 
-			return (c < Epsilon && c > -Epsilon);
-		}
+		static inline bool FloatEqual(float a, float b, float tolerance = Epsilon) { return Abs(a - b) <= tolerance; }
 
-		inline float Sign(float a)
+		static inline float Sign(float a)
 		{
 			if (a > 0.0f) return 1.0f;
 			if (a < 0.0f) return -1.0f;
@@ -32,12 +35,12 @@ namespace Freeking
 		}
 
 		template<typename T>
-		inline T Min(T a, T b) { return (a < b) ? a : b; }
+		static inline T Min(T a, T b) { return (a < b) ? a : b; }
 
 		template<typename T>
-		inline T Max(T a, T b) { return (a > b) ? a : b; }
+		static inline T Max(T a, T b) { return (a > b) ? a : b; }
 
 		template<typename T>
-		inline T Clamp(T value, T min, T max) { return Max(Min(value, max), min); }
-	}
+		static inline T Clamp(T value, T min, T max) { return Max(Min(value, max), min); }
+	};
 }

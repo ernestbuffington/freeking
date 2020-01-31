@@ -10,7 +10,8 @@ namespace Freeking
 	public:
 
 		Matrix4x4();
-		Matrix4x4(float xx, float xy, float xz, float xw,
+		Matrix4x4(
+			float xx, float xy, float xz, float xw,
 			float yx, float yy, float yz, float yw,
 			float zx, float zy, float zz, float zw,
 			float wx, float wy, float wz, float ww);
@@ -19,7 +20,7 @@ namespace Freeking
 
 		void Identity();
 		void Translate(const Vector3f& position);
-		inline Vector4f Row(size_t index) const { return Vector4f(m[0][index], m[1][index], m[2][index], m[3][index]); }
+		inline Vector4f Row(int index) const { return Vector4f(m[0][index], m[1][index], m[2][index], m[3][index]); }
 		static Matrix4x4 Translation(const Vector3f& position);
 		static Matrix4x4 Perspective(float fov, float aspect, float nearClip, float farClip);
 		static Matrix4x4 Ortho(float left, float right, float top, float bottom, float nearClip, float farClip);

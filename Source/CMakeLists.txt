@@ -36,6 +36,9 @@ if (WIN32)
     # disable shite warnings
     add_compile_options(/wd4005) # macro redefinition https://docs.microsoft.com/en-us/visualstudio/code-quality/c4005
     add_compile_options(/wd26451) # arithmetic overflow https://docs.microsoft.com/en-us/visualstudio/code-quality/c26451
+    add_compile_options(/wd4100) # unreferenced formal parameter
+    add_compile_options(/wd4201) # nonstandard extension used : nameless struct/union
+    add_compile_options(/wd26812) # The enum type %type% is unscoped. Prefer 'enum class' over 'enum' (Enum.3)
   endif()
 endif()
 
