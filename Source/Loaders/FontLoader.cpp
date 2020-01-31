@@ -108,18 +108,11 @@ namespace Freeking
 			}
 		}
 
-		auto path = std::filesystem::path(name).remove_filename();
 		std::vector<std::shared_ptr<Texture2D>> pageTextures;
 
 		for (const auto& jPage : jPages)
 		{
-			auto pagePath = (path / jPage.get<std::string>()).string();
-			if (!FileSystem::FileExists(pagePath))
-			{
-				return nullptr;
-			}
-
-			if (auto texture = Texture2D::Library.Get(pagePath))
+			if (auto texture = Texture2D::Library.Get(jPage.get<std::string>()))
 			{
 				pageTextures.push_back(texture);
 			}

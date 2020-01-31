@@ -1,10 +1,5 @@
 #include "Util.h"
-#include "Texture2D.h"
-#include "Shader.h"
-#include "FileSystem.h"
 #include <charconv>
-#include <filesystem>
-#include <fstream> 
 
 namespace Freeking
 {

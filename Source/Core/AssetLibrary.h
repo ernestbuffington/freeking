@@ -5,9 +5,26 @@
 #include <unordered_map>
 #include <string>
 #include <filesystem>
+#include <stack>
+#include <algorithm>
 
 namespace Freeking
 {
+	class PathStack
+	{
+	public:
+
+		PathStack() = delete;
+		PathStack(const std::filesystem::path& path) { _paths.push(path.parent_path()); }
+		~PathStack() { _paths.pop(); }
+
+		static std::filesystem::path Top() { return _paths.empty() ? "" : _paths.top(); }
+
+	private:
+
+		static std::stack<std::filesystem::path> _paths;
+	};
+
 	template <typename T>
 	class AssetLoader
 	{
@@ -46,18 +63,22 @@ namespace Freeking
 				return nullptr;
 			}
 
-			if (auto it = _dictionary.find(name); it != _dictionary.end())
+			auto absolutePath = PathStack::Top() / name;
+			auto absoluteName = absolutePath.string();
+			std::replace(absoluteName.begin(), absoluteName.end(), '\\', '/');
+
+			if (auto it = _dictionary.find(absoluteName); it != _dictionary.end())
 			{
 				return it->second;
 			}
 			else
 			{
-				if (!FileSystem::FileExists(name))
+				if (!FileSystem::FileExists(absoluteName))
 				{
 					return nullptr;
 				}
 
-				auto extension = std::filesystem::path(name).extension();
+				auto extension = std::filesystem::path(absoluteName).extension();
 				if (extension.empty())
 				{
 					return nullptr;
@@ -68,6 +89,8 @@ namespace Freeking
 					UpdateLoaders();
 				}
 
+				PathStack ps(absolutePath);
+
 				for (const auto& loader : _loaders)
 				{
 					if (!loader->CanLoadExtension(extension.string()))
@@ -75,9 +98,9 @@ namespace Freeking
 						continue;
 					}
 
-					if (auto asset = loader->Load(name))
+					if (auto asset = loader->Load(absoluteName))
 					{
-						_dictionary.emplace(name, asset);
+						_dictionary.emplace(absoluteName, asset);
 
 						return asset;
 					}

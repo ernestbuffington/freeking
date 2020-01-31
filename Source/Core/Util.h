@@ -2,7 +2,6 @@
 
 #include "Vector.h"
 #include "Matrix4x4.h"
-#include <vector>
 
 namespace Freeking
 {
