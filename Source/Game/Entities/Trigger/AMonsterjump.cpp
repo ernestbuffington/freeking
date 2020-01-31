@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Trigger
 {
-	AMonsterjump::AMonsterjump() : BaseEntity()
+	AMonsterjump::AMonsterjump() : IEntity()
 	{
 	}
 

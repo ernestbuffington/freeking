@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Info
 {
-	APlayerCoop::APlayerCoop() : BaseEntity()
+	APlayerCoop::APlayerCoop() : IEntity()
 	{
 	}
 

@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Target
 {
-	AString::AString() : BaseEntity()
+	AString::AString() : IEntity()
 	{
 	}
 

@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Target
 {
-    class ASecret : public BaseEntity
+    class ASecret : public IEntity
     {
     public:
 

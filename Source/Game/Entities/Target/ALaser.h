@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Target
 {
-    class ALaser : public BaseEntity
+    class ALaser : public IEntity
     {
     public:
 

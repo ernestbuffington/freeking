@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props2
 {
-	APlantXl::APlantXl() : BaseEntity()
+	APlantXl::APlantXl() : IEntity()
 	{
 	}
 

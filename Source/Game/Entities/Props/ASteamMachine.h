@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props
 {
-    class ASteamMachine : public BaseEntity
+    class ASteamMachine : public IEntity
     {
     public:
 

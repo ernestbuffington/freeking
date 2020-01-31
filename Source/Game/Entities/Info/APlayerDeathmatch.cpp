@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Info
 {
-	APlayerDeathmatch::APlayerDeathmatch() : BaseEntity()
+	APlayerDeathmatch::APlayerDeathmatch() : IEntity()
 	{
 	}
 

@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Misc
 {
-	AFidela::AFidela() : BaseEntity()
+	AFidela::AFidela() : IEntity()
 	{
 	}
 

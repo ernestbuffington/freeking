@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Ai
 {
-	ASyDykesBoundry::ASyDykesBoundry() : BaseEntity()
+	ASyDykesBoundry::ASyDykesBoundry() : IEntity()
 	{
 	}
 

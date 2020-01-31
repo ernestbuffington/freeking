@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props2
 {
-	AWallFish::AWallFish() : BaseEntity()
+	AWallFish::AWallFish() : IEntity()
 	{
 	}
 

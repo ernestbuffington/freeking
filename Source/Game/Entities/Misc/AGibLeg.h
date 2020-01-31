@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Misc
 {
-    class AGibLeg : public BaseEntity
+    class AGibLeg : public IEntity
     {
     public:
 

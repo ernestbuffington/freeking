@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props3
 {
-	ADecoFixture::ADecoFixture() : BaseEntity()
+	ADecoFixture::ADecoFixture() : IEntity()
 	{
 	}
 

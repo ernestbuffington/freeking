@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props
 {
-    class ARoofVent : public BaseEntity
+    class ARoofVent : public IEntity
     {
     public:
 

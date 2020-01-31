@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props3
 {
-    class ACutPinballGuyAnimate : public BaseEntity
+    class ACutPinballGuyAnimate : public IEntity
     {
     public:
 

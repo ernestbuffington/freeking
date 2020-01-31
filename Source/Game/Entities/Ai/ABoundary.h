@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Ai
 {
-    class ABoundary : public BaseEntity
+    class ABoundary : public IEntity
     {
     public:
 

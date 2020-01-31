@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props
 {
-	ATrashpaper::ATrashpaper() : BaseEntity()
+	ATrashpaper::ATrashpaper() : IEntity()
 	{
 	}
 

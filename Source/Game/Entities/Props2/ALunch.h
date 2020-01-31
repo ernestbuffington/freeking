@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props2
 {
-    class ALunch : public BaseEntity
+    class ALunch : public IEntity
     {
     public:
 

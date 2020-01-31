@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props
 {
-	ATrashbottle::ATrashbottle() : BaseEntity()
+	ATrashbottle::ATrashbottle() : IEntity()
 	{
 	}
 

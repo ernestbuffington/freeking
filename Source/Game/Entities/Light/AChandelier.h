@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Light
 {
-    class AChandelier : public BaseEntity
+    class AChandelier : public IEntity
     {
     public:
 

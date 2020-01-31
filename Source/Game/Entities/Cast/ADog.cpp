@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Cast
 {
-	ADog::ADog() : BaseEntity()
+	ADog::ADog() : IEntity()
 	{
 	}
 

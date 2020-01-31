@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Target
 {
-    class ACrosslevelTarget : public BaseEntity
+    class ACrosslevelTarget : public IEntity
     {
     public:
 

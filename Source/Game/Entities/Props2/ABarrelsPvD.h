@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props2
 {
-    class ABarrelsPvD : public BaseEntity
+    class ABarrelsPvD : public IEntity
     {
     public:
 

@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Misc
 {
-    class ACutsceneTrigger : public BaseEntity
+    class ACutsceneTrigger : public IEntity
     {
     public:
 

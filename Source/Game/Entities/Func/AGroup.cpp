@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Func
 {
-	AGroup::AGroup() : BaseEntity()
+	AGroup::AGroup() : IEntity()
 	{
 	}
 

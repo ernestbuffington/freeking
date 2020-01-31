@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Path
 {
-	ACorner::ACorner() : BaseEntity()
+	ACorner::ACorner() : IEntity()
 	{
 	}
 

@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Trigger
 {
-	AAlways::AAlways() : BaseEntity()
+	AAlways::AAlways() : IEntity()
 	{
 	}
 

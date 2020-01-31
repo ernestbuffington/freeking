@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Cast
 {
-	AThug::AThug() : BaseEntity()
+	AThug::AThug() : IEntity()
 	{
 	}
 

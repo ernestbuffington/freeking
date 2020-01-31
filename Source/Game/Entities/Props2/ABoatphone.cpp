@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props2
 {
-	ABoatphone::ABoatphone() : BaseEntity()
+	ABoatphone::ABoatphone() : IEntity()
 	{
 	}
 

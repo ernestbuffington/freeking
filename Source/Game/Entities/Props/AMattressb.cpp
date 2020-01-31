@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props
 {
-	AMattressb::AMattressb() : BaseEntity()
+	AMattressb::AMattressb() : IEntity()
 	{
 	}
 

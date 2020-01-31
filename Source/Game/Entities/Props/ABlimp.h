@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props
 {
-    class ABlimp : public BaseEntity
+    class ABlimp : public IEntity
     {
     public:
 

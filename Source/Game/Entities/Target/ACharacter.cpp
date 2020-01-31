@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Target
 {
-	ACharacter::ACharacter() : BaseEntity()
+	ACharacter::ACharacter() : IEntity()
 	{
 	}
 

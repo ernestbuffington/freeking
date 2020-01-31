@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Misc
 {
-	ATeleporter::ATeleporter() : BaseEntity()
+	ATeleporter::ATeleporter() : IEntity()
 	{
 	}
 

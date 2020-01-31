@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Sfx
 {
-    class ABeacon : public BaseEntity
+    class ABeacon : public IEntity
     {
     public:
 

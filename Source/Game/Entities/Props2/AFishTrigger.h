@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props2
 {
-    class AFishTrigger : public BaseEntity
+    class AFishTrigger : public IEntity
     {
     public:
 

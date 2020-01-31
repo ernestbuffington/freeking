@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Rotating
 {
-    class ALight : public BaseEntity
+    class ALight : public IEntity
     {
     public:
 

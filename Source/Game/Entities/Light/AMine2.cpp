@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Light
 {
-	AMine2::AMine2() : BaseEntity()
+	AMine2::AMine2() : IEntity()
 	{
 	}
 

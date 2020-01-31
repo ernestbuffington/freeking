@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props
 {
-    class AColaMachine : public BaseEntity
+    class AColaMachine : public IEntity
     {
     public:
 

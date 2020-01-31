@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props2
 {
-    class AWallFish : public BaseEntity
+    class AWallFish : public IEntity
     {
     public:
 

@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Ai
 {
-	ATerritory::ATerritory() : BaseEntity()
+	ATerritory::ATerritory() : IEntity()
 	{
 	}
 

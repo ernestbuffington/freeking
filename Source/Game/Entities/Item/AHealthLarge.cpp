@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Item
 {
-	AHealthLarge::AHealthLarge() : BaseEntity()
+	AHealthLarge::AHealthLarge() : IEntity()
 	{
 	}
 

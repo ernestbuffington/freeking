@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Misc
 {
-	ACutsceneTrigger::ACutsceneTrigger() : BaseEntity()
+	ACutsceneTrigger::ACutsceneTrigger() : IEntity()
 	{
 	}
 

@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props
 {
-    class AWallFall : public BaseEntity
+    class AWallFall : public IEntity
     {
     public:
 

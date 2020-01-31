@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Pistol
 {
-	AModRof::AModRof() : BaseEntity()
+	AModRof::AModRof() : IEntity()
 	{
 	}
 

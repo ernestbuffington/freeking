@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Func
 {
-    class ALift : public BaseEntity
+    class ALift : public IEntity
     {
     public:
 

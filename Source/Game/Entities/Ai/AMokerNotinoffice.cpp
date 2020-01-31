@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Ai
 {
-	AMokerNotinoffice::AMokerNotinoffice() : BaseEntity()
+	AMokerNotinoffice::AMokerNotinoffice() : IEntity()
 	{
 	}
 

@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props3
 {
-    class ACutBossChickAnimate : public BaseEntity
+    class ACutBossChickAnimate : public IEntity
     {
     public:
 

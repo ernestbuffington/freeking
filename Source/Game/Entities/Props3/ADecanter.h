@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props3
 {
-    class ADecanter : public BaseEntity
+    class ADecanter : public IEntity
     {
     public:
 

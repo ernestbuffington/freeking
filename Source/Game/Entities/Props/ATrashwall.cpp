@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props
 {
-	ATrashwall::ATrashwall() : BaseEntity()
+	ATrashwall::ATrashwall() : IEntity()
 	{
 	}
 

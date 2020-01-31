@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Misc
 {
-	APvAfraid::APvAfraid() : BaseEntity()
+	APvAfraid::APvAfraid() : IEntity()
 	{
 	}
 

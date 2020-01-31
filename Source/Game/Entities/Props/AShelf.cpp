@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props
 {
-	AShelf::AShelf() : BaseEntity()
+	AShelf::AShelf() : IEntity()
 	{
 	}
 

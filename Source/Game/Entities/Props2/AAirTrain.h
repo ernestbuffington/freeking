@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props2
 {
-    class AAirTrain : public BaseEntity
+    class AAirTrain : public IEntity
     {
     public:
 

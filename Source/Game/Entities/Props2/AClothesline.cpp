@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props2
 {
-	AClothesline::AClothesline() : BaseEntity()
+	AClothesline::AClothesline() : IEntity()
 	{
 	}
 

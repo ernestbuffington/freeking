@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Cast
 {
-	AShorty::AShorty() : BaseEntity()
+	AShorty::AShorty() : IEntity()
 	{
 	}
 

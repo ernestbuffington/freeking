@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Misc
 {
-	ASteeltownAfraid::ASteeltownAfraid() : BaseEntity()
+	ASteeltownAfraid::ASteeltownAfraid() : IEntity()
 	{
 	}
 

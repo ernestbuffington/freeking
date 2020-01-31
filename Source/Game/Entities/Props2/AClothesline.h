@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props2
 {
-    class AClothesline : public BaseEntity
+    class AClothesline : public IEntity
     {
     public:
 

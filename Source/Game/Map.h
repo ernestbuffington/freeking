@@ -5,7 +5,7 @@
 #include "TextureSampler.h"
 #include "Vector.h"
 #include "Quaternion.h"
-#include "IEntity.h"
+#include "BaseWorldEntity.h"
 #include <string>
 #include <memory>
 #include <charconv>

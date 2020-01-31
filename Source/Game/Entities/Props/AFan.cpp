@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props
 {
-	AFan::AFan() : BaseEntity()
+	AFan::AFan() : IEntity()
 	{
 	}
 

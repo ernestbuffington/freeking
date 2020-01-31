@@ -82,16 +82,18 @@ namespace Freeking
 			throw std::runtime_error("Failed to initialize the OpenGL context: " + std::string(SDL_GetError()));
 		}
 
-		if (!gladLoaderLoadGL())
+		if (auto version = gladLoadGL((GLADloadfunc)SDL_GL_GetProcAddress))
+		{
+			std::cout << "OpenGL: " << GLAD_VERSION_MAJOR(version) << "." << GLAD_VERSION_MINOR(version) << "\n"
+				"Vendor: " << glGetString(GL_VENDOR) << "\n" <<
+				"Renderer: " << glGetString(GL_RENDERER) << "\n" <<
+				"Version: " << glGetString(GL_VERSION) << "\n" <<
+				std::endl;
+		}
+		else
 		{
 			throw std::runtime_error("Failed to initialize the OpenGL context.");
 		}
-
-		std::cout << "OpenGL loaded" << "\n" <<
-			"Vendor: " << glGetString(GL_VENDOR) << "\n" <<
-			"Renderer: " << glGetString(GL_RENDERER) << "\n" <<
-			"Version: " << glGetString(GL_VERSION) << "\n" <<
-			std::endl;
 
 		if (!GLAD_GL_VERSION_4_6)
 		{

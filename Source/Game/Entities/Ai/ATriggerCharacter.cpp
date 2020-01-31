@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Ai
 {
-	ATriggerCharacter::ATriggerCharacter() : BaseEntity()
+	ATriggerCharacter::ATriggerCharacter() : IEntity()
 	{
 	}
 

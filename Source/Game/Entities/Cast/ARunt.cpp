@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Cast
 {
-	ARunt::ARunt() : BaseEntity()
+	ARunt::ARunt() : IEntity()
 	{
 	}
 

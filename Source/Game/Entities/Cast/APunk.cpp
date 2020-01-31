@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Cast
 {
-	APunk::APunk() : BaseEntity()
+	APunk::APunk() : IEntity()
 	{
 	}
 

@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Misc
 {
-	ABarryBitch::ABarryBitch() : BaseEntity()
+	ABarryBitch::ABarryBitch() : IEntity()
 	{
 	}
 

@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props2
 {
-	ATruckDie::ATruckDie() : BaseEntity()
+	ATruckDie::ATruckDie() : IEntity()
 	{
 	}
 

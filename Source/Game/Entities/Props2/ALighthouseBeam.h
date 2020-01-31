@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props2
 {
-    class ALighthouseBeam : public BaseEntity
+    class ALighthouseBeam : public IEntity
     {
     public:
 

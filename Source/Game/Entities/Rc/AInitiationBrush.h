@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Rc
 {
-    class AInitiationBrush : public BaseEntity
+    class AInitiationBrush : public IEntity
     {
     public:
 

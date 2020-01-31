@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Func
 {
-    class APlat : public BaseEntity
+    class APlat : public IEntity
     {
     public:
 

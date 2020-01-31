@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props
 {
-	ASteamMachine::ASteamMachine() : BaseEntity()
+	ASteamMachine::ASteamMachine() : IEntity()
 	{
 	}
 

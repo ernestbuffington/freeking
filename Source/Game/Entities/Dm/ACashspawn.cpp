@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Dm
 {
-	ACashspawn::ACashspawn() : BaseEntity()
+	ACashspawn::ACashspawn() : IEntity()
 	{
 	}
 

@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Elements
 {
-    class ASnowcloud : public BaseEntity
+    class ASnowcloud : public IEntity
     {
     public:
 

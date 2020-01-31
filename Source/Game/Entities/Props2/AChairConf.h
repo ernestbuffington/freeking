@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props2
 {
-    class AChairConf : public BaseEntity
+    class AChairConf : public IEntity
     {
     public:
 

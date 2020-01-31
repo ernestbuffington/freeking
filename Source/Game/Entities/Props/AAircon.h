@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props
 {
-    class AAircon : public BaseEntity
+    class AAircon : public IEntity
     {
     public:
 

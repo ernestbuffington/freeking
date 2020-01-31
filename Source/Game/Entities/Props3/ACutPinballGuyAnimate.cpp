@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props3
 {
-	ACutPinballGuyAnimate::ACutPinballGuyAnimate() : BaseEntity()
+	ACutPinballGuyAnimate::ACutPinballGuyAnimate() : IEntity()
 	{
 	}
 

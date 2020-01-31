@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Func
 {
-    class AGroup : public BaseEntity
+    class AGroup : public IEntity
     {
     public:
 

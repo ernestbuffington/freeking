@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Ai
 {
-    class APvFuseblown1 : public BaseEntity
+    class APvFuseblown1 : public IEntity
     {
     public:
 

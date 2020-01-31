@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Trigger
 {
-	AMultiple::AMultiple() : BaseEntity()
+	AMultiple::AMultiple() : IEntity()
 	{
 	}
 

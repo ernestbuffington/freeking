@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props2
 {
-	ALunch::ALunch() : BaseEntity()
+	ALunch::ALunch() : IEntity()
 	{
 	}
 

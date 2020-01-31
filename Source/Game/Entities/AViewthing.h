@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity
 {
-    class AViewthing : public BaseEntity
+    class AViewthing : public IEntity
     {
     public:
 

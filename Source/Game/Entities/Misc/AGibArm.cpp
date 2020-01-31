@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Misc
 {
-	AGibArm::AGibArm() : BaseEntity()
+	AGibArm::AGibArm() : IEntity()
 	{
 	}
 

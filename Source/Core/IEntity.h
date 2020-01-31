@@ -5,150 +5,45 @@
 #include "Matrix4x4.h"
 #include "Quaternion.h"
 #include "Material.h"
+#include <iostream>
 
 namespace Freeking
 {
-	class Map;
-	class BrushModel;
-
 	typedef std::shared_ptr<class IEntity> shared_ptr_entity;
+	typedef std::shared_ptr<class IEntityComponent> shared_ptr_component;
 
 	class IEntity
 	{
 	public:
 
-		IEntity() {}
-		virtual ~IEntity() {}
+		IEntity() = default;
+		virtual ~IEntity() = default;
 
-		virtual void PreInitialize(const EntityLump::EntityDef& def) {};
-		virtual void Initialize() = 0;
-		virtual void Tick(double dt) = 0;
-		virtual void Spawn() = 0;
+		virtual void InitializeProperties(const EntityLump::EntityDef& def);
+		virtual void Initialize();
+		virtual void PostInitialize();
+		virtual void Tick(double dt);
+		virtual void PostTick();
+		virtual void Spawn();
 
 		static shared_ptr_entity Make(const std::string_view& classname);
 
 	protected:
 
 		virtual bool SetProperty(const EntityKeyValue& keyValue) = 0;
-	};
 
-	class BaseEntity : public IEntity
-	{
-	public:
+		template <typename T>
+		T* CreateComponent()
+		{
+			static_assert(std::is_base_of<IEntityComponent, T>::value, "CreateComponent type parameter must derive from IEntityComponent");
 
-		virtual void Spawn() override {}
-	};
+			auto component = std::make_shared<T>();
+			_components.push_back(std::static_pointer_cast<IEntityComponent>(component));
 
-	class BaseWorldEntity : public BaseEntity
-	{
-	public:
+			return component.get();
+		}
 
-		BaseWorldEntity();
-
-		virtual void PreInitialize(const EntityLump::EntityDef& def) override;
-		virtual void Tick(double dt) override;
-
-		virtual void RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<Material>& material) = 0;
-		virtual void RenderTranslucent(const Matrix4x4& viewProjection, const std::shared_ptr<Material>& material) = 0;
-
-		inline void SetPosition(const Vector3f& position) { _position = position; }
-		inline void SetRotation(const Quaternion& rotation) { _rotation = rotation; }
-
-		inline const Vector3f& GetPosition() const { return _position; }
-		inline const Quaternion& GetRotation() const { return _rotation; }
-		inline const Matrix4x4& GetTransform() const { return _transform; }
-
-	protected:
-
-		Vector3f _position;
-		Quaternion _rotation;
-		Matrix4x4 _transform;
-	};
-
-	class BrushModelEntity : public BaseWorldEntity
-	{
-	public:
-
-		BrushModelEntity();
-
-		virtual void Initialize() override;
-		virtual void Tick(double dt) override;
-
-		virtual void RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<Material>& material) override;
-		virtual void RenderTranslucent(const Matrix4x4& viewProjection, const std::shared_ptr<Material>& material) override;
-
-	protected:
-
-		virtual bool SetProperty(const EntityKeyValue& keyValue) override;
-
-	protected:
-
-		int _modelIndex;
-		std::shared_ptr<BrushModel> _model;
-	};
-
-	class WorldSpawnEntity : public BrushModelEntity
-	{
-	public:
-
-		virtual void Initialize() override;
-	};
-
-	class RotatingEntity : public BrushModelEntity
-	{
-	public:
-
-		RotatingEntity();
-
-		virtual void Tick(double dt) override;
-
-	protected:
-
-		virtual bool SetProperty(const EntityKeyValue& keyValue) override;
-
-	private:
-
-		float _speed;
-	};
-
-	class DoorRotatingEntity : public BrushModelEntity
-	{
-	public:
-
-		DoorRotatingEntity();
-
-		virtual void Tick(double dt) override;
-
-	protected:
-
-		virtual bool SetProperty(const EntityKeyValue& keyValue) override;
-
-	private:
-
-		float _speed;
-		float _angle;
-		float _distance;
-		float _time;
-	};
-
-	class DoorEntity : public BrushModelEntity
-	{
-	public:
-
-		DoorEntity();
-
-		virtual void Initialize() override;
-		virtual void Tick(double dt) override;
-
-	protected:
-
-		virtual bool SetProperty(const EntityKeyValue& keyValue) override;
-
-	private:
-
-		float _speed;
-		float _angle;
-		float _time;
-		Vector3f _initialPosition;
+		std::string _name;
+		std::vector<shared_ptr_component> _components;
 	};
 }

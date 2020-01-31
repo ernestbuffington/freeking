@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props2
 {
-	ABarrelsFallSt::ABarrelsFallSt() : BaseEntity()
+	ABarrelsFallSt::ABarrelsFallSt() : IEntity()
 	{
 	}
 

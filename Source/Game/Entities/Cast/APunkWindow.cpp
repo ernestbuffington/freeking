@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Cast
 {
-	APunkWindow::APunkWindow() : BaseEntity()
+	APunkWindow::APunkWindow() : IEntity()
 	{
 	}
 

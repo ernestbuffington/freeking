@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity
 {
-    class ALightflare : public BaseEntity
+    class ALightflare : public IEntity
     {
     public:
 

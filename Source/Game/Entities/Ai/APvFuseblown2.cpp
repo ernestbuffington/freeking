@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Ai
 {
-	APvFuseblown2::APvFuseblown2() : BaseEntity()
+	APvFuseblown2::APvFuseblown2() : IEntity()
 	{
 	}
 

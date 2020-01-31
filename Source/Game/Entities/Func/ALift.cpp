@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Func
 {
-	ALift::ALift() : BaseEntity()
+	ALift::ALift() : IEntity()
 	{
 	}
 

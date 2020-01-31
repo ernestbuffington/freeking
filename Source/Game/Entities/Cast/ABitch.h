@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Cast
 {
-    class ABitch : public BaseEntity
+    class ABitch : public IEntity
     {
     public:
 

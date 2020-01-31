@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Func
 {
-	ATrain::ATrain() : BaseEntity()
+	ATrain::ATrain() : IEntity()
 	{
 	}
 

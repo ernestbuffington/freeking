@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Hmg
 {
-	AModCooling::AModCooling() : BaseEntity()
+	AModCooling::AModCooling() : IEntity()
 	{
 	}
 

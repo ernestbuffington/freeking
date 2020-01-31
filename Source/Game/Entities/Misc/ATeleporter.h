@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Misc
 {
-    class ATeleporter : public BaseEntity
+    class ATeleporter : public IEntity
     {
     public:
 

@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Misc
 {
-	ACorkyFidelMdxPcx::ACorkyFidelMdxPcx() : BaseEntity()
+	ACorkyFidelMdxPcx::ACorkyFidelMdxPcx() : IEntity()
 	{
 	}
 

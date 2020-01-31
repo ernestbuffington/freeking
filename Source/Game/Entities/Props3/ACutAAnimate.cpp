@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props3
 {
-	ACutAAnimate::ACutAAnimate() : BaseEntity()
+	ACutAAnimate::ACutAAnimate() : IEntity()
 	{
 	}
 

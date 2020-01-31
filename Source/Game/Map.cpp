@@ -86,6 +86,7 @@ namespace Freeking
 		for (const auto& entity : _entities)
 		{
 			entity->Tick(dt);
+			entity->PostTick();
 		}
 	}
 
@@ -357,8 +358,9 @@ namespace Freeking
 
 			if (auto newEntity = IEntity::Make(classname))
 			{
-				newEntity->PreInitialize(e);
+				newEntity->InitializeProperties(e);
 				newEntity->Initialize();
+				newEntity->PostInitialize();
 				newEntity->Spawn();
 
 				_entities.push_back(newEntity);

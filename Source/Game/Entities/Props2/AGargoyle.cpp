@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props2
 {
-	AGargoyle::AGargoyle() : BaseEntity()
+	AGargoyle::AGargoyle() : IEntity()
 	{
 	}
 

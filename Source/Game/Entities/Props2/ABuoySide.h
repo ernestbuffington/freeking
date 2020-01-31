@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props2
 {
-    class ABuoySide : public BaseEntity
+    class ABuoySide : public IEntity
     {
     public:
 

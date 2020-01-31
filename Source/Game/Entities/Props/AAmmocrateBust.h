@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props
 {
-    class AAmmocrateBust : public BaseEntity
+    class AAmmocrateBust : public IEntity
     {
     public:
 

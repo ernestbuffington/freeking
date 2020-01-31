@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Misc
 {
-    class ASkidrowAiReset : public BaseEntity
+    class ASkidrowAiReset : public IEntity
     {
     public:
 

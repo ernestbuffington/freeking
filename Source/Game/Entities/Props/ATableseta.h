@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props
 {
-    class ATableseta : public BaseEntity
+    class ATableseta : public IEntity
     {
     public:
 

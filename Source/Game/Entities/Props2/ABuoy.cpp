@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props2
 {
-	ABuoy::ABuoy() : BaseEntity()
+	ABuoy::ABuoy() : IEntity()
 	{
 	}
 

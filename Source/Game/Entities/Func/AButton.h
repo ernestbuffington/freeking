@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Func
 {
-    class AButton : public BaseEntity
+    class AButton : public IEntity
     {
     public:
 

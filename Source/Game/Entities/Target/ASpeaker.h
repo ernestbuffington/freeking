@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Target
 {
-    class ASpeaker : public BaseEntity
+    class ASpeaker : public IEntity
     {
     public:
 

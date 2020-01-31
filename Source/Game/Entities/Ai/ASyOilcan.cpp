@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Ai
 {
-	ASyOilcan::ASyOilcan() : BaseEntity()
+	ASyOilcan::ASyOilcan() : IEntity()
 	{
 	}
 

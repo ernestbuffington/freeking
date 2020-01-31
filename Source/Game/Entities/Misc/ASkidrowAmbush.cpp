@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Misc
 {
-	ASkidrowAmbush::ASkidrowAmbush() : BaseEntity()
+	ASkidrowAmbush::ASkidrowAmbush() : IEntity()
 	{
 	}
 

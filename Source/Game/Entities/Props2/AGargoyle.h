@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props2
 {
-    class AGargoyle : public BaseEntity
+    class AGargoyle : public IEntity
     {
     public:
 

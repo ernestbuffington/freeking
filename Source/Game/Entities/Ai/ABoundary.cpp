@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Ai
 {
-	ABoundary::ABoundary() : BaseEntity()
+	ABoundary::ABoundary() : IEntity()
 	{
 	}
 

@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props2
 {
-    class ABarrelsFallSt : public BaseEntity
+    class ABarrelsFallSt : public IEntity
     {
     public:
 

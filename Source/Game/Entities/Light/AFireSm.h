@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Light
 {
-    class AFireSm : public BaseEntity
+    class AFireSm : public IEntity
     {
     public:
 

@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Target
 {
-	ASpawner::ASpawner() : BaseEntity()
+	ASpawner::ASpawner() : IEntity()
 	{
 	}
 

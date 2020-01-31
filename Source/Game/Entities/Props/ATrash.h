@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props
 {
-    class ATrash : public BaseEntity
+    class ATrash : public IEntity
     {
     public:
 

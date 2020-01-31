@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Misc
 {
-	ACutsceneCamera::ACutsceneCamera() : BaseEntity()
+	ACutsceneCamera::ACutsceneCamera() : IEntity()
 	{
 	}
 

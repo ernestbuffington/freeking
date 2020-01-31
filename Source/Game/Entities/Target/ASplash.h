@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Target
 {
-    class ASplash : public BaseEntity
+    class ASplash : public IEntity
     {
     public:
 

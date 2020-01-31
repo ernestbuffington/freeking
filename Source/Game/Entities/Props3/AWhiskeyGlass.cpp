@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props3
 {
-	AWhiskeyGlass::AWhiskeyGlass() : BaseEntity()
+	AWhiskeyGlass::AWhiskeyGlass() : IEntity()
 	{
 	}
 

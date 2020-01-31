@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props
 {
-    class ATrashcana : public BaseEntity
+    class ATrashcana : public IEntity
     {
     public:
 

@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props2
 {
-    class AChairPush : public BaseEntity
+    class AChairPush : public IEntity
     {
     public:
 

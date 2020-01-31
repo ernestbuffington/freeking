@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Ai
 {
-	ACombatSpot::ACombatSpot() : BaseEntity()
+	ACombatSpot::ACombatSpot() : IEntity()
 	{
 	}
 

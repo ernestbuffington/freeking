@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Cast
 {
-    class ADog : public BaseEntity
+    class ADog : public IEntity
     {
     public:
 

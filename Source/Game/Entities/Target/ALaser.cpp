@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Target
 {
-	ALaser::ALaser() : BaseEntity()
+	ALaser::ALaser() : IEntity()
 	{
 	}
 

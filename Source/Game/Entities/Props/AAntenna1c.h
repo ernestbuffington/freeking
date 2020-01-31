@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props
 {
-    class AAntenna1c : public BaseEntity
+    class AAntenna1c : public IEntity
     {
     public:
 

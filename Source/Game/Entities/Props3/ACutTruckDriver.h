@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props3
 {
-    class ACutTruckDriver : public BaseEntity
+    class ACutTruckDriver : public IEntity
     {
     public:
 

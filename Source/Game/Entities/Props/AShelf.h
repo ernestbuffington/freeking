@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props
 {
-    class AShelf : public BaseEntity
+    class AShelf : public IEntity
     {
     public:
 

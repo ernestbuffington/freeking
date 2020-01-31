@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props
 {
-    class AExtinguisherb : public BaseEntity
+    class AExtinguisherb : public IEntity
     {
     public:
 

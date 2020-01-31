@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Info
 {
-    class APlayerCoop : public BaseEntity
+    class APlayerCoop : public IEntity
     {
     public:
 

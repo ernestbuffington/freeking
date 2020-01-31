@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Cast
 {
-    class APunkWindow : public BaseEntity
+    class APunkWindow : public IEntity
     {
     public:
 

@@ -31,6 +31,7 @@ namespace Freeking
 
 			if (entityDef.TryGetString("classname", entityDef.classname))
 			{
+				entityDef.TryGetString("name", entityDef.name);
 				entityDef.TryGetString("targetname", entityDef.targetname);
 				entityDef.TryGetString("target", entityDef.target);
 

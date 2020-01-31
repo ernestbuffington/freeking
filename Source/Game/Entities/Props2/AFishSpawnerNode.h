@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props2
 {
-    class AFishSpawnerNode : public BaseEntity
+    class AFishSpawnerNode : public IEntity
     {
     public:
 

@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity
 {
-	ARefl::ARefl() : BaseEntity()
+	ARefl::ARefl() : IEntity()
 	{
 	}
 

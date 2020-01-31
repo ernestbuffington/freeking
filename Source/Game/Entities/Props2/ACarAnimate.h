@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props2
 {
-    class ACarAnimate : public BaseEntity
+    class ACarAnimate : public IEntity
     {
     public:
 

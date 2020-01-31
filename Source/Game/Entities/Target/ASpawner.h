@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Target
 {
-    class ASpawner : public BaseEntity
+    class ASpawner : public IEntity
     {
     public:
 

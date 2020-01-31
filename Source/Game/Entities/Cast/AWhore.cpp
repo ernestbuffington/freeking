@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Cast
 {
-	AWhore::AWhore() : BaseEntity()
+	AWhore::AWhore() : IEntity()
 	{
 	}
 

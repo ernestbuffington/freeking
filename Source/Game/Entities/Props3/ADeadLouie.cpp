@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props3
 {
-	ADeadLouie::ADeadLouie() : BaseEntity()
+	ADeadLouie::ADeadLouie() : IEntity()
 	{
 	}
 

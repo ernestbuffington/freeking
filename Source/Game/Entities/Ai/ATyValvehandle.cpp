@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Ai
 {
-	ATyValvehandle::ATyValvehandle() : BaseEntity()
+	ATyValvehandle::ATyValvehandle() : IEntity()
 	{
 	}
 

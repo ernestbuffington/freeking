@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Target
 {
-	AExplosion::AExplosion() : BaseEntity()
+	AExplosion::AExplosion() : IEntity()
 	{
 	}
 

@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Target
 {
-	AEarthquake::AEarthquake() : BaseEntity()
+	AEarthquake::AEarthquake() : IEntity()
 	{
 	}
 

@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Misc
 {
-    class AUseCutscene : public BaseEntity
+    class AUseCutscene : public IEntity
     {
     public:
 

@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props2
 {
-    class APlantSm : public BaseEntity
+    class APlantSm : public IEntity
     {
     public:
 

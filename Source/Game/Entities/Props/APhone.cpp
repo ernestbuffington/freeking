@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props
 {
-	APhone::APhone() : BaseEntity()
+	APhone::APhone() : IEntity()
 	{
 	}
 

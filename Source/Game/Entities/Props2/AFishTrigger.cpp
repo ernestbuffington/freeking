@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props2
 {
-	AFishTrigger::AFishTrigger() : BaseEntity()
+	AFishTrigger::AFishTrigger() : IEntity()
 	{
 	}
 

@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props
 {
-	ARatTrigger::ARatTrigger() : BaseEntity()
+	ARatTrigger::ARatTrigger() : IEntity()
 	{
 	}
 

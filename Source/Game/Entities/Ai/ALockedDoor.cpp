@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Ai
 {
-	ALockedDoor::ALockedDoor() : BaseEntity()
+	ALockedDoor::ALockedDoor() : IEntity()
 	{
 	}
 

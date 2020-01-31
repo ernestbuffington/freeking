@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Trigger
 {
-    class AGravity : public BaseEntity
+    class AGravity : public IEntity
     {
     public:
 

@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props2
 {
-    class AAshtray : public BaseEntity
+    class AAshtray : public IEntity
     {
     public:
 

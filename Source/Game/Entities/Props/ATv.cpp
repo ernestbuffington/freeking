@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props
 {
-	ATv::ATv() : BaseEntity()
+	ATv::ATv() : IEntity()
 	{
 	}
 

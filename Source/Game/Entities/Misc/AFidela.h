@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Misc
 {
-    class AFidela : public BaseEntity
+    class AFidela : public IEntity
     {
     public:
 

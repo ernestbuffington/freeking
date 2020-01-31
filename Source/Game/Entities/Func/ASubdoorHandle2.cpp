@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Func
 {
-	ASubdoorHandle2::ASubdoorHandle2() : BaseEntity()
+	ASubdoorHandle2::ASubdoorHandle2() : IEntity()
 	{
 	}
 

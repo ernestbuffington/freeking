@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Misc
 {
-    class AGrunt : public BaseEntity
+    class AGrunt : public IEntity
     {
     public:
 

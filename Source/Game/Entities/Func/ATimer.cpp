@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Func
 {
-	ATimer::ATimer() : BaseEntity()
+	ATimer::ATimer() : IEntity()
 	{
 	}
 

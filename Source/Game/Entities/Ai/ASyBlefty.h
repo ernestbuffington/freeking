@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Ai
 {
-    class ASyBlefty : public BaseEntity
+    class ASyBlefty : public IEntity
     {
     public:
 

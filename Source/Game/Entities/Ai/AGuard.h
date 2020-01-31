@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Ai
 {
-    class AGuard : public BaseEntity
+    class AGuard : public IEntity
     {
     public:
 

@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Target
 {
-	ASecret::ASecret() : BaseEntity()
+	ASecret::ASecret() : IEntity()
 	{
 	}
 

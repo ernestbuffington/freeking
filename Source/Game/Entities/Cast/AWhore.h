@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Cast
 {
-    class AWhore : public BaseEntity
+    class AWhore : public IEntity
     {
     public:
 

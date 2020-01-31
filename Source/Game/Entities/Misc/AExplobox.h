@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Misc
 {
-    class AExplobox : public BaseEntity
+    class AExplobox : public IEntity
     {
     public:
 

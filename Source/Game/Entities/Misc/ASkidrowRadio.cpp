@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Misc
 {
-	ASkidrowRadio::ASkidrowRadio() : BaseEntity()
+	ASkidrowRadio::ASkidrowRadio() : IEntity()
 	{
 	}
 

@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity
 {
-    class ARefl : public BaseEntity
+    class ARefl : public IEntity
     {
     public:
 

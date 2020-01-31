@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props
 {
-	AExtinguisherb::AExtinguisherb() : BaseEntity()
+	AExtinguisherb::AExtinguisherb() : IEntity()
 	{
 	}
 

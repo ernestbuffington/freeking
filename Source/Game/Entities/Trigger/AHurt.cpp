@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Trigger
 {
-	AHurt::AHurt() : BaseEntity()
+	AHurt::AHurt() : IEntity()
 	{
 	}
 

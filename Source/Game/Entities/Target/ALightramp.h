@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Target
 {
-    class ALightramp : public BaseEntity
+    class ALightramp : public IEntity
     {
     public:
 

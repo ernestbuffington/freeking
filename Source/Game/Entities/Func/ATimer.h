@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Func
 {
-    class ATimer : public BaseEntity
+    class ATimer : public IEntity
     {
     public:
 

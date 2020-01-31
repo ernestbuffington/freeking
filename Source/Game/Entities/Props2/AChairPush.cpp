@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props2
 {
-	AChairPush::AChairPush() : BaseEntity()
+	AChairPush::AChairPush() : IEntity()
 	{
 	}
 

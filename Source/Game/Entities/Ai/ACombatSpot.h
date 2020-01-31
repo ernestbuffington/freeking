@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Ai
 {
-    class ACombatSpot : public BaseEntity
+    class ACombatSpot : public IEntity
     {
     public:
 

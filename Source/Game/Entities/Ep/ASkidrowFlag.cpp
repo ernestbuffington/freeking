@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Ep
 {
-	ASkidrowFlag::ASkidrowFlag() : BaseEntity()
+	ASkidrowFlag::ASkidrowFlag() : IEntity()
 	{
 	}
 

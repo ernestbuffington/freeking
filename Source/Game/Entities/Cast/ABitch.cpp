@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Cast
 {
-	ABitch::ABitch() : BaseEntity()
+	ABitch::ABitch() : IEntity()
 	{
 	}
 

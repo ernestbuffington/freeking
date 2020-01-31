@@ -37,6 +37,7 @@ namespace Freeking
 
 			std::map<std::string, std::string> keyValues;
 
+			std::string name;
 			std::string classname;
 			std::string targetname;
 			std::string target;

@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Ai
 {
-    class ATyMoBoundry : public BaseEntity
+    class ATyMoBoundry : public IEntity
     {
     public:
 

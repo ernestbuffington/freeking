@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Pawn
 {
-    class AOMatic : public BaseEntity
+    class AOMatic : public IEntity
     {
     public:
 

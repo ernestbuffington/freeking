@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props
 {
-	ACrateBust64::ACrateBust64() : BaseEntity()
+	ACrateBust64::ACrateBust64() : IEntity()
 	{
 	}
 

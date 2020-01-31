@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Misc
 {
-    class ASteeltownAfraid : public BaseEntity
+    class ASteeltownAfraid : public IEntity
     {
     public:
 

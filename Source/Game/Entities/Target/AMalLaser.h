@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Target
 {
-    class AMalLaser : public BaseEntity
+    class AMalLaser : public IEntity
     {
     public:
 

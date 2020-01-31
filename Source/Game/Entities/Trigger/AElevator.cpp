@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Trigger
 {
-	AElevator::AElevator() : BaseEntity()
+	AElevator::AElevator() : IEntity()
 	{
 	}
 

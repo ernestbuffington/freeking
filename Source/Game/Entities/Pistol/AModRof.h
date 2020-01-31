@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Pistol
 {
-    class AModRof : public BaseEntity
+    class AModRof : public IEntity
     {
     public:
 

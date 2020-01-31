@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity
 {
-	ALightflare::ALightflare() : BaseEntity()
+	ALightflare::ALightflare() : IEntity()
 	{
 	}
 

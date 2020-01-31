@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Trigger
 {
-	ARelay::ARelay() : BaseEntity()
+	ARelay::ARelay() : IEntity()
 	{
 	}
 

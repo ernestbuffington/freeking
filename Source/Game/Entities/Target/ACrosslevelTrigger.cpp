@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Target
 {
-	ACrosslevelTrigger::ACrosslevelTrigger() : BaseEntity()
+	ACrosslevelTrigger::ACrosslevelTrigger() : IEntity()
 	{
 	}
 

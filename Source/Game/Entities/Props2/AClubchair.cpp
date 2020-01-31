@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props2
 {
-	AClubchair::AClubchair() : BaseEntity()
+	AClubchair::AClubchair() : IEntity()
 	{
 	}
 

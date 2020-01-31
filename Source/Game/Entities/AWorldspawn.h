@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IEntity.h"
+#include "WorldSpawnEntity.h"
 
 namespace Freeking::Entity
 {

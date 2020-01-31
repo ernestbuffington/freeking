@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Func
 {
-    class AWater : public BaseEntity
+    class AWater : public IEntity
     {
     public:
 

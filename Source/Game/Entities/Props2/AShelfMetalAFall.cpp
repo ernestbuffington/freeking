@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props2
 {
-	AShelfMetalAFall::AShelfMetalAFall() : BaseEntity()
+	AShelfMetalAFall::AShelfMetalAFall() : IEntity()
 	{
 	}
 

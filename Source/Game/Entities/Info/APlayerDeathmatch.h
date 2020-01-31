@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Info
 {
-    class APlayerDeathmatch : public BaseEntity
+    class APlayerDeathmatch : public IEntity
     {
     public:
 

@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Target
 {
-	AGoal::AGoal() : BaseEntity()
+	AGoal::AGoal() : IEntity()
 	{
 	}
 

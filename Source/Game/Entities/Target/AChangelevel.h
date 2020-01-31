@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Target
 {
-    class AChangelevel : public BaseEntity
+    class AChangelevel : public IEntity
     {
     public:
 

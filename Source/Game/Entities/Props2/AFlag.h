@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props2
 {
-    class AFlag : public BaseEntity
+    class AFlag : public IEntity
     {
     public:
 

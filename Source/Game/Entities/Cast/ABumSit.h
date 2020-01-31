@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Cast
 {
-    class ABumSit : public BaseEntity
+    class ABumSit : public IEntity
     {
     public:
 

@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props3
 {
-    class AWhiskeyGlass : public BaseEntity
+    class AWhiskeyGlass : public IEntity
     {
     public:
 

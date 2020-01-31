@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Trigger
 {
-    class APush : public BaseEntity
+    class APush : public IEntity
     {
     public:
 

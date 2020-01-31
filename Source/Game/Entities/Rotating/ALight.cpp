@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Rotating
 {
-	ALight::ALight() : BaseEntity()
+	ALight::ALight() : IEntity()
 	{
 	}
 

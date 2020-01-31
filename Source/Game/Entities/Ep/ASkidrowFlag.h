@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Ep
 {
-    class ASkidrowFlag : public BaseEntity
+    class ASkidrowFlag : public IEntity
     {
     public:
 

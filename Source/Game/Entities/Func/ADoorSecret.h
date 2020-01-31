@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Func
 {
-    class ADoorSecret : public BaseEntity
+    class ADoorSecret : public IEntity
     {
     public:
 

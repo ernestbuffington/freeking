@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Misc
 {
-	AExplobox::AExplobox() : BaseEntity()
+	AExplobox::AExplobox() : IEntity()
 	{
 	}
 

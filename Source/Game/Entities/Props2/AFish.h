@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props2
 {
-    class AFish : public BaseEntity
+    class AFish : public IEntity
     {
     public:
 

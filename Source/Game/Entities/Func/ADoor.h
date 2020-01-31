@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IEntity.h"
+#include "DoorEntity.h"
 
 namespace Freeking::Entity::Func
 {

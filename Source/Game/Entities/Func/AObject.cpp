@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Func
 {
-	AObject::AObject() : BaseEntity()
+	AObject::AObject() : IEntity()
 	{
 	}
 

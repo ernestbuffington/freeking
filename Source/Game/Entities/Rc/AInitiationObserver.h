@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Rc
 {
-    class AInitiationObserver : public BaseEntity
+    class AInitiationObserver : public IEntity
     {
     public:
 

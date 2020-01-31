@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props2
 {
-	ALighthouseBeam::ALighthouseBeam() : BaseEntity()
+	ALighthouseBeam::ALighthouseBeam() : IEntity()
 	{
 	}
 

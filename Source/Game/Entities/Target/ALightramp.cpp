@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Target
 {
-	ALightramp::ALightramp() : BaseEntity()
+	ALightramp::ALightramp() : IEntity()
 	{
 	}
 

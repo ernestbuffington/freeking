@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props2
 {
-	APlantBush::APlantBush() : BaseEntity()
+	APlantBush::APlantBush() : IEntity()
 	{
 	}
 

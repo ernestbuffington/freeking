@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Func
 {
-    class ASubdoorHandle2 : public BaseEntity
+    class ASubdoorHandle2 : public IEntity
     {
     public:
 

@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Item
 {
-    class AHealthSmall : public BaseEntity
+    class AHealthSmall : public IEntity
     {
     public:
 

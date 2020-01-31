@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props3
 {
-    class ACash : public BaseEntity
+    class ACash : public IEntity
     {
     public:
 

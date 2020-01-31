@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Dm
 {
-    class ASafebag : public BaseEntity
+    class ASafebag : public IEntity
     {
     public:
 

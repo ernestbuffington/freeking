@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props2
 {
-    class APinballMachine : public BaseEntity
+    class APinballMachine : public IEntity
     {
     public:
 

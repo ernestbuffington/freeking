@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Misc
 {
-    class ACar : public BaseEntity
+    class ACar : public IEntity
     {
     public:
 

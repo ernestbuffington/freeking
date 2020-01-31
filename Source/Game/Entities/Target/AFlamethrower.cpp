@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Target
 {
-	AFlamethrower::AFlamethrower() : BaseEntity()
+	AFlamethrower::AFlamethrower() : IEntity()
 	{
 	}
 

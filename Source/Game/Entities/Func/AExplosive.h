@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IEntity.h"
+#include "BrushModelEntity.h"
 
 namespace Freeking::Entity::Func
 {

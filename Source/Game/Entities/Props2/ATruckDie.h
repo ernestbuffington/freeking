@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props2
 {
-    class ATruckDie : public BaseEntity
+    class ATruckDie : public IEntity
     {
     public:
 

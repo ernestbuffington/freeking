@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Ai
 {
-	ATyMoBoundry::ATyMoBoundry() : BaseEntity()
+	ATyMoBoundry::ATyMoBoundry() : IEntity()
 	{
 	}
 

@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Trigger
 {
-	APush::APush() : BaseEntity()
+	APush::APush() : IEntity()
 	{
 	}
 

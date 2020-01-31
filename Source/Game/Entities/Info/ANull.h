@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Info
 {
-    class ANull : public BaseEntity
+    class ANull : public IEntity
     {
     public:
 

@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props2
 {
-	ADeadguy::ADeadguy() : BaseEntity()
+	ADeadguy::ADeadguy() : IEntity()
 	{
 	}
 

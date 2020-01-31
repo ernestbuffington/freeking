@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Props
 {
-    class ATv : public BaseEntity
+    class ATv : public IEntity
     {
     public:
 

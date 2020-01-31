@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Misc
 {
-    class ABarryBitch : public BaseEntity
+    class ABarryBitch : public IEntity
     {
     public:
 
