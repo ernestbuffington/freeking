@@ -3,7 +3,7 @@
 
 namespace Freeking
 {
-	DoorEntity::DoorEntity() :
+	DoorEntity::DoorEntity() : BrushModelEntity(),
 		_speed(100.0f),
 		_angle(0.0f),
 		_time(0.0f)

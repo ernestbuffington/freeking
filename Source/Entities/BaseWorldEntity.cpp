@@ -5,7 +5,7 @@
 
 namespace Freeking
 {
-	BaseWorldEntity::BaseWorldEntity() :
+	BaseWorldEntity::BaseWorldEntity() : BaseEntity(),
 		_rootComponent(CreateComponent<SceneComponent>())
 	{
 	}
