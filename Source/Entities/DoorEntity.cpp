@@ -6,26 +6,27 @@ namespace Freeking
 	DoorEntity::DoorEntity() : BrushModelEntity(),
 		_speed(100.0f),
 		_angle(0.0f),
-		_time(0.0f)
+		_time(0.0f),
+		_distance(0.0f)
 	{
 	}
 
 	void DoorEntity::Initialize()
 	{
 		BrushModelEntity::Initialize();
+
+		if (_model)
+		{
+			_distance = (_model->BoundsMax - _model->BoundsMin).y - 8.0f;
+		}
 	}
 
 	void DoorEntity::Tick(double dt)
 	{
 		BrushModelEntity::Tick(dt);
 
-		_time += (dt * Math::DegreesToRadians(_speed));
-		_time = std::fmodf(_time, Math::TWO_PI);
-
-		float t = (std::sinf(_time) + 1.0f) * 0.5f;
-		float distance = (_model->BoundsMax - _model->BoundsMin).y - 8.0f;
-
-		SetPosition(_initialPosition + Vector3f(0, distance * (t * 1.0f), 0));
+		_time = std::fmodf(_time + (dt * Math::DegreesToRadians(_speed)), Math::TwoPi);
+		SetPosition(_initialPosition + Vector3f(0, _distance * ((std::sinf(_time) + 1.0f) * 0.5f), 0));
 	}
 
 	bool DoorEntity::SetProperty(const EntityKeyValue& keyValue)

@@ -22,6 +22,7 @@ namespace Freeking
 		float _speed;
 		float _angle;
 		float _time;
+		float _distance;
 		Vector3f _initialPosition;
 	};
 }

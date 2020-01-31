@@ -498,7 +498,7 @@ namespace Freeking
 			}
 			else if (cosAngle <= -1.0f)
 			{
-				return Math::PI;
+				return Math::Pi;
 			}
 			else
 			{

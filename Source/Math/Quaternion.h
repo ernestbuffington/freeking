@@ -38,7 +38,12 @@ namespace Freeking
 		static void Slerp(const Quaternion& from, const Quaternion& to, float fraction, Quaternion& result);
 		static Quaternion FromAxisAngle(const Vector3f& axis, float angle);
 		static Quaternion FromRadianAngles(const Vector3f& angle);
+		static Quaternion FromRadianAngles(float pitch, float yaw, float roll);
 		static Quaternion FromDegreeAngles(const Vector3f& angle);
+		static Quaternion FromDegreeAngles(float pitch, float yaw, float roll);
+		static Quaternion FromDegreePitch(float pitch);
+		static Quaternion FromDegreeYaw(float yaw);
+		static Quaternion FromDegreeRoll(float roll);
 
 		Vector3f operator*(const Vector3f& v) const;
 		Quaternion operator+(const Quaternion& v) const;

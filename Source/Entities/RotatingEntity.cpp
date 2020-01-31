@@ -11,7 +11,7 @@ namespace Freeking
 	{
 		BrushModelEntity::Tick(dt);
 
-		AddRotation(Quaternion::FromDegreeAngles(Vector3f(0, _speed * dt, 0)));
+		AddRotation(Quaternion::FromDegreeYaw(_speed * dt));
 	}
 
 	bool RotatingEntity::SetProperty(const EntityKeyValue& keyValue)

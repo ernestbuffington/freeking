@@ -161,7 +161,7 @@ namespace Freeking
 		Vector3f angles;
 		float s = sqrt(m[0][0] * m[0][0] + m[0][1] * m[0][1]);
 
-		if (s > Math::EPSILON)
+		if (s > Math::Epsilon)
 		{
 			angles.x = -atan2(m[0][2], s);
 			angles.y = atan2(m[0][1], m[0][0]);

@@ -86,8 +86,8 @@ namespace Freeking
 			{
 				float u = j / (float)(theta - 1);
 				float v = i / (float)(phi - 1);
-				float t = Math::TWO_PI * u;
-				float p = Math::PI * v;
+				float t = Math::TwoPi * u;
+				float p = Math::Pi * v;
 
 				Vector3f vertex(
 					radius * sin(p) * cos(t),
@@ -126,7 +126,7 @@ namespace Freeking
 
 		for (std::size_t i = 0; i <= sides; ++i)
 		{
-			float r = Math::TWO_PI * (i / (float)sides);
+			float r = Math::TwoPi * (i / (float)sides);
 			Vector3f vertex(radius * cos(r), 0.0f, radius * sin(r));
 			vertices.push_back(position + vertex);
 		}
@@ -152,7 +152,7 @@ namespace Freeking
 
 		for (std::size_t i = 0; i <= sides; ++i)
 		{
-			float r = Math::TWO_PI * (i / (float)sides);
+			float r = Math::TwoPi * (i / (float)sides);
 			Vector3f vertex(radius * cos(r), 0.0f, radius * sin(r));
 			vertices.push_back(position + (rotation * vertex));
 		}

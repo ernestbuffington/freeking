@@ -215,9 +215,14 @@ namespace Freeking
 
 	Quaternion Quaternion::FromRadianAngles(const Vector3f& angles)
 	{
-		Quaternion q(FromAxisAngle(Vector3f(0.0f, 0.0f, 1.0f), angles.z) *
-			FromAxisAngle(Vector3f(0.0f, 1.0f, 0.0f), angles.y) *
-			FromAxisAngle(Vector3f(1.0f, 0.0f, 0.0f), angles.x));
+		return FromRadianAngles(angles.x, angles.y, angles.z);
+	}
+
+	Quaternion Quaternion::FromRadianAngles(float pitch, float yaw, float roll)
+	{
+		Quaternion q(FromAxisAngle(Vector3f(0.0f, 0.0f, 1.0f), roll) *
+			FromAxisAngle(Vector3f(0.0f, 1.0f, 0.0f), yaw) *
+			FromAxisAngle(Vector3f(1.0f, 0.0f, 0.0f), pitch));
 
 		q.Normalise();
 
@@ -226,9 +231,29 @@ namespace Freeking
 
 	Quaternion Quaternion::FromDegreeAngles(const Vector3f& angles)
 	{
-		return FromRadianAngles(Vector3f(Math::DegreesToRadians(angles.x),
-			Math::DegreesToRadians(angles.y),
-			Math::DegreesToRadians(angles.z)));
+		return FromDegreeAngles(angles.x, angles.y, angles.z);
+	}
+
+	Quaternion Quaternion::FromDegreeAngles(float pitch, float yaw, float roll)
+	{
+		return FromRadianAngles(Vector3f(Math::DegreesToRadians(pitch),
+			Math::DegreesToRadians(yaw),
+			Math::DegreesToRadians(roll)));
+	}
+
+	Quaternion Quaternion::FromDegreePitch(float pitch)
+	{
+		return FromRadianAngles(Math::DegreesToRadians(pitch), 0, 0);
+	}
+
+	Quaternion Quaternion::FromDegreeYaw(float yaw)
+	{
+		return FromRadianAngles(0, Math::DegreesToRadians(yaw), 0);
+	}
+
+	Quaternion Quaternion::FromDegreeRoll(float roll)
+	{
+		return FromRadianAngles(0, 0, Math::DegreesToRadians(roll));
 	}
 
 	Vector3f Quaternion::ToRadianAngles() const
