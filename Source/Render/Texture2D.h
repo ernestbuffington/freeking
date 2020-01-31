@@ -2,7 +2,7 @@
 
 #include "Texture.h"
 #include "AssetLibrary.h"
-#include <glad/glad.h>
+#include <glad/gl.h>
 
 namespace Freeking
 {

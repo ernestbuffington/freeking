@@ -3,7 +3,7 @@
 #include "Vector.h"
 #include "Matrix3x3.h"
 #include "Matrix4x4.h"
-#include <glad/glad.h>
+#include <glad/gl.h>
 #include <unordered_map>
 #include <memory>
 

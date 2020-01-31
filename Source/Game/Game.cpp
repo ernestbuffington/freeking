@@ -26,7 +26,7 @@
 #include "PakFileSystem.h"
 #include "Material.h"
 #include "Renderer.h"
-#include <glad/glad.h>
+#include <glad/gl.h>
 #include <iostream>
 #include <fstream>
 #include <memory>
