@@ -19,9 +19,9 @@ namespace Freeking
 		static inline float DegreesToRadians(float degrees) { return degrees * (Pi / 180.0f); }
 
 		static inline float Abs(float v) { return fabsf(v); }
-		static inline bool Mod(float a, float b) { return fmodf(a, b); }
-		static inline bool Sin(float a) { return sinf(a); }
-		static inline bool Cos(float a) { return cosf(a); }
+		static inline float Mod(float a, float b) { return fmodf(a, b); }
+		static inline float Sin(float a) { return sinf(a); }
+		static inline float Cos(float a) { return cosf(a); }
 		static inline float Round(float a) { return roundf(a); }
 
 		static inline bool FloatEqual(float a, float b, float tolerance = Epsilon) { return Abs(a - b) <= tolerance; }

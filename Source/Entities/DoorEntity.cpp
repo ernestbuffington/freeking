@@ -25,7 +25,7 @@ namespace Freeking
 	{
 		BrushModelEntity::Tick(dt);
 
-		_time = Math::Mod(_time + ((float)dt * Math::DegreesToRadians(_speed)), Math::TwoPi);
+		_time = Math::Mod(_time + (float)(dt * Math::DegreesToRadians(_speed)), Math::TwoPi);
 		SetPosition(_initialPosition + Vector3f(0, _distance * ((Math::Sin(_time) + 1.0f) * 0.5f), 0));
 	}
 

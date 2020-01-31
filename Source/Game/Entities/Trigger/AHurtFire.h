@@ -1,23 +1,12 @@
 #pragma once
 
-#include "IEntity.h"
+#include "BrushModelEntity.h"
 
 namespace Freeking::Entity::Trigger
 {
-    class AHurtFire : public IEntity
+    class AHurtFire : public BrushModelEntity
     {
     public:
-
-        AHurtFire();
-
-		virtual void Initialize() override;
-		virtual void Tick(double dt) override;
-
-	protected:
-
-		virtual bool SetProperty(const EntityKeyValue& keyValue) override;
-
-    private:
 
     };
 }

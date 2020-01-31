@@ -63,11 +63,16 @@ namespace Freeking
 				return nullptr;
 			}
 
+			if (auto it = _specialAssets.find(name); it != _specialAssets.end())
+			{
+				return it->second;
+			}
+
 			auto absolutePath = PathStack::Top() / name;
 			auto absoluteName = absolutePath.string();
 			std::replace(absoluteName.begin(), absoluteName.end(), '\\', '/');
 
-			if (auto it = _dictionary.find(absoluteName); it != _dictionary.end())
+			if (auto it = _pathAssets.find(absoluteName); it != _pathAssets.end())
 			{
 				return it->second;
 			}
@@ -100,7 +105,7 @@ namespace Freeking
 
 					if (auto asset = loader->Load(absoluteName))
 					{
-						_dictionary.emplace(absoluteName, asset);
+						_pathAssets.emplace(absoluteName, asset);
 
 						return asset;
 					}
@@ -108,6 +113,11 @@ namespace Freeking
 
 				return nullptr;
 			}
+		}
+
+		void SetSpecialNamed(const std::string& name, AssetPtr asset)
+		{
+			_specialAssets.emplace(name, asset);
 		}
 
 	protected:
@@ -121,7 +131,8 @@ namespace Freeking
 
 	private:
 
-		std::unordered_map<std::string, AssetPtr> _dictionary;
+		std::unordered_map<std::string, AssetPtr> _pathAssets;
+		std::unordered_map<std::string, AssetPtr> _specialAssets;
 		std::vector<AssetLoaderPtr> _loaders;
 	};
 }

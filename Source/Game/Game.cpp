@@ -104,6 +104,9 @@ namespace Freeking
 		_window->Swap();
 
 
+		Texture2D::Library.SetSpecialNamed("pink", std::make_shared<Texture2D>(2, 2, 255, 0, 255));
+		auto pink = Texture2D::Library.Get("pink");
+
 		Renderer renderer;
 
 		std::string mapName("sr1");

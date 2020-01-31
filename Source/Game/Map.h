@@ -9,6 +9,7 @@
 #include <string>
 #include <memory>
 #include <charconv>
+#include <array>
 
 namespace Freeking
 {
@@ -28,7 +29,7 @@ namespace Freeking
 		{
 			Vector3f Position;
 			Vector3f Normal;
-			Vector2f UV[3] = {};
+			std::array<Vector2f, 3> UV;
 		};
 
 		BrushMesh() :

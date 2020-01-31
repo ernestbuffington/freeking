@@ -325,7 +325,7 @@ namespace Freeking
 		_lightmapTexture = std::make_shared<Texture2D>(
 			lmSize,
 			lmSize,
-			GL_RGBA,
+			GL_RGBA8,
 			GL_RGB,
 			GL_UNSIGNED_BYTE,
 			lightmapImage->Data.data());

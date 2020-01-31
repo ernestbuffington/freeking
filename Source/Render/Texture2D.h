@@ -23,6 +23,7 @@ namespace Freeking
 
 		Texture2D() = delete;
 		Texture2D(GLsizei width, GLsizei height, GLenum internalFormat, GLenum format, GLenum type, const void* data);
+		Texture2D(GLsizei width, GLsizei height, uint8_t r, uint8_t g, uint8_t b);
 		~Texture2D();
 
 		void Bind() const;

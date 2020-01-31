@@ -1,23 +1,12 @@
 #pragma once
 
-#include "IEntity.h"
+#include "BrushModelEntity.h"
 
 namespace Freeking::Entity::Func
 {
-    class AButton : public IEntity
+    class AButton : public BrushModelEntity
     {
     public:
-
-        AButton();
-
-		virtual void Initialize() override;
-		virtual void Tick(double dt) override;
-
-	protected:
-
-		virtual bool SetProperty(const EntityKeyValue& keyValue) override;
-
-    private:
 
     };
 }

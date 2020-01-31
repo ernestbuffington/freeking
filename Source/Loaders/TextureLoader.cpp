@@ -27,7 +27,7 @@ namespace Freeking
 			{
 				auto texture = std::make_shared<Texture2D>(
 					imageWidth, imageHeight,
-					GL_RGBA, imageChannels == 3 ? GL_RGB : GL_RGBA,
+					GL_RGBA8, imageChannels == 3 ? GL_RGB : GL_RGBA,
 					GL_UNSIGNED_BYTE,
 					image);
 
