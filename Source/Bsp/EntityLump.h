@@ -41,7 +41,7 @@ namespace Freeking
 		{
 		public:
 
-			operator T() const { return value; }
+			operator const T&() const { return value; }
 			const T& operator*() const { return value; }
 			explicit operator bool() const { return !unset; }
 
