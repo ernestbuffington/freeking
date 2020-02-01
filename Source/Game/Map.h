@@ -105,5 +105,6 @@ namespace Freeking
 		std::vector<std::shared_ptr<BaseEntity>> _entities;
 		std::vector<std::shared_ptr<PrimitiveEntity>> _worldEntities;
 		std::vector<EntityProperties> _entityKeyValues;
+		double _time;
 	};
 }

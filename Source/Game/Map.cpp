@@ -89,6 +89,8 @@ namespace Freeking
 
 	void Map::Tick(double dt)
 	{
+		_time += dt;
+
 		for (const auto& entity : _entities)
 		{
 			entity->Tick(dt);
@@ -101,7 +103,24 @@ namespace Freeking
 		_material->SetParameterValue("viewProj", viewProjection);
 		_material->SetParameterValue("diffuse", 0);
 		_material->SetParameterValue("lightmap", 1);
-		_material->SetParameterValue("brightness", 2.0f);
+
+		static const uint8_t lightSequence[] = "mmamammmmammamamaaamammma";
+		int sequenceLength = 25;
+		double t = fmod(_time, (double)sequenceLength) * 20.0;
+		int index = (int)floor(t);
+		double delta = t - (double)index;
+		index %= sequenceLength;
+		int nextIndex = (index + 1) % sequenceLength;
+		float brightnessA = (float)(lightSequence[index] - 97) / 25.0f;
+		float brightnessB = (float)(lightSequence[nextIndex] - 97) / 25.0f;
+		float brightness = (brightnessA + delta * (brightnessB - brightnessA));
+
+		if (brightness < 0.0f)
+		{
+			brightness = brightness;
+		}
+
+		_material->SetParameterValue("brightness", brightness * 2.0f);
 
 		glDisable(GL_BLEND);
 
@@ -129,7 +148,8 @@ namespace Freeking
 		_material->Unbind();
 	}
 
-	Map::Map(const BspFile& bspFile)
+	Map::Map(const BspFile& bspFile) :
+		_time(0.0)
 	{
 		Map::Current = this;
 
