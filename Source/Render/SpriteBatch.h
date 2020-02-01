@@ -31,6 +31,7 @@ namespace Freeking
 		SpriteBatch(size_t = 1000);
 
 		void Flush(const Matrix4x4&, float = 1.0f);
+		void Clear();
 		void DrawText(const Font*, const std::string&, const Vector2f&, const Vector4f&, float);
 		void Draw(Texture2D*, const Vector2f&, float, const Vector4f&);
 		void Draw(Texture2D*, const Vector2f&, const Vector2f&, const Vector4f&);

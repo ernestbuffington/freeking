@@ -340,6 +340,9 @@ namespace Freeking
 				spriteBatch->Flush(orthoProjection);
 			}
 
+			lineRenderer->Clear();
+			spriteBatch->Clear();
+
 			_window->Swap();
 		}
 	}

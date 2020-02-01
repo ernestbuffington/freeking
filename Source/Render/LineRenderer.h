@@ -24,6 +24,7 @@ namespace Freeking
 		void DrawCone(const Vector3f& position, const Quaternion& rotation, float radius, float height, std::size_t sides, const Vector4f& colour);
 
 		void Flush(Matrix4x4& viewProj);
+		void Clear();
 
 		inline std::size_t GetVertexCount() const { return _vertexCount; }
 		inline std::size_t GetMaxVertexCount() const { return _maxVertexCount; }

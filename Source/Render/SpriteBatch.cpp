@@ -528,7 +528,12 @@ namespace Freeking
 		_vertexBinding->Unbind();
 
 		glEnable(GL_DEPTH_TEST);
+	}
 
+	void SpriteBatch::Clear()
+	{
+		_spritesToDraw.clear();
+		_textToDraw.clear();
 	}
 
 	void SpriteBatch::DrawSprites(const Matrix4x4& proj, float scale, const std::shared_ptr<Material>& material, std::vector<SpriteBatch::Sprite>& sprites)

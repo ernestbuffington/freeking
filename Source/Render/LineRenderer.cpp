@@ -45,6 +45,11 @@ namespace Freeking
 		_material->Unbind();
 	}
 
+	void LineRenderer::Clear()
+	{
+		_vertexCount = 0;
+	}
+
 	void LineRenderer::DrawLine(const Vector3f& p1, const Vector3f& p2, const Vector4f& colour)
 	{
 		BufferVertex(p1, colour);
