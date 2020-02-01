@@ -115,11 +115,6 @@ namespace Freeking
 		float brightnessB = (float)(lightSequence[nextIndex] - 97) / 25.0f;
 		float brightness = (brightnessA + delta * (brightnessB - brightnessA));
 
-		if (brightness < 0.0f)
-		{
-			brightness = brightness;
-		}
-
 		_material->SetParameterValue("brightness", brightness * 2.0f);
 
 		glDisable(GL_BLEND);
