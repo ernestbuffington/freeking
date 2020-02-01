@@ -10,6 +10,7 @@ namespace Freeking
 
 		ButtonEntity();
 
+		virtual void Initialize() override;
 		virtual void Tick(double dt) override;
 
 	protected:
@@ -24,6 +25,8 @@ namespace Freeking
 		float _angle;
 		float _lip;
 		float _time;
+		float _moveDistance;
+		Vector3f _moveDirection;
 		Vector3f _initialPosition;
 	};
 

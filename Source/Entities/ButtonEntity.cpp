@@ -7,27 +7,28 @@ namespace Freeking
 		_speed(500.0f),
 		_angle(0.0f),
 		_lip(0.0f),
-		_time(0.0f)
+		_time(0.0f),
+		_moveDistance(0.0f)
 	{
+	}
+
+	void ButtonEntity::Initialize()
+	{
+		BrushModelEntity::Initialize();
+
+		_initialPosition = GetPosition();
+
+		auto yaw = Quaternion::FromDegreeYaw(_angle);
+		_moveDistance = _lip - (yaw * (GetLocalMaxBounds() - GetLocalMinBounds())).x;
+		_moveDirection = (yaw * Vector3f(1, 0, 0)).Normalise();
 	}
 
 	void ButtonEntity::Tick(double dt)
 	{
 		BrushModelEntity::Tick(dt);
 
-		auto rotation = Quaternion::FromDegreeYaw(_angle);
-
-		float distance = 0.0f;
-		if (_model)
-		{
-			auto extent = rotation * (GetLocalMaxBounds() - GetLocalMinBounds());
-			distance = _lip - extent.x;
-		}
-
 		_time = Math::Mod(_time + (float)(dt * Math::DegreesToRadians(_speed)), Math::TwoPi);
-		auto direction = rotation * Vector3f(1, 0, 0);
-		distance *= Math::Clamp((Math::Sin(_time) + 1.0f) * 0.5f, 0.0f, 1.0f);
-		SetPosition(_initialPosition + (direction.Normalise() * distance));
+		SetPosition(_initialPosition + (_moveDirection * (_moveDistance * Math::SineWave(_time))));
 	}
 
 	bool ButtonEntity::SetProperty(const EntityProperty& property)

@@ -24,6 +24,8 @@ namespace Freeking
 		static inline float Cos(float a) { return cosf(a); }
 		static inline float Round(float a) { return roundf(a); }
 
+		static inline float SineWave(float v) { return Clamp((Sin(v) + 1.0f) * 0.5f, 0.0f, 1.0f); }
+
 		static inline bool FloatEqual(float a, float b, float tolerance = Epsilon) { return Abs(a - b) <= tolerance; }
 
 		static inline float Sign(float a)

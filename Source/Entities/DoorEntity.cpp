@@ -15,10 +15,8 @@ namespace Freeking
 	{
 		BrushModelEntity::Initialize();
 
-		if (_model)
-		{
-			_distance = (GetLocalMaxBounds() - GetLocalMinBounds()).y - 8.0f;
-		}
+		_initialPosition = GetPosition();
+		_distance = (GetLocalMaxBounds() - GetLocalMinBounds()).y - 8.0f;
 	}
 
 	void DoorEntity::Tick(double dt)
@@ -26,7 +24,7 @@ namespace Freeking
 		BrushModelEntity::Tick(dt);
 
 		_time = Math::Mod(_time + (float)(dt * Math::DegreesToRadians(_speed)), Math::TwoPi);
-		SetPosition(_initialPosition + Vector3f(0, _distance * ((Math::Sin(_time) + 1.0f) * 0.5f), 0));
+		SetPosition(_initialPosition + Vector3f(0, _distance * Math::SineWave(_time), 0));
 	}
 
 	bool DoorEntity::SetProperty(const EntityProperty& property)
