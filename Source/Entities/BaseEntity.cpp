@@ -9,6 +9,11 @@ namespace Freeking
 			_name = name;
 		}
 
+		if (auto classname = properties.GetClassnameProperty())
+		{
+			_classname = classname;
+		}
+
 		for (const auto& property : properties.GetKeyValues())
 		{
 			SetProperty(property);

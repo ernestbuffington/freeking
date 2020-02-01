@@ -112,7 +112,8 @@ namespace Freeking
 		std::string mapName("sr1");
 
 		auto lineRenderer = std::make_unique<LineRenderer>(2000000);
-		auto spriteBatch = std::make_unique<SpriteBatch>(1000);
+		auto spriteBatch = std::make_shared<SpriteBatch>(10000);
+		SpriteBatch::Debug = spriteBatch;
 		FreeCamera camera;
 		bool debug = true;
 		auto font = Font::Library.Get("Fonts/Roboto-Bold.json");
@@ -223,6 +224,11 @@ namespace Freeking
 			Matrix4x4 projectionMatrix = Matrix4x4::Perspective(80, (float)_viewportWidth / (float)_viewportHeight, 0.1f, 10000.0f);
 			Matrix4x4 viewMatrix = camera.GetViewMatrix();
 			Matrix4x4 viewProjectionMatrix = projectionMatrix * viewMatrix;
+
+			SpriteBatch::ProjectionMatrix = projectionMatrix;
+			SpriteBatch::ViewMatrix = viewMatrix;
+			SpriteBatch::ViewportWidth = _viewportWidth;
+			SpriteBatch::ViewportHeight = _viewportHeight;
 
 			map->Tick(deltaTime);
 			map->Render(viewProjectionMatrix, lineRenderer.get());

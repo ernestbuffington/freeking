@@ -15,7 +15,7 @@ namespace Freeking
 		Vector4f in(position.x, position.y, position.z, 1.0f);
 		in = projectionMatrix * (viewMatrix * in);
 
-		if (in.w < 0.001f || in.w > maxDistance)
+		if (in.w < 0.001f)
 		{
 			return false;
 		}

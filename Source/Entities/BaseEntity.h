@@ -32,5 +32,6 @@ namespace Freeking
 		virtual bool SetProperty(const EntityProperty& property);
 
 		std::string _name;
+		std::string _classname;
 	};
 }

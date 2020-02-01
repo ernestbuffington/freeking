@@ -22,6 +22,12 @@ namespace Freeking
 	{
 	public:
 
+		static std::shared_ptr<SpriteBatch> Debug;
+		static Matrix4x4 ProjectionMatrix;
+		static Matrix4x4 ViewMatrix;
+		static float ViewportWidth;
+		static float ViewportHeight;
+
 		SpriteBatch(size_t = 1000);
 
 		void Flush(const Matrix4x4&, float = 1.0f);

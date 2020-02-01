@@ -11,6 +11,12 @@
 
 namespace Freeking
 {
+	std::shared_ptr<SpriteBatch> SpriteBatch::Debug = nullptr;
+	Matrix4x4 SpriteBatch::ProjectionMatrix;
+	Matrix4x4 SpriteBatch::ViewMatrix;
+	float SpriteBatch::ViewportWidth;
+	float SpriteBatch::ViewportHeight;
+
 	std::shared_ptr<Material> SpriteBatch::GetSpriteMaterial()
 	{
 		static auto material = std::make_shared<Material>(Shader::Library.Get("Shaders/Sprite.shader"));
@@ -21,6 +27,12 @@ namespace Freeking
 	{
 		static auto material = std::make_shared<Material>(Shader::Library.Get("Shaders/Text.shader"));
 		return material;
+	}
+
+	static std::shared_ptr<Font> GetDebugFont()
+	{
+		static auto font = Font::Library.Get("Fonts/Roboto-Bold.json");
+		return font;
 	}
 
 	SpriteBatch::Sprite::Sprite(
@@ -84,7 +96,12 @@ namespace Freeking
 	{
 		if (font == nullptr)
 		{
-			return;
+			font = GetDebugFont().get();
+
+			if (font == nullptr)
+			{
+				return;
+			}
 		}
 
 		Font::Character character;
