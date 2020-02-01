@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props2
 	{
 	}
 
-	bool ABarrelsPvB::SetProperty(const EntityKeyValue& keyValue)
+	bool ABarrelsPvB::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

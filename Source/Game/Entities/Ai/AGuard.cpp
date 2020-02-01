@@ -14,7 +14,7 @@ namespace Freeking::Entity::Ai
 	{
 	}
 
-	bool AGuard::SetProperty(const EntityKeyValue& keyValue)
+	bool AGuard::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

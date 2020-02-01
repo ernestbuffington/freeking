@@ -14,7 +14,7 @@ namespace Freeking::Entity::Func
 	{
 	}
 
-	bool AConveyor::SetProperty(const EntityKeyValue& keyValue)
+	bool AConveyor::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

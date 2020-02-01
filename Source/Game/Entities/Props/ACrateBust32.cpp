@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props
 	{
 	}
 
-	bool ACrateBust32::SetProperty(const EntityKeyValue& keyValue)
+	bool ACrateBust32::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

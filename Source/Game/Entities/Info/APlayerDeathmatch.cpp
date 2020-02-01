@@ -14,7 +14,7 @@ namespace Freeking::Entity::Info
 	{
 	}
 
-	bool APlayerDeathmatch::SetProperty(const EntityKeyValue& keyValue)
+	bool APlayerDeathmatch::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

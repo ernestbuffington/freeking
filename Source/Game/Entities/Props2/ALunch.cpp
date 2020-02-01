@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props2
 	{
 	}
 
-	bool ALunch::SetProperty(const EntityKeyValue& keyValue)
+	bool ALunch::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

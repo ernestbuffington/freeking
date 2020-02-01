@@ -14,7 +14,7 @@ namespace Freeking::Entity::Light
 	{
 	}
 
-	bool ABulb::SetProperty(const EntityKeyValue& keyValue)
+	bool ABulb::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

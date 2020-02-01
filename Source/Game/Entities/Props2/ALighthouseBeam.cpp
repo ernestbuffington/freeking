@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props2
 	{
 	}
 
-	bool ALighthouseBeam::SetProperty(const EntityKeyValue& keyValue)
+	bool ALighthouseBeam::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

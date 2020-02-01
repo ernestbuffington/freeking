@@ -14,7 +14,7 @@ namespace Freeking::Entity::Ai
 	{
 	}
 
-	bool ATriggerCharacter::SetProperty(const EntityKeyValue& keyValue)
+	bool ATriggerCharacter::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

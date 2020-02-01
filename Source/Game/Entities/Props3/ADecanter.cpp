@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props3
 	{
 	}
 
-	bool ADecanter::SetProperty(const EntityKeyValue& keyValue)
+	bool ADecanter::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

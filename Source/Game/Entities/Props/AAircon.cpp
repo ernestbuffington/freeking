@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props
 	{
 	}
 
-	bool AAircon::SetProperty(const EntityKeyValue& keyValue)
+	bool AAircon::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

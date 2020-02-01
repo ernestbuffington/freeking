@@ -14,7 +14,7 @@ namespace Freeking::Entity::Target
 	{
 	}
 
-	bool ALightramp::SetProperty(const EntityKeyValue& keyValue)
+	bool ALightramp::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

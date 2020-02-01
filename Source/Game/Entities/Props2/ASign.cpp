@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props2
 	{
 	}
 
-	bool ASign::SetProperty(const EntityKeyValue& keyValue)
+	bool ASign::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

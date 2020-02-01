@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props2
 	{
 	}
 
-	bool AVasea::SetProperty(const EntityKeyValue& keyValue)
+	bool AVasea::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

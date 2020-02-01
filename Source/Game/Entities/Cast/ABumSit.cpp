@@ -14,7 +14,7 @@ namespace Freeking::Entity::Cast
 	{
 	}
 
-	bool ABumSit::SetProperty(const EntityKeyValue& keyValue)
+	bool ABumSit::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

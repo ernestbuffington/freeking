@@ -14,7 +14,7 @@ namespace Freeking::Entity::Light
 	{
 	}
 
-	bool AChandelier::SetProperty(const EntityKeyValue& keyValue)
+	bool AChandelier::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

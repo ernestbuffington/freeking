@@ -14,7 +14,7 @@ namespace Freeking::Entity::Ep
 	{
 	}
 
-	bool ASkidrowFlag::SetProperty(const EntityKeyValue& keyValue)
+	bool ASkidrowFlag::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

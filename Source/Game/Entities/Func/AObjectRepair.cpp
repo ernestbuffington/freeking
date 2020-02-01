@@ -14,7 +14,7 @@ namespace Freeking::Entity::Func
 	{
 	}
 
-	bool AObjectRepair::SetProperty(const EntityKeyValue& keyValue)
+	bool AObjectRepair::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

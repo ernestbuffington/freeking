@@ -18,7 +18,7 @@ namespace Freeking
 		BaseEntity() = default;
 		virtual ~BaseEntity() = default;
 
-		virtual void InitializeProperties(const EntityLump::EntityDef& def);
+		virtual void InitializeProperties(const EntityProperties& properties);
 		virtual void Initialize();
 		virtual void PostInitialize();
 		virtual void Tick(double dt);
@@ -29,7 +29,7 @@ namespace Freeking
 
 	protected:
 
-		virtual bool SetProperty(const EntityKeyValue& keyValue) = 0;
+		virtual bool SetProperty(const EntityProperty& property);
 
 		std::string _name;
 	};

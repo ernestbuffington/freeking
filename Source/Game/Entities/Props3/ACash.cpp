@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props3
 	{
 	}
 
-	bool ACash::SetProperty(const EntityKeyValue& keyValue)
+	bool ACash::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

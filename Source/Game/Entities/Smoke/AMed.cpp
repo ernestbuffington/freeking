@@ -14,7 +14,7 @@ namespace Freeking::Entity::Smoke
 	{
 	}
 
-	bool AMed::SetProperty(const EntityKeyValue& keyValue)
+	bool AMed::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

@@ -14,7 +14,7 @@ namespace Freeking::Entity::Cast
 	{
 	}
 
-	bool AShorty::SetProperty(const EntityKeyValue& keyValue)
+	bool AShorty::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

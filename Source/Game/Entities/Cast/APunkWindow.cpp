@@ -14,7 +14,7 @@ namespace Freeking::Entity::Cast
 	{
 	}
 
-	bool APunkWindow::SetProperty(const EntityKeyValue& keyValue)
+	bool APunkWindow::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

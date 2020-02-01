@@ -14,7 +14,7 @@ namespace Freeking::Entity::Trigger
 	{
 	}
 
-	bool AUnlock::SetProperty(const EntityKeyValue& keyValue)
+	bool AUnlock::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

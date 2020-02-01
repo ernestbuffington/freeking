@@ -14,7 +14,7 @@ namespace Freeking::Entity::Ai
 	{
 	}
 
-	bool AMokerNotinoffice::SetProperty(const EntityKeyValue& keyValue)
+	bool AMokerNotinoffice::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

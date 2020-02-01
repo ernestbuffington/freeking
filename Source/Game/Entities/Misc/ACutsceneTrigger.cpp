@@ -14,7 +14,7 @@ namespace Freeking::Entity::Misc
 	{
 	}
 
-	bool ACutsceneTrigger::SetProperty(const EntityKeyValue& keyValue)
+	bool ACutsceneTrigger::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

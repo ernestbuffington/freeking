@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props
 	{
 	}
 
-	bool AExtinguisherb::SetProperty(const EntityKeyValue& keyValue)
+	bool AExtinguisherb::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

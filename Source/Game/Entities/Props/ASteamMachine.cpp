@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props
 	{
 	}
 
-	bool ASteamMachine::SetProperty(const EntityKeyValue& keyValue)
+	bool ASteamMachine::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

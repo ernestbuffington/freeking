@@ -14,7 +14,7 @@ namespace Freeking::Entity::Hmg
 	{
 	}
 
-	bool AModCooling::SetProperty(const EntityKeyValue& keyValue)
+	bool AModCooling::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

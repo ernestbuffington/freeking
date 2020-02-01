@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props
 	{
 	}
 
-	bool ATrashwall::SetProperty(const EntityKeyValue& keyValue)
+	bool ATrashwall::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

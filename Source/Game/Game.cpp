@@ -123,21 +123,27 @@ namespace Freeking
 
 		std::vector<std::shared_ptr<Thug>> thugs;
 
-		for (const auto& entDef : map->GetEntityLump().Entities)
+		for (const auto& entDef : map->GetEntityProperties())
 		{
-			if (entDef.classname.substr(0, 5) == "cast_")
+			std::string classname = entDef.GetClassnameProperty();
+			if (classname.substr(0, 5) == "cast_")
 			{
-				if (entDef.classname == "cast_dog")
+				if (classname == "cast_dog")
 				{
 					continue;
 				}
 
-				auto thug = std::make_shared<Thug>(entDef);
-				Vector3f origin(entDef.origin.x, entDef.origin.z, -entDef.origin.y);
-				thug->ModelMatrix = Matrix4x4::Translation(origin) * Matrix3x3::RotationY(Math::DegreesToRadians(entDef.angle));
-				camera.MoveTo(origin);
+				if (auto originProperty = entDef.GetOriginProperty())
+				{
+					Vector3f origin = originProperty;
+					auto thug = std::make_shared<Thug>(entDef);
+					origin = Vector3f(origin.x, origin.z, -origin.y);
+					thug->ModelMatrix = Matrix4x4::Translation(origin) * Matrix3x3::RotationY(Math::DegreesToRadians(entDef.GetAngleProperty()));
+					camera.MoveTo(origin);
 
-				thugs.push_back(std::move(thug));
+					thugs.push_back(std::move(thug));
+				}
+
 			}
 		}
 
@@ -250,18 +256,21 @@ namespace Freeking
 
 			if (debug)
 			{
-				for (const auto& entDef : map->GetEntityLump().Entities)
+				for (const auto& entDef : map->GetEntityProperties())
 				{
-					Vector3f origin(entDef.origin.x, entDef.origin.z, -entDef.origin.y);
+					if (!entDef.GetOriginProperty())
+					{
+						continue;
+					}
+
+					auto origin = *entDef.GetOriginProperty();
+					origin = Vector3f(origin.x, origin.z, -origin.y);
 					float distance = origin.LengthBetween(camera.GetPosition());
 
 					if (distance >= 512.0f)
 					{
 						continue;
 					}
-
-					std::string name;
-					entDef.TryGetString("name", name);
 
 					Vector2f screenPosition;
 					if (Util::WorldPointToNormalisedScreenPoint(origin, screenPosition, projectionMatrix, viewMatrix, 512.0f))
@@ -271,7 +280,7 @@ namespace Freeking
 						screenPosition = Util::ScreenSpaceToPixelPosition(screenPosition, Vector4i(0, 0, _viewportWidth, _viewportHeight));
 						screenPosition.x = Math::Round(screenPosition.x);
 						screenPosition.y = Math::Round(screenPosition.y);
-						auto text = entDef.classname + " (" + name + ")";
+						auto text = *entDef.GetClassnameProperty() + " (" + *entDef.GetNameProperty() + ")";
 						spriteBatch->DrawText(font.get(), text, screenPosition + Vector2f(2, 2), Vector4f(0, 0, 0, alpha), 0.5f);
 						spriteBatch->DrawText(font.get(), text, screenPosition, Vector4f(1, 1, 1, alpha), 0.5f);
 					}

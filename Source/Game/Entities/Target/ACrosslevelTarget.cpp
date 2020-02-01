@@ -14,7 +14,7 @@ namespace Freeking::Entity::Target
 	{
 	}
 
-	bool ACrosslevelTarget::SetProperty(const EntityKeyValue& keyValue)
+	bool ACrosslevelTarget::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

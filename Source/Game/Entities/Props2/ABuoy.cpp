@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props2
 	{
 	}
 
-	bool ABuoy::SetProperty(const EntityKeyValue& keyValue)
+	bool ABuoy::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

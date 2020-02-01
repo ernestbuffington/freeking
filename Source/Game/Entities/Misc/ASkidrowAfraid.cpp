@@ -14,7 +14,7 @@ namespace Freeking::Entity::Misc
 	{
 	}
 
-	bool ASkidrowAfraid::SetProperty(const EntityKeyValue& keyValue)
+	bool ASkidrowAfraid::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

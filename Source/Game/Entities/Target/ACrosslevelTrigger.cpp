@@ -14,7 +14,7 @@ namespace Freeking::Entity::Target
 	{
 	}
 
-	bool ACrosslevelTrigger::SetProperty(const EntityKeyValue& keyValue)
+	bool ACrosslevelTrigger::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

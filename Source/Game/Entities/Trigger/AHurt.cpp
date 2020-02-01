@@ -14,7 +14,7 @@ namespace Freeking::Entity::Trigger
 	{
 	}
 
-	bool AHurt::SetProperty(const EntityKeyValue& keyValue)
+	bool AHurt::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

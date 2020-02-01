@@ -14,7 +14,7 @@ namespace Freeking::Entity::Elements
 	{
 	}
 
-	bool ARaincloud::SetProperty(const EntityKeyValue& keyValue)
+	bool ARaincloud::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

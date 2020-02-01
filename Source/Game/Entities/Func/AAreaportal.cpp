@@ -14,7 +14,7 @@ namespace Freeking::Entity::Func
 	{
 	}
 
-	bool AAreaportal::SetProperty(const EntityKeyValue& keyValue)
+	bool AAreaportal::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

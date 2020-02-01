@@ -14,7 +14,7 @@ namespace Freeking::Entity::Ai
 	{
 	}
 
-	bool ASafespot::SetProperty(const EntityKeyValue& keyValue)
+	bool ASafespot::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

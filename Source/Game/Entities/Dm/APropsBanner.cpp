@@ -14,7 +14,7 @@ namespace Freeking::Entity::Dm
 	{
 	}
 
-	bool APropsBanner::SetProperty(const EntityKeyValue& keyValue)
+	bool APropsBanner::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

@@ -14,7 +14,7 @@ namespace Freeking::Entity::Target
 	{
 	}
 
-	bool ALaser::SetProperty(const EntityKeyValue& keyValue)
+	bool ALaser::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

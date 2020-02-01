@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props2
 	{
 	}
 
-	bool AChairPush::SetProperty(const EntityKeyValue& keyValue)
+	bool AChairPush::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

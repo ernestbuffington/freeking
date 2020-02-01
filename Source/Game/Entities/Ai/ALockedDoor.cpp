@@ -14,7 +14,7 @@ namespace Freeking::Entity::Ai
 	{
 	}
 
-	bool ALockedDoor::SetProperty(const EntityKeyValue& keyValue)
+	bool ALockedDoor::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

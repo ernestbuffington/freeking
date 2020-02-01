@@ -14,7 +14,7 @@ namespace Freeking::Entity::Ai
 	{
 	}
 
-	bool APvDeadlouie::SetProperty(const EntityKeyValue& keyValue)
+	bool APvDeadlouie::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

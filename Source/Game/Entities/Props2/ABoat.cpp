@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props2
 	{
 	}
 
-	bool ABoat::SetProperty(const EntityKeyValue& keyValue)
+	bool ABoat::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

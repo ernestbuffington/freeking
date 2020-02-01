@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props
 	{
 	}
 
-	bool AWallFall::SetProperty(const EntityKeyValue& keyValue)
+	bool AWallFall::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

@@ -8,12 +8,29 @@ namespace Freeking
 	{
 	}
 
-	void SceneEntity::InitializeProperties(const EntityLump::EntityDef& def)
+	void SceneEntity::InitializeProperties(const EntityProperties& properties)
 	{
-		BaseEntity::InitializeProperties(def);
+		BaseEntity::InitializeProperties(properties);
 
-		SetPosition(Vector3f(def.origin.x, def.origin.z, -def.origin.y));
-		SetRotation(Quaternion::FromDegreeAngles(Vector3f(0, def.angle, 0)));
+		if (auto origin = properties.GetOriginProperty())
+		{
+			InitializeOriginProperty(origin);
+		}
+
+		if (auto angle = properties.GetAngleProperty())
+		{
+			InitializeAngleProperty(angle);
+		}
+	}
+
+	void SceneEntity::InitializeOriginProperty(const Vector3f& origin)
+	{
+		SetPosition(Util::ConvertVector(origin));
+	}
+
+	void SceneEntity::InitializeAngleProperty(float angle)
+	{
+		SetRotation(Quaternion::FromDegreeYaw(angle));
 	}
 
 	void SceneEntity::Initialize()
@@ -43,7 +60,7 @@ namespace Freeking
 		BaseEntity::Spawn();
 	}
 
-	bool SceneEntity::SetProperty(const EntityKeyValue& keyValue)
+	bool SceneEntity::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

@@ -14,7 +14,7 @@ namespace Freeking::Entity::Cast
 	{
 	}
 
-	bool ARosie::SetProperty(const EntityKeyValue& keyValue)
+	bool ARosie::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

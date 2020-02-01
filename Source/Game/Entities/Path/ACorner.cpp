@@ -14,7 +14,7 @@ namespace Freeking::Entity::Path
 	{
 	}
 
-	bool ACorner::SetProperty(const EntityKeyValue& keyValue)
+	bool ACorner::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

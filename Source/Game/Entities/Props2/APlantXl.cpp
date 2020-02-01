@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props2
 	{
 	}
 
-	bool APlantXl::SetProperty(const EntityKeyValue& keyValue)
+	bool APlantXl::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

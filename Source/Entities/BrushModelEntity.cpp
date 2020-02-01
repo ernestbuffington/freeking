@@ -37,16 +37,14 @@ namespace Freeking
 		}
 	}
 
-	bool BrushModelEntity::SetProperty(const EntityKeyValue& keyValue)
+	bool BrushModelEntity::SetProperty(const EntityProperty& property)
 	{
-		if (keyValue.Key == "model" &&
-			!keyValue.Value.empty() &&
-			keyValue.Value[0] == '*')
+		if (property.IsKey("model"))
 		{
-			return Util::TryParseInt(keyValue.Value.substr(1), _modelIndex);
+			return property.ValueAsModelIndex(_modelIndex);
 		}
 
-		return PrimitiveEntity::SetProperty(keyValue);
+		return PrimitiveEntity::SetProperty(property);
 	}
 
 	std::shared_ptr<BrushModel> BrushModelEntity::GetModel()

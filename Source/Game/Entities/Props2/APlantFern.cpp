@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props2
 	{
 	}
 
-	bool APlantFern::SetProperty(const EntityKeyValue& keyValue)
+	bool APlantFern::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

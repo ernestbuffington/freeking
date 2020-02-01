@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props2
 	{
 	}
 
-	bool ATruckDie::SetProperty(const EntityKeyValue& keyValue)
+	bool ATruckDie::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

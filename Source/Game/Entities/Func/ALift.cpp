@@ -14,7 +14,7 @@ namespace Freeking::Entity::Func
 	{
 	}
 
-	bool ALift::SetProperty(const EntityKeyValue& keyValue)
+	bool ALift::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

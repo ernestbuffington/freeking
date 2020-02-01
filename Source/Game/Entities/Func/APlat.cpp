@@ -14,7 +14,7 @@ namespace Freeking::Entity::Func
 	{
 	}
 
-	bool APlat::SetProperty(const EntityKeyValue& keyValue)
+	bool APlat::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

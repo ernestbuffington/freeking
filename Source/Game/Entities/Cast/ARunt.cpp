@@ -14,7 +14,7 @@ namespace Freeking::Entity::Cast
 	{
 	}
 
-	bool ARunt::SetProperty(const EntityKeyValue& keyValue)
+	bool ARunt::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

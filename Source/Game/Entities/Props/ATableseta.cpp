@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props
 	{
 	}
 
-	bool ATableseta::SetProperty(const EntityKeyValue& keyValue)
+	bool ATableseta::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

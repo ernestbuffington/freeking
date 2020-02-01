@@ -14,7 +14,7 @@ namespace Freeking::Entity::Ai
 	{
 	}
 
-	bool ATyFuseblown::SetProperty(const EntityKeyValue& keyValue)
+	bool ATyFuseblown::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

@@ -14,7 +14,7 @@ namespace Freeking::Entity::Func
 	{
 	}
 
-	bool ASubdoorBase::SetProperty(const EntityKeyValue& keyValue)
+	bool ASubdoorBase::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

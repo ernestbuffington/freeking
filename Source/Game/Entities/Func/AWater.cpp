@@ -14,7 +14,7 @@ namespace Freeking::Entity::Func
 	{
 	}
 
-	bool AWater::SetProperty(const EntityKeyValue& keyValue)
+	bool AWater::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props2
 	{
 	}
 
-	bool AWallFish::SetProperty(const EntityKeyValue& keyValue)
+	bool AWallFish::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

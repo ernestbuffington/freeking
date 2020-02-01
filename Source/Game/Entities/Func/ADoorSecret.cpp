@@ -14,7 +14,7 @@ namespace Freeking::Entity::Func
 	{
 	}
 
-	bool ADoorSecret::SetProperty(const EntityKeyValue& keyValue)
+	bool ADoorSecret::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

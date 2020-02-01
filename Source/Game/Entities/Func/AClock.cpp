@@ -14,7 +14,7 @@ namespace Freeking::Entity::Func
 	{
 	}
 
-	bool AClock::SetProperty(const EntityKeyValue& keyValue)
+	bool AClock::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

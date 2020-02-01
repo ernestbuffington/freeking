@@ -15,7 +15,7 @@ namespace Freeking::Entity::Ep
 
 	protected:
 
-		virtual bool SetProperty(const EntityKeyValue& keyValue) override;
+		virtual bool SetProperty(const EntityProperty& property) override;
 
     private:
 

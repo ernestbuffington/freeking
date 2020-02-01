@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props3
 	{
 	}
 
-	bool ACutPinballGuyAnimate::SetProperty(const EntityKeyValue& keyValue)
+	bool ACutPinballGuyAnimate::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props
 	{
 	}
 
-	bool APhone::SetProperty(const EntityKeyValue& keyValue)
+	bool APhone::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

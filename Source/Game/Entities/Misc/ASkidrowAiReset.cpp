@@ -14,7 +14,7 @@ namespace Freeking::Entity::Misc
 	{
 	}
 
-	bool ASkidrowAiReset::SetProperty(const EntityKeyValue& keyValue)
+	bool ASkidrowAiReset::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

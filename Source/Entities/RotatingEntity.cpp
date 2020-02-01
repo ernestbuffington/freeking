@@ -14,13 +14,13 @@ namespace Freeking
 		AddRotation(Quaternion::FromDegreeYaw(_speed * (float)dt));
 	}
 
-	bool RotatingEntity::SetProperty(const EntityKeyValue& keyValue)
+	bool RotatingEntity::SetProperty(const EntityProperty& property)
 	{
-		if (keyValue.Key == "speed")
+		if (property.IsKey("speed"))
 		{
-			return keyValue.ValueAsFloat(_speed);
+			return property.ValueAsFloat(_speed);
 		}
 
-		return BrushModelEntity::SetProperty(keyValue);
+		return BrushModelEntity::SetProperty(property);
 	}
 }

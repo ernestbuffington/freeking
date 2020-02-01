@@ -14,7 +14,7 @@ namespace Freeking::Entity::Misc
 	{
 	}
 
-	bool AAlarm::SetProperty(const EntityKeyValue& keyValue)
+	bool AAlarm::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

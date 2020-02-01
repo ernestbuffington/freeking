@@ -14,7 +14,7 @@ namespace Freeking::Entity::Ai
 	{
 	}
 
-	bool ATerritory::SetProperty(const EntityKeyValue& keyValue)
+	bool ATerritory::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

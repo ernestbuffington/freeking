@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props3
 	{
 	}
 
-	bool ACutAAnimate::SetProperty(const EntityKeyValue& keyValue)
+	bool ACutAAnimate::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

@@ -14,7 +14,7 @@ namespace Freeking::Entity::Misc
 	{
 	}
 
-	bool ATeleporter::SetProperty(const EntityKeyValue& keyValue)
+	bool ATeleporter::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

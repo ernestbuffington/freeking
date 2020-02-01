@@ -14,7 +14,7 @@ namespace Freeking::Entity::Target
 	{
 	}
 
-	bool AEarthquake::SetProperty(const EntityKeyValue& keyValue)
+	bool AEarthquake::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

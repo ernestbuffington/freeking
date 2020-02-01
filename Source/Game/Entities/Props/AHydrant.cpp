@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props
 	{
 	}
 
-	bool AHydrant::SetProperty(const EntityKeyValue& keyValue)
+	bool AHydrant::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

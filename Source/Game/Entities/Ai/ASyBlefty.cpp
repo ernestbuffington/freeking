@@ -14,7 +14,7 @@ namespace Freeking::Entity::Ai
 	{
 	}
 
-	bool ASyBlefty::SetProperty(const EntityKeyValue& keyValue)
+	bool ASyBlefty::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

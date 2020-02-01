@@ -14,7 +14,7 @@ namespace Freeking::Entity::Target
 	{
 	}
 
-	bool ASpawner::SetProperty(const EntityKeyValue& keyValue)
+	bool ASpawner::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

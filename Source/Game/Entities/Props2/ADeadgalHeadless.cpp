@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props2
 	{
 	}
 
-	bool ADeadgalHeadless::SetProperty(const EntityKeyValue& keyValue)
+	bool ADeadgalHeadless::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

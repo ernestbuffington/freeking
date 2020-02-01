@@ -14,7 +14,7 @@ namespace Freeking::Entity::Misc
 	{
 	}
 
-	bool AGibLeg::SetProperty(const EntityKeyValue& keyValue)
+	bool AGibLeg::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

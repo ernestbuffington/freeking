@@ -14,7 +14,7 @@ namespace Freeking::Entity::Pawn
 	{
 	}
 
-	bool AOMatic::SetProperty(const EntityKeyValue& keyValue)
+	bool AOMatic::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

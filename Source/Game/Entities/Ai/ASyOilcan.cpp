@@ -14,7 +14,7 @@ namespace Freeking::Entity::Ai
 	{
 	}
 
-	bool ASyOilcan::SetProperty(const EntityKeyValue& keyValue)
+	bool ASyOilcan::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

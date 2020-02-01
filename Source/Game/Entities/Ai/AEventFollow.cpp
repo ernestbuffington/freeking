@@ -14,7 +14,7 @@ namespace Freeking::Entity::Ai
 	{
 	}
 
-	bool AEventFollow::SetProperty(const EntityKeyValue& keyValue)
+	bool AEventFollow::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

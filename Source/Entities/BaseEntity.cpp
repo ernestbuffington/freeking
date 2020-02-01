@@ -2,13 +2,16 @@
 
 namespace Freeking
 {
-	void BaseEntity::InitializeProperties(const EntityLump::EntityDef& def)
+	void BaseEntity::InitializeProperties(const EntityProperties& properties)
 	{
-		_name = def.name;
-
-		for (const auto& [key, value] : def.keyValues)
+		if (auto name = properties.GetNameProperty())
 		{
-			SetProperty({ key, value });
+			_name = name;
+		}
+
+		for (const auto& property : properties.GetKeyValues())
+		{
+			SetProperty(property);
 		}
 	}
 
@@ -30,5 +33,10 @@ namespace Freeking
 
 	void BaseEntity::Spawn()
 	{
+	}
+
+	bool BaseEntity::SetProperty(const EntityProperty& property)
+	{
+		return false;
 	}
 }

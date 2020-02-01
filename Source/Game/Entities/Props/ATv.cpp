@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props
 	{
 	}
 
-	bool ATv::SetProperty(const EntityKeyValue& keyValue)
+	bool ATv::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

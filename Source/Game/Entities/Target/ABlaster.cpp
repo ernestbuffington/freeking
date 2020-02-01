@@ -14,7 +14,7 @@ namespace Freeking::Entity::Target
 	{
 	}
 
-	bool ABlaster::SetProperty(const EntityKeyValue& keyValue)
+	bool ABlaster::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props2
 	{
 	}
 
-	bool APinballMachine::SetProperty(const EntityKeyValue& keyValue)
+	bool APinballMachine::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

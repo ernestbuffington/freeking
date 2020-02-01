@@ -14,7 +14,7 @@ namespace Freeking::Entity::Target
 	{
 	}
 
-	bool AMalLaser::SetProperty(const EntityKeyValue& keyValue)
+	bool AMalLaser::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

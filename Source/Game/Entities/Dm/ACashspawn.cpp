@@ -14,7 +14,7 @@ namespace Freeking::Entity::Dm
 	{
 	}
 
-	bool ACashspawn::SetProperty(const EntityKeyValue& keyValue)
+	bool ACashspawn::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

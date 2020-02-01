@@ -14,7 +14,7 @@ namespace Freeking::Entity::Ai
 	{
 	}
 
-	bool ATyValvehandle::SetProperty(const EntityKeyValue& keyValue)
+	bool ATyValvehandle::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

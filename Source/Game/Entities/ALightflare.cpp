@@ -14,7 +14,7 @@ namespace Freeking::Entity
 	{
 	}
 
-	bool ALightflare::SetProperty(const EntityKeyValue& keyValue)
+	bool ALightflare::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

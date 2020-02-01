@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props2
 	{
 	}
 
-	bool AClothesline::SetProperty(const EntityKeyValue& keyValue)
+	bool AClothesline::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props2
 	{
 	}
 
-	bool AAshtray::SetProperty(const EntityKeyValue& keyValue)
+	bool AAshtray::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

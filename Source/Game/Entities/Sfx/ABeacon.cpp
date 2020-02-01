@@ -14,7 +14,7 @@ namespace Freeking::Entity::Sfx
 	{
 	}
 
-	bool ABeacon::SetProperty(const EntityKeyValue& keyValue)
+	bool ABeacon::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props2
 	{
 	}
 
-	bool AHelicopterAnimate::SetProperty(const EntityKeyValue& keyValue)
+	bool AHelicopterAnimate::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

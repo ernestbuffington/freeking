@@ -10,7 +10,7 @@ namespace Freeking
 
 		SceneEntity();
 
-		virtual void InitializeProperties(const EntityLump::EntityDef& def) override;
+		virtual void InitializeProperties(const EntityProperties& properties) override;
 		virtual void Initialize() override;
 		virtual void PostInitialize() override;
 		virtual void Tick(double dt) override;
@@ -28,7 +28,10 @@ namespace Freeking
 
 	protected:
 
-		virtual bool SetProperty(const EntityKeyValue& keyValue) override;
+		virtual bool SetProperty(const EntityProperty& property) override;
+
+		virtual void InitializeOriginProperty(const Vector3f& origin);
+		virtual void InitializeAngleProperty(float angle);
 
 	private:
 

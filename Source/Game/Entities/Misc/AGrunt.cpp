@@ -14,7 +14,7 @@ namespace Freeking::Entity::Misc
 	{
 	}
 
-	bool AGrunt::SetProperty(const EntityKeyValue& keyValue)
+	bool AGrunt::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

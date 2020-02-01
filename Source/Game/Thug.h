@@ -12,7 +12,7 @@ namespace Freeking
 	{
 	public:
 
-		Thug(const EntityLump::EntityDef& entityDef);
+		Thug(const EntityProperties& entityKeyValues);
 
 		void Render(const Matrix4x4& viewProjection, double dt);
 

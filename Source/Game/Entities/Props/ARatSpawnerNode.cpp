@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props
 	{
 	}
 
-	bool ARatSpawnerNode::SetProperty(const EntityKeyValue& keyValue)
+	bool ARatSpawnerNode::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

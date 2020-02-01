@@ -14,7 +14,7 @@ namespace Freeking::Entity::Misc
 	{
 	}
 
-	bool AExplobox::SetProperty(const EntityKeyValue& keyValue)
+	bool AExplobox::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

@@ -14,7 +14,7 @@ namespace Freeking::Entity::Dm
 	{
 	}
 
-	bool ASafebag::SetProperty(const EntityKeyValue& keyValue)
+	bool ASafebag::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

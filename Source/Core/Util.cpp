@@ -37,4 +37,48 @@ namespace Freeking
 	{
 		return std::from_chars(s.data(), s.data() + s.size(), v).ec == std::errc();
 	}
+
+	bool Util::TryParseVector(const std::string& s, Vector3f& v)
+	{
+		auto xyz = SplitString(s, " ");
+		if (xyz.size() != 3)
+		{
+			return false;
+		}
+
+		float x, y, z;
+		if (!Util::TryParseFloat(xyz[0], x) ||
+			!Util::TryParseFloat(xyz[1], y) ||
+			!Util::TryParseFloat(xyz[2], z))
+		{
+			return false;
+		}
+
+		v = Vector3f(x, y, z);
+
+		return true;
+	}
+
+	std::vector<std::string> Util::SplitString(const std::string& s, const std::string& delimiter)
+	{
+		std::vector<std::string> result;
+		size_t start = 0;
+		size_t end = 0;
+
+		do
+		{
+			end = s.find(delimiter, start);
+			size_t length = end - start;
+			std::string token = s.substr(start, length);
+
+			if (length > 0)
+			{
+				result.emplace_back(token);
+			}
+
+			start += length + delimiter.length();
+		} while (end != std::string::npos);
+
+		return result;
+	}
 }

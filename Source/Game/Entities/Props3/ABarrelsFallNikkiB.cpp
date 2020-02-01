@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props3
 	{
 	}
 
-	bool ABarrelsFallNikkiB::SetProperty(const EntityKeyValue& keyValue)
+	bool ABarrelsFallNikkiB::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

@@ -14,7 +14,7 @@ namespace Freeking::Entity::Trigger
 	{
 	}
 
-	bool AMonsterjump::SetProperty(const EntityKeyValue& keyValue)
+	bool AMonsterjump::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

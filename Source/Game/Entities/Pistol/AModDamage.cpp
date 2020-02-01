@@ -14,7 +14,7 @@ namespace Freeking::Entity::Pistol
 	{
 	}
 
-	bool AModDamage::SetProperty(const EntityKeyValue& keyValue)
+	bool AModDamage::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

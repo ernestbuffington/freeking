@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props2
 	{
 	}
 
-	bool AFlag::SetProperty(const EntityKeyValue& keyValue)
+	bool AFlag::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

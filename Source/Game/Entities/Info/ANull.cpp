@@ -14,7 +14,7 @@ namespace Freeking::Entity::Info
 	{
 	}
 
-	bool ANull::SetProperty(const EntityKeyValue& keyValue)
+	bool ANull::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

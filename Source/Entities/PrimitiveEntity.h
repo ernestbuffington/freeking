@@ -4,12 +4,6 @@
 
 namespace Freeking
 {
-	class PrimitiveSceneProxy
-	{
-	public:
-
-	};
-
 	class PrimitiveEntity : public SceneEntity
 	{
 	public:

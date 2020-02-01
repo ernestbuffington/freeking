@@ -14,7 +14,7 @@ namespace Freeking::Entity
 	{
 	}
 
-	bool AElps::SetProperty(const EntityKeyValue& keyValue)
+	bool AElps::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

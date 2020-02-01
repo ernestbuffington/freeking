@@ -14,7 +14,7 @@ namespace Freeking::Entity
 	{
 	}
 
-	bool AJunior::SetProperty(const EntityKeyValue& keyValue)
+	bool AJunior::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

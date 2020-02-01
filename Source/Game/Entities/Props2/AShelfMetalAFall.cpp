@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props2
 	{
 	}
 
-	bool AShelfMetalAFall::SetProperty(const EntityKeyValue& keyValue)
+	bool AShelfMetalAFall::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

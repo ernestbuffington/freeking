@@ -14,7 +14,7 @@ namespace Freeking::Entity::Misc
 	{
 	}
 
-	bool ACorkyFidelMdxTga::SetProperty(const EntityKeyValue& keyValue)
+	bool ACorkyFidelMdxTga::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

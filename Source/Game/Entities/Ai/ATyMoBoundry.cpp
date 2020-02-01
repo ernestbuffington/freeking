@@ -14,7 +14,7 @@ namespace Freeking::Entity::Ai
 	{
 	}
 
-	bool ATyMoBoundry::SetProperty(const EntityKeyValue& keyValue)
+	bool ATyMoBoundry::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

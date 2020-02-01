@@ -14,7 +14,7 @@ namespace Freeking::Entity::Func
 	{
 	}
 
-	bool AKillbox::SetProperty(const EntityKeyValue& keyValue)
+	bool AKillbox::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

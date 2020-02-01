@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props2
 	{
 	}
 
-	bool ADeadguy::SetProperty(const EntityKeyValue& keyValue)
+	bool ADeadguy::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

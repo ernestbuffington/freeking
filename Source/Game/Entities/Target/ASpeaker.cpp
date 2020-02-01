@@ -14,7 +14,7 @@ namespace Freeking::Entity::Target
 	{
 	}
 
-	bool ASpeaker::SetProperty(const EntityKeyValue& keyValue)
+	bool ASpeaker::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

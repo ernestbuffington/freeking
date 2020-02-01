@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props2
 	{
 	}
 
-	bool ACarTopup::SetProperty(const EntityKeyValue& keyValue)
+	bool ACarTopup::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

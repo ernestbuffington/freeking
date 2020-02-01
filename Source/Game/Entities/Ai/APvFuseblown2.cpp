@@ -14,7 +14,7 @@ namespace Freeking::Entity::Ai
 	{
 	}
 
-	bool APvFuseblown2::SetProperty(const EntityKeyValue& keyValue)
+	bool APvFuseblown2::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

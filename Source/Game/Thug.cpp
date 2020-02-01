@@ -9,11 +9,11 @@
 
 namespace Freeking
 {
-	Thug::Thug(const EntityLump::EntityDef& entityDef) :
+	Thug::Thug(const EntityProperties& entityKeyValues) :
 		_frameTime(0.0),
 		_animIndex(0)
 	{
-		auto actorName = entityDef.classname.substr(5);
+		auto actorName = (*entityKeyValues.GetClassnameProperty()).substr(5);
 
 		static const std::array<std::string, 3> bodyParts =
 		{
@@ -37,7 +37,7 @@ namespace Freeking
 		const auto& skinFolder = skinFolders[actorName];
 
 		std::vector<std::string> artSkins;
-		entityDef.TryGetSplitString("art_skins", artSkins);
+		entityKeyValues.TryGetSplitString("art_skins", artSkins);
 
 		int bodyPartIndex = 0;
 		for (const auto& bodyPart : bodyParts)

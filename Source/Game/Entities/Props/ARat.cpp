@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props
 	{
 	}
 
-	bool ARat::SetProperty(const EntityKeyValue& keyValue)
+	bool ARat::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

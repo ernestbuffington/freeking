@@ -14,7 +14,7 @@ namespace Freeking::Entity::Cast
 	{
 	}
 
-	bool ABuma::SetProperty(const EntityKeyValue& keyValue)
+	bool ABuma::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

@@ -14,7 +14,7 @@ namespace Freeking::Entity::Misc
 	{
 	}
 
-	bool AAmb4::SetProperty(const EntityKeyValue& keyValue)
+	bool AAmb4::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

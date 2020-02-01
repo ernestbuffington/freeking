@@ -14,7 +14,7 @@ namespace Freeking::Entity::Trigger
 	{
 	}
 
-	bool AElevator::SetProperty(const EntityKeyValue& keyValue)
+	bool AElevator::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

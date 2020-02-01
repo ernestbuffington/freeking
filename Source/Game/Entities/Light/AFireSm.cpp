@@ -14,7 +14,7 @@ namespace Freeking::Entity::Light
 	{
 	}
 
-	bool AFireSm::SetProperty(const EntityKeyValue& keyValue)
+	bool AFireSm::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

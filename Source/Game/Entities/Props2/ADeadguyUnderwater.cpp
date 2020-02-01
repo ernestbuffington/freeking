@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props2
 	{
 	}
 
-	bool ADeadguyUnderwater::SetProperty(const EntityKeyValue& keyValue)
+	bool ADeadguyUnderwater::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

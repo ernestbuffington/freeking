@@ -14,7 +14,7 @@ namespace Freeking::Entity::Pistol
 	{
 	}
 
-	bool AModReload::SetProperty(const EntityKeyValue& keyValue)
+	bool AModReload::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

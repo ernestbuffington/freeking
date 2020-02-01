@@ -14,7 +14,7 @@ namespace Freeking::Entity::Cast
 	{
 	}
 
-	bool ADog::SetProperty(const EntityKeyValue& keyValue)
+	bool ADog::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

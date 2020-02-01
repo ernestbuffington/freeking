@@ -14,7 +14,7 @@ namespace Freeking::Entity::Cast
 	{
 	}
 
-	bool AWhore::SetProperty(const EntityKeyValue& keyValue)
+	bool AWhore::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

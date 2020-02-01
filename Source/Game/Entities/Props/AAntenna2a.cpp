@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props
 	{
 	}
 
-	bool AAntenna2a::SetProperty(const EntityKeyValue& keyValue)
+	bool AAntenna2a::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

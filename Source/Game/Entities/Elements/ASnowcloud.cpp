@@ -14,7 +14,7 @@ namespace Freeking::Entity::Elements
 	{
 	}
 
-	bool ASnowcloud::SetProperty(const EntityKeyValue& keyValue)
+	bool ASnowcloud::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

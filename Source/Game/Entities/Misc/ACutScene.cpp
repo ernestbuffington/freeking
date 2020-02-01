@@ -14,7 +14,7 @@ namespace Freeking::Entity::Misc
 	{
 	}
 
-	bool ACutScene::SetProperty(const EntityKeyValue& keyValue)
+	bool ACutScene::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props
 	{
 	}
 
-	bool AColaMachine::SetProperty(const EntityKeyValue& keyValue)
+	bool AColaMachine::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

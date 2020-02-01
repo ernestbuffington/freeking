@@ -14,7 +14,7 @@ namespace Freeking::Entity::Rc
 	{
 	}
 
-	bool AInitiationObserver::SetProperty(const EntityKeyValue& keyValue)
+	bool AInitiationObserver::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

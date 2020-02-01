@@ -14,7 +14,7 @@ namespace Freeking::Entity::Target
 	{
 	}
 
-	bool ASplash::SetProperty(const EntityKeyValue& keyValue)
+	bool ASplash::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

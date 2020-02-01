@@ -14,7 +14,7 @@ namespace Freeking::Entity::Ai
 	{
 	}
 
-	bool ACombatSpot::SetProperty(const EntityKeyValue& keyValue)
+	bool ACombatSpot::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

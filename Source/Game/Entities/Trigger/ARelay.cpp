@@ -14,7 +14,7 @@ namespace Freeking::Entity::Trigger
 	{
 	}
 
-	bool ARelay::SetProperty(const EntityKeyValue& keyValue)
+	bool ARelay::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

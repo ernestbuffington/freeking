@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props
 	{
 	}
 
-	bool AChair::SetProperty(const EntityKeyValue& keyValue)
+	bool AChair::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

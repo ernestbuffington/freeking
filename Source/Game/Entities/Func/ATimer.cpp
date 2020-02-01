@@ -14,7 +14,7 @@ namespace Freeking::Entity::Func
 	{
 	}
 
-	bool ATimer::SetProperty(const EntityKeyValue& keyValue)
+	bool ATimer::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

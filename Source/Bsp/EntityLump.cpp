@@ -3,56 +3,84 @@
 
 namespace Freeking
 {
-	bool EntityKeyValue::ValueAsVector(Vector3f& v) const
+	bool EntityProperty::ValueAsVector(Vector3f& v) const
 	{
-		return EntityLump::TryParseVector(Value, v);
+		return Util::TryParseVector(_value, v);
 	}
 
-	bool EntityKeyValue::ValueAsFloat(float& v) const
+	bool EntityProperty::ValueAsFloat(float& v) const
 	{
-		return Util::TryParseFloat(Value, v);
+		return Util::TryParseFloat(_value, v);
 	}
 
-	bool EntityKeyValue::ValueAsInt(int& v) const
+	bool EntityProperty::ValueAsInt(int& v) const
 	{
-		return Util::TryParseInt(Value, v);
+		return Util::TryParseInt(_value, v);
 	}
 
-	bool EntityLump::Parse(const std::string& string)
+	bool EntityProperty::ValueAsModelIndex(int& v) const
 	{
-		size_t pos = 0;
-		while (pos < string.size())
+		if (!_value.empty() && _value[0] == '*')
 		{
-			EntityDef entityDef;
-			if (!TryParseEntityDef(string, pos, entityDef))
+			if (Util::TryParseInt(_value.substr(1), v))
 			{
-				return false;
-			}
-
-			if (entityDef.TryGetString("classname", entityDef.classname))
-			{
-				entityDef.TryGetString("name", entityDef.name);
-				entityDef.TryGetString("targetname", entityDef.targetname);
-				entityDef.TryGetString("target", entityDef.target);
-
-				if (!entityDef.TryGetFloat("angle", entityDef.angle))
-				{
-					entityDef.angle = 0;
-				}
-
-				entityDef.logic = !entityDef.TryGetVector("origin", entityDef.origin);
-
-				Entities.push_back(entityDef);
+				return true;
 			}
 		}
 
-		return true;
+		v = -1;
+
+		return false;
 	}
 
-	bool EntityLump::EntityDef::TryGetString(const std::string& key, std::string& value) const
+	bool EntityProperties::TryGetString(const std::string& key, CommonString& value) const
 	{
-		auto it = keyValues.find(key);
-		if (it == keyValues.end())
+		if (TryGetString(key, value.value))
+		{
+			value.unset = false;
+			return true;
+		}
+
+		return false;
+	}
+
+	bool EntityProperties::TryGetVector(const std::string& key, CommonVector& value) const
+	{
+		if (TryGetVector(key, value.value))
+		{
+			value.unset = false;
+			return true;
+		}
+
+		return false;
+	}
+
+	bool EntityProperties::TryGetFloat(const std::string& key, CommonScalar& value) const
+	{
+		if (TryGetFloat(key, value.value))
+		{
+			value.unset = false;
+			return true;
+		}
+
+		return false;
+	}
+
+	bool EntityProperties::TryGetInt(const std::string& key, CommonInt& value) const
+	{
+		if (TryGetInt(key, value.value))
+		{
+			value.unset = false;
+			return true;
+		}
+
+		return false;
+	}
+
+	bool EntityProperties::TryGetString(const std::string& key, std::string& value) const
+	{
+		auto it = _keyToValues.find(key);
+		if (it == _keyToValues.end())
 		{
 			return false;
 		}
@@ -62,20 +90,20 @@ namespace Freeking
 		return true;
 	}
 
-	bool EntityLump::EntityDef::TryGetSplitString(const std::string& key, std::vector<std::string>& value) const
+	bool EntityProperties::TryGetSplitString(const std::string& key, std::vector<std::string>& value) const
 	{
-		auto it = keyValues.find(key);
-		if (it == keyValues.end())
+		auto it = _keyToValues.find(key);
+		if (it == _keyToValues.end())
 		{
 			return false;
 		}
 
-		value = SplitString(it->second, " ");
+		value = Util::SplitString(it->second, " ");
 
 		return true;
 	}
 
-	bool EntityLump::EntityDef::TryGetInt(const std::string& key, int& value) const
+	bool EntityProperties::TryGetInt(const std::string& key, int& value) const
 	{
 		std::string s;
 		if (!TryGetString(key, s))
@@ -86,7 +114,7 @@ namespace Freeking
 		return Util::TryParseInt(s, value);
 	}
 
-	bool EntityLump::EntityDef::TryGetFloat(const std::string& key, float& value) const
+	bool EntityProperties::TryGetFloat(const std::string& key, float& value) const
 	{
 		std::string s;
 		if (!TryGetString(key, s))
@@ -97,7 +125,7 @@ namespace Freeking
 		return Util::TryParseFloat(s, value);
 	}
 
-	bool EntityLump::EntityDef::TryGetVector(const std::string& key, Vector3f& value) const
+	bool EntityProperties::TryGetVector(const std::string& key, Vector3f& value) const
 	{
 		std::string s;
 		if (!TryGetString(key, s))
@@ -105,55 +133,52 @@ namespace Freeking
 			return false;
 		}
 
-		return TryParseVector(s, value);
+		return Util::TryParseVector(s, value);
 	}
 
-	bool EntityLump::TryParseVector(const std::string& s, Vector3f& v)
+	void EntityProperties::AddKeyValue(const std::string& key, const std::string& value)
 	{
-		auto xyz = SplitString(s, " ");
-		if (xyz.size() != 3)
-		{
-			return false;
-		}
+		_keyValues.emplace_back(key, value);
+		_keyToValues.emplace(key, value);
+	}
 
-		float x, y, z;
-		if (!Util::TryParseFloat(xyz[0], x) ||
-			!Util::TryParseFloat(xyz[1], y) ||
-			!Util::TryParseFloat(xyz[2], z))
+	void EntityProperties::FindCommonValues()
+	{
+		if (TryGetString("classname", _classname))
 		{
-			return false;
+			TryGetString("name", _name);
+			TryGetString("targetname", _targetname);
+			TryGetString("target", _target);
+			TryGetVector("origin", _origin);
+			TryGetFloat("angle", _angle);
 		}
+	}
 
-		v = Vector3f(x, y, z);
+	bool EntityLump::Parse(const std::string& string, std::vector<EntityProperties>& items)
+	{
+		std::vector<EntityProperties> entityKeyValues;
+
+		size_t pos = 0;
+		while (pos < string.size())
+		{
+			EntityProperties keyValues;
+			if (!TryParseKeyValues(string, pos, keyValues))
+			{
+				return false;
+			}
+
+			keyValues.FindCommonValues();
+
+			if (keyValues.GetClassnameProperty())
+			{
+				items.push_back(std::move(keyValues));
+			}
+		}
 
 		return true;
 	}
 
-	std::vector<std::string> EntityLump::SplitString(const std::string& s, const std::string& delimiter)
-	{
-		std::vector<std::string> result;
-		size_t start = 0;
-		size_t end = 0;
-
-		do
-		{
-			end = s.find(delimiter, start);
-			size_t length = end - start;
-			std::string token = s.substr(start, length);
-
-			if (length > 0)
-			{
-				result.emplace_back(token);
-			}
-
-			start += length + delimiter.length();
-		} 
-		while (end != std::string::npos);
-
-		return result;
-	}
-
-	bool EntityLump::TryParseEntityDef(const std::string& string, size_t& pos, EntityDef& entityDef)
+	bool EntityLump::TryParseKeyValues(const std::string& string, size_t& pos, EntityProperties& properties)
 	{
 		bool begin = false;
 
@@ -192,7 +217,7 @@ namespace Freeking
 			{
 				std::string key = ParseSubString(string, pos);
 				std::string value = ParseSubString(string, pos);
-				entityDef.keyValues.emplace(key, value);
+				properties.AddKeyValue(key, value);
 
 				continue;
 			}

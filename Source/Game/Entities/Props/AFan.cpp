@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props
 	{
 	}
 
-	bool AFan::SetProperty(const EntityKeyValue& keyValue)
+	bool AFan::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

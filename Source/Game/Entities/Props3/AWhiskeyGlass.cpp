@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props3
 	{
 	}
 
-	bool AWhiskeyGlass::SetProperty(const EntityKeyValue& keyValue)
+	bool AWhiskeyGlass::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

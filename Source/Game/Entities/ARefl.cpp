@@ -14,7 +14,7 @@ namespace Freeking::Entity
 	{
 	}
 
-	bool ARefl::SetProperty(const EntityKeyValue& keyValue)
+	bool ARefl::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

@@ -14,7 +14,7 @@ namespace Freeking::Entity::Target
 	{
 	}
 
-	bool AString::SetProperty(const EntityKeyValue& keyValue)
+	bool AString::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

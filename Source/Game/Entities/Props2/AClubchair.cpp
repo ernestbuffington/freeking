@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props2
 	{
 	}
 
-	bool AClubchair::SetProperty(const EntityKeyValue& keyValue)
+	bool AClubchair::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

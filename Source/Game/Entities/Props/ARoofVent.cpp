@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props
 	{
 	}
 
-	bool ARoofVent::SetProperty(const EntityKeyValue& keyValue)
+	bool ARoofVent::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

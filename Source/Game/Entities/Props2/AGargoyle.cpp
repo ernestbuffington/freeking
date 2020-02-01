@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props2
 	{
 	}
 
-	bool AGargoyle::SetProperty(const EntityKeyValue& keyValue)
+	bool AGargoyle::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

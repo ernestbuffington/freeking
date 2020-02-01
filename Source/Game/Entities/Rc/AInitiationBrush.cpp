@@ -14,7 +14,7 @@ namespace Freeking::Entity::Rc
 	{
 	}
 
-	bool AInitiationBrush::SetProperty(const EntityKeyValue& keyValue)
+	bool AInitiationBrush::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

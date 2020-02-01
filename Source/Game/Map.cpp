@@ -139,8 +139,13 @@ namespace Freeking
 		auto lightmapData = bspFile.GetLumpArray<uint8_t>(bspFile.Header.Lightmaps);
 
 		pf.Start();
+
 		std::string entityString(entities.Data(), entities.Num());
-		_entityLump.Parse(entityString);
+		if (!EntityLump::Parse(entityString, _entityKeyValues))
+		{
+			std::cout << "Error parsing entity lump" << std::endl;
+		}
+
 		pf.Stop("EntityLump");
 
 		pf.Start();
@@ -348,9 +353,9 @@ namespace Freeking
 
 		pf.Start();
 
-		for (const auto& e : _entityLump.Entities)
+		for (const auto& e : _entityKeyValues)
 		{
-			const auto& classname = e.classname;
+			std::string classname = e.GetClassnameProperty();
 			if (classname.empty())
 			{
 				continue;

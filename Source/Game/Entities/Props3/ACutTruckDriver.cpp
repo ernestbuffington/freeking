@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props3
 	{
 	}
 
-	bool ACutTruckDriver::SetProperty(const EntityKeyValue& keyValue)
+	bool ACutTruckDriver::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

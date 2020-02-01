@@ -14,7 +14,7 @@ namespace Freeking::Entity::Item
 	{
 	}
 
-	bool AHealth::SetProperty(const EntityKeyValue& keyValue)
+	bool AHealth::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

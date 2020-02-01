@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props2
 	{
 	}
 
-	bool AVaseb::SetProperty(const EntityKeyValue& keyValue)
+	bool AVaseb::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

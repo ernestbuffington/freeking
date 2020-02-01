@@ -14,7 +14,7 @@ namespace Freeking::Entity::Cast
 	{
 	}
 
-	bool AThug::SetProperty(const EntityKeyValue& keyValue)
+	bool AThug::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

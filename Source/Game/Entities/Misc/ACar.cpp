@@ -14,7 +14,7 @@ namespace Freeking::Entity::Misc
 	{
 	}
 
-	bool ACar::SetProperty(const EntityKeyValue& keyValue)
+	bool ACar::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props2
 	{
 	}
 
-	bool ACarAnimate::SetProperty(const EntityKeyValue& keyValue)
+	bool ACarAnimate::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

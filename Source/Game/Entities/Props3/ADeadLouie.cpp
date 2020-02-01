@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props3
 	{
 	}
 
-	bool ADeadLouie::SetProperty(const EntityKeyValue& keyValue)
+	bool ADeadLouie::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

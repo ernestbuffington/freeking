@@ -14,7 +14,7 @@ namespace Freeking::Entity::Info
 	{
 	}
 
-	bool APlayerStart::SetProperty(const EntityKeyValue& keyValue)
+	bool APlayerStart::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

@@ -14,7 +14,7 @@ namespace Freeking::Entity::Light
 	{
 	}
 
-	bool ADecoSconce::SetProperty(const EntityKeyValue& keyValue)
+	bool ADecoSconce::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

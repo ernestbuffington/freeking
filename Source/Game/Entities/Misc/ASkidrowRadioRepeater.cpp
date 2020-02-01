@@ -14,7 +14,7 @@ namespace Freeking::Entity::Misc
 	{
 	}
 
-	bool ASkidrowRadioRepeater::SetProperty(const EntityKeyValue& keyValue)
+	bool ASkidrowRadioRepeater::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

@@ -14,7 +14,7 @@ namespace Freeking::Entity::Info
 	{
 	}
 
-	bool APlayerIntermission::SetProperty(const EntityKeyValue& keyValue)
+	bool APlayerIntermission::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

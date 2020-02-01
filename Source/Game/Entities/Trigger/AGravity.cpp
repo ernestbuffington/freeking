@@ -14,7 +14,7 @@ namespace Freeking::Entity::Trigger
 	{
 	}
 
-	bool AGravity::SetProperty(const EntityKeyValue& keyValue)
+	bool AGravity::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

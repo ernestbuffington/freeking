@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props
 	{
 	}
 
-	bool AMattressa::SetProperty(const EntityKeyValue& keyValue)
+	bool AMattressa::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

@@ -14,7 +14,7 @@ namespace Freeking::Entity::Misc
 	{
 	}
 
-	bool AFidela::SetProperty(const EntityKeyValue& keyValue)
+	bool AFidela::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

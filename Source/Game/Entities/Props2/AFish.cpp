@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props2
 	{
 	}
 
-	bool AFish::SetProperty(const EntityKeyValue& keyValue)
+	bool AFish::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

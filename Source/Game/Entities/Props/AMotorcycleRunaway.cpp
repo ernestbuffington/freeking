@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props
 	{
 	}
 
-	bool AMotorcycleRunaway::SetProperty(const EntityKeyValue& keyValue)
+	bool AMotorcycleRunaway::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

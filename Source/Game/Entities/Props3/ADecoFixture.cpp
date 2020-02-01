@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props3
 	{
 	}
 
-	bool ADecoFixture::SetProperty(const EntityKeyValue& keyValue)
+	bool ADecoFixture::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

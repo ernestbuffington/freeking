@@ -14,7 +14,7 @@ namespace Freeking::Entity::Cast
 	{
 	}
 
-	bool ABitch::SetProperty(const EntityKeyValue& keyValue)
+	bool ABitch::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

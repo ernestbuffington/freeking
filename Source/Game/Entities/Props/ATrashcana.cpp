@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props
 	{
 	}
 
-	bool ATrashcana::SetProperty(const EntityKeyValue& keyValue)
+	bool ATrashcana::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

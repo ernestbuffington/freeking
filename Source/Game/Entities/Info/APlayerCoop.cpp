@@ -14,7 +14,7 @@ namespace Freeking::Entity::Info
 	{
 	}
 
-	bool APlayerCoop::SetProperty(const EntityKeyValue& keyValue)
+	bool APlayerCoop::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

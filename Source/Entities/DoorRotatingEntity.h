@@ -14,7 +14,9 @@ namespace Freeking
 
 	protected:
 
-		virtual bool SetProperty(const EntityKeyValue& keyValue) override;
+		virtual bool SetProperty(const EntityProperty& property) override;
+
+		virtual void InitializeAngleProperty(float angle) override;
 
 	private:
 

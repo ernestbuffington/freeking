@@ -14,7 +14,7 @@ namespace Freeking::Entity
 	{
 	}
 
-	bool AViewthing::SetProperty(const EntityKeyValue& keyValue)
+	bool AViewthing::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

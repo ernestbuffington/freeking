@@ -14,7 +14,7 @@ namespace Freeking::Entity::Func
 	{
 	}
 
-	bool ATrainRotating::SetProperty(const EntityKeyValue& keyValue)
+	bool ATrainRotating::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

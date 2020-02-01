@@ -14,7 +14,7 @@ namespace Freeking::Entity::Misc
 	{
 	}
 
-	bool ABarryBitch::SetProperty(const EntityKeyValue& keyValue)
+	bool ABarryBitch::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

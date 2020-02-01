@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props
 	{
 	}
 
-	bool ACigMachine::SetProperty(const EntityKeyValue& keyValue)
+	bool ACigMachine::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

@@ -29,18 +29,19 @@ namespace Freeking
 		SetPosition(_initialPosition + Vector3f(0, _distance * ((Math::Sin(_time) + 1.0f) * 0.5f), 0));
 	}
 
-	bool DoorEntity::SetProperty(const EntityKeyValue& keyValue)
+	bool DoorEntity::SetProperty(const EntityProperty& property)
 	{
-		if (keyValue.Key == "speed")
+		if (property.IsKey("speed"))
 		{
-			return keyValue.ValueAsFloat(_speed);
-		}
-		else if (keyValue.Key == "angle")
-		{
-			SetRotation(Quaternion(0, 0, 0, 1));
-			return keyValue.ValueAsFloat(_angle);
+			return property.ValueAsFloat(_speed);
 		}
 
-		return BrushModelEntity::SetProperty(keyValue);
+		return BrushModelEntity::SetProperty(property);
+	}
+
+	void DoorEntity::InitializeAngleProperty(float angle)
+	{
+		// "angle" for this entity is used for direction and not entity rotation
+		_angle = angle;
 	}
 }

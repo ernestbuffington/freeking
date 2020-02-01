@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props
 	{
 	}
 
-	bool ATrashpaper::SetProperty(const EntityKeyValue& keyValue)
+	bool ATrashpaper::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

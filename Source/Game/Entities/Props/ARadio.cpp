@@ -14,7 +14,7 @@ namespace Freeking::Entity::Props
 	{
 	}
 
-	bool ARadio::SetProperty(const EntityKeyValue& keyValue)
+	bool ARadio::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}

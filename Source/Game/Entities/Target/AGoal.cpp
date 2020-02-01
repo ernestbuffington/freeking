@@ -14,7 +14,7 @@ namespace Freeking::Entity::Target
 	{
 	}
 
-	bool AGoal::SetProperty(const EntityKeyValue& keyValue)
+	bool AGoal::SetProperty(const EntityProperty& property)
 	{
 		return false;
 	}
