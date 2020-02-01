@@ -104,7 +104,7 @@ namespace Freeking
 		_window->Swap();
 
 
-		Texture2D::Library.SetSpecialNamed("pink", std::make_shared<Texture2D>(2, 2, 255, 0, 255));
+		Texture2D::Library.SetSpecialNamed("pink", std::make_shared<Texture2D>(2, 2, (uint8_t)255, (uint8_t)0, (uint8_t)255));
 		auto pink = Texture2D::Library.Get("pink");
 
 		Renderer renderer;
@@ -227,7 +227,7 @@ namespace Freeking
 			}
 
 			globals->SetValue(viewProjId, viewProjectionMatrix * Matrix4x4::Translation(Vector3f(0, 50, 0)));
-			md2Material->SetParameterValue("delta", 0);
+			md2Material->SetParameterValue("delta", 0.0f);
 			md2Material->SetParameterValue("normalBuffer", DynamicModel::GetNormalBuffer().get());
 
 			if (md2Mesh)

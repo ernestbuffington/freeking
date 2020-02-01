@@ -1,10 +1,10 @@
 #pragma once
 
-#include "IEntity.h"
+#include "BaseEntity.h"
 
 namespace Freeking::Entity::Elements
 {
-    class ARaincloud : public IEntity
+    class ARaincloud : public BaseEntity
     {
     public:
 

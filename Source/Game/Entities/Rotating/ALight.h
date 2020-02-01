@@ -1,10 +1,10 @@
 #pragma once
 
-#include "IEntity.h"
+#include "BaseEntity.h"
 
 namespace Freeking::Entity::Rotating
 {
-    class ALight : public IEntity
+    class ALight : public BaseEntity
     {
     public:
 

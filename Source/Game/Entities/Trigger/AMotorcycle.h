@@ -1,10 +1,10 @@
 #pragma once
 
-#include "IEntity.h"
+#include "BaseEntity.h"
 
 namespace Freeking::Entity::Trigger
 {
-    class AMotorcycle : public IEntity
+    class AMotorcycle : public BaseEntity
     {
     public:
 

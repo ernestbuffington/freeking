@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Smoke
 {
-	ASm::ASm() : IEntity()
+	ASm::ASm() : BaseEntity()
 	{
 	}
 

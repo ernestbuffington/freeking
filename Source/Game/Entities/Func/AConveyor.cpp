@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Func
 {
-	AConveyor::AConveyor() : IEntity()
+	AConveyor::AConveyor() : BaseEntity()
 	{
 	}
 

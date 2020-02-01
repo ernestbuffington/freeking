@@ -1,10 +1,10 @@
 #pragma once
 
-#include "IEntity.h"
+#include "BaseEntity.h"
 
 namespace Freeking::Entity::Hmg
 {
-    class AModCooling : public IEntity
+    class AModCooling : public BaseEntity
     {
     public:
 

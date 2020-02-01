@@ -1,10 +1,10 @@
 #pragma once
 
-#include "IEntity.h"
+#include "BaseEntity.h"
 
 namespace Freeking::Entity::Rc
 {
-    class AInitiationObserver : public IEntity
+    class AInitiationObserver : public BaseEntity
     {
     public:
 

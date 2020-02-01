@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Ai
 {
-	AGuard::AGuard() : IEntity()
+	AGuard::AGuard() : BaseEntity()
 	{
 	}
 

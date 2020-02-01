@@ -1,10 +1,10 @@
 #pragma once
 
-#include "IEntity.h"
+#include "BaseEntity.h"
 
 namespace Freeking::Entity::Pistol
 {
-    class AModRof : public IEntity
+    class AModRof : public BaseEntity
     {
     public:
 

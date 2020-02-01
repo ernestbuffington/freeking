@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props3
 {
-	ADecanter::ADecanter() : IEntity()
+	ADecanter::ADecanter() : BaseEntity()
 	{
 	}
 

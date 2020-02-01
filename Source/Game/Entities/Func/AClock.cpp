@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Func
 {
-	AClock::AClock() : IEntity()
+	AClock::AClock() : BaseEntity()
 	{
 	}
 

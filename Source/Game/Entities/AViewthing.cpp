@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity
 {
-	AViewthing::AViewthing() : IEntity()
+	AViewthing::AViewthing() : BaseEntity()
 	{
 	}
 

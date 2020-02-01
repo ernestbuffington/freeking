@@ -1,10 +1,10 @@
 #pragma once
 
-#include "IEntity.h"
+#include "BaseEntity.h"
 
 namespace Freeking::Entity::Rc
 {
-    class AInitiationBrush : public IEntity
+    class AInitiationBrush : public BaseEntity
     {
     public:
 

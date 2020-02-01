@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props
 {
-	AColaMachine::AColaMachine() : IEntity()
+	AColaMachine::AColaMachine() : BaseEntity()
 	{
 	}
 

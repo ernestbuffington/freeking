@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Misc
 {
-	ASkidrowAiReset::ASkidrowAiReset() : IEntity()
+	ASkidrowAiReset::ASkidrowAiReset() : BaseEntity()
 	{
 	}
 

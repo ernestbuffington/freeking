@@ -1,10 +1,10 @@
 #pragma once
 
-#include "IEntity.h"
+#include "BaseEntity.h"
 
 namespace Freeking::Entity::Props
 {
-    class ARatTrigger : public IEntity
+    class ARatTrigger : public BaseEntity
     {
     public:
 

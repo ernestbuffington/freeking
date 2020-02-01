@@ -1,26 +1,16 @@
 #include "BaseWorldEntity.h"
-#include "EntityComponent.h"
 #include "Map.h"
 #include "Util.h"
 
 namespace Freeking
 {
-	BaseWorldEntity::BaseWorldEntity() : BaseEntity(),
-		_rootComponent(CreateComponent<SceneComponent>())
-	{
-	}
-
-	void BaseWorldEntity::Initialize()
-	{
-	}
-
-	void BaseWorldEntity::Tick(double dt)
+	BaseWorldEntity::BaseWorldEntity() : BaseEntity()
 	{
 	}
 
 	void BaseWorldEntity::InitializeProperties(const EntityLump::EntityDef& def)
 	{
-		IEntity::InitializeProperties(def);
+		BaseEntity::InitializeProperties(def);
 
 		if (!def.logic)
 		{
@@ -35,5 +25,37 @@ namespace Freeking
 			SetPosition(origin);
 			SetRotation(rotation);
 		}
+	}
+
+	void BaseWorldEntity::Initialize()
+	{
+		BaseEntity::Initialize();
+	}
+
+	void BaseWorldEntity::PostInitialize()
+	{
+		BaseEntity::PostInitialize();
+	}
+
+	void BaseWorldEntity::Tick(double dt)
+	{
+		BaseEntity::Tick(dt);
+	}
+
+	void BaseWorldEntity::PostTick()
+	{
+		BaseEntity::PostTick();
+
+		UpdateTransform();
+	}
+
+	void BaseWorldEntity::Spawn()
+	{
+		BaseEntity::Spawn();
+	}
+
+	void BaseWorldEntity::UpdateTransform()
+	{
+		_transform = Matrix4x4::Translation(_position) * _rotation.ToMatrix4x4();
 	}
 }

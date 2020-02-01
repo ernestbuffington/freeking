@@ -1,10 +1,10 @@
 #pragma once
 
-#include "IEntity.h"
+#include "BaseEntity.h"
 
 namespace Freeking::Entity::Target
 {
-    class ABlaster : public IEntity
+    class ABlaster : public BaseEntity
     {
     public:
 

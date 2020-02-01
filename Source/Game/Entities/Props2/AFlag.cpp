@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props2
 {
-	AFlag::AFlag() : IEntity()
+	AFlag::AFlag() : BaseEntity()
 	{
 	}
 

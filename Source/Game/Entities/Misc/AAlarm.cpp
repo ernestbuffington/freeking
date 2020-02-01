@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Misc
 {
-	AAlarm::AAlarm() : IEntity()
+	AAlarm::AAlarm() : BaseEntity()
 	{
 	}
 

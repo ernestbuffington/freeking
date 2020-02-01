@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props2
 {
-	APinballMachine::APinballMachine() : IEntity()
+	APinballMachine::APinballMachine() : BaseEntity()
 	{
 	}
 

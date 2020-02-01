@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Target
 {
-	ASplash::ASplash() : IEntity()
+	ASplash::ASplash() : BaseEntity()
 	{
 	}
 

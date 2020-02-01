@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Target
 {
-	AChangelevel::AChangelevel() : IEntity()
+	AChangelevel::AChangelevel() : BaseEntity()
 	{
 	}
 

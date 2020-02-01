@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Rc
 {
-	AInitiationObserver::AInitiationObserver() : IEntity()
+	AInitiationObserver::AInitiationObserver() : BaseEntity()
 	{
 	}
 

@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Cast
 {
-	ARosie::ARosie() : IEntity()
+	ARosie::ARosie() : BaseEntity()
 	{
 	}
 

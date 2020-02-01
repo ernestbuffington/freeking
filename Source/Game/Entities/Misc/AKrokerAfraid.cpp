@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Misc
 {
-	AKrokerAfraid::AKrokerAfraid() : IEntity()
+	AKrokerAfraid::AKrokerAfraid() : BaseEntity()
 	{
 	}
 

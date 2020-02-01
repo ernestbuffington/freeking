@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Target
 {
-	AMalLaser::AMalLaser() : IEntity()
+	AMalLaser::AMalLaser() : BaseEntity()
 	{
 	}
 

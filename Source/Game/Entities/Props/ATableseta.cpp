@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props
 {
-	ATableseta::ATableseta() : IEntity()
+	ATableseta::ATableseta() : BaseEntity()
 	{
 	}
 

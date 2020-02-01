@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity
 {
-	AJunior::AJunior() : IEntity()
+	AJunior::AJunior() : BaseEntity()
 	{
 	}
 

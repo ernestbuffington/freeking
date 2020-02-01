@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props2
 {
-	AAirTrain::AAirTrain() : IEntity()
+	AAirTrain::AAirTrain() : BaseEntity()
 	{
 	}
 

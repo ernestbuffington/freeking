@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Func
 {
-	AKillbox::AKillbox() : IEntity()
+	AKillbox::AKillbox() : BaseEntity()
 	{
 	}
 

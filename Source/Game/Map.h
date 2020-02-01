@@ -102,7 +102,7 @@ namespace Freeking
 		std::map<std::string, std::shared_ptr<Texture2D>> _textures;
 		std::shared_ptr<Material> _material;
 		EntityLump _entityLump;
-		std::vector<std::shared_ptr<IEntity>> _entities;
+		std::vector<std::shared_ptr<BaseEntity>> _entities;
 		std::vector<std::shared_ptr<BaseWorldEntity>> _worldEntities;
 	};
 }

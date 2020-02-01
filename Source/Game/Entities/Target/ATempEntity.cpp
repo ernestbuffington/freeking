@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Target
 {
-	ATempEntity::ATempEntity() : IEntity()
+	ATempEntity::ATempEntity() : BaseEntity()
 	{
 	}
 

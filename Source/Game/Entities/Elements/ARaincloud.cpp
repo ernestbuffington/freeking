@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Elements
 {
-	ARaincloud::ARaincloud() : IEntity()
+	ARaincloud::ARaincloud() : BaseEntity()
 	{
 	}
 

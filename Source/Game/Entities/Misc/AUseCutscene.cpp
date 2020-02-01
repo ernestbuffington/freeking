@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Misc
 {
-	AUseCutscene::AUseCutscene() : IEntity()
+	AUseCutscene::AUseCutscene() : BaseEntity()
 	{
 	}
 

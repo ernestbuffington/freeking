@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props2
 {
-	ASign::ASign() : IEntity()
+	ASign::ASign() : BaseEntity()
 	{
 	}
 

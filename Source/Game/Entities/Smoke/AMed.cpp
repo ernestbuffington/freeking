@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Smoke
 {
-	AMed::AMed() : IEntity()
+	AMed::AMed() : BaseEntity()
 	{
 	}
 

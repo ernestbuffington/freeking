@@ -1,10 +1,10 @@
 #pragma once
 
-#include "IEntity.h"
+#include "BaseEntity.h"
 
 namespace Freeking::Entity::Elements
 {
-    class ASnowcloud : public IEntity
+    class ASnowcloud : public BaseEntity
     {
     public:
 

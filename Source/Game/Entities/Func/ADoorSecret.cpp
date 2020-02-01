@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Func
 {
-	ADoorSecret::ADoorSecret() : IEntity()
+	ADoorSecret::ADoorSecret() : BaseEntity()
 	{
 	}
 

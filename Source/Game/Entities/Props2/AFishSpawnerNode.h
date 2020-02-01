@@ -1,10 +1,10 @@
 #pragma once
 
-#include "IEntity.h"
+#include "BaseEntity.h"
 
 namespace Freeking::Entity::Props2
 {
-    class AFishSpawnerNode : public IEntity
+    class AFishSpawnerNode : public BaseEntity
     {
     public:
 

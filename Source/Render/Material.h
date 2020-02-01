@@ -273,7 +273,7 @@ namespace Freeking
 					if (auto it = _propertyNameIds.find(name);
 						it != _propertyNameIds.end())
 					{
-						return  it->second;
+						return it->second;
 					}
 
 					return -1;

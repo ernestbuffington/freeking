@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Ai
 {
-	ASafespot::ASafespot() : IEntity()
+	ASafespot::ASafespot() : BaseEntity()
 	{
 	}
 

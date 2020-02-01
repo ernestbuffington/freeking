@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Trigger
 {
-	AGravity::AGravity() : IEntity()
+	AGravity::AGravity() : BaseEntity()
 	{
 	}
 

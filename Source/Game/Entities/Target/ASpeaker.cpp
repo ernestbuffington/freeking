@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Target
 {
-	ASpeaker::ASpeaker() : IEntity()
+	ASpeaker::ASpeaker() : BaseEntity()
 	{
 	}
 

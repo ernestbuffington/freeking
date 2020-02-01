@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Misc
 {
-	AAmb4::AAmb4() : IEntity()
+	AAmb4::AAmb4() : BaseEntity()
 	{
 	}
 

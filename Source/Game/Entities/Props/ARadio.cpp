@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props
 {
-	ARadio::ARadio() : IEntity()
+	ARadio::ARadio() : BaseEntity()
 	{
 	}
 

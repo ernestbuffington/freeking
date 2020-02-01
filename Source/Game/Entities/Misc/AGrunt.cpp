@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Misc
 {
-	AGrunt::AGrunt() : IEntity()
+	AGrunt::AGrunt() : BaseEntity()
 	{
 	}
 

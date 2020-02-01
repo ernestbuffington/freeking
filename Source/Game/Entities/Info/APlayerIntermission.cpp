@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Info
 {
-	APlayerIntermission::APlayerIntermission() : IEntity()
+	APlayerIntermission::APlayerIntermission() : BaseEntity()
 	{
 	}
 

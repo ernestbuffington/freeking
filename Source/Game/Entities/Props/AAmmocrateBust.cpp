@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props
 {
-	AAmmocrateBust::AAmmocrateBust() : IEntity()
+	AAmmocrateBust::AAmmocrateBust() : BaseEntity()
 	{
 	}
 

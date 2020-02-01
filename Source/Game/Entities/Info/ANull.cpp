@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Info
 {
-	ANull::ANull() : IEntity()
+	ANull::ANull() : BaseEntity()
 	{
 	}
 

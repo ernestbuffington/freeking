@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Pawn
 {
-	AOMatic::AOMatic() : IEntity()
+	AOMatic::AOMatic() : BaseEntity()
 	{
 	}
 

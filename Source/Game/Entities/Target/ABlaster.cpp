@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Target
 {
-	ABlaster::ABlaster() : IEntity()
+	ABlaster::ABlaster() : BaseEntity()
 	{
 	}
 

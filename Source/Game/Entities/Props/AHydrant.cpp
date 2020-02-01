@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props
 {
-	AHydrant::AHydrant() : IEntity()
+	AHydrant::AHydrant() : BaseEntity()
 	{
 	}
 

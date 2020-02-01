@@ -1,10 +1,10 @@
 #pragma once
 
-#include "IEntity.h"
+#include "BaseEntity.h"
 
 namespace Freeking::Entity::Props
 {
-    class AHydrant : public IEntity
+    class AHydrant : public BaseEntity
     {
     public:
 

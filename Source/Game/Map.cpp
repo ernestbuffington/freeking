@@ -356,7 +356,7 @@ namespace Freeking
 				continue;
 			}
 
-			if (auto newEntity = IEntity::Make(classname))
+			if (auto newEntity = BaseEntity::Make(classname))
 			{
 				newEntity->InitializeProperties(e);
 				newEntity->Initialize();

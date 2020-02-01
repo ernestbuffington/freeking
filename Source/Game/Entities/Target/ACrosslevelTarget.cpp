@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Target
 {
-	ACrosslevelTarget::ACrosslevelTarget() : IEntity()
+	ACrosslevelTarget::ACrosslevelTarget() : BaseEntity()
 	{
 	}
 

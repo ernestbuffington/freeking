@@ -1,10 +1,10 @@
 #pragma once
 
-#include "IEntity.h"
+#include "BaseEntity.h"
 
 namespace Freeking::Entity::Sfx
 {
-    class ABeacon : public IEntity
+    class ABeacon : public BaseEntity
     {
     public:
 

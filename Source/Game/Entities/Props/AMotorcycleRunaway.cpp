@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props
 {
-	AMotorcycleRunaway::AMotorcycleRunaway() : IEntity()
+	AMotorcycleRunaway::AMotorcycleRunaway() : BaseEntity()
 	{
 	}
 

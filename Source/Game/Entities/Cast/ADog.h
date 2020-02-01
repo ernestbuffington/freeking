@@ -1,10 +1,10 @@
 #pragma once
 
-#include "IEntity.h"
+#include "BaseEntity.h"
 
 namespace Freeking::Entity::Cast
 {
-    class ADog : public IEntity
+    class ADog : public BaseEntity
     {
     public:
 

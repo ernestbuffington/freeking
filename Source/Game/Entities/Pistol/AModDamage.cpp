@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Pistol
 {
-	AModDamage::AModDamage() : IEntity()
+	AModDamage::AModDamage() : BaseEntity()
 	{
 	}
 

@@ -1,10 +1,10 @@
 #pragma once
 
-#include "IEntity.h"
+#include "BaseEntity.h"
 
 namespace Freeking::Entity::Props2
 {
-    class ABarrelsPvC : public IEntity
+    class ABarrelsPvC : public BaseEntity
     {
     public:
 

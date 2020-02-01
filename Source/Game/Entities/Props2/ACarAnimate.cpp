@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Props2
 {
-	ACarAnimate::ACarAnimate() : IEntity()
+	ACarAnimate::ACarAnimate() : BaseEntity()
 	{
 	}
 

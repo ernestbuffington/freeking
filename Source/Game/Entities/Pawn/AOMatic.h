@@ -1,10 +1,10 @@
 #pragma once
 
-#include "IEntity.h"
+#include "BaseEntity.h"
 
 namespace Freeking::Entity::Pawn
 {
-    class AOMatic : public IEntity
+    class AOMatic : public BaseEntity
     {
     public:
 

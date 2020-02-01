@@ -1,10 +1,10 @@
 #pragma once
 
-#include "IEntity.h"
+#include "BaseEntity.h"
 
 namespace Freeking::Entity::Misc
 {
-    class ASkidrowRadioRepeater : public IEntity
+    class ASkidrowRadioRepeater : public BaseEntity
     {
     public:
 

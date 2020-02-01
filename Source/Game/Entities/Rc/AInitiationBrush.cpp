@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Rc
 {
-	AInitiationBrush::AInitiationBrush() : IEntity()
+	AInitiationBrush::AInitiationBrush() : BaseEntity()
 	{
 	}
 

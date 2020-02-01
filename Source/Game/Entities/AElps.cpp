@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity
 {
-	AElps::AElps() : IEntity()
+	AElps::AElps() : BaseEntity()
 	{
 	}
 
