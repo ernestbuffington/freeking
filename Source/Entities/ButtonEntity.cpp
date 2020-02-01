@@ -20,7 +20,7 @@ namespace Freeking
 		float distance = 0.0f;
 		if (_model)
 		{
-			auto extent = (rotation * (_model->BoundsMax - _model->BoundsMin));
+			auto extent = rotation * (GetLocalMaxBounds() - GetLocalMinBounds());
 			distance = _lip - extent.x;
 		}
 

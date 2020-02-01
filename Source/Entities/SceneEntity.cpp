@@ -69,4 +69,10 @@ namespace Freeking
 	{
 		_transform = Matrix4x4::Translation(_position) * _rotation.ToMatrix4x4();
 	}
+
+	void SceneEntity::SetLocalBounds(const Vector3f& minBounds, const Vector3f& maxBounds)
+	{
+		_localMinBounds = minBounds;
+		_localMaxBounds = maxBounds;
+	}
 }

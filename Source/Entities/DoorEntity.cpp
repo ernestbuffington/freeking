@@ -17,7 +17,7 @@ namespace Freeking
 
 		if (_model)
 		{
-			_distance = (_model->BoundsMax - _model->BoundsMin).y - 8.0f;
+			_distance = (GetLocalMaxBounds() - GetLocalMinBounds()).y - 8.0f;
 		}
 	}
 

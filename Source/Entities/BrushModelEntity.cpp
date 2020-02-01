@@ -20,7 +20,10 @@ namespace Freeking
 	{
 		PrimitiveEntity::Initialize();
 
-		_model = GetModel();
+		if (_model = GetModel(); _model)
+		{
+			SetLocalBounds(_model->BoundsMin, _model->BoundsMax);
+		}
 	}
 
 	void BrushModelEntity::RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<Material>& material)
@@ -43,15 +46,15 @@ namespace Freeking
 	{
 		if (_model)
 		{
-			lineRenderer->DrawBox(GetTransform(), _model->BoundsMin, _model->BoundsMax, Vector4f(0, 1, 0, 1));
+			lineRenderer->DrawBox(GetTransform(), GetLocalMinBounds(), GetLocalMaxBounds(), Vector4f(0, 1, 0, 1));
 
-			auto position = GetTransform() * (_model->BoundsMin + ((_model->BoundsMax - _model->BoundsMin) * 0.5f));
+			auto position = GetTransform() * (GetLocalMinBounds() + ((GetLocalMaxBounds() - GetLocalMinBounds()) * 0.5f));
 
 			auto& spriteBatch = SpriteBatch::Debug;
 			Vector2f screenPosition;
 			if (Util::WorldPointToNormalisedScreenPoint(position, screenPosition, SpriteBatch::ProjectionMatrix, SpriteBatch::ViewMatrix, 2048.0f))
 			{
-				float alpha = 0.6f;
+				float alpha = 0.75f;
 				screenPosition = Util::ScreenSpaceToPixelPosition(screenPosition, Vector4i(0, 0, SpriteBatch::ViewportWidth, SpriteBatch::ViewportHeight));
 				screenPosition.x = Math::Round(screenPosition.x);
 				screenPosition.y = Math::Round(screenPosition.y);

@@ -26,6 +26,10 @@ namespace Freeking
 		inline const Quaternion& GetRotation() const { return _rotation; }
 		inline const Matrix4x4& GetTransform() const { return _transform; }
 
+		void SetLocalBounds(const Vector3f& minBounds, const Vector3f& maxBounds);
+		inline const Vector3f& GetLocalMinBounds() const { return _localMinBounds; }
+		inline const Vector3f& GetLocalMaxBounds() const { return _localMaxBounds; }
+
 	protected:
 
 		virtual bool SetProperty(const EntityProperty& property) override;
@@ -40,5 +44,8 @@ namespace Freeking
 		Vector3f _position;
 		Quaternion _rotation;
 		Matrix4x4 _transform;
+
+		Vector3f _localMinBounds;
+		Vector3f _localMaxBounds;
 	};
 }
