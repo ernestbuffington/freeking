@@ -1,12 +1,12 @@
 #pragma once
 
-#include "BaseWorldEntity.h"
+#include "PrimitiveEntity.h"
 
 namespace Freeking
 {
 	class BrushModel;
 
-	class BrushModelEntity : public BaseWorldEntity
+	class BrushModelEntity : public PrimitiveEntity
 	{
 	public:
 
@@ -21,6 +21,8 @@ namespace Freeking
 	protected:
 
 		virtual bool SetProperty(const EntityKeyValue& keyValue) override;
+
+		virtual std::shared_ptr<BrushModel> GetModel();
 
 	protected:
 

@@ -4,24 +4,21 @@
 
 namespace Freeking
 {
-	BrushModelEntity::BrushModelEntity() : BaseWorldEntity(),
+	BrushModelEntity::BrushModelEntity() : PrimitiveEntity(),
 		_modelIndex(-1)
 	{
 	}
 
 	void BrushModelEntity::Tick(double dt)
 	{
-		BaseWorldEntity::Tick(dt);
+		PrimitiveEntity::Tick(dt);
 	}
 
 	void BrushModelEntity::Initialize()
 	{
-		if (_modelIndex < 0)
-		{
-			return;
-		}
+		PrimitiveEntity::Initialize();
 
-		_model = Map::Current->GetBrushModel(_modelIndex);
+		_model = GetModel();
 	}
 
 	void BrushModelEntity::RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<Material>& material)
@@ -49,6 +46,11 @@ namespace Freeking
 			return Util::TryParseInt(keyValue.Value.substr(1), _modelIndex);
 		}
 
-		return false;
+		return PrimitiveEntity::SetProperty(keyValue);
+	}
+
+	std::shared_ptr<BrushModel> BrushModelEntity::GetModel()
+	{
+		return _modelIndex < 0 ? nullptr : Map::Current->GetBrushModel(_modelIndex);
 	}
 }

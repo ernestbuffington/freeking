@@ -4,13 +4,11 @@
 
 namespace Freeking
 {
-	class Material;
-
-	class BaseWorldEntity : public BaseEntity
+	class SceneEntity : public BaseEntity
 	{
 	public:
 
-		BaseWorldEntity();
+		SceneEntity();
 
 		virtual void InitializeProperties(const EntityLump::EntityDef& def) override;
 		virtual void Initialize() override;
@@ -18,9 +16,6 @@ namespace Freeking
 		virtual void Tick(double dt) override;
 		virtual void PostTick() override;
 		virtual void Spawn() override;
-
-		virtual void RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<Material>& material) = 0;
-		virtual void RenderTranslucent(const Matrix4x4& viewProjection, const std::shared_ptr<Material>& material) = 0;
 
 		inline void SetPosition(const Vector3f& position) { _position = position; }
 		inline void SetRotation(const Quaternion& rotation) { _rotation = rotation; }
@@ -32,6 +27,10 @@ namespace Freeking
 		inline const Matrix4x4& GetTransform() const { return _transform; }
 
 	protected:
+
+		virtual bool SetProperty(const EntityKeyValue& keyValue) override;
+
+	private:
 
 		void UpdateTransform();
 

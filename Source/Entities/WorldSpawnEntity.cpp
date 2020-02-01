@@ -3,8 +3,8 @@
 
 namespace Freeking
 {
-	void WorldSpawnEntity::Initialize()
+	std::shared_ptr<BrushModel> WorldSpawnEntity::GetModel()
 	{
-		_model = Map::Current->GetBrushModel(0);
+		return Map::Current->GetBrushModel(0);
 	}
 }

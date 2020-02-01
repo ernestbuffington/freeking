@@ -365,7 +365,7 @@ namespace Freeking
 
 				_entities.push_back(newEntity);
 
-				if (auto worldEntity = std::dynamic_pointer_cast<BaseWorldEntity>(newEntity))
+				if (auto worldEntity = std::dynamic_pointer_cast<PrimitiveEntity>(newEntity))
 				{
 					_worldEntities.push_back(worldEntity);
 				}

@@ -5,7 +5,7 @@
 #include "TextureSampler.h"
 #include "Vector.h"
 #include "Quaternion.h"
-#include "BaseWorldEntity.h"
+#include "PrimitiveEntity.h"
 #include <string>
 #include <memory>
 #include <charconv>
@@ -103,6 +103,6 @@ namespace Freeking
 		std::shared_ptr<Material> _material;
 		EntityLump _entityLump;
 		std::vector<std::shared_ptr<BaseEntity>> _entities;
-		std::vector<std::shared_ptr<BaseWorldEntity>> _worldEntities;
+		std::vector<std::shared_ptr<PrimitiveEntity>> _worldEntities;
 	};
 }
