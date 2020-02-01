@@ -2,4 +2,7 @@
 
 namespace Freeking::Entity::Func
 {
+	AButton::AButton() : ButtonEntity()
+	{
+	}
 }

@@ -1,6 +1,7 @@
 #include "BrushModelEntity.h"
 #include "Map.h"
 #include "Util.h"
+#include "LineRenderer.h"
 
 namespace Freeking
 {
@@ -34,6 +35,14 @@ namespace Freeking
 		if (_model)
 		{
 			_model->RenderTranslucent(viewProjection, material);
+		}
+	}
+
+	void BrushModelEntity::RenderDebug(LineRenderer* lineRenderer)
+	{
+		if (_model)
+		{
+			lineRenderer->DrawBox(GetTransform(), _model->BoundsMin, _model->BoundsMax, Vector4f(0, 1, 0, 1));
 		}
 	}
 

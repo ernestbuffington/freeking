@@ -73,6 +73,7 @@ namespace Freeking
 
 		void RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<Material>& material);
 		void RenderTranslucent(const Matrix4x4& viewProjection, const std::shared_ptr<Material>& material);
+		void RenderDebug(class LineRenderer* lineRenderer);
 
 		std::map<std::string, std::shared_ptr<BrushMesh>> Meshes;
 
@@ -88,7 +89,7 @@ namespace Freeking
 		Map(const BspFile& bspFile);
 
 		void Tick(double dt);
-		void Render(const Matrix4x4& viewProjection);
+		void Render(const Matrix4x4& viewProjection, class LineRenderer* lineRenderer);
 
 		const std::vector<EntityProperties>& GetEntityProperties() { return _entityKeyValues; }
 		const std::shared_ptr<BrushModel>& GetBrushModel(uint32_t index) const { return _models.at(index); }

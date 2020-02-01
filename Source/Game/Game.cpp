@@ -225,7 +225,7 @@ namespace Freeking
 			Matrix4x4 viewProjectionMatrix = projectionMatrix * viewMatrix;
 
 			map->Tick(deltaTime);
-			map->Render(viewProjectionMatrix);
+			map->Render(viewProjectionMatrix, lineRenderer.get());
 
 			for (const auto& thug : thugs)
 			{

@@ -7,6 +7,7 @@
 #include "DynamicModel.h"
 #include "Paths.h"
 #include "Profiler.h"
+#include "LineRenderer.h"
 #include "ThirdParty/rectpack2d/finders_interface.h"
 #include <array>
 
@@ -81,6 +82,11 @@ namespace Freeking
 		}
 	}
 
+	void BrushModel::RenderDebug(LineRenderer* lineRenderer)
+	{
+
+	}
+
 	void Map::Tick(double dt)
 	{
 		for (const auto& entity : _entities)
@@ -90,7 +96,7 @@ namespace Freeking
 		}
 	}
 
-	void Map::Render(const Matrix4x4& viewProjection)
+	void Map::Render(const Matrix4x4& viewProjection, LineRenderer* lineRenderer)
 	{
 		_material->SetParameterValue("viewProj", viewProjection);
 		_material->SetParameterValue("diffuse", 0);
@@ -106,6 +112,7 @@ namespace Freeking
 			auto mvp = viewProjection * entity->GetTransform();
 			_material->SetParameterValue("viewProj", mvp);
 			entity->RenderOpaque(mvp, _material);
+			entity->RenderDebug(lineRenderer);
 		}
 
 		glEnable(GL_BLEND);
@@ -181,8 +188,10 @@ namespace Freeking
 		{
 			const auto& model = models[modelIndex];
 			auto brushModel = std::make_shared<BrushModel>();
-			brushModel->BoundsMin = Vector3f(model.BoundsMin.x, model.BoundsMin.z, -model.BoundsMin.y);
-			brushModel->BoundsMax = Vector3f(model.BoundsMax.x, model.BoundsMax.z, -model.BoundsMax.y);
+			Vector3f boundsMin(model.BoundsMin.x, model.BoundsMin.z, -model.BoundsMin.y);
+			Vector3f boundsMax(model.BoundsMax.x, model.BoundsMax.z, -model.BoundsMax.y);
+			brushModel->BoundsMin = Vector3f(Math::Min(boundsMin.x, boundsMax.x), Math::Min(boundsMin.y, boundsMax.y), Math::Min(boundsMin.z, boundsMax.z));
+			brushModel->BoundsMax = Vector3f(Math::Max(boundsMin.x, boundsMax.x), Math::Max(boundsMin.y, boundsMax.y), Math::Max(boundsMin.z, boundsMax.z));
 			brushModel->Origin = Vector3f(model.Origin.x, model.Origin.z, -model.Origin.y);
 
 			for (int faceIndex = model.FirstFace; faceIndex < (model.FirstFace + model.NumFaces); ++faceIndex)

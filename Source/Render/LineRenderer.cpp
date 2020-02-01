@@ -51,6 +51,22 @@ namespace Freeking
 		BufferVertex(p2, colour);
 	}
 
+	void LineRenderer::DrawBox(const Matrix4x4& transform, const Vector3f& mins, const Vector3f& maxs, const Vector4f& colour)
+	{
+		DrawLine(transform * Vector3f(mins.x, mins.y, mins.z), transform * Vector3f(maxs.x, mins.y, mins.z), colour);
+		DrawLine(transform * Vector3f(maxs.x, mins.y, mins.z), transform * Vector3f(maxs.x, maxs.y, mins.z), colour);
+		DrawLine(transform * Vector3f(maxs.x, maxs.y, mins.z), transform * Vector3f(mins.x, maxs.y, mins.z), colour);
+		DrawLine(transform * Vector3f(mins.x, maxs.y, mins.z), transform * Vector3f(mins.x, mins.y, mins.z), colour);
+		DrawLine(transform * Vector3f(mins.x, mins.y, mins.z), transform * Vector3f(mins.x, mins.y, maxs.z), colour);
+		DrawLine(transform * Vector3f(maxs.x, mins.y, mins.z), transform * Vector3f(maxs.x, mins.y, maxs.z), colour);
+		DrawLine(transform * Vector3f(maxs.x, maxs.y, mins.z), transform * Vector3f(maxs.x, maxs.y, maxs.z), colour);
+		DrawLine(transform * Vector3f(mins.x, maxs.y, mins.z), transform * Vector3f(mins.x, maxs.y, maxs.z), colour);
+		DrawLine(transform * Vector3f(mins.x, mins.y, maxs.z), transform * Vector3f(maxs.x, mins.y, maxs.z), colour);
+		DrawLine(transform * Vector3f(maxs.x, mins.y, maxs.z), transform * Vector3f(maxs.x, maxs.y, maxs.z), colour);
+		DrawLine(transform * Vector3f(maxs.x, maxs.y, maxs.z), transform * Vector3f(mins.x, maxs.y, maxs.z), colour);
+		DrawLine(transform * Vector3f(mins.x, maxs.y, maxs.z), transform * Vector3f(mins.x, mins.y, maxs.z), colour);
+	}
+
 	void LineRenderer::DrawAABBox(const Vector3f& position, const Vector3f& mins, const Vector3f& maxs, const Vector4f& colour)
 	{
 		DrawAABBox(position + mins, position + maxs, colour);

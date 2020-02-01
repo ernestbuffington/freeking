@@ -1,12 +1,13 @@
 #pragma once
 
-#include "BrushModelEntity.h"
+#include "ButtonEntity.h"
 
 namespace Freeking::Entity::Func
 {
-    class AButton : public BrushModelEntity
+    class AButton : public ButtonEntity
     {
     public:
 
+        AButton();
     };
 }

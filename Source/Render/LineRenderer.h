@@ -16,6 +16,7 @@ namespace Freeking
 		LineRenderer(std::size_t maxVertexCount);
 
 		void DrawLine(const Vector3f& p1, const Vector3f& p2, const Vector4f& colour);
+		void DrawBox(const Matrix4x4& transform, const Vector3f& mins, const Vector3f& maxs, const Vector4f& colour);
 		void DrawAABBox(const Vector3f& mins, const Vector3f& maxs, const Vector4f& colour);
 		void DrawAABBox(const Vector3f& position, const Vector3f& mins, const Vector3f& maxs, const Vector4f& colour);
 		void DrawSphere(const Vector3f& position, float radius, int thetaSegments, int phiSegments, const Vector4f& colour);
