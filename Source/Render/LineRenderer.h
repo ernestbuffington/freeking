@@ -13,6 +13,8 @@ namespace Freeking
 	{
 	public:
 
+		static std::shared_ptr<LineRenderer> Debug;
+
 		LineRenderer(std::size_t maxVertexCount);
 
 		void DrawLine(const Vector3f& p1, const Vector3f& p2, const Vector4f& colour);

@@ -48,6 +48,8 @@ set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 target_link_libraries(${PROJECT_NAME}
   PRIVATE
     SDL2::SDL2
+    OpenAL::OpenAL
+    fmt::fmt
   )
 
 include_directories(ThirdParty/glad/include)

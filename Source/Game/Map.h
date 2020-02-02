@@ -35,7 +35,8 @@ namespace Freeking
 		BrushMesh() :
 			AlphaCutOff(0.0f),
 			AlphaMultiply(0.0f),
-			Translucent(false)
+			Translucent(false),
+			LightStyles({ {255, 255, 255, 255} })
 		{
 		}
 
@@ -58,7 +59,7 @@ namespace Freeking
 		float AlphaMultiply;
 		bool Translucent;
 
-		uint8_t LightStyles[4];
+		std::array<uint8_t, 4> LightStyles;
 
 	private:
 

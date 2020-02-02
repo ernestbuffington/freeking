@@ -44,7 +44,7 @@ namespace Freeking
 		_vertexBinding->Create(vertexLayout, 5, *_indexBuffer, ElementType::UInt);
 	}
 
-	const static std::array<std::string, 12> lightSequences
+	const static std::array<std::string, 21> lightSequences
 	{
 		"m",
 		"mmnmmommommnonmmonqnmmo",
@@ -58,6 +58,15 @@ namespace Freeking
 		"aaaaaaaazzzzzzzz",
 		"mmamammmmammamamaaamammma",
 		"abcdefghijklmnopqrrqponmlkjihgfedcba",
+		"mmnommomhkmmomnonmmonqnmmo",
+		"kmamaamakmmmaakmamakmakmmmma",
+		"kmmmakakmmaaamammamkmamakmmmma",
+		"mmnnoonnmmmmmmmmmnmmmmnonmmmmmmm",
+		"mmmmnonmmmmnmmmmmnonmmmmmnmmmmmmm",
+		"zzzzzzzzaaaaaaaa",
+		"zzzzzzzzaaaaaaaaaaaaaaaa",
+		"aaaaaaaazzzzzzzzaaaaaaaa",
+		"aaaaaaaaaaaaaaaazzzzzzzz"
 	};
 
 	class LightStyle
@@ -112,7 +121,7 @@ namespace Freeking
 
 			if (_interpolated)
 			{
-				int nextIndex = (index + 1) % numSamples;
+				size_t nextIndex = (index + 1) % numSamples;
 
 				float a = _samples.at(index);
 				float b = _samples.at(nextIndex);
@@ -123,7 +132,7 @@ namespace Freeking
 				}
 				else
 				{
-					_lastSample = (a + fraction * (b - a));
+					_lastSample = (a + static_cast<float>(fraction) * (b - a));
 				}
 			}
 			else
@@ -182,21 +191,6 @@ namespace Freeking
 
 		std::vector<LightStyle> _styles;
 	};
-
-	static float GetLightStyleBrightness(const std::string& sequence)
-	{
-		int sequenceLength = sequence.size();
-		if (sequenceLength == 0) return 0.0f;
-		double t = fmod(Map::Time, (double)sequenceLength) * 10.0;
-		int index = (int)floor(t);
-		double delta = t - (double)index;
-		index %= sequenceLength;
-		int nextIndex = (index + 1) % sequenceLength;
-		float brightnessA = ((float)(sequence[index] - 97) / 25.0f) * 2.0f;
-		float brightnessB = ((float)(sequence[nextIndex] - 97) / 25.0f) * 2.0f;
-		float brightness = (brightnessA + delta * (brightnessB - brightnessA));
-		return brightness;
-	}
 
 	void BrushModel::RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<Material>& material)
 	{
@@ -335,7 +329,7 @@ namespace Freeking
 			if (textureIds.find(textureName) == textureIds.end())
 			{
 				auto path = "textures/" + (textureName + std::string(".tga"));
-				textureIds.emplace(textureName, _textures.size());
+				textureIds.emplace(textureName, static_cast<uint32_t>(_textures.size()));
 				_textures.push_back(Texture2D::Library.Get(path));
 			}
 		}

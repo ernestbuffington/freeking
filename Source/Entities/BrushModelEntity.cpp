@@ -55,7 +55,7 @@ namespace Freeking
 			if (Util::WorldPointToNormalisedScreenPoint(position, screenPosition, SpriteBatch::ProjectionMatrix, SpriteBatch::ViewMatrix, 2048.0f))
 			{
 				float alpha = 0.75f;
-				screenPosition = Util::ScreenSpaceToPixelPosition(screenPosition, Vector4i(0, 0, SpriteBatch::ViewportWidth, SpriteBatch::ViewportHeight));
+				screenPosition = Util::ScreenSpaceToPixelPosition(screenPosition, Vector4i(0, 0, (int)SpriteBatch::ViewportWidth, (int)SpriteBatch::ViewportHeight));
 				screenPosition.x = Math::Round(screenPosition.x);
 				screenPosition.y = Math::Round(screenPosition.y);
 				auto text = _classname + " (*" + std::to_string(_modelIndex) + ")";

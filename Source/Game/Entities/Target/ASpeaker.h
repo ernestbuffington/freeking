@@ -1,10 +1,10 @@
 #pragma once
 
-#include "BaseEntity.h"
+#include "SceneEntity.h"
 
 namespace Freeking::Entity::Target
 {
-    class ASpeaker : public BaseEntity
+    class ASpeaker : public SceneEntity
     {
     public:
 
@@ -19,5 +19,17 @@ namespace Freeking::Entity::Target
 
     private:
 
+        enum class SpawnFlags : uint32_t
+        {
+            None = 0,
+            LoopedOn = 1,
+            LoopOff = 2,
+            Important = 4
+        };
+
+        std::string _noise;
+        float _attenuation;
+        float _volume;
+        SpawnFlags _spawnFlags;
     };
 }

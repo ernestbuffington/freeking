@@ -4,6 +4,8 @@
 
 namespace Freeking
 {
+	std::shared_ptr<LineRenderer> LineRenderer::Debug = nullptr;
+
 	LineRenderer::LineRenderer(size_t maxVertexCount) :
 		_maxVertexCount(maxVertexCount),
 		_vertexCount(0)

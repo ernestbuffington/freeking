@@ -40,6 +40,15 @@ mark_as_advanced(_CXX_FILESYSTEM_HAVE_EXPERIMENTAL_HEADER)
 
 # Dependencies
 find_package(SDL2 REQUIRED)
+find_package(OpenAL REQUIRED)
+find_package(fmt REQUIRED)
+
+# Wrap OpenAL Soft in an interface
+if (OPENAL_FOUND AND NOT TARGET OpenAL::OpenAL)
+  add_library(OpenAL::OpenAL INTERFACE IMPORTED GLOBAL)
+  set_target_properties(OpenAL::OpenAL PROPERTIES INTERFACE_INCLUDE_DIRECTORIES ${OPENAL_INCLUDE_DIR})
+  set_target_properties(OpenAL::OpenAL PROPERTIES INTERFACE_LINK_LIBRARIES ${OPENAL_LIBRARY})
+endif()
 
 # The Code
 add_subdirectory(Source)
