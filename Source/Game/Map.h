@@ -116,6 +116,7 @@ namespace Freeking
 
 		static Map* Current;
 		static double Time;
+		static class LightStyles LightStyles;
 
 	private:
 

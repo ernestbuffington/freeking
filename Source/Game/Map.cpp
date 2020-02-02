@@ -44,7 +44,7 @@ namespace Freeking
 		_vertexBinding->Create(vertexLayout, 5, *_indexBuffer, ElementType::UInt);
 	}
 
-	const static std::string lightSequences[]
+	const static std::array<std::string, 12> lightSequences
 	{
 		"m",
 		"mmnmmommommnonmmonqnmmo",
@@ -60,17 +60,140 @@ namespace Freeking
 		"abcdefghijklmnopqrrqponmlkjihgfedcba",
 	};
 
+	class LightStyle
+	{
+	public:
+
+		LightStyle(const std::string_view& values, double speed, bool interpolated) :
+			_speed(speed),
+			_lastSample(0.0f),
+			_interpolated(interpolated),
+			_disabled(false)
+		{
+			_samples.resize(values.size());
+
+			for (auto i = 0; i < _samples.size(); ++i)
+			{
+				_samples[i] = ((float)(values[i] - 97) / 25.0f) * 2.0f;
+			}
+		}
+
+		void SetEnabled(bool enabled)
+		{
+			_disabled = !enabled;
+		}
+
+		void Update(double time)
+		{
+			if (_disabled)
+			{
+				_lastSample = 0.0f;
+
+				return;
+			}
+
+			if (_speed < 0.0)
+			{
+				return;
+			}
+
+			size_t numSamples = _samples.size();
+			if (numSamples == 1)
+			{
+				_lastSample = _samples.at(0);
+
+				return;
+			}
+
+			time = fmod(time, static_cast<double>(numSamples) * (1.0 / _speed)) * _speed;
+			size_t index = static_cast<size_t>(floor(time));
+			double fraction = time - static_cast<double>(index);
+			index %= numSamples;
+
+			if (_interpolated)
+			{
+				int nextIndex = (index + 1) % numSamples;
+
+				float a = _samples.at(index);
+				float b = _samples.at(nextIndex);
+
+				if (index == nextIndex)
+				{
+					_lastSample = _samples.at(index);
+				}
+				else
+				{
+					_lastSample = (a + fraction * (b - a));
+				}
+			}
+			else
+			{
+				_lastSample = _samples.at(index);
+			}
+		}
+
+		inline float GetSample() const { return _lastSample; }
+
+	private:
+
+		std::vector<float> _samples;
+		double _speed;
+		float _lastSample;
+		bool _interpolated;
+		bool _disabled;
+	};
+
+	class LightStyles
+	{
+	public:
+
+		void Update(double time)
+		{
+			for (auto& style : _styles)
+			{
+				style.Update(time);
+			}
+		}
+
+		void SetEnabled(size_t index, bool enabled)
+		{
+			if (index < _styles.size())
+			{
+				_styles.at(index).SetEnabled(enabled);
+			}
+		}
+
+		void Add(const std::string_view& values, double speed, bool interpolated)
+		{
+			_styles.emplace_back(values, speed, interpolated);
+		}
+
+		float GetSample(size_t index) const
+		{
+			if (index < _styles.size())
+			{
+				return _styles.at(index).GetSample();
+			}
+
+			return 0.0f;
+		}
+
+	private:
+
+		std::vector<LightStyle> _styles;
+	};
+
 	static float GetLightStyleBrightness(const std::string& sequence)
 	{
 		int sequenceLength = sequence.size();
 		if (sequenceLength == 0) return 0.0f;
-		double t = fmod(Map::Time, (double)sequenceLength) * 15.0;
+		double t = fmod(Map::Time, (double)sequenceLength) * 10.0;
 		int index = (int)floor(t);
 		double delta = t - (double)index;
 		index %= sequenceLength;
 		int nextIndex = (index + 1) % sequenceLength;
-		float brightnessA = (float)(sequence[index] - 97) / 25.0f;
-		float brightnessB = (float)(sequence[nextIndex] - 97) / 25.0f;
+		float brightnessA = ((float)(sequence[index] - 97) / 25.0f) * 2.0f;
+		float brightnessB = ((float)(sequence[nextIndex] - 97) / 25.0f) * 2.0f;
 		float brightness = (brightnessA + delta * (brightnessB - brightnessA));
 		return brightness;
 	}
@@ -84,13 +207,8 @@ namespace Freeking
 				continue;
 			}
 
-			float lightStyleBrightness = 0.0f;
-			if (mesh.second->LightStyles[1] != 255)
-			{
-				lightStyleBrightness = GetLightStyleBrightness(lightSequences[mesh.second->LightStyles[1]]);
-			}
-
-			material->SetParameterValue("brightness", lightStyleBrightness * 2.0f);
+			float brightness = Map::LightStyles.GetSample(mesh.second->LightStyles[1]);
+			material->SetParameterValue("brightness", brightness * 2.0f);
 			material->SetParameterValue("alphaCutOff", mesh.second->AlphaCutOff);
 			material->SetParameterValue("diffuse", mesh.second->GetDiffuse().get());
 			material->SetParameterValue("lightmap", mesh.second->GetLightmap().get());
@@ -109,13 +227,8 @@ namespace Freeking
 				continue;
 			}
 
-			float lightStyleBrightness = 0.0f;
-			if (mesh.second->LightStyles[1] != 255)
-			{
-				lightStyleBrightness = GetLightStyleBrightness(lightSequences[mesh.second->LightStyles[1]]);
-			}
-
-			material->SetParameterValue("brightness", lightStyleBrightness * 2.0f);
+			float brightness = Map::LightStyles.GetSample(mesh.second->LightStyles[1]);
+			material->SetParameterValue("brightness", brightness * 2.0f);
 			material->SetParameterValue("alphaMultiply", mesh.second->AlphaMultiply);
 			material->SetParameterValue("diffuse", mesh.second->GetDiffuse().get());
 			material->SetParameterValue("lightmap", mesh.second->GetLightmap().get());
@@ -133,6 +246,7 @@ namespace Freeking
 	void Map::Tick(double dt)
 	{
 		Time += dt;
+		LightStyles.Update(Time);
 
 		for (const auto& entity : _entities)
 		{
@@ -176,10 +290,16 @@ namespace Freeking
 
 	Map* Map::Current = nullptr;
 	double Map::Time = 0.0;
+	LightStyles Map::LightStyles;
 
 	Map::Map(const BspFile& bspFile)
 	{
 		Map::Current = this;
+
+		for (const auto& l : lightSequences)
+		{
+			LightStyles.Add(l, 10.0, true);
+		}
 
 		Profiler pf;
 
