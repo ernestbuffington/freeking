@@ -33,5 +33,6 @@ namespace Freeking
 
 		std::string _name;
 		std::string _classname;
+		double _timeSpawned;
 	};
 }

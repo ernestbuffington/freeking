@@ -251,6 +251,11 @@ namespace Freeking
 		return FromRadianAngles(0, Math::DegreesToRadians(yaw), 0);
 	}
 
+	Quaternion Quaternion::FromRadianYaw(float yaw)
+	{
+		return FromRadianAngles(0, yaw, 0);
+	}
+
 	Quaternion Quaternion::FromDegreeRoll(float roll)
 	{
 		return FromRadianAngles(0, 0, Math::DegreesToRadians(roll));

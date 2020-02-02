@@ -7,7 +7,7 @@ namespace Freeking
 {
 	struct MDXHeader
 	{
-		int Magic;
+		int Ident;
 		int Version;
 		int SkinWidth;
 		int SkinHeight;

@@ -10,6 +10,7 @@ namespace Freeking
 
 		RotatingEntity();
 
+		virtual void Initialize() override;
 		virtual void Tick(double dt) override;
 
 	protected:
@@ -19,5 +20,6 @@ namespace Freeking
 	private:
 
 		float _speed;
+		Quaternion _initialRotation;
 	};
 }

@@ -1,5 +1,6 @@
 #include "ButtonEntity.h"
 #include "Map.h"
+#include "TimeUtil.h"
 
 namespace Freeking
 {
@@ -7,7 +8,6 @@ namespace Freeking
 		_speed(500.0f),
 		_angle(0.0f),
 		_lip(0.0f),
-		_time(0.0f),
 		_moveDistance(0.0f)
 	{
 	}
@@ -27,8 +27,7 @@ namespace Freeking
 	{
 		BrushModelEntity::Tick(dt);
 
-		_time = Math::Mod(_time + (float)(dt * Math::DegreesToRadians(_speed)), Math::TwoPi);
-		SetPosition(_initialPosition + (_moveDirection * (_moveDistance * Math::SineWave(_time))));
+		SetPosition(_initialPosition + (_moveDirection * (_moveDistance * Math::SineWave(Time::Now() - _timeSpawned, _speed))));
 	}
 
 	bool ButtonEntity::SetProperty(const EntityProperty& property)

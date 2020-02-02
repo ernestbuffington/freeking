@@ -44,6 +44,7 @@ namespace Freeking
 		static Quaternion FromDegreePitch(float pitch);
 		static Quaternion FromDegreeYaw(float yaw);
 		static Quaternion FromDegreeRoll(float roll);
+		static Quaternion FromRadianYaw(float yaw);
 
 		Vector3f operator*(const Vector3f& v) const;
 		Quaternion operator+(const Quaternion& v) const;

@@ -1,4 +1,5 @@
 #include "BaseEntity.h"
+#include "TimeUtil.h"
 
 namespace Freeking
 {
@@ -38,6 +39,7 @@ namespace Freeking
 
 	void BaseEntity::Spawn()
 	{
+		_timeSpawned = Time::Now();
 	}
 
 	bool BaseEntity::SetProperty(const EntityProperty& property)

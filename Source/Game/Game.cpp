@@ -26,6 +26,7 @@
 #include "PakFileSystem.h"
 #include "Material.h"
 #include "Renderer.h"
+#include "TimeUtil.h"
 #include <glad/gl.h>
 #include <iostream>
 #include <fstream>
@@ -147,6 +148,8 @@ namespace Freeking
 
 	void Game::Run()
 	{
+		Time::SetTimeApplicationStart();
+
 		uint64_t now = SDL_GetPerformanceCounter();
 		uint64_t last = 0;
 		double deltaTime = 0.0;
@@ -228,6 +231,8 @@ namespace Freeking
 
 		while (running)
 		{
+			Time::Update();
+
 			last = now;
 			now = SDL_GetPerformanceCounter();
 			deltaTime = ((now - last) / (double)SDL_GetPerformanceFrequency());

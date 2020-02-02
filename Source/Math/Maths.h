@@ -26,6 +26,21 @@ namespace Freeking
 
 		static inline float SineWave(float v) { return Clamp((Sin(v) + 1.0f) * 0.5f, 0.0f, 1.0f); }
 
+		static float SineWave(float time, float speed)
+		{
+			return SineWave(AngleAtTime(DegreesToRadians(time), speed));
+		}
+
+		static float AngleAtTime(float time, float speed)
+		{
+			return fmodf(time, TwoPi * (speed > 0.0f ? (1.0f / speed) : 0.0f)) * speed;
+		}
+
+		static float Lerp(float a, float b, float f)
+		{
+			return a + f * (b - a);
+		}
+
 		static inline bool FloatEqual(float a, float b, float tolerance = Epsilon) { return Abs(a - b) <= tolerance; }
 
 		static inline float Sign(float a)

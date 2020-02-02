@@ -16,7 +16,7 @@ namespace Freeking
 
 		inline bool IsValid() const
 		{
-			return Header.Magic == MagicNumber && Header.Version == Version;
+			return Header.Ident == Ident && Header.Version == Version;
 		}
 
 		template<typename T>
@@ -28,7 +28,7 @@ namespace Freeking
 			return ptr;
 		}
 
-		static const int MagicNumber = 0x58504449;
+		static const int Ident = 0x58504449;
 		static const int Version = 4;
 
 		MDXHeader Header;

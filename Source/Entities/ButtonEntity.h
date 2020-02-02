@@ -24,7 +24,6 @@ namespace Freeking
 		float _speed;
 		float _angle;
 		float _lip;
-		float _time;
 		float _moveDistance;
 		Vector3f _moveDirection;
 		Vector3f _initialPosition;

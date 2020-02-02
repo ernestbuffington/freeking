@@ -127,9 +127,9 @@ namespace Freeking
 
 		virtual void UpdateLoaders() {}
 
-		template<class T2> void AddLoader()
+		template<class T> void AddLoader()
 		{
-			_loaders.emplace_back(std::make_unique<T2>());
+			_loaders.emplace_back(std::make_unique<T>());
 		}
 
 	private:

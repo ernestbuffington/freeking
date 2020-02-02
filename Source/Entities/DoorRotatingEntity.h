@@ -23,7 +23,6 @@ namespace Freeking
 		float _speed;
 		float _angle;
 		float _distance;
-		float _time;
 	};
 
 }

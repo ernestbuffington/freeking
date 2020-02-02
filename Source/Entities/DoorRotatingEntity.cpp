@@ -1,12 +1,12 @@
 #include "DoorRotatingEntity.h"
+#include "TimeUtil.h"
 
 namespace Freeking
 {
 	DoorRotatingEntity::DoorRotatingEntity() : BrushModelEntity(),
 		_speed(100.0f),
 		_angle(0.0f),
-		_distance(0.0f),
-		_time(0.0f)
+		_distance(0.0f)
 	{
 	}
 
@@ -14,8 +14,7 @@ namespace Freeking
 	{
 		BrushModelEntity::Tick(dt);
 
-		_time = Math::Mod(_time + (float)(dt * Math::DegreesToRadians(_speed)), Math::TwoPi);
-		SetRotation(Quaternion::FromDegreeYaw(_distance * (Math::SineWave(_time) * -Math::Sign(_angle))));
+		SetRotation(Quaternion::FromDegreeYaw(_distance * (Math::SineWave(Time::Now() - _timeSpawned, _speed) * -1.0f)));
 	}
 
 	bool DoorRotatingEntity::SetProperty(const EntityProperty& property)

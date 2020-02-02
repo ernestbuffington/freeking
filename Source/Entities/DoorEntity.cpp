@@ -1,12 +1,12 @@
 #include "DoorEntity.h"
 #include "Map.h"
+#include "TimeUtil.h"
 
 namespace Freeking
 {
 	DoorEntity::DoorEntity() : BrushModelEntity(),
 		_speed(100.0f),
 		_angle(0.0f),
-		_time(0.0f),
 		_distance(0.0f)
 	{
 	}
@@ -23,8 +23,7 @@ namespace Freeking
 	{
 		BrushModelEntity::Tick(dt);
 
-		_time = Math::Mod(_time + (float)(dt * Math::DegreesToRadians(_speed)), Math::TwoPi);
-		SetPosition(_initialPosition + Vector3f::Up * (_distance * Math::SineWave(_time)));
+		SetPosition(_initialPosition + Vector3f::Up * (_distance * Math::SineWave(Time::Now() - _timeSpawned, _speed)));
 	}
 
 	bool DoorEntity::SetProperty(const EntityProperty& property)
