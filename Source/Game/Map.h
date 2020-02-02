@@ -58,6 +58,8 @@ namespace Freeking
 		float AlphaMultiply;
 		bool Translucent;
 
+		uint8_t LightStyles[4];
+
 	private:
 
 		std::unique_ptr<VertexBinding> _vertexBinding;
@@ -75,7 +77,25 @@ namespace Freeking
 		void RenderTranslucent(const Matrix4x4& viewProjection, const std::shared_ptr<Material>& material);
 		void RenderDebug(class LineRenderer* lineRenderer);
 
-		std::map<std::string, std::shared_ptr<BrushMesh>> Meshes;
+		struct MeshKey
+		{
+			uint64_t key;
+
+			MeshKey() :
+				key(0)
+			{
+			}
+
+			MeshKey(uint32_t textureId, uint32_t lightStyle) :
+				key((((uint64_t)lightStyle) << 32) | ((uint64_t)textureId))
+			{
+			}
+
+			bool operator==(const MeshKey& other) const { return (key == other.key); }
+			std::size_t operator()(const MeshKey& other) const { return std::hash<uint64_t>()(other.key); }
+		};
+
+		std::unordered_map<MeshKey, std::shared_ptr<BrushMesh>, MeshKey> Meshes;
 
 		Vector3f BoundsMin;
 		Vector3f BoundsMax;
@@ -95,16 +115,16 @@ namespace Freeking
 		const std::shared_ptr<BrushModel>& GetBrushModel(uint32_t index) const { return _models.at(index); }
 
 		static Map* Current;
+		static double Time;
 
 	private:
 
 		std::vector<std::shared_ptr<BrushModel>> _models;
 		std::shared_ptr<Texture2D> _lightmapTexture;
-		std::map<std::string, std::shared_ptr<Texture2D>> _textures;
+		std::vector<std::shared_ptr<Texture2D>> _textures;
 		std::shared_ptr<Material> _material;
 		std::vector<std::shared_ptr<BaseEntity>> _entities;
 		std::vector<std::shared_ptr<PrimitiveEntity>> _worldEntities;
 		std::vector<EntityProperties> _entityKeyValues;
-		double _time;
 	};
 }

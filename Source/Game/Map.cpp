@@ -13,8 +13,6 @@
 
 namespace Freeking
 {
-	Map* Map::Current = nullptr;
-
 	void BrushMesh::Draw()
 	{
 		_vertexBinding->Bind();
@@ -46,6 +44,37 @@ namespace Freeking
 		_vertexBinding->Create(vertexLayout, 5, *_indexBuffer, ElementType::UInt);
 	}
 
+	const static std::string lightSequences[]
+	{
+		"m",
+		"mmnmmommommnonmmonqnmmo",
+		"abcdefghijklmnopqrstuvwxyzyxwvutsrqponmlkjihgfedcba",
+		"mmmmmaaaaammmmmaaaaaabcdefgabcdefg",
+		"mamamamamama",
+		"jklmnopqrstuvwxyzyxwvutsrqponmlkj",
+		"nmonqnmomnmomomno",
+		"mmmaaaabcdefgmmmmaaaammmaamm",
+		"mmmaaammmaaammmabcdefaaaammmmabcdefmmmaaaa",
+		"aaaaaaaazzzzzzzz",
+		"mmamammmmammamamaaamammma",
+		"abcdefghijklmnopqrrqponmlkjihgfedcba",
+	};
+
+	static float GetLightStyleBrightness(const std::string& sequence)
+	{
+		int sequenceLength = sequence.size();
+		if (sequenceLength == 0) return 0.0f;
+		double t = fmod(Map::Time, (double)sequenceLength) * 15.0;
+		int index = (int)floor(t);
+		double delta = t - (double)index;
+		index %= sequenceLength;
+		int nextIndex = (index + 1) % sequenceLength;
+		float brightnessA = (float)(sequence[index] - 97) / 25.0f;
+		float brightnessB = (float)(sequence[nextIndex] - 97) / 25.0f;
+		float brightness = (brightnessA + delta * (brightnessB - brightnessA));
+		return brightness;
+	}
+
 	void BrushModel::RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<Material>& material)
 	{
 		for (const auto& mesh : Meshes)
@@ -55,6 +84,13 @@ namespace Freeking
 				continue;
 			}
 
+			float lightStyleBrightness = 0.0f;
+			if (mesh.second->LightStyles[1] != 255)
+			{
+				lightStyleBrightness = GetLightStyleBrightness(lightSequences[mesh.second->LightStyles[1]]);
+			}
+
+			material->SetParameterValue("brightness", lightStyleBrightness * 2.0f);
 			material->SetParameterValue("alphaCutOff", mesh.second->AlphaCutOff);
 			material->SetParameterValue("diffuse", mesh.second->GetDiffuse().get());
 			material->SetParameterValue("lightmap", mesh.second->GetLightmap().get());
@@ -73,6 +109,13 @@ namespace Freeking
 				continue;
 			}
 
+			float lightStyleBrightness = 0.0f;
+			if (mesh.second->LightStyles[1] != 255)
+			{
+				lightStyleBrightness = GetLightStyleBrightness(lightSequences[mesh.second->LightStyles[1]]);
+			}
+
+			material->SetParameterValue("brightness", lightStyleBrightness * 2.0f);
 			material->SetParameterValue("alphaMultiply", mesh.second->AlphaMultiply);
 			material->SetParameterValue("diffuse", mesh.second->GetDiffuse().get());
 			material->SetParameterValue("lightmap", mesh.second->GetLightmap().get());
@@ -89,7 +132,7 @@ namespace Freeking
 
 	void Map::Tick(double dt)
 	{
-		_time += dt;
+		Time += dt;
 
 		for (const auto& entity : _entities)
 		{
@@ -103,19 +146,7 @@ namespace Freeking
 		_material->SetParameterValue("viewProj", viewProjection);
 		_material->SetParameterValue("diffuse", 0);
 		_material->SetParameterValue("lightmap", 1);
-
-		static const uint8_t lightSequence[] = "mmamammmmammamamaaamammma";
-		int sequenceLength = 25;
-		double t = fmod(_time, (double)sequenceLength) * 20.0;
-		int index = (int)floor(t);
-		double delta = t - (double)index;
-		index %= sequenceLength;
-		int nextIndex = (index + 1) % sequenceLength;
-		float brightnessA = (float)(lightSequence[index] - 97) / 25.0f;
-		float brightnessB = (float)(lightSequence[nextIndex] - 97) / 25.0f;
-		float brightness = (brightnessA + delta * (brightnessB - brightnessA));
-
-		_material->SetParameterValue("brightness", brightness * 2.0f);
+		_material->SetParameterValue("brightness", 0.0f);
 
 		glDisable(GL_BLEND);
 
@@ -143,8 +174,10 @@ namespace Freeking
 		_material->Unbind();
 	}
 
-	Map::Map(const BspFile& bspFile) :
-		_time(0.0)
+	Map* Map::Current = nullptr;
+	double Map::Time = 0.0;
+
+	Map::Map(const BspFile& bspFile)
 	{
 		Map::Current = this;
 
@@ -171,18 +204,22 @@ namespace Freeking
 		pf.Stop("EntityLump");
 
 		pf.Start();
-		std::map<std::string, std::shared_ptr<Texture2D>> textures;
+
+		std::map<std::string, uint32_t> textureIds;
+
 		for (int i = 0; i < textureInfo.Num(); ++i)
 		{
 			const auto& texInfo = textureInfo[i];
 			auto textureName = std::string(texInfo.TextureName);
 
-			if (_textures.find(textureName) == _textures.end())
+			if (textureIds.find(textureName) == textureIds.end())
 			{
 				auto path = "textures/" + (textureName + std::string(".tga"));
-				_textures.emplace(textureName, Texture2D::Library.Get(path));
+				textureIds.emplace(textureName, _textures.size());
+				_textures.push_back(Texture2D::Library.Get(path));
 			}
 		}
+
 		std::cout << _textures.size() << " map textures" << std::endl;
 
 		pf.Stop("Map textures");
@@ -224,21 +261,33 @@ namespace Freeking
 				std::string textureName(faceTextureInfo.TextureName);
 				auto masked = (faceTextureInfo.Flags & BspSurfaceFlags::Masked);
 				auto trans = (faceTextureInfo.Flags & BspSurfaceFlags::Trans33) || (faceTextureInfo.Flags & BspSurfaceFlags::Trans66);
+				auto textureId = textureIds[textureName];
+				auto texture = _textures.at(textureId);
 
-				auto [meshIt, meshInserted] = brushModel->Meshes.try_emplace(textureName, nullptr);
+				uint32_t lightStyleKey =
+					face.LightmapStyles[0] << 24 |
+					face.LightmapStyles[1] << 16 |
+					face.LightmapStyles[2] << 8 |
+					face.LightmapStyles[3];
+
+				auto meshKey = BrushModel::MeshKey(textureId, lightStyleKey);
+				auto [meshIt, meshInserted] = brushModel->Meshes.try_emplace(meshKey, nullptr);
 				auto mesh = meshInserted ? std::make_shared<BrushMesh>() : meshIt->second;
 				if (meshInserted)
 				{
 					meshIt->second = mesh;
-					mesh->SetDiffuse(_textures[textureName]);
+					mesh->LightStyles[0] = face.LightmapStyles[0];
+					mesh->LightStyles[1] = face.LightmapStyles[1];
+					mesh->LightStyles[2] = face.LightmapStyles[2];
+					mesh->LightStyles[3] = face.LightmapStyles[3];
+					mesh->SetDiffuse(texture);
 					mesh->AlphaMultiply = trans ? ((faceTextureInfo.Flags & BspSurfaceFlags::Trans33) ? 0.33f : 0.66f) : 1.0f;
 					mesh->AlphaCutOff = masked ? 0.67f : 0.0f;
 					mesh->Translucent = trans;
 				}
 
-				const auto& faceTexture = _textures[textureName];
-				auto textureWidth = faceTexture->GetWidth();
-				auto textureHeight = faceTexture->GetHeight();
+				auto textureWidth = texture->GetWidth();
+				auto textureHeight = texture->GetHeight();
 
 				float umin = std::numeric_limits<float>::max();
 				float vmin = std::numeric_limits<float>::max();
