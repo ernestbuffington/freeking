@@ -33,6 +33,10 @@
 #include <vector>
 #include <array>
 
+#include "ThirdParty/imgui/imgui.h"
+#include "ThirdParty/imgui/imgui_impl_opengl3.h"
+#include "ThirdParty/imgui/imgui_impl_sdl.h"
+
 namespace Freeking
 {
 	Game::Game(int argc, char** argv)
@@ -50,6 +54,10 @@ namespace Freeking
 
 	Game::~Game()
 	{
+		ImGui_ImplOpenGL3_Shutdown();
+		ImGui_ImplSDL2_Shutdown();
+		ImGui::DestroyContext();
+
 		_window.reset();
 		SDL_Quit();
 	}
@@ -102,6 +110,14 @@ namespace Freeking
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		_window->Swap();
+
+
+
+		ImGui::CreateContext();
+		ImGui_ImplSDL2_InitForOpenGL(static_cast<SDL_Window*>(*_window), static_cast<SDL_GLContext*>(*_window));
+		ImGui_ImplOpenGL3_Init("#version 130");
+		ImGuiIO& io = ImGui::GetIO();
+
 
 
 		Texture2D::Library.SetSpecialNamed("pink", std::make_shared<Texture2D>(2, 2, (uint8_t)255, (uint8_t)0, (uint8_t)255));
@@ -183,6 +199,8 @@ namespace Freeking
 					break;
 				}
 
+				ImGui_ImplSDL2_ProcessEvent(&e);
+
 				Input::HandleEvent(e);
 			}
 
@@ -212,6 +230,21 @@ namespace Freeking
 				inputForce *= Input::IsDown(Button::KeyLSHIFT) ? 600.0f : 100.0f;
 				camera.Move(inputForce, static_cast<float>(deltaTime));
 			}
+
+			ImGui_ImplOpenGL3_NewFrame();
+			ImGui_ImplSDL2_NewFrame(static_cast<SDL_Window*>(*_window));
+			ImGui::NewFrame();
+
+			ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x - 8.0f, io.DisplaySize.y - 8.0f), ImGuiCond_Always, ImVec2(1.0f, 1.0f));
+			ImGui::SetNextWindowBgAlpha(0.35f);
+			if (ImGui::Begin("Camera position overlay", NULL,
+				ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize |
+				ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav))
+			{
+				auto const& camPos = camera.GetPosition();
+				ImGui::Text("Camera Position: %s", camPos.ToString().c_str());
+			}
+			ImGui::End();
 
 			glEnable(GL_DEPTH_TEST);
 			glEnable(GL_BLEND);
@@ -343,6 +376,9 @@ namespace Freeking
 
 			lineRenderer->Clear();
 			spriteBatch->Clear();
+
+			ImGui::Render();
+			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 			_window->Swap();
 		}

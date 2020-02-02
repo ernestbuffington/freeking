@@ -22,7 +22,7 @@ namespace Freeking::Entity::Target
 
 		if (_noise == "world/cypress")
 		{
-			LineRenderer::Debug->DrawSphere(GetPosition(), _attenuation * 400, 8, 8, Vector4f(0, 1, 1, 0.5f));
+			//LineRenderer::Debug->DrawSphere(GetPosition(), _attenuation * 400, 8, 8, Vector4f(0, 1, 1, 0.5f));
 		}
 	}
 
