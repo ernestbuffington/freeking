@@ -23,7 +23,7 @@ namespace Freeking
 	{
 		BrushModelEntity::Tick(dt);
 
-		SetPosition(_initialPosition + Vector3f::Up * (_distance * Math::SineWave(Time::Now() - _timeSpawned, _speed)));
+		SetPosition(_initialPosition.MulAdd(_distance * Math::SineWave(Time::Now() - _timeSpawned, Math::DegreesToRadians(_speed)), Vector3f::Up));
 	}
 
 	bool DoorEntity::SetProperty(const EntityProperty& property)

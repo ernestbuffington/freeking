@@ -5,7 +5,7 @@
 namespace Freeking
 {
 	ButtonEntity::ButtonEntity() : BrushModelEntity(),
-		_speed(500.0f),
+		_speed(1.0f),
 		_angle(0.0f),
 		_lip(0.0f),
 		_moveDistance(0.0f)
@@ -27,7 +27,7 @@ namespace Freeking
 	{
 		BrushModelEntity::Tick(dt);
 
-		SetPosition(_initialPosition + (_moveDirection * (_moveDistance * Math::SineWave(Time::Now() - _timeSpawned, _speed))));
+		SetPosition(_initialPosition.MulAdd(_moveDistance * Math::SineWave(Time::Now() - _timeSpawned, _speed), _moveDirection));
 	}
 
 	bool ButtonEntity::SetProperty(const EntityProperty& property)

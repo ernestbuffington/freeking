@@ -28,7 +28,7 @@ namespace Freeking
 
 		static float SineWave(float time, float speed)
 		{
-			return SineWave(AngleAtTime(DegreesToRadians(time), speed));
+			return SineWave(AngleAtTime(time, speed));
 		}
 
 		static float AngleAtTime(float time, float speed)

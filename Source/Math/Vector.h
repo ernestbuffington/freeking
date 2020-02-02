@@ -552,6 +552,11 @@ namespace Freeking
 			return stream.str();
 		}
 
+		Vector3<T> MulAdd(T a, const Vector3<T>& b) const
+		{
+			return Vector3<T>(std::fma(b.x, a, x), std::fma(b.y, a, y), std::fma(b.z, a, z));
+		}
+
 		const T* Base() const
 		{
 			return &x;
