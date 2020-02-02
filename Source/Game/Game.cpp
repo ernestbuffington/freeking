@@ -94,6 +94,57 @@ namespace Freeking
 		Input::ResetMouseDelta();
 	}
 
+	static void ImGuiDebugAssetLibrary()
+	{
+		ImGui::SetNextWindowSize(ImVec2(800, 1000), ImGuiCond_Once);
+		ImGui::Begin("Asset Library");
+		ImGui::BeginTabBar("tabs");
+
+		if (ImGui::BeginTabItem("Textures"))
+		{
+			int windowWidth = static_cast<int>(ImGui::GetWindowContentRegionWidth());
+			int lineWidth = 0;
+			int i = 0;
+
+			for (auto const& [name, texture] : Texture2D::Library.GetPathAssets())
+			{
+				if ((lineWidth + texture->GetWidth()) < windowWidth)
+				{
+					lineWidth += (texture->GetWidth() + 10);
+				}
+				else
+				{
+					lineWidth = texture->GetWidth() + 10;
+
+					if (i > 0)
+					{
+						ImGui::NewLine();
+					}
+				}
+
+				ImGui::Image(
+					(ImTextureID)(intptr_t)texture->GetHandle(),
+					ImVec2((float)texture->GetWidth(), (float)texture->GetHeight()),
+					ImVec2(0, 0), ImVec2(1, 1), ImVec4(1, 1, 1, 1), ImVec4(1, 1, 0, 1));
+
+				if (ImGui::IsItemHovered())
+				{
+					ImGui::SetTooltip("%s", name.c_str());
+				}
+
+				ImGui::SameLine();
+
+				i++;
+			}
+
+			ImGui::EndTabItem();
+		}
+
+		ImGui::EndTabBar();
+
+		ImGui::End();
+	}
+
 	void Game::Run()
 	{
 		uint64_t now = SDL_GetPerformanceCounter();
@@ -235,6 +286,8 @@ namespace Freeking
 			ImGui_ImplSDL2_NewFrame(static_cast<SDL_Window*>(*_window));
 			ImGui::NewFrame();
 
+			ImGuiDebugAssetLibrary();
+
 			ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x - 8.0f, io.DisplaySize.y - 8.0f), ImGuiCond_Always, ImVec2(1.0f, 1.0f));
 			ImGui::SetNextWindowBgAlpha(0.35f);
 			if (ImGui::Begin("Camera position overlay", NULL,
@@ -245,6 +298,8 @@ namespace Freeking
 				ImGui::Text("Camera Position: %s", camPos.ToString().c_str());
 			}
 			ImGui::End();
+
+
 
 			glEnable(GL_DEPTH_TEST);
 			glEnable(GL_BLEND);

@@ -120,6 +120,9 @@ namespace Freeking
 			_specialAssets.emplace(name, asset);
 		}
 
+		inline const std::unordered_map<std::string, AssetPtr>& GetPathAssets() const { return _pathAssets; }
+		inline const std::unordered_map<std::string, AssetPtr>& GetSpecialAssets() const { return _specialAssets; }
+
 	protected:
 
 		virtual void UpdateLoaders() {}
