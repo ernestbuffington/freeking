@@ -29,4 +29,3 @@ namespace Freeking
 		static double _timeSinceApplicationStart;
 	};
 }
-

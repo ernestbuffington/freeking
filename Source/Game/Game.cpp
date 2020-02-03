@@ -24,6 +24,7 @@
 #include "Thug.h"
 #include "Nav/NavFile.h"
 #include "PakFileSystem.h"
+#include "PhysicalFileSystem.h"
 #include "Material.h"
 #include "Renderer.h"
 #include "TimeUtil.h"
@@ -325,7 +326,7 @@ namespace Freeking
 			SpriteBatch::ViewportHeight = static_cast<float>(_viewportHeight);
 
 			map->Tick(deltaTime);
-			map->Render(viewProjectionMatrix, lineRenderer.get());
+			map->Render(viewProjectionMatrix);
 
 			for (const auto& thug : thugs)
 			{

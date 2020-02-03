@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SceneEntity.h"
+#include "EnumFlags.h"
 
 namespace Freeking::Entity::Target
 {
@@ -30,6 +31,6 @@ namespace Freeking::Entity::Target
         std::string _noise;
         float _attenuation;
         float _volume;
-        SpawnFlags _spawnFlags;
+        EnumFlags<SpawnFlags> _spawnFlags;
     };
 }

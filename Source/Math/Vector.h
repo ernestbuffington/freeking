@@ -578,7 +578,6 @@ namespace Freeking
 		}
 
 		T x, y, z;
-
 	};
 
 	template<typename T> const Vector3<T> Vector3<T>::Zero(0);
@@ -590,6 +589,8 @@ namespace Freeking
 	template<typename T> const Vector3<T> Vector3<T>::Backward(0, 0, -1);
 	template<typename T> const Vector3<T> Vector3<T>::Up(0, 1, 0);
 	template<typename T> const Vector3<T> Vector3<T>::Down(0, -1, 0);
+	template<typename T> const Vector3<T> Vector3<T>::Left(1, 0, 0);
+	template<typename T> const Vector3<T> Vector3<T>::Right(-1, 0, 0);
 
 	template<typename T>
 	inline const Vector3<T> operator*(T s, const Vector3<T>& v)

@@ -14,6 +14,25 @@ namespace Freeking
 	void BrushModelEntity::Tick(double dt)
 	{
 		PrimitiveEntity::Tick(dt);
+
+		if (_model)
+		{
+			LineRenderer::Debug->DrawBox(GetTransform(), GetLocalMinBounds(), GetLocalMaxBounds(), Vector4f(0, 1, 0, 1));
+
+			auto position = GetTransform() * (GetLocalMinBounds() + ((GetLocalMaxBounds() - GetLocalMinBounds()) * 0.5f));
+
+			Vector2f screenPosition;
+			if (Util::WorldPointToNormalisedScreenPoint(position, screenPosition, SpriteBatch::ProjectionMatrix, SpriteBatch::ViewMatrix, 2048.0f))
+			{
+				float alpha = 0.75f;
+				screenPosition = Util::ScreenSpaceToPixelPosition(screenPosition, Vector4i(0, 0, (int)SpriteBatch::ViewportWidth, (int)SpriteBatch::ViewportHeight));
+				screenPosition.x = Math::Round(screenPosition.x);
+				screenPosition.y = Math::Round(screenPosition.y);
+				auto text = _classname + " (*" + std::to_string(_modelIndex) + ")";
+				SpriteBatch::Debug->DrawText(nullptr, text, screenPosition + Vector2f(2, 2), Vector4f(0, 0, 0, alpha), 0.5f);
+				SpriteBatch::Debug->DrawText(nullptr, text, screenPosition, Vector4f(0.5f, 1, 0.5f, alpha), 0.5f);
+			}
+		}
 	}
 
 	void BrushModelEntity::Initialize()
@@ -39,29 +58,6 @@ namespace Freeking
 		if (_model)
 		{
 			_model->RenderTranslucent(viewProjection, material);
-		}
-	}
-
-	void BrushModelEntity::RenderDebug(LineRenderer* lineRenderer)
-	{
-		if (_model)
-		{
-			lineRenderer->DrawBox(GetTransform(), GetLocalMinBounds(), GetLocalMaxBounds(), Vector4f(0, 1, 0, 1));
-
-			auto position = GetTransform() * (GetLocalMinBounds() + ((GetLocalMaxBounds() - GetLocalMinBounds()) * 0.5f));
-
-			auto& spriteBatch = SpriteBatch::Debug;
-			Vector2f screenPosition;
-			if (Util::WorldPointToNormalisedScreenPoint(position, screenPosition, SpriteBatch::ProjectionMatrix, SpriteBatch::ViewMatrix, 2048.0f))
-			{
-				float alpha = 0.75f;
-				screenPosition = Util::ScreenSpaceToPixelPosition(screenPosition, Vector4i(0, 0, (int)SpriteBatch::ViewportWidth, (int)SpriteBatch::ViewportHeight));
-				screenPosition.x = Math::Round(screenPosition.x);
-				screenPosition.y = Math::Round(screenPosition.y);
-				auto text = _classname + " (*" + std::to_string(_modelIndex) + ")";
-				spriteBatch->DrawText(nullptr, text, screenPosition + Vector2f(2, 2), Vector4f(0, 0, 0, alpha), 0.5f);
-				spriteBatch->DrawText(nullptr, text, screenPosition, Vector4f(0.5f, 1, 0.5f, alpha), 0.5f);
-			}
 		}
 	}
 

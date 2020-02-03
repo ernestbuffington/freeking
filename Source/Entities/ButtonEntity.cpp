@@ -20,7 +20,7 @@ namespace Freeking
 
 		auto yaw = Quaternion::FromDegreeYaw(_angle);
 		_moveDistance = _lip - (yaw * (GetLocalMaxBounds() - GetLocalMinBounds())).x;
-		_moveDirection = (yaw * Vector3f(1, 0, 0)).Normalise();
+		_moveDirection = (yaw * Vector3f::OneX).Normalise();
 	}
 
 	void ButtonEntity::Tick(double dt)

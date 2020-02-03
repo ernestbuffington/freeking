@@ -2,6 +2,7 @@
 
 #include "BspFlags.h"
 #include "Vector.h"
+#include "EnumFlags.h"
 #include <stdint.h>
 
 namespace Freeking
@@ -86,7 +87,7 @@ namespace Freeking
 		float OffsetU;
 		Vector3f AxisV;
 		float OffsetV;
-		BspSurfaceFlags Flags;
+		EnumFlags<BspSurfaceFlags> Flags;
 		uint32_t Value;
 		char TextureName[32];
 		uint32_t NextTextureInfo;

@@ -30,16 +30,7 @@ namespace Freeking::Entity::Target
 	{
 		if (property.IsKey("spawnflags"))
 		{
-			int spawnFlags;
-
-			if (property.ValueAsInt(spawnFlags))
-			{
-				_spawnFlags = static_cast<SpawnFlags>(spawnFlags);
-
-				return true;
-			}
-
-			return false;
+			return property.ValueAsFlags(_spawnFlags);
 		}
 		else if(property.IsKey("noise"))
 		{

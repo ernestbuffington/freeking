@@ -15,12 +15,16 @@ namespace Freeking
 	public:
 
 		PathStack() = delete;
-		PathStack(const std::filesystem::path& path) { _paths.push(path.parent_path()); }
-		~PathStack() { _paths.pop(); }
 
 		static std::filesystem::path Top() { return _paths.empty() ? "" : _paths.top(); }
 
 	private:
+
+		template <typename>
+		friend class AssetLibrary;
+
+		PathStack(const std::filesystem::path& path) { _paths.push(path.parent_path()); }
+		~PathStack() { _paths.pop(); }
 
 		static std::stack<std::filesystem::path> _paths;
 	};

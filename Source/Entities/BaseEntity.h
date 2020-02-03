@@ -15,7 +15,7 @@ namespace Freeking
 
 		using SharedPtr = std::shared_ptr<BaseEntity>;
 
-		BaseEntity() = default;
+		BaseEntity();
 		virtual ~BaseEntity() = default;
 
 		virtual void InitializeProperties(const EntityProperties& properties);

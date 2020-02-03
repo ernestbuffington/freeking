@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Vector.h"
+#include "EnumFlags.h"
 #include <string>
 #include <vector>
 #include <unordered_map>
@@ -24,6 +25,20 @@ namespace Freeking
 		bool ValueAsVector(Vector3f& v) const;
 		bool ValueAsFloat(float& v) const;
 		bool ValueAsInt(int& v) const;
+
+		template<typename T>
+		bool ValueAsFlags(EnumFlags<T>& v) const
+		{
+			int value;
+			if (ValueAsInt(value))
+			{
+				v = value;
+				return true;
+			}
+
+			return false;
+		}
+
 		bool ValueAsModelIndex(int& v) const;
 
 	private:
@@ -41,7 +56,7 @@ namespace Freeking
 		{
 		public:
 
-			operator const T&() const { return value; }
+			operator const T& () const { return value; }
 			const T& operator*() const { return value; }
 			explicit operator bool() const { return !unset; }
 

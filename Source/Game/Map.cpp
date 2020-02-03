@@ -232,11 +232,6 @@ namespace Freeking
 		}
 	}
 
-	void BrushModel::RenderDebug(LineRenderer* lineRenderer)
-	{
-
-	}
-
 	void Map::Tick(double dt)
 	{
 		Time += dt;
@@ -249,7 +244,7 @@ namespace Freeking
 		}
 	}
 
-	void Map::Render(const Matrix4x4& viewProjection, LineRenderer* lineRenderer)
+	void Map::Render(const Matrix4x4& viewProjection)
 	{
 		_material->SetParameterValue("viewProj", viewProjection);
 		_material->SetParameterValue("diffuse", 0);
@@ -265,7 +260,6 @@ namespace Freeking
 			auto mvp = viewProjection * entity->GetTransform();
 			_material->SetParameterValue("viewProj", mvp);
 			entity->RenderOpaque(mvp, _material);
-			entity->RenderDebug(lineRenderer);
 		}
 
 		glEnable(GL_BLEND);
@@ -365,16 +359,16 @@ namespace Freeking
 				const auto& face = faces[faceIndex];
 				const auto& faceTextureInfo = textureInfo[face.TextureInfo];
 
-				if ((faceTextureInfo.Flags & BspSurfaceFlags::NoDraw) ||
-					(faceTextureInfo.Flags & BspSurfaceFlags::Sky) ||
-					(faceTextureInfo.Flags & BspSurfaceFlags::Warp))
+				if ((faceTextureInfo.Flags[BspSurfaceFlags::NoDraw]) ||
+					(faceTextureInfo.Flags[BspSurfaceFlags::Sky]) ||
+					(faceTextureInfo.Flags[BspSurfaceFlags::Warp]))
 				{
 					continue;
 				}
 
 				std::string textureName(faceTextureInfo.TextureName);
-				auto masked = (faceTextureInfo.Flags & BspSurfaceFlags::Masked);
-				auto trans = (faceTextureInfo.Flags & BspSurfaceFlags::Trans33) || (faceTextureInfo.Flags & BspSurfaceFlags::Trans66);
+				auto masked = (faceTextureInfo.Flags[BspSurfaceFlags::Masked]);
+				auto trans = (faceTextureInfo.Flags[BspSurfaceFlags::Trans33]) || (faceTextureInfo.Flags[BspSurfaceFlags::Trans66]);
 				auto textureId = textureIds[textureName];
 				auto texture = _textures.at(textureId);
 
@@ -395,7 +389,7 @@ namespace Freeking
 					mesh->LightStyles[2] = face.LightmapStyles[2];
 					mesh->LightStyles[3] = face.LightmapStyles[3];
 					mesh->SetDiffuse(texture);
-					mesh->AlphaMultiply = trans ? ((faceTextureInfo.Flags & BspSurfaceFlags::Trans33) ? 0.33f : 0.66f) : 1.0f;
+					mesh->AlphaMultiply = trans ? ((faceTextureInfo.Flags[BspSurfaceFlags::Trans33]) ? 0.33f : 0.66f) : 1.0f;
 					mesh->AlphaCutOff = masked ? 0.67f : 0.0f;
 					mesh->Translucent = trans;
 				}

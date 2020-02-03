@@ -3,6 +3,11 @@
 
 namespace Freeking
 {
+	BaseEntity::BaseEntity() :
+		_timeSpawned(0)
+	{
+	}
+
 	void BaseEntity::InitializeProperties(const EntityProperties& properties)
 	{
 		if (auto name = properties.GetNameProperty())

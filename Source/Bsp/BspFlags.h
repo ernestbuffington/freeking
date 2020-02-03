@@ -39,9 +39,4 @@ namespace Freeking
 		_40000000 = 0x40000000,
 		_80000000 = 0x80000000,
 	};
-
-	inline bool operator&(BspSurfaceFlags a, BspSurfaceFlags b)
-	{
-		return static_cast<int>(a) & static_cast<int>(b);
-	}
 }

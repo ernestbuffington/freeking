@@ -10,6 +10,5 @@ namespace Freeking
 
 		virtual void RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<class Material>& material) = 0;
 		virtual void RenderTranslucent(const Matrix4x4& viewProjection, const std::shared_ptr<class Material>& material) = 0;
-		virtual void RenderDebug(class LineRenderer* lineRenderer) = 0;
 	};
 }
