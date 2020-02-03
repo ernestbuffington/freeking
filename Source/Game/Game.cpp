@@ -28,7 +28,8 @@
 #include "Material.h"
 #include "Renderer.h"
 #include "TimeUtil.h"
-#include "WavLoader.h"
+#include "Audio/AudioClip.h"
+#include "Audio/AudioDevice.h"
 #include <glad/gl.h>
 #include <iostream>
 #include <fstream>
@@ -47,8 +48,6 @@ namespace Freeking
 		FileSystem::AddFileSystem(PhysicalFileSystem::Create(std::filesystem::current_path() / "Assets"));
 		FileSystem::AddFileSystem(PhysicalFileSystem::Create(Paths::KingpinDir() / "main"));
 		FileSystem::AddFileSystem(PakFileSystem::Create(Paths::KingpinDir() / "main/Pak0.pak"));
-
-		auto clip = AudioClip::Library.Get("sound/world/cypress.wav");
 
 		static const std::string windowTitle = "Kingpin";
 		_viewportWidth = 2880;
@@ -176,7 +175,8 @@ namespace Freeking
 		ImGui_ImplOpenGL3_Init("#version 130");
 		ImGuiIO& io = ImGui::GetIO();
 
-
+		AudioDevice audio;
+		audio.PlayClip(AudioClip::Library.Get("sound/world/cypress.wav").get());
 
 		Texture2D::Library.SetSpecialNamed("pink", std::make_shared<Texture2D>(2, 2, (uint8_t)255, (uint8_t)0, (uint8_t)255));
 		auto pink = Texture2D::Library.Get("pink");

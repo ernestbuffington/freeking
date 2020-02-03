@@ -5,6 +5,17 @@ namespace Freeking
 {
 	AudioClipLibrary AudioClip::Library;
 
+	struct RiffFormatChunk
+	{
+		uint16_t wFormatTag;
+		uint16_t nChannels;
+		uint32_t nSamplesPerSec;
+		uint32_t nAvgBytesPerSec;
+		uint16_t nBlockAlign;
+		uint16_t wBitsPerSample;
+		uint16_t cbSize;
+	};
+
 	bool WavLoader::CanLoadExtension(const std::string& extension) const
 	{
 		if (extension == ".wav") return true;
@@ -106,6 +117,6 @@ namespace Freeking
 		auto sampleCount = dataSize / (channelCount * (bitsPerSample / 8));
 		auto totalTime = (float)dataSize / ((float)samplesPerSecond * (float)channelCount * (float)(bitsPerSample / 8));
 
-		return std::make_shared<AudioClip>();
+		return std::make_shared<AudioClip>(channelCount, bitsPerSample, samplesPerSecond, pcmData);
 	}
 }
