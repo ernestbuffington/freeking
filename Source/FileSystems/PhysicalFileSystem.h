@@ -14,7 +14,7 @@ namespace Freeking
 		PhysicalFileSystem(const std::filesystem::path& path);
 
 		virtual bool FileExists(const std::string& filename) override;
-		virtual std::vector<char> GetFileData(const std::string& filename) override;
+		virtual std::vector<uint8_t> GetFileData(const std::string& filename) override;
 
 	private:
 

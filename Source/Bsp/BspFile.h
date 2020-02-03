@@ -37,7 +37,7 @@ namespace Freeking
 
 	struct BspFile
 	{
-		static const BspFile& Create(const char* Data)
+		static const BspFile& Create(const uint8_t* Data)
 		{
 			return (const BspFile&)*Data;
 		}

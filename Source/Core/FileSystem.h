@@ -15,7 +15,7 @@ namespace Freeking
 		virtual ~IFileSystem() {}
 
 		virtual bool FileExists(const std::string& filename) = 0;
-		virtual std::vector<char> GetFileData(const std::string& filename) = 0;
+		virtual std::vector<uint8_t> GetFileData(const std::string& filename) = 0;
 	};
 
 	class FileSystem
@@ -27,7 +27,7 @@ namespace Freeking
 
 		static void AddFileSystem(std::unique_ptr<IFileSystem> fileSystem);
 		static bool FileExists(const std::string& filename);
-		static std::vector<char> GetFileData(const std::string& filename);
+		static std::vector<uint8_t> GetFileData(const std::string& filename);
 
 	private:
 

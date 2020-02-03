@@ -61,7 +61,7 @@ namespace Freeking
 		return _fileItems.find(filename) != _fileItems.end();
 	}
 
-	std::vector<char> PakFileSystem::GetFileData(const std::string& filename)
+	std::vector<uint8_t> PakFileSystem::GetFileData(const std::string& filename)
 	{
 		if (!_stream.is_open())
 		{
@@ -75,7 +75,7 @@ namespace Freeking
 		}
 
 		const auto& fileItem = it->second;
-		std::vector<char> fileData(fileItem.size);
+		std::vector<uint8_t> fileData(fileItem.size);
 		_stream.seekg(fileItem.offset);
 		_stream.read((char*)fileData.data(), fileItem.size);
 

@@ -9,7 +9,7 @@ namespace Freeking
 {
 	struct MDXFile
 	{
-		static const MDXFile& Create(const char* data)
+		static const MDXFile& Create(const uint8_t* data)
 		{
 			return (const MDXFile&)*data;
 		}

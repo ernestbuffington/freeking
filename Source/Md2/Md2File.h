@@ -9,7 +9,7 @@ namespace Freeking
 {
 	struct MD2File
 	{
-		static const MD2File& Create(const char* data)
+		static const MD2File& Create(const uint8_t* data)
 		{
 			return (const MD2File&)*data;
 		}

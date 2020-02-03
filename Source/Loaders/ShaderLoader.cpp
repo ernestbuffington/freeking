@@ -14,11 +14,11 @@ namespace Freeking
 	{
 		auto source = FileSystem::GetFileData(name);
 
-		if (source.empty() || source.empty())
+		if (source.empty())
 		{
 			return nullptr;
 		}
 
-		return std::make_shared<Shader>(std::string(source.data(), source.size()));
+		return std::make_shared<Shader>(std::string((char*)source.data(), source.size()));
 	}
 }

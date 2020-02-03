@@ -19,11 +19,6 @@ namespace Freeking::Entity::Target
 	void ASpeaker::Tick(double dt)
 	{
 		SceneEntity::Tick(dt);
-
-		if (_noise == "world/cypress")
-		{
-			//LineRenderer::Debug->DrawSphere(GetPosition(), _attenuation * 400, 8, 8, Vector4f(0, 1, 1, 0.5f));
-		}
 	}
 
 	bool ASpeaker::SetProperty(const EntityProperty& property)

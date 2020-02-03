@@ -28,6 +28,7 @@
 #include "Material.h"
 #include "Renderer.h"
 #include "TimeUtil.h"
+#include "WavLoader.h"
 #include <glad/gl.h>
 #include <iostream>
 #include <fstream>
@@ -46,6 +47,8 @@ namespace Freeking
 		FileSystem::AddFileSystem(PhysicalFileSystem::Create(std::filesystem::current_path() / "Assets"));
 		FileSystem::AddFileSystem(PhysicalFileSystem::Create(Paths::KingpinDir() / "main"));
 		FileSystem::AddFileSystem(PakFileSystem::Create(Paths::KingpinDir() / "main/Pak0.pak"));
+
+		auto clip = AudioClip::Library.Get("sound/world/cypress.wav");
 
 		static const std::string windowTitle = "Kingpin";
 		_viewportWidth = 2880;

@@ -18,7 +18,7 @@ namespace Freeking
 		return std::filesystem::exists(_path / filename);
 	}
 
-	std::vector<char> PhysicalFileSystem::GetFileData(const std::string& filename)
+	std::vector<uint8_t> PhysicalFileSystem::GetFileData(const std::string& filename)
 	{
 		auto filepath = _path / filename;
 		if (!std::filesystem::exists(_path / filename))
@@ -34,7 +34,7 @@ namespace Freeking
 			return {};
 		}
 
-		std::vector<char> buffer(fileSize);
+		std::vector<uint8_t> buffer(fileSize);
 		stream.seekg(0);
 		stream.read((char*)buffer.data(), buffer.size());
 

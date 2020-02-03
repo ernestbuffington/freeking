@@ -2,7 +2,7 @@
 
 namespace Freeking
 {
-	std::vector<NavNode> NavFile::ReadNodes(const char* data)
+	std::vector<NavNode> NavFile::ReadNodes(const uint8_t* data)
 	{
 		if (*(uint16_t*)&data[0] != 4)
 		{

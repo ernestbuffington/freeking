@@ -27,7 +27,7 @@ namespace Freeking
 		return false;
 	}
 
-	std::vector<char> FileSystem::GetFileData(const std::string& filename)
+	std::vector<uint8_t> FileSystem::GetFileData(const std::string& filename)
 	{
 		for (const auto& fileSystem : _fileSystems)
 		{
