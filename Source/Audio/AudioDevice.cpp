@@ -26,11 +26,10 @@ namespace Freeking
 		alSourcef(_sourceId, AL_PITCH, 1);
 		alSourcef(_sourceId, AL_GAIN, 1);
 		alSource3f(_sourceId, AL_POSITION, 0, 0, 0);
-		alSource3f(_sourceId, AL_VELOCITY, 0, 0, 0);
 
 		alSourcei(_sourceId, AL_SOURCE_RELATIVE, AL_FALSE);
 		alSourcef(_sourceId, AL_REFERENCE_DISTANCE, 0.0f);
-		alSourcef(_sourceId, AL_MAX_DISTANCE, 1000.0f);
+		alSourcef(_sourceId, AL_MAX_DISTANCE, 800.0f);
 		alDistanceModel(AL_LINEAR_DISTANCE_CLAMPED);
 
 		alSourcePlay(_sourceId);
@@ -69,6 +68,13 @@ namespace Freeking
 
 	void AudioDevice::ShutdownOpenAL()
 	{
+		if (_sourceId)
+		{
+			alDeleteSources(1, &_sourceId);
+
+			_sourceId = 0;
+		}
+
 		if (_alContext)
 		{
 			alcMakeContextCurrent(nullptr);
@@ -82,13 +88,6 @@ namespace Freeking
 			alcCloseDevice(_alDevice);
 
 			_alDevice = nullptr;
-		}
-
-		if (_sourceId)
-		{
-			alDeleteSources(1, &_sourceId);
-
-			_sourceId = 0;
 		}
 	}
 }
