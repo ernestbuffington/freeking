@@ -1,5 +1,7 @@
 #include "ASpeaker.h"
 #include "LineRenderer.h"
+#include "Audio/AudioDevice.h"
+#include "Audio/AudioClip.h"
 
 namespace Freeking::Entity::Target
 {
@@ -14,11 +16,25 @@ namespace Freeking::Entity::Target
 	void ASpeaker::Initialize()
 	{
 		SceneEntity::Initialize();
+
+		if (_spawnFlags[SpawnFlags::LoopedOn])
+		{
+			const auto& sound = AudioClip::Library.Get("sound/" + _noise + ".wav");
+			if (sound)
+			{
+				AudioDevice::Current->Sounds.push_back({ sound->GetBufferId(), GetPosition() });
+			}
+		}
 	}
 
 	void ASpeaker::Tick(double dt)
 	{
 		SceneEntity::Tick(dt);
+
+		if (_noise == "world/cypress")
+		{
+			LineRenderer::Debug->DrawSphere(GetPosition(), 400, 8, 8, Vector4f(0, 1, 1, 1));
+		}
 	}
 
 	bool ASpeaker::SetProperty(const EntityProperty& property)
@@ -39,9 +55,9 @@ namespace Freeking::Entity::Target
 
 			if (property.ValueAsInt(attenuation))
 			{
-				if (attenuation == 0) _attenuation = 1.0f;
-				else if (attenuation == -1) _attenuation = 0.0f;
-				else _attenuation = static_cast<float>(attenuation);
+				if (attenuation == 0) _attenuation = 1;
+				else if (attenuation == -1) _attenuation = 0;
+				else _attenuation = attenuation;
 
 				return true;
 			}

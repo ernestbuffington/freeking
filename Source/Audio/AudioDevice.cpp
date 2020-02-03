@@ -4,8 +4,12 @@
 
 namespace Freeking
 {
+	AudioDevice* AudioDevice::Current = nullptr;
+
 	AudioDevice::AudioDevice()
 	{
+		Current = this;
+
 		InitializeOpenAl();
 	}
 
@@ -14,25 +18,19 @@ namespace Freeking
 		ShutdownOpenAL();
 	}
 
-	void AudioDevice::PlayClip(AudioClip* clip)
+	void AudioDevice::Play()
 	{
-		if (!clip)
+		for (int i = 0; i < Sounds.size(); ++i)
 		{
-			return;
+			const auto& sound = Sounds[i];
+			auto sourceId = _sourceIds[i];
+			alSourcei(sourceId, AL_BUFFER, sound.bufferId);
+			alSource3f(sourceId, AL_POSITION, sound.position.x, sound.position.y, sound.position.z);
 		}
 
-		alSourcei(_sourceId, AL_BUFFER, clip->GetBufferId());
-		alSourcei(_sourceId, AL_LOOPING, AL_TRUE);
-		alSourcef(_sourceId, AL_PITCH, 1);
-		alSourcef(_sourceId, AL_GAIN, 1);
-		alSource3f(_sourceId, AL_POSITION, 0, 0, 0);
+		alSourcePlayv(Sounds.size(), _sourceIds.data());
 
-		alSourcei(_sourceId, AL_SOURCE_RELATIVE, AL_FALSE);
-		alSourcef(_sourceId, AL_REFERENCE_DISTANCE, 0.0f);
-		alSourcef(_sourceId, AL_MAX_DISTANCE, 800.0f);
-		alDistanceModel(AL_LINEAR_DISTANCE_CLAMPED);
-
-		alSourcePlay(_sourceId);
+		Sounds.clear();
 	}
 
 	void AudioDevice::SetListenerTransform(const Vector3f& position, const Quaternion& rotation)
@@ -63,18 +61,23 @@ namespace Freeking
 		alcGetIntegerv(_alDevice, ALC_MONO_SOURCES, 1, &_numMonoSources);
 		alcGetIntegerv(_alDevice, ALC_STEREO_SOURCES, 1, &_numStereoSources);
 
-		alGenSources(1, &_sourceId);
+		alGenSources(_sourceIds.size(), _sourceIds.data());
+
+		for (const auto& sourceId : _sourceIds)
+		{
+			alSourcei(sourceId, AL_LOOPING, AL_TRUE);
+			alSourcef(sourceId, AL_PITCH, 1);
+			alSourcef(sourceId, AL_GAIN, 1);
+			alSourcei(sourceId, AL_SOURCE_RELATIVE, AL_FALSE);
+			alSourcef(sourceId, AL_REFERENCE_DISTANCE, 0.0f);
+			alSourcef(sourceId, AL_MAX_DISTANCE, 400.0f);
+		}
+
+		alDistanceModel(AL_LINEAR_DISTANCE_CLAMPED);
 	}
 
 	void AudioDevice::ShutdownOpenAL()
 	{
-		if (_sourceId)
-		{
-			alDeleteSources(1, &_sourceId);
-
-			_sourceId = 0;
-		}
-
 		if (_alContext)
 		{
 			alcMakeContextCurrent(nullptr);

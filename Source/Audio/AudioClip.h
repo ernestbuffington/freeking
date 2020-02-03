@@ -23,7 +23,7 @@ namespace Freeking
 		AudioClip(uint32_t numChannels, uint32_t bitsPerSample, uint32_t sampleRate, const std::vector<char>& pcmData);
 		~AudioClip();
 
-		int GetBufferId() const { return _bufferId; }
+		uint32_t GetBufferId() const { return _bufferId; }
 
 	private:
 

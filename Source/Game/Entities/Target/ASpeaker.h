@@ -29,7 +29,7 @@ namespace Freeking::Entity::Target
         };
 
         std::string _noise;
-        float _attenuation;
+        int _attenuation;
         float _volume;
         EnumFlags<SpawnFlags> _spawnFlags;
     };

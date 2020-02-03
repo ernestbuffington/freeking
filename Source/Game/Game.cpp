@@ -176,7 +176,6 @@ namespace Freeking
 		ImGuiIO& io = ImGui::GetIO();
 
 		AudioDevice audio;
-		audio.PlayClip(AudioClip::Library.Get("sound/world/cypress.wav").get());
 
 		Texture2D::Library.SetSpecialNamed("pink", std::make_shared<Texture2D>(2, 2, (uint8_t)255, (uint8_t)0, (uint8_t)255));
 		auto pink = Texture2D::Library.Get("pink");
@@ -232,6 +231,8 @@ namespace Freeking
 
 		auto md2Mesh = DynamicModel::Library.Get("models/weapons/g_tomgun/tris.md2");
 		auto md2Texture = Texture2D::Library.Get(md2Mesh->Skins[0]);
+
+		audio.Play();
 
 		while (running)
 		{
