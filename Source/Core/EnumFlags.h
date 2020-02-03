@@ -11,8 +11,8 @@ public:
 	using UnderlyingType = std::underlying_type_t<T>;
 
 	EnumFlags() = default;
-	EnumFlags(const T& v) : _value(static_cast<UnderlyingType>(v)) {}
-	EnumFlags(const UnderlyingType& v) : _value(v) {}
+	explicit EnumFlags(const T& v) : _value(static_cast<UnderlyingType>(v)) {}
+	explicit EnumFlags(const UnderlyingType& v) : _value(v) {}
 
 	EnumFlags<T>& operator=(const T& v) { return _value = static_cast<UnderlyingType>(v); return *this; }
 	EnumFlags<T>& operator=(const UnderlyingType& v) { _value = v; return *this; }

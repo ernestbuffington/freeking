@@ -47,7 +47,7 @@ namespace Freeking
 
 	void BrushModelEntity::RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<Material>& material)
 	{
-		if (_model)
+		if (_model && !HasSurf2Alpha())
 		{
 			_model->RenderOpaque(viewProjection, material);
 		}
@@ -57,7 +57,7 @@ namespace Freeking
 	{
 		if (_model)
 		{
-			_model->RenderTranslucent(viewProjection, material);
+			_model->RenderTranslucent(viewProjection, material, HasSurf2Alpha());
 		}
 	}
 

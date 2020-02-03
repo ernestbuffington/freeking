@@ -75,7 +75,7 @@ namespace Freeking
 	public:
 
 		void RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<Material>& material);
-		void RenderTranslucent(const Matrix4x4& viewProjection, const std::shared_ptr<Material>& material);
+		void RenderTranslucent(const Matrix4x4& viewProjection, const std::shared_ptr<Material>& material, bool forceTranslucent);
 
 		struct MeshKey
 		{

@@ -212,11 +212,11 @@ namespace Freeking
 		}
 	}
 
-	void BrushModel::RenderTranslucent(const Matrix4x4& viewProjection, const std::shared_ptr<Material>& material)
+	void BrushModel::RenderTranslucent(const Matrix4x4& viewProjection, const std::shared_ptr<Material>& material, bool forceTranslucent)
 	{
 		for (auto& mesh : Meshes)
 		{
-			if (!mesh.second->Translucent)
+			if (!mesh.second->Translucent && !forceTranslucent)
 			{
 				continue;
 			}

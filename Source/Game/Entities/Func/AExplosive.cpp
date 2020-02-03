@@ -14,6 +14,6 @@ namespace Freeking::Entity::Func
 			return property.ValueAsFlags(_spawnFlags);
 		}
 
-		return PrimitiveEntity::SetProperty(property);
+		return BrushModelEntity::SetProperty(property);
 	}
 }
