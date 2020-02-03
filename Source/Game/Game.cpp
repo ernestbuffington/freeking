@@ -291,6 +291,8 @@ namespace Freeking
 				camera.Move(inputForce, static_cast<float>(deltaTime));
 			}
 
+			audio.SetListenerTransform(camera.GetPosition(), camera.GetRotation().Inverse());
+
 			ImGui_ImplOpenGL3_NewFrame();
 			ImGui_ImplSDL2_NewFrame(static_cast<SDL_Window*>(*_window));
 			ImGui::NewFrame();

@@ -13,6 +13,7 @@ namespace Freeking
 		FreeCamera();
 
 		inline const Vector3f& GetPosition() const { return Position; }
+		inline const Quaternion& GetRotation() const { return RotationQuat; }
 		inline const Matrix4x4& GetViewMatrix() const { return ViewMatrix; }
 		inline const float GetPitch() const { return Pitch; }
 		inline const float GetYaw() const { return Yaw; }

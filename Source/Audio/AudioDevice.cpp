@@ -23,7 +23,28 @@ namespace Freeking
 
 		alSourcei(_sourceId, AL_BUFFER, clip->GetBufferId());
 		alSourcei(_sourceId, AL_LOOPING, AL_TRUE);
+		alSourcef(_sourceId, AL_PITCH, 1);
+		alSourcef(_sourceId, AL_GAIN, 1);
+		alSource3f(_sourceId, AL_POSITION, 0, 0, 0);
+		alSource3f(_sourceId, AL_VELOCITY, 0, 0, 0);
+
+		alSourcei(_sourceId, AL_SOURCE_RELATIVE, AL_FALSE);
+		alSourcef(_sourceId, AL_REFERENCE_DISTANCE, 0.0f);
+		alSourcef(_sourceId, AL_MAX_DISTANCE, 1000.0f);
+		alDistanceModel(AL_LINEAR_DISTANCE_CLAMPED);
+
 		alSourcePlay(_sourceId);
+	}
+
+	void AudioDevice::SetListenerTransform(const Vector3f& position, const Quaternion& rotation)
+	{
+		alListener3f(AL_POSITION, position.x, position.y, position.z);
+
+		Vector3f forward = rotation * Vector3f::Forward;
+		Vector3f up = rotation * Vector3f::Up;
+		float orientation[6] = { forward[0], forward[1], forward[2], up[0], up[1], up[2] };
+
+		alListenerfv(AL_ORIENTATION, orientation);
 	}
 
 	void AudioDevice::InitializeOpenAl()
@@ -39,6 +60,9 @@ namespace Freeking
 		}
 
 		alcMakeContextCurrent(_alContext);
+
+		alcGetIntegerv(_alDevice, ALC_MONO_SOURCES, 1, &_numMonoSources);
+		alcGetIntegerv(_alDevice, ALC_STEREO_SOURCES, 1, &_numStereoSources);
 
 		alGenSources(1, &_sourceId);
 	}
@@ -60,6 +84,11 @@ namespace Freeking
 			_alDevice = nullptr;
 		}
 
-		alDeleteSources(1, &_sourceId);
+		if (_sourceId)
+		{
+			alDeleteSources(1, &_sourceId);
+
+			_sourceId = 0;
+		}
 	}
 }

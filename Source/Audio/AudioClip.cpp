@@ -33,6 +33,9 @@ namespace Freeking
 
 	AudioClip::~AudioClip()
 	{
-		alDeleteBuffers(1, &_bufferId);
+		if (_bufferId)
+		{
+			alDeleteBuffers(1, &_bufferId);
+		}
 	}
 }

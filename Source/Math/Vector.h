@@ -585,8 +585,8 @@ namespace Freeking
 	template<typename T> const Vector3<T> Vector3<T>::OneX(1, 0, 0);
 	template<typename T> const Vector3<T> Vector3<T>::OneY(0, 1, 0);
 	template<typename T> const Vector3<T> Vector3<T>::OneZ(0, 0, 1);
-	template<typename T> const Vector3<T> Vector3<T>::Forward(0, 0, 1);
-	template<typename T> const Vector3<T> Vector3<T>::Backward(0, 0, -1);
+	template<typename T> const Vector3<T> Vector3<T>::Forward(0, 0, -1);
+	template<typename T> const Vector3<T> Vector3<T>::Backward(0, 0, 1);
 	template<typename T> const Vector3<T> Vector3<T>::Up(0, 1, 0);
 	template<typename T> const Vector3<T> Vector3<T>::Down(0, -1, 0);
 	template<typename T> const Vector3<T> Vector3<T>::Left(1, 0, 0);

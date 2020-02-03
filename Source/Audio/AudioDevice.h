@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Vector.h"
+#include "Quaternion.h"
 #include <stdint.h>
 #include <AL/alc.h>
 #include <AL/alext.h>
@@ -18,6 +20,8 @@ namespace Freeking
 
 		void PlayClip(AudioClip* clip);
 
+		void SetListenerTransform(const Vector3f& position, const Quaternion& rotation);
+
 	private:
 
 		void InitializeOpenAl();
@@ -27,5 +31,8 @@ namespace Freeking
 		ALCdevice* _alDevice;
 
 		uint32_t _sourceId;
+
+		ALCint _numMonoSources;
+		ALCint _numStereoSources;
 	};
 }
