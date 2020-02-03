@@ -7,7 +7,7 @@ namespace Freeking
 	ButtonEntity::ButtonEntity() : BrushModelEntity(),
 		_speed(40.0f),
 		_angle(0.0f),
-		_lip(0.0f),
+		_lip(4.0f),
 		_moveDistance(0.0f)
 	{
 	}
