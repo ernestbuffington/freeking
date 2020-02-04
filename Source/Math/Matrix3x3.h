@@ -44,7 +44,6 @@ namespace Freeking
 		inline const Vector3f& operator[](unsigned int value) const { return m[value]; }
 
 		const float* Base() const;
-		float* Base();
 
 	private:
 

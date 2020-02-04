@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Vector.h"
-#include <sstream>
 
 namespace Freeking
 {
@@ -45,6 +44,10 @@ namespace Freeking
 		static Quaternion FromDegreeYaw(float yaw);
 		static Quaternion FromDegreeRoll(float roll);
 		static Quaternion FromRadianYaw(float yaw);
+
+		inline Vector3f Forward() const { return *this * Vector3f::Forward; }
+		inline Vector3f Right() const { return *this * Vector3f::Right; }
+		inline Vector3f Up() const { return *this * Vector3f::Up; }
 
 		Vector3f operator*(const Vector3f& v) const;
 		Quaternion operator+(const Quaternion& v) const;

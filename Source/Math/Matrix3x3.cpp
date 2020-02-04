@@ -262,9 +262,4 @@ namespace Freeking
 	{
 		return m[0].Base();
 	}
-
-	float* Matrix3x3::Base()
-	{
-		return m[0].Base();
-	}
 }

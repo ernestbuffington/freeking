@@ -289,7 +289,7 @@ namespace Freeking
 				camera.Move(inputForce, static_cast<float>(deltaTime));
 			}
 
-			audio.SetListenerTransform(camera.GetPosition(), camera.GetRotation().Inverse());
+			audio.SetListenerTransform(camera.GetPosition(), camera.GetRotation());
 
 			ImGui_ImplOpenGL3_NewFrame();
 			ImGui_ImplSDL2_NewFrame(static_cast<SDL_Window*>(*_window));
@@ -320,7 +320,7 @@ namespace Freeking
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			Matrix4x4 projectionMatrix = Matrix4x4::Perspective(80, (float)_viewportWidth / (float)_viewportHeight, 0.1f, 10000.0f);
-			Matrix4x4 viewMatrix = camera.GetViewMatrix();
+			Matrix4x4 viewMatrix = camera.GetTransform();
 			Matrix4x4 viewProjectionMatrix = projectionMatrix * viewMatrix;
 
 			Shader::Globals.SetValue(viewProjId, viewProjectionMatrix);

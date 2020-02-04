@@ -4,44 +4,43 @@
 namespace Freeking
 {
 	FreeCamera::FreeCamera() :
-		Pitch(0.0f), Yaw(0.0f), Position(0.0f, 0.0f, 0.0f)
+		_position(0.0f, 0.0f, 0.0f)
 	{
-		UpdateRotationQuat();
-		UpdateViewMatrix();
+		SetRotation(0.0f, 0.0f, 0.0f);
+		UpdateTransform();
 	}
 
 	void FreeCamera::MoveTo(const Vector3f& position)
 	{
-		Position = position;
-		UpdateViewMatrix();
+		_position = position;
+		UpdateTransform();
 	}
 
 	void FreeCamera::Move(const Vector3f& force, float dt)
 	{
 		if (force.Length() > 0.0f)
 		{
-			Position -= (RotationQuat.Inverse() * force) * dt;
-			UpdateViewMatrix();
+			_position -= (_rotation * force) * dt;
+			UpdateTransform();
 		}
 	}
 
 	void FreeCamera::LookDelta(float x, float y)
 	{
-		Yaw += -x;
-		Yaw += ceil(-Yaw / 360.0f) * 360.0f;
-		Pitch = Math::Clamp(Pitch + -y, -90.0f, 90.0f);
-
-		UpdateRotationQuat();
-		UpdateViewMatrix();
+		SetRotation(_pitch - y, _yaw - x, _roll);
+		UpdateTransform();
 	}
 
-	void FreeCamera::UpdateViewMatrix()
+	void FreeCamera::UpdateTransform()
 	{
-		ViewMatrix = RotationQuat.ToMatrix4x4() * Matrix4x4::Translation(-Position);
+		_transform = _rotation.Inverse().ToMatrix4x4() * Matrix4x4::Translation(_position * -1.0f);
 	}
 
-	void FreeCamera::UpdateRotationQuat()
+	void FreeCamera::SetRotation(float pitch, float yaw, float roll)
 	{
-		RotationQuat = Quaternion::FromDegreeAngles(Vector3f(Pitch, Yaw, 0.0)).Inverse();
+		_pitch = Math::Clamp(pitch, -90.0f, 90.0f);
+		_yaw = fmod(yaw + (ceil(-yaw / 360.0f) * 360.0f), 360.0f);
+		_roll = fmod(roll + (ceil(-roll / 360.0f) * 360.0f), 360.0f);
+		_rotation = Quaternion::FromDegreeAngles(_pitch, _yaw, _roll);
 	}
 }

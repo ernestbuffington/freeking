@@ -28,20 +28,12 @@ namespace Freeking
 		m[3] = c3;
 	}
 
-	Matrix4x4::Matrix4x4(const float* matrix)
-	{
-		m[0] = Vector4f(matrix[0], matrix[1], matrix[2], matrix[3]);
-		m[1] = Vector4f(matrix[4], matrix[5], matrix[6], matrix[7]);
-		m[2] = Vector4f(matrix[8], matrix[9], matrix[10], matrix[11]);
-		m[3] = Vector4f(matrix[12], matrix[13], matrix[14], matrix[15]);
-	}
-
 	void Matrix4x4::Identity()
 	{
-		m[0] = Vector4f(1, 0, 0, 0);
-		m[1] = Vector4f(0, 1, 0, 0);
-		m[2] = Vector4f(0, 0, 1, 0);
-		m[3] = Vector4f(0, 0, 0, 1);
+		m[0][0] = 1; m[0][1] = 0; m[0][2] = 0; m[0][3] = 0;
+		m[1][0] = 0; m[1][1] = 1; m[1][2] = 0; m[1][3] = 0;
+		m[2][0] = 0; m[2][1] = 0; m[2][2] = 1; m[2][3] = 0;
+		m[3][0] = 0; m[3][1] = 0; m[3][2] = 0; m[3][3] = 1;
 	}
 
 	Matrix4x4 Matrix4x4::Translation(const Vector3f& position)
@@ -100,7 +92,8 @@ namespace Freeking
 
 	Vector4f Matrix4x4::Transform(const Vector4f& v) const
 	{
-		return Vector4f(Row(0).Dot(v),
+		return Vector4f(
+			Row(0).Dot(v),
 			Row(1).Dot(v),
 			Row(2).Dot(v),
 			Row(3).Dot(v));
@@ -108,14 +101,8 @@ namespace Freeking
 
 	Vector3f Matrix4x4::Transform(const Vector3f& v) const
 	{
-		return Vector3f(Row(0).xyz().Dot(v),
-			Row(1).xyz().Dot(v),
-			Row(2).xyz().Dot(v));
-	}
-
-	Vector3f Matrix4x4::TransformDirection(const Vector3f& v) const
-	{
-		return Vector3f(Row(0).xyz().Dot(v),
+		return Vector3f(
+			Row(0).xyz().Dot(v),
 			Row(1).xyz().Dot(v),
 			Row(2).xyz().Dot(v));
 	}
@@ -126,16 +113,10 @@ namespace Freeking
 		Vector4f r1 = Row(1);
 		Vector4f r2 = Row(2);
 
-		Vector3f r(r0.Dot(v) + m[3][0],
+		Vector3f r(
+			r0.Dot(v) + m[3][0],
 			r1.Dot(v) + m[3][1],
 			r2.Dot(v) + m[3][2]);
-
-		float w = v.x * m[0][3] + v.y * m[1][3] + v.z * m[2][3] + m[3][3];
-
-		if (w != 1 && w != 0)
-		{
-			//r.x = r.x / w; r.y = r.y / w; r.z = r.z / w;
-		}
 
 		return r;
 	}
@@ -296,11 +277,6 @@ namespace Freeking
 	}
 
 	const float* Matrix4x4::Base() const
-	{
-		return m[0].Base();
-	}
-
-	float* Matrix4x4::Base()
 	{
 		return m[0].Base();
 	}

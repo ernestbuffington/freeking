@@ -16,7 +16,6 @@ namespace Freeking
 			float zx, float zy, float zz, float zw,
 			float wx, float wy, float wz, float ww);
 		Matrix4x4(const Vector4f& c0, const Vector4f& c1, const Vector4f& c2, const Vector4f& c3);
-		Matrix4x4(const float* matrix);
 
 		void Identity();
 		void Translate(const Vector3f& position);
@@ -33,7 +32,6 @@ namespace Freeking
 		Vector4f Transform(const Vector4f& v) const;
 		Vector3f Transform(const Vector3f& v) const;
 		Vector3f TransformPoint(const Vector3f& v) const;
-		Vector3f TransformDirection(const Vector3f& v) const;
 		void ClipProjection(const Vector4f& clipPlane);
 
 		Matrix4x4 operator*(const Matrix4x4& rhs) const;
@@ -46,7 +44,6 @@ namespace Freeking
 		inline const Vector4f& operator[](unsigned int value) const { return m[value]; }
 
 		const float* Base() const;
-		float* Base();
 
 	private:
 
