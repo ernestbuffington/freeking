@@ -20,9 +20,11 @@ namespace Freeking
 		inline const Vector3f& GetPosition() const { return _position; }
 		inline const Quaternion& GetRotation() const { return _rotation; }
 		inline const Matrix4x4& GetTransform() const { return _transform; }
+		inline const Matrix4x4& GetTransformCenter() const { return _transformCenter; }
 
 		inline const Vector3f& GetLocalMinBounds() const { return _localMinBounds; }
 		inline const Vector3f& GetLocalMaxBounds() const { return _localMaxBounds; }
+		inline const Vector3f& GetLocalBoundsCenter() const { return _localBoundsCenter; }
 
 	protected:
 
@@ -45,8 +47,10 @@ namespace Freeking
 		Vector3f _position;
 		Quaternion _rotation;
 		Matrix4x4 _transform;
+		Matrix4x4 _transformCenter;
 
 		Vector3f _localMinBounds;
 		Vector3f _localMaxBounds;
+		Vector3f _localBoundsCenter;
 	};
 }

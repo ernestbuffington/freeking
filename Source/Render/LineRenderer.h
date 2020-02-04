@@ -22,8 +22,8 @@ namespace Freeking
 		void DrawAABBox(const Vector3f& mins, const Vector3f& maxs, const Vector4f& colour);
 		void DrawAABBox(const Vector3f& position, const Vector3f& mins, const Vector3f& maxs, const Vector4f& colour);
 		void DrawSphere(const Vector3f& position, float radius, int thetaSegments, int phiSegments, const Vector4f& colour);
-		void DrawCone(const Vector3f& position, float radius, float height, std::size_t sides, const Vector4f& colour);
-		void DrawCone(const Vector3f& position, const Quaternion& rotation, float radius, float height, std::size_t sides, const Vector4f& colour);
+		void DrawAxis(const Matrix4x4& transform, float length, float size);
+		void DrawArrow(const Vector3f& start, const Vector3f& end, const Vector3f& up, const Vector3f& right, const float size, const Vector4f& color);
 
 		void Flush(Matrix4x4& viewProj);
 		void Clear();

@@ -67,6 +67,7 @@ namespace Freeking
 
 	void SceneEntity::UpdateTransform()
 	{
+		_transformCenter = Matrix4x4::Translation(_position + _localBoundsCenter) * _rotation.ToMatrix4x4();
 		_transform = Matrix4x4::Translation(_position) * _rotation.ToMatrix4x4();
 	}
 
@@ -74,5 +75,6 @@ namespace Freeking
 	{
 		_localMinBounds = minBounds;
 		_localMaxBounds = maxBounds;
+		_localBoundsCenter = _localMinBounds + ((_localMaxBounds - _localMinBounds) * 0.5f);
 	}
 }

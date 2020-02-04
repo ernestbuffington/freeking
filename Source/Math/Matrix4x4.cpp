@@ -53,6 +53,11 @@ namespace Freeking
 		m[3][2] = position.z;
 	}
 
+	Vector3f Matrix4x4::Translation() const
+	{
+		return Vector3f(m[3][0], m[3][1], m[3][2]);
+	}
+
 	Matrix4x4 Matrix4x4::Perspective(float fov, float aspect, float nearClip, float farClip)
 	{
 		float f = 1.0f / tan(Math::DegreesToRadians(fov) / 2.0f);

@@ -34,7 +34,6 @@ namespace Freeking
 
 		_vertexBuffer->UpdateBuffer(_buffer.data(), 0, _vertexCount * VertexSize);
 
-		_shader->SetParameterValue("viewProj", viewProj);
 		_shader->Apply();
 
 		_vertexBinding->Bind();
@@ -134,55 +133,48 @@ namespace Freeking
 		}
 	}
 
-	void LineRenderer::DrawCone(const Vector3f& position, float radius, float height, std::size_t sides, const Vector4f& colour)
+	void LineRenderer::DrawAxis(const Matrix4x4& transform, float length, float size)
 	{
-		if (sides < 3)
-		{
-			return;
-		}
+		Vector3f start = transform.Translation();
+		Vector3f p1 = transform.Transform(Vector3f::OneX);
+		Vector3f p2 = transform.Transform(Vector3f::OneY);
+		Vector3f p3 = transform.Transform(Vector3f::OneZ);
 
-		std::vector<Vector3f> vertices;
-		vertices.reserve(sides + 1);
-
-		Vector3f topVertex = position + (Vector3f(0, 1, 0) * height);
-
-		for (std::size_t i = 0; i <= sides; ++i)
-		{
-			float r = Math::TwoPi * (i / (float)sides);
-			Vector3f vertex(radius * cos(r), 0.0f, radius * sin(r));
-			vertices.push_back(position + vertex);
-		}
-
-		for (std::size_t i = 0; i < sides; ++i)
-		{
-			DrawLine(vertices[i], vertices[i + 1], colour);
-			DrawLine(vertices[i], topVertex, colour);
-		}
+		DrawArrow(start, start + p1 * length, p2, p3, size, Vector4f(1, 0, 0, 1));
+		DrawArrow(start, start + p2 * length, p3, p1, size, Vector4f(0, 1, 0, 1));
+		DrawArrow(start, start + p3 * length, p1, p2, size, Vector4f(0, 0, 1, 1));
 	}
 
-	void LineRenderer::DrawCone(const Vector3f& position, const Quaternion& rotation, float radius, float height, std::size_t sides, const Vector4f& colour)
+	void LineRenderer::DrawArrow(const Vector3f& start, const Vector3f& end, const Vector3f& up, const Vector3f& right, const float size, const Vector4f& color)
 	{
-		if (sides < 3)
+		static const float degreeStep = 30.0f;
+
+		static const float arrowSin[45] = {
+			0.0f, 0.5f, 0.866025f, 1.0f, 0.866025f, 0.5f, -0.0f, -0.5f, -0.866025f,
+			-1.0f, -0.866025f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+			0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+			0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f
+		};
+
+		static const float arrowCos[45] = {
+			1.0f, 0.866025f, 0.5f, -0.0f, -0.5f, -0.866026f, -1.0f, -0.866025f, -0.5f, 0.0f,
+			0.5f, 0.866026f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+			0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+			0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f
+		};
+
+		DrawLine(start, end, color);
+
+		Vector3f forward = (end - start).Normalise() * size;
+		float degrees = 0.0f;
+
+		for (int i = 0; degrees < 360.0f; degrees += degreeStep, ++i)
 		{
-			return;
-		}
+			Vector3f v1(end - forward + up * ((size * arrowCos[i]) * 0.5f) + right * ((size * arrowSin[i]) * 0.5f));
+			Vector3f v2(end - forward + up * ((size * arrowCos[i + 1]) * 0.5f) + right * ((size * arrowSin[i + 1]) * 0.5f));
 
-		std::vector<Vector3f> vertices;
-		vertices.reserve(sides + 1);
-
-		Vector3f topVertex = position + (rotation * Vector3f(0, height, 0));
-
-		for (std::size_t i = 0; i <= sides; ++i)
-		{
-			float r = Math::TwoPi * (i / (float)sides);
-			Vector3f vertex(radius * cos(r), 0.0f, radius * sin(r));
-			vertices.push_back(position + (rotation * vertex));
-		}
-
-		for (std::size_t i = 0; i < sides; ++i)
-		{
-			DrawLine(vertices[i], vertices[i + 1], colour);
-			DrawLine(vertices[i], topVertex, colour);
+			DrawLine(v1, end, color);
+			DrawLine(v1, v2, color);
 		}
 	}
 
