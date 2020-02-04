@@ -72,7 +72,6 @@ namespace Freeking
 			4, 5, 0, 0, 5, 1
 		};
 
-
 		_vertexBuffer = std::make_unique<VertexBuffer>(vertices, 8, 12, GL_STATIC_DRAW);
 		_indexBuffer = std::make_unique<IndexBuffer>(indices, 36, GL_UNSIGNED_INT);
 

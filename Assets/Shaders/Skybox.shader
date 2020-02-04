@@ -12,7 +12,7 @@ uniform mat4 viewProj;
 void main()
 {
 	vert.uv = position;
-	gl_Position = viewProj * vec4(position, 1.0);
+	gl_Position = (viewProj * vec4(position, 1.0)).xyww;
 }
 
 #endif

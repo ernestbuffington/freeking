@@ -328,12 +328,6 @@ namespace Freeking
 
 			Shader::Globals.SetValue(viewProjId, viewProjectionMatrix);
 
-			glDepthMask(GL_FALSE);
-			Matrix4x4 skyboxView = viewMatrix;
-			skyboxView.Translate(0);
-			skybox.Draw(projectionMatrix * skyboxView);
-			glDepthMask(GL_TRUE);
-
 			SpriteBatch::ProjectionMatrix = projectionMatrix;
 			SpriteBatch::ViewMatrix = viewMatrix;
 			SpriteBatch::ViewportWidth = static_cast<float>(_viewportWidth);
@@ -367,6 +361,12 @@ namespace Freeking
 			}
 
 			renderer.Flush();
+
+			glDepthFunc(GL_LEQUAL);
+			Matrix4x4 skyboxView = viewMatrix;
+			skyboxView.Translate(0);
+			skybox.Draw(projectionMatrix* skyboxView);
+			glDepthFunc(GL_LESS);
 
 			if (debug)
 			{
