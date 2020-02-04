@@ -29,6 +29,7 @@
 #include "TimeUtil.h"
 #include "Audio/AudioClip.h"
 #include "Audio/AudioDevice.h"
+#include "Skybox.h"
 #include <glad/gl.h>
 #include <iostream>
 #include <fstream>
@@ -183,6 +184,8 @@ namespace Freeking
 
 		std::string mapName("sr1");
 
+		Skybox skybox("sr");
+
 		auto lineRenderer = std::make_shared<LineRenderer>(2000000);
 		auto spriteBatch = std::make_shared<SpriteBatch>(10000);
 		SpriteBatch::Debug = spriteBatch;
@@ -324,6 +327,12 @@ namespace Freeking
 			Matrix4x4 viewProjectionMatrix = projectionMatrix * viewMatrix;
 
 			Shader::Globals.SetValue(viewProjId, viewProjectionMatrix);
+
+			glDepthMask(GL_FALSE);
+			Matrix4x4 skyboxView = viewMatrix;
+			skyboxView.Translate(0);
+			skybox.Draw(projectionMatrix * skyboxView);
+			glDepthMask(GL_TRUE);
 
 			SpriteBatch::ProjectionMatrix = projectionMatrix;
 			SpriteBatch::ViewMatrix = viewMatrix;

@@ -12,6 +12,7 @@ namespace Freeking
 {
 	class Texture2D;
 	class TextureBuffer;
+	class TextureCube;
 	class TextureSampler;
 	class Shader;
 
@@ -26,6 +27,7 @@ namespace Freeking
 		std::shared_ptr<Shader> Lightmapped;
 		std::shared_ptr<Shader> Sprite;
 		std::shared_ptr<Shader> Text;
+		std::shared_ptr<Shader> Skybox;
 
 	protected:
 
@@ -57,6 +59,7 @@ namespace Freeking
 		void SetParameterValue(const char*, const Texture2D*);
 		void SetParameterValue(const char*, const Texture2D*, const TextureSampler*);
 		void SetParameterValue(const char*, const TextureBuffer*);
+		void SetParameterValue(const char*, const TextureCube*, const TextureSampler*);
 
 		void SetParameterValue(int, int);
 		void SetParameterValue(int, float);
@@ -68,6 +71,7 @@ namespace Freeking
 		void SetParameterValue(int, const Texture2D*);
 		void SetParameterValue(int, const Texture2D*, const TextureSampler*);
 		void SetParameterValue(int, const TextureBuffer*);
+		void SetParameterValue(int, const TextureCube*, const TextureSampler*);
 
 		int GetFloatParameterId(const std::string& name) { return _floatParameters.GetId(name); }
 		int GetIntParameterId(const std::string& name) { return _intParameters.GetId(name); }
@@ -184,7 +188,7 @@ namespace Freeking
 			{
 				enum class Type : uint8_t
 				{
-					Tex1D, Tex2D, Tex3D, TexBuffer, Invalid
+					Tex1D, Tex2D, Tex3D, TexBuffer, TexCube, Invalid
 				};
 
 				inline static Type CastType(GLenum type)
@@ -197,6 +201,7 @@ namespace Freeking
 					case GL_SAMPLER_BUFFER: return Type::TexBuffer;
 					case GL_INT_SAMPLER_BUFFER: return Type::TexBuffer;
 					case GL_UNSIGNED_INT_SAMPLER_BUFFER: return Type::TexBuffer;
+					case GL_SAMPLER_CUBE: return Type::TexCube;
 					}
 
 					return Type::Invalid;
@@ -204,6 +209,7 @@ namespace Freeking
 
 				void SetTexture(const Texture2D*, const TextureSampler*);
 				void SetTexture(const TextureBuffer*);
+				void SetTexture(const TextureCube*, const TextureSampler*);
 
 				Type type;
 				GLuint textureId;

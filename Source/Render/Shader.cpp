@@ -1,6 +1,7 @@
 #include "Shader.h"
 #include "Texture2D.h"
 #include "TextureBuffer.h"
+#include "TextureCube.h"
 #include "TextureSampler.h"
 #include "ShaderLoader.h"
 #include <cassert>
@@ -14,6 +15,7 @@ namespace Freeking
 		Lightmapped = Get("Shaders/Lightmapped.shader");
 		Sprite = Get("Shaders/Sprite.shader");
 		Text = Get("Shaders/Text.shader");
+		Skybox = Get("Shaders/Skybox.shader");
 	}
 
 	void ShaderLibrary::UpdateLoaders()
@@ -355,6 +357,7 @@ namespace Freeking
 			case PropertyType::Tex2D: textureType = GL_TEXTURE_2D; break;
 			case PropertyType::Tex3D: textureType = GL_TEXTURE_3D; break;
 			case PropertyType::TexBuffer: textureType = GL_TEXTURE_BUFFER; break;
+			case PropertyType::TexCube: textureType = GL_TEXTURE_CUBE_MAP; break;
 			}
 
 			if (textureType != GL_INVALID_ENUM)
@@ -509,6 +512,16 @@ namespace Freeking
 		SetParameterValue(_textureParameters.GetId(name), texture);
 	}
 
+	void Shader::SetParameterValue(const char* name, const TextureCube* texture, const TextureSampler* sampler)
+	{
+		if (!texture)
+		{
+			return;
+		}
+
+		SetParameterValue(_textureParameters.GetId(name), texture, sampler);
+	}
+
 	void Shader::SetParameterValue(int id, const TextureBuffer* texture)
 	{
 		if (!texture)
@@ -520,6 +533,20 @@ namespace Freeking
 			param != nullptr && param->prop.type == TexturePropertyType::TexBuffer)
 		{
 			param->prop.SetTexture(texture);
+		}
+	}
+
+	void Shader::SetParameterValue(int id, const TextureCube* texture, const TextureSampler* sampler)
+	{
+		if (!texture)
+		{
+			return;
+		}
+
+		if (auto param = _textureParameters.GetParameter(id);
+			param != nullptr && param->prop.type == TexturePropertyType::TexCube)
+		{
+			param->prop.SetTexture(texture, sampler);
 		}
 	}
 
@@ -602,6 +629,16 @@ namespace Freeking
 		{
 			textureId = texture->GetHandle();
 			samplerId = GL_INVALID_INDEX;
+			unset = false;
+		}
+	}
+
+	void Shader::TextureParameter::Property::SetTexture(const TextureCube* texture, const TextureSampler* sampler)
+	{
+		if (type == Type::TexCube && texture)
+		{
+			textureId = texture->GetHandle();
+			samplerId = sampler != nullptr ? sampler->GetHandle() : TextureSampler::GetDefault()->GetHandle();
 			unset = false;
 		}
 	}
