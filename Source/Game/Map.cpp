@@ -192,7 +192,7 @@ namespace Freeking
 		std::vector<LightStyle> _styles;
 	};
 
-	void BrushModel::RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<Material>& material)
+	void BrushModel::RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<Shader>& shader)
 	{
 		for (const auto& mesh : Meshes)
 		{
@@ -202,17 +202,17 @@ namespace Freeking
 			}
 
 			float brightness = Map::LightStyles.GetSample(mesh.second->LightStyles[1]);
-			material->SetParameterValue("brightness", brightness * 2.0f);
-			material->SetParameterValue("alphaCutOff", mesh.second->AlphaCutOff);
-			material->SetParameterValue("diffuse", mesh.second->GetDiffuse().get());
-			material->SetParameterValue("lightmap", mesh.second->GetLightmap().get());
-			material->Apply();
+			shader->SetParameterValue("brightness", brightness * 2.0f);
+			shader->SetParameterValue("alphaCutOff", mesh.second->AlphaCutOff);
+			shader->SetParameterValue("diffuse", mesh.second->GetDiffuse().get());
+			shader->SetParameterValue("lightmap", mesh.second->GetLightmap().get());
+			shader->Apply();
 
 			mesh.second->Draw();
 		}
 	}
 
-	void BrushModel::RenderTranslucent(const Matrix4x4& viewProjection, const std::shared_ptr<Material>& material, bool forceTranslucent)
+	void BrushModel::RenderTranslucent(const Matrix4x4& viewProjection, const std::shared_ptr<Shader>& shader, bool forceTranslucent)
 	{
 		for (auto& mesh : Meshes)
 		{
@@ -222,11 +222,11 @@ namespace Freeking
 			}
 
 			float brightness = Map::LightStyles.GetSample(mesh.second->LightStyles[1]);
-			material->SetParameterValue("brightness", brightness * 2.0f);
-			material->SetParameterValue("alphaMultiply", mesh.second->AlphaMultiply);
-			material->SetParameterValue("diffuse", mesh.second->GetDiffuse().get());
-			material->SetParameterValue("lightmap", mesh.second->GetLightmap().get());
-			material->Apply();
+			shader->SetParameterValue("brightness", brightness * 2.0f);
+			shader->SetParameterValue("alphaMultiply", mesh.second->AlphaMultiply);
+			shader->SetParameterValue("diffuse", mesh.second->GetDiffuse().get());
+			shader->SetParameterValue("lightmap", mesh.second->GetLightmap().get());
+			shader->Apply();
 
 			mesh.second->Draw();
 		}
@@ -246,34 +246,29 @@ namespace Freeking
 
 	void Map::Render(const Matrix4x4& viewProjection)
 	{
-		_material->SetParameterValue("viewProj", viewProjection);
-		_material->SetParameterValue("diffuse", 0);
-		_material->SetParameterValue("lightmap", 1);
-		_material->SetParameterValue("brightness", 0.0f);
-
 		glDisable(GL_BLEND);
 
-		_material->SetParameterValue("alphaMultiply", 1.0f);
+		_shader->SetParameterValue("alphaMultiply", 1.0f);
 
 		for (const auto& entity : _worldEntities)
 		{
 			auto mvp = viewProjection * entity->GetTransform();
-			_material->SetParameterValue("viewProj", mvp);
-			entity->RenderOpaque(mvp, _material);
+			_shader->SetParameterValue("viewProj", mvp);
+			entity->RenderOpaque(mvp, _shader);
 		}
 
 		glEnable(GL_BLEND);
 
-		_material->SetParameterValue("alphaCutOff", 0.0f);
+		_shader->SetParameterValue("alphaCutOff", 0.0f);
 
 		for (const auto& entity : _worldEntities)
 		{
 			auto mvp = viewProjection * entity->GetTransform();
-			_material->SetParameterValue("viewProj", mvp);
-			entity->RenderTranslucent(mvp, _material);
+			_shader->SetParameterValue("viewProj", mvp);
+			entity->RenderTranslucent(mvp, _shader);
 		}
 
-		_material->Unbind();
+		_shader->Unbind();
 	}
 
 	Map* Map::Current = nullptr;
@@ -313,7 +308,7 @@ namespace Freeking
 
 		pf.Start();
 
-		std::map<std::string, uint32_t> textureIds;
+		std::unordered_map<std::string, uint32_t> textureIds;
 
 		for (int i = 0; i < textureInfo.Num(); ++i)
 		{
@@ -530,7 +525,7 @@ namespace Freeking
 
 		pf.Stop("Map commit");
 
-		_material = std::make_shared<Material>(Shader::Library.Get("Shaders/Lightmapped.shader"));
+		_shader = Shader::Library.Get("Shaders/Lightmapped.shader");
 
 		pf.Start();
 
@@ -555,6 +550,10 @@ namespace Freeking
 				{
 					_worldEntities.push_back(worldEntity);
 				}
+			}
+			else
+			{
+				std::cout << "Could not make entity \"" << classname << "\"" << std::endl;
 			}
 		}
 

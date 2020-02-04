@@ -4,7 +4,7 @@
 
 namespace Freeking
 {
-	class Material;
+	class Shader;
 	class VertexBinding;
 
 	enum class DrawPrimitive
@@ -19,7 +19,7 @@ namespace Freeking
 
 		void Draw(
 			VertexBinding* binding,
-			Material* material,
+			Shader* shader,
 			DrawPrimitive primitive = DrawPrimitive::Triangles,
 			int offset = 0,
 			int count = 0,
@@ -32,7 +32,7 @@ namespace Freeking
 		struct DrawCall
 		{
 			VertexBinding* binding;
-			Material* material;
+			Shader* shader;
 			DrawPrimitive primitive;
 			int offset;
 			int count;

@@ -4,13 +4,13 @@
 
 namespace Freeking
 {
-	class BrushModel;
+	class DynamicModel;
 
-	class BrushModelEntity : public PrimitiveEntity
+	class ModelEntity : public PrimitiveEntity
 	{
 	public:
 
-		BrushModelEntity();
+		ModelEntity();
 
 		virtual void Initialize() override;
 		virtual void Tick(double dt) override;
@@ -22,13 +22,8 @@ namespace Freeking
 
 		virtual bool SetProperty(const EntityProperty& property) override;
 
-		virtual std::shared_ptr<BrushModel> GetModel();
-
-		virtual bool HasSurf2Alpha() const { return false; }
-
 	protected:
 
-		int _modelIndex;
-		std::shared_ptr<BrushModel> _model;
+		std::shared_ptr<DynamicModel> _model;
 	};
 }

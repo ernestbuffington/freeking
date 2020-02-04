@@ -19,7 +19,7 @@ namespace Freeking
 	class BrushModel;
 	class LightmapNode;
 	class LightmapImage;
-	class Material;
+	class Shader;
 
 	class BrushMesh
 	{
@@ -74,8 +74,8 @@ namespace Freeking
 	{
 	public:
 
-		void RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<Material>& material);
-		void RenderTranslucent(const Matrix4x4& viewProjection, const std::shared_ptr<Material>& material, bool forceTranslucent);
+		void RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<Shader>& shader);
+		void RenderTranslucent(const Matrix4x4& viewProjection, const std::shared_ptr<Shader>& shader, bool forceTranslucent);
 
 		struct MeshKey
 		{
@@ -123,7 +123,7 @@ namespace Freeking
 		std::vector<std::shared_ptr<BrushModel>> _models;
 		std::shared_ptr<Texture2D> _lightmapTexture;
 		std::vector<std::shared_ptr<Texture2D>> _textures;
-		std::shared_ptr<Material> _material;
+		std::shared_ptr<Shader> _shader;
 		std::vector<std::shared_ptr<BaseEntity>> _entities;
 		std::vector<std::shared_ptr<PrimitiveEntity>> _worldEntities;
 		std::vector<EntityProperties> _entityKeyValues;

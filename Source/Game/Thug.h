@@ -6,7 +6,7 @@
 
 namespace Freeking
 {
-	class Material;
+	class Shader;
 
 	class Thug
 	{
@@ -29,7 +29,7 @@ namespace Freeking
 		std::vector<std::shared_ptr<DynamicModel>> _meshes;
 		std::vector<std::shared_ptr<Texture2D>> _meshTextures;
 		std::vector<AnimFrameIndex> _animFrameIndex;
-		std::shared_ptr<Material> _material;
+		std::shared_ptr<Shader> _shader;
 		double _frameTime;
 		int _animIndex;
 	};

@@ -28,7 +28,7 @@ namespace Freeking
 			alSource3f(sourceId, AL_POSITION, sound.position.x, sound.position.y, sound.position.z);
 		}
 
-		alSourcePlayv(Sounds.size(), _sourceIds.data());
+		alSourcePlayv((int)Sounds.size(), _sourceIds.data());
 
 		Sounds.clear();
 	}
@@ -61,7 +61,7 @@ namespace Freeking
 		alcGetIntegerv(_alDevice, ALC_MONO_SOURCES, 1, &_numMonoSources);
 		alcGetIntegerv(_alDevice, ALC_STEREO_SOURCES, 1, &_numStereoSources);
 
-		alGenSources(_sourceIds.size(), _sourceIds.data());
+		alGenSources((int)_sourceIds.size(), _sourceIds.data());
 
 		for (const auto& sourceId : _sourceIds)
 		{
@@ -78,6 +78,8 @@ namespace Freeking
 
 	void AudioDevice::ShutdownOpenAL()
 	{
+		alDeleteSources((int)_sourceIds.size(), _sourceIds.data());
+
 		if (_alContext)
 		{
 			alcMakeContextCurrent(nullptr);

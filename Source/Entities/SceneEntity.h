@@ -17,16 +17,10 @@ namespace Freeking
 		virtual void PostTick() override;
 		virtual void Spawn() override;
 
-		inline void SetPosition(const Vector3f& position) { _position = position; }
-		inline void SetRotation(const Quaternion& rotation) { _rotation = rotation; }
-		inline void AddPosition(const Vector3f& position) { _position += position; }
-		inline void AddRotation(const Quaternion& rotation) { _rotation *= rotation; }
-
 		inline const Vector3f& GetPosition() const { return _position; }
 		inline const Quaternion& GetRotation() const { return _rotation; }
 		inline const Matrix4x4& GetTransform() const { return _transform; }
 
-		void SetLocalBounds(const Vector3f& minBounds, const Vector3f& maxBounds);
 		inline const Vector3f& GetLocalMinBounds() const { return _localMinBounds; }
 		inline const Vector3f& GetLocalMaxBounds() const { return _localMaxBounds; }
 
@@ -36,6 +30,13 @@ namespace Freeking
 
 		virtual void InitializeOriginProperty(const Vector3f& origin);
 		virtual void InitializeAngleProperty(float angle);
+
+		inline void SetPosition(const Vector3f& position) { _position = position; }
+		inline void SetRotation(const Quaternion& rotation) { _rotation = rotation; }
+		inline void AddPosition(const Vector3f& position) { _position += position; }
+		inline void AddRotation(const Quaternion& rotation) { _rotation *= rotation; }
+
+		void SetLocalBounds(const Vector3f& minBounds, const Vector3f& maxBounds);
 
 	private:
 

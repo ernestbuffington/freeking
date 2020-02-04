@@ -25,7 +25,6 @@
 #include "Nav/NavFile.h"
 #include "PakFileSystem.h"
 #include "PhysicalFileSystem.h"
-#include "Material.h"
 #include "Renderer.h"
 #include "TimeUtil.h"
 #include "Audio/AudioClip.h"
@@ -222,12 +221,10 @@ namespace Freeking
 			}
 		}
 
-		auto globals = std::make_shared<Material::PropertyGlobals>();
 		auto md2Shader = Shader::Library.Get("Shaders/DynamicModel.shader");
-		auto md2Material = std::make_unique<Material>(md2Shader, globals);
-		auto viewProjId = globals->GetMatrixId("viewProj");
-		auto diffuseId = md2Material->GetTextureParameterId("diffuse");
-		auto frameVertexBufferId = md2Material->GetTextureParameterId("frameVertexBuffer");
+		auto viewProjId = Shader::Globals.GetMatrixId("viewProj");
+		auto diffuseId = md2Shader->GetTextureParameterId("diffuse");
+		auto frameVertexBufferId = md2Shader->GetTextureParameterId("frameVertexBuffer");
 
 		auto md2Mesh = DynamicModel::Library.Get("models/weapons/g_tomgun/tris.md2");
 		auto md2Texture = Texture2D::Library.Get(md2Mesh->Skins[0]);
@@ -326,6 +323,8 @@ namespace Freeking
 			Matrix4x4 viewMatrix = camera.GetViewMatrix();
 			Matrix4x4 viewProjectionMatrix = projectionMatrix * viewMatrix;
 
+			Shader::Globals.SetValue(viewProjId, viewProjectionMatrix);
+
 			SpriteBatch::ProjectionMatrix = projectionMatrix;
 			SpriteBatch::ViewMatrix = viewMatrix;
 			SpriteBatch::ViewportWidth = static_cast<float>(_viewportWidth);
@@ -339,24 +338,23 @@ namespace Freeking
 				thug->Render(viewProjectionMatrix, deltaTime);
 			}
 
-			globals->SetValue(viewProjId, viewProjectionMatrix * Matrix4x4::Translation(Vector3f(0, 50, 0)));
-			md2Material->SetParameterValue("delta", 0.0f);
-			md2Material->SetParameterValue("normalBuffer", DynamicModel::GetNormalBuffer().get());
+			md2Shader->SetParameterValue("delta", 0.0f);
+			md2Shader->SetParameterValue("normalBuffer", DynamicModel::GetNormalBuffer().get());
 
 			if (md2Mesh)
 			{
 				int md2Frame = 0;
-				md2Material->SetParameterValue(diffuseId, md2Texture.get());
-				md2Material->SetParameterValue(frameVertexBufferId, md2Mesh->GetFrameVertexBuffer().get());
-				md2Material->SetParameterValue("frames[0].index", (int)(md2Frame * md2Mesh->GetFrameVertexCount()));
-				md2Material->SetParameterValue("frames[0].translate", md2Mesh->FrameTransforms[md2Frame].translate);
-				md2Material->SetParameterValue("frames[0].scale", md2Mesh->FrameTransforms[md2Frame].scale);
-				md2Material->SetParameterValue("frames[1].index", (int)(md2Frame * md2Mesh->GetFrameVertexCount()));
-				md2Material->SetParameterValue("frames[1].translate", md2Mesh->FrameTransforms[md2Frame].translate);
-				md2Material->SetParameterValue("frames[1].scale", md2Mesh->FrameTransforms[md2Frame].scale);
-				md2Material->Apply();
+				md2Shader->SetParameterValue(diffuseId, md2Texture.get());
+				md2Shader->SetParameterValue(frameVertexBufferId, md2Mesh->GetFrameVertexBuffer().get());
+				md2Shader->SetParameterValue("frames[0].index", (int)(md2Frame * md2Mesh->GetFrameVertexCount()));
+				md2Shader->SetParameterValue("frames[0].translate", md2Mesh->FrameTransforms[md2Frame].translate);
+				md2Shader->SetParameterValue("frames[0].scale", md2Mesh->FrameTransforms[md2Frame].scale);
+				md2Shader->SetParameterValue("frames[1].index", (int)(md2Frame * md2Mesh->GetFrameVertexCount()));
+				md2Shader->SetParameterValue("frames[1].translate", md2Mesh->FrameTransforms[md2Frame].translate);
+				md2Shader->SetParameterValue("frames[1].scale", md2Mesh->FrameTransforms[md2Frame].scale);
+				md2Shader->Apply();
 
-				renderer.Draw(md2Mesh->GetBinding().get(), md2Material.get());
+				renderer.Draw(md2Mesh->GetBinding().get(), md2Shader.get());
 			}
 
 			renderer.Flush();

@@ -1,12 +1,12 @@
 #include "Renderer.h"
 #include "VertexBinding.h"
-#include "Material.h"
+#include "Shader.h"
 
 namespace Freeking
 {
-	void Renderer::Draw(VertexBinding* binding, Material* material, DrawPrimitive primitive, int offset, int count, int instances)
+	void Renderer::Draw(VertexBinding* binding, Shader* shader, DrawPrimitive primitive, int offset, int count, int instances)
 	{
-		if (material == nullptr || binding == nullptr)
+		if (shader == nullptr || binding == nullptr)
 		{
 			return;
 		}
@@ -19,7 +19,7 @@ namespace Freeking
 		_drawCalls.push_back(
 			{ 
 				binding,
-				material,
+				shader,
 				primitive,
 				offset,
 				count,
@@ -48,7 +48,7 @@ namespace Freeking
 				continue;
 			}
 
-			drawCall.material->Apply();
+			drawCall.shader->Apply();
 			drawCall.binding->Bind();
 
 			if (drawCall.binding->HasIndices())
@@ -91,7 +91,7 @@ namespace Freeking
 			}
 
 			drawCall.binding->Unbind();
-			drawCall.material->Unbind();
+			drawCall.shader->Unbind();
 		}
 
 		_drawCalls.clear();

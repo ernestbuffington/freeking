@@ -4,7 +4,7 @@
 #include "Vector.h"
 #include "Matrix4x4.h"
 #include "Quaternion.h"
-#include "Material.h"
+#include "Shader.h"
 #include <iostream>
 
 namespace Freeking

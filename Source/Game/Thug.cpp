@@ -4,7 +4,7 @@
 #include "Util.h"
 #include "FileSystem.h"
 #include "Input.h"
-#include "Material.h"
+#include "Shader.h"
 #include <charconv>
 
 namespace Freeking
@@ -92,8 +92,7 @@ namespace Freeking
 			currentFrameIndex++;
 		}
 
-		auto shader = Shader::Library.Get("Shaders/DynamicModel.shader");
-		_material = std::make_shared<Material>(shader);
+		_shader = Shader::Library.Get("Shaders/DynamicModel.shader");
 	}
 
 	void Thug::Render(const Matrix4x4& viewProjection, double dt)
@@ -123,23 +122,23 @@ namespace Freeking
 		frame += animFrameIndex.firstFrame;
 		nextFrame += animFrameIndex.firstFrame;
 
-		_material->SetParameterValue("delta", delta);
-		_material->SetParameterValue("viewProj", viewProjection * ModelMatrix);
-		_material->SetParameterValue("normalBuffer", DynamicModel::GetNormalBuffer().get());
+		_shader->SetParameterValue("delta", delta);
+		_shader->SetParameterValue("viewProj", viewProjection * ModelMatrix);
+		_shader->SetParameterValue("normalBuffer", DynamicModel::GetNormalBuffer().get());
 
 		for (auto i = 0; i < _meshes.size(); ++i)
 		{
 			auto& mesh = _meshes.at(i);
 			auto& meshTexture = _meshTextures.at(i);
-			_material->SetParameterValue("diffuse", meshTexture.get());
-			_material->SetParameterValue("frameVertexBuffer", mesh->GetFrameVertexBuffer().get());
-			_material->SetParameterValue("frames[0].index", (int)(frame * mesh->GetFrameVertexCount()));
-			_material->SetParameterValue("frames[0].translate", mesh->FrameTransforms[frame].translate);
-			_material->SetParameterValue("frames[0].scale", mesh->FrameTransforms[frame].scale);
-			_material->SetParameterValue("frames[1].index", (int)(nextFrame * mesh->GetFrameVertexCount()));
-			_material->SetParameterValue("frames[1].translate", mesh->FrameTransforms[nextFrame].translate);
-			_material->SetParameterValue("frames[1].scale", mesh->FrameTransforms[nextFrame].scale);
-			_material->Apply();
+			_shader->SetParameterValue("diffuse", meshTexture.get());
+			_shader->SetParameterValue("frameVertexBuffer", mesh->GetFrameVertexBuffer().get());
+			_shader->SetParameterValue("frames[0].index", (int)(frame * mesh->GetFrameVertexCount()));
+			_shader->SetParameterValue("frames[0].translate", mesh->FrameTransforms[frame].translate);
+			_shader->SetParameterValue("frames[0].scale", mesh->FrameTransforms[frame].scale);
+			_shader->SetParameterValue("frames[1].index", (int)(nextFrame * mesh->GetFrameVertexCount()));
+			_shader->SetParameterValue("frames[1].translate", mesh->FrameTransforms[nextFrame].translate);
+			_shader->SetParameterValue("frames[1].scale", mesh->FrameTransforms[nextFrame].scale);
+			_shader->Apply();
 
 			mesh->Draw();
 		}

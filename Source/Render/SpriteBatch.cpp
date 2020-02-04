@@ -1,6 +1,5 @@
 #include "SpriteBatch.h"
 #include "Shader.h"
-#include "Material.h"
 #include "VertexBinding.h"
 #include "VertexBuffer.h"
 #include "Texture2D.h"
@@ -17,16 +16,16 @@ namespace Freeking
 	float SpriteBatch::ViewportWidth;
 	float SpriteBatch::ViewportHeight;
 
-	std::shared_ptr<Material> SpriteBatch::GetSpriteMaterial()
+	std::shared_ptr<Shader> SpriteBatch::GetSpriteShader()
 	{
-		static auto material = std::make_shared<Material>(Shader::Library.Get("Shaders/Sprite.shader"));
-		return material;
+		static auto shader = Shader::Library.Get("Shaders/Sprite.shader");
+		return shader;
 	}
 
-	std::shared_ptr<Material> SpriteBatch::GetTextMaterial()
+	std::shared_ptr<Shader> SpriteBatch::GetTextShader()
 	{
-		static auto material = std::make_shared<Material>(Shader::Library.Get("Shaders/Text.shader"));
-		return material;
+		static auto shader = Shader::Library.Get("Shaders/Text.shader");
+		return shader;
 	}
 
 	static std::shared_ptr<Font> GetDebugFont()
@@ -512,16 +511,16 @@ namespace Freeking
 
 		_vertexBinding->Bind();
 
-		const auto& spriteMaterial = GetSpriteMaterial();
-		if (spriteMaterial)
+		const auto& spriteShader = GetSpriteShader();
+		if (spriteShader)
 		{
-			DrawSprites(proj, scale, spriteMaterial, _spritesToDraw);
+			DrawSprites(proj, scale, spriteShader, _spritesToDraw);
 		}
 
-		const auto& textMaterial = GetTextMaterial();
-		if (textMaterial)
+		const auto& textShader = GetTextShader();
+		if (textShader)
 		{
-			DrawSprites(proj, scale, textMaterial, _textToDraw);
+			DrawSprites(proj, scale, textShader, _textToDraw);
 		}
 
 		glBindSampler(0, 0);
@@ -536,9 +535,9 @@ namespace Freeking
 		_textToDraw.clear();
 	}
 
-	void SpriteBatch::DrawSprites(const Matrix4x4& proj, float scale, const std::shared_ptr<Material>& material, std::vector<SpriteBatch::Sprite>& sprites)
+	void SpriteBatch::DrawSprites(const Matrix4x4& proj, float scale, const std::shared_ptr<Shader>& shader, std::vector<SpriteBatch::Sprite>& sprites)
 	{
-		material->SetParameterValue("projMatrix", proj);
+		shader->SetParameterValue("projMatrix", proj);
 
 		static const size_t vertSize = 8;
 		static const size_t faceVertCount = 6;
@@ -564,8 +563,8 @@ namespace Freeking
 
 			if (batchTexture != nullptr)
 			{
-				material->SetParameterValue("texture", batchTexture);
-				material->Apply();
+				shader->SetParameterValue("texture", batchTexture);
+				shader->Apply();
 			}
 
 			for (size_t i = basePos; i < searchPos; ++i)
@@ -627,7 +626,7 @@ namespace Freeking
 			basePos = searchPos;
 		}
 
-		material->Unbind();	
+		shader->Unbind();	
 
 		sprites.clear();
 	}

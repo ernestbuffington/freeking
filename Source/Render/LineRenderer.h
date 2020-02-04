@@ -7,7 +7,7 @@
 
 namespace Freeking
 {
-	class Material;
+	class Shader;
 
 	class LineRenderer
 	{
@@ -42,6 +42,6 @@ namespace Freeking
 		std::unique_ptr<VertexBuffer> _vertexBuffer;
 		std::unique_ptr<VertexBinding> _vertexBinding;
 		std::vector<uint8_t> _buffer;
-		std::shared_ptr<Material> _material;
+		std::shared_ptr<Shader> _shader;
 	};
 }
