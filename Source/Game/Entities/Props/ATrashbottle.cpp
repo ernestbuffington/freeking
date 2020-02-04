@@ -2,20 +2,8 @@
 
 namespace Freeking::Entity::Props
 {
-	ATrashbottle::ATrashbottle() : BaseEntity()
+	ATrashbottle::ATrashbottle() : ModelEntity()
 	{
-	}
-
-	void ATrashbottle::Initialize()
-	{
-	}
-
-	void ATrashbottle::Tick(double dt)
-	{
-	}
-
-	bool ATrashbottle::SetProperty(const EntityProperty& property)
-	{
-		return false;
+		_modelName = "models/props/trashbottle/tris.md2";
 	}
 }

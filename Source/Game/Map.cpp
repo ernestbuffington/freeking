@@ -192,8 +192,13 @@ namespace Freeking
 		std::vector<LightStyle> _styles;
 	};
 
-	void BrushModel::RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<Shader>& shader)
+	void BrushModel::RenderOpaque(Shader* shader)
 	{
+		if (!shader)
+		{
+			return;
+		}
+
 		for (const auto& mesh : Meshes)
 		{
 			if (mesh.second->Translucent)
@@ -212,8 +217,13 @@ namespace Freeking
 		}
 	}
 
-	void BrushModel::RenderTranslucent(const Matrix4x4& viewProjection, const std::shared_ptr<Shader>& shader, bool forceTranslucent)
+	void BrushModel::RenderTranslucent(Shader* shader, bool forceTranslucent)
 	{
+		if (!shader)
+		{
+			return;
+		}
+
 		for (auto& mesh : Meshes)
 		{
 			if (!mesh.second->Translucent && !forceTranslucent)
@@ -244,31 +254,23 @@ namespace Freeking
 		}
 	}
 
-	void Map::Render(const Matrix4x4& viewProjection)
+	void Map::Render()
 	{
 		glDisable(GL_BLEND);
 
-		_shader->SetParameterValue("alphaMultiply", 1.0f);
-
 		for (const auto& entity : _worldEntities)
 		{
-			auto mvp = viewProjection * entity->GetTransform();
-			_shader->SetParameterValue("viewProj", mvp);
-			entity->RenderOpaque(mvp, _shader);
+			entity->PreRender(false);
+			entity->RenderOpaque();
 		}
 
 		glEnable(GL_BLEND);
 
-		_shader->SetParameterValue("alphaCutOff", 0.0f);
-
 		for (const auto& entity : _worldEntities)
 		{
-			auto mvp = viewProjection * entity->GetTransform();
-			_shader->SetParameterValue("viewProj", mvp);
-			entity->RenderTranslucent(mvp, _shader);
+			entity->PreRender(true);
+			entity->RenderTranslucent();
 		}
-
-		_shader->Unbind();
 	}
 
 	Map* Map::Current = nullptr;
@@ -524,8 +526,6 @@ namespace Freeking
 		}
 
 		pf.Stop("Map commit");
-
-		_shader = Shader::Library.Get("Shaders/Lightmapped.shader");
 
 		pf.Start();
 

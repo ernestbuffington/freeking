@@ -8,6 +8,6 @@ namespace Freeking
 	{
 	public:
 
-		virtual std::shared_ptr<BrushModel> GetModel() override final;
+		WorldSpawnEntity();
 	};
 }

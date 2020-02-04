@@ -2,20 +2,8 @@
 
 namespace Freeking::Entity::Props
 {
-	ACrateBust32::ACrateBust32() : BaseEntity()
+	ACrateBust32::ACrateBust32() : ModelEntity()
 	{
-	}
-
-	void ACrateBust32::Initialize()
-	{
-	}
-
-	void ACrateBust32::Tick(double dt)
-	{
-	}
-
-	bool ACrateBust32::SetProperty(const EntityProperty& property)
-	{
-		return false;
+		_modelName = "models/props/crate/stillcrate32_1.mdx";
 	}
 }

@@ -1,10 +1,9 @@
 #include "WorldSpawnEntity.h"
-#include "Map.h"
 
 namespace Freeking
 {
-	std::shared_ptr<BrushModel> WorldSpawnEntity::GetModel()
+	WorldSpawnEntity::WorldSpawnEntity() : BrushModelEntity()
 	{
-		return Map::Current->GetBrushModel(0);
+		_modelIndex = 0;
 	}
 }

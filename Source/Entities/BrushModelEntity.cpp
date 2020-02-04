@@ -39,25 +39,44 @@ namespace Freeking
 	{
 		PrimitiveEntity::Initialize();
 
-		if (_model = GetModel(); _model)
+		if (_model = Map::Current->GetBrushModel(_modelIndex))
 		{
 			SetLocalBounds(_model->BoundsMin, _model->BoundsMax);
 		}
+
+		_shader = Shader::Library.Lightmapped.get();
 	}
 
-	void BrushModelEntity::RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<Shader>& shader)
+	void BrushModelEntity::PreRender(bool translucent)
 	{
-		if (_model && !HasSurf2Alpha())
+		if (_shader)
 		{
-			_model->RenderOpaque(viewProjection, shader);
+			if (translucent)
+			{
+				_shader->SetParameterValue("alphaCutOff", 0.0f);
+			}
+			else
+			{
+				_shader->SetParameterValue("alphaMultiply", 1.0f);
+			}
+
+			_shader->SetParameterValue("model", GetTransform());
 		}
 	}
 
-	void BrushModelEntity::RenderTranslucent(const Matrix4x4& viewProjection, const std::shared_ptr<Shader>& shader)
+	void BrushModelEntity::RenderOpaque()
 	{
-		if (_model)
+		if (_model && _shader && !HasSurf2Alpha())
 		{
-			_model->RenderTranslucent(viewProjection, shader, HasSurf2Alpha());
+			_model->RenderOpaque(_shader);
+		}
+	}
+
+	void BrushModelEntity::RenderTranslucent()
+	{
+		if (_model && _shader)
+		{
+			_model->RenderTranslucent(_shader, HasSurf2Alpha());
 		}
 	}
 
@@ -69,10 +88,5 @@ namespace Freeking
 		}
 
 		return PrimitiveEntity::SetProperty(property);
-	}
-
-	std::shared_ptr<BrushModel> BrushModelEntity::GetModel()
-	{
-		return _modelIndex < 0 ? nullptr : Map::Current->GetBrushModel(_modelIndex);
 	}
 }

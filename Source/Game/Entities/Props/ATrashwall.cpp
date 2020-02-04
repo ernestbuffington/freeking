@@ -2,20 +2,8 @@
 
 namespace Freeking::Entity::Props
 {
-	ATrashwall::ATrashwall() : BaseEntity()
+	ATrashwall::ATrashwall() : ModelEntity()
 	{
-	}
-
-	void ATrashwall::Initialize()
-	{
-	}
-
-	void ATrashwall::Tick(double dt)
-	{
-	}
-
-	bool ATrashwall::SetProperty(const EntityProperty& property)
-	{
-		return false;
+		_modelName = "models/props/trashwall/tris.md2";
 	}
 }

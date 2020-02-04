@@ -8,7 +8,14 @@ namespace Freeking
 	{
 	public:
 
-		virtual void RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<class Shader>& shader) = 0;
-		virtual void RenderTranslucent(const Matrix4x4& viewProjection, const std::shared_ptr<class Shader>& shader) = 0;
+		PrimitiveEntity();
+
+		virtual void PreRender(bool translucent) = 0;
+		virtual void RenderOpaque() = 0;
+		virtual void RenderTranslucent() = 0;
+
+	protected:
+
+		Shader* _shader;
 	};
 }

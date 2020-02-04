@@ -95,7 +95,7 @@ namespace Freeking
 		_shader = Shader::Library.Get("Shaders/DynamicModel.shader");
 	}
 
-	void Thug::Render(const Matrix4x4& viewProjection, double dt)
+	void Thug::Render(double dt)
 	{
 		if (Input::JustPressed(Button::KeyLeft))
 		{
@@ -123,7 +123,7 @@ namespace Freeking
 		nextFrame += animFrameIndex.firstFrame;
 
 		_shader->SetParameterValue("delta", delta);
-		_shader->SetParameterValue("viewProj", viewProjection * ModelMatrix);
+		_shader->SetParameterValue("model", ModelMatrix);
 		_shader->SetParameterValue("normalBuffer", DynamicModel::GetNormalBuffer().get());
 
 		for (auto i = 0; i < _meshes.size(); ++i)

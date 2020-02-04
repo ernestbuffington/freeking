@@ -1,23 +1,13 @@
 #pragma once
 
-#include "BaseEntity.h"
+#include "ModelEntity.h"
 
 namespace Freeking::Entity::Props
 {
-    class ATrashbottle : public BaseEntity
+    class ATrashbottle : public ModelEntity
     {
     public:
 
         ATrashbottle();
-
-		virtual void Initialize() override;
-		virtual void Tick(double dt) override;
-
-	protected:
-
-		virtual bool SetProperty(const EntityProperty& property) override;
-
-    private:
-
     };
 }

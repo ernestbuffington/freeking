@@ -14,7 +14,7 @@ namespace Freeking
 
 		Thug(const EntityProperties& entityKeyValues);
 
-		void Render(const Matrix4x4& viewProjection, double dt);
+		void Render(double dt);
 
 		Matrix4x4 ModelMatrix;
 

@@ -167,7 +167,7 @@ namespace Freeking
 
 		_window->Swap();
 
-
+		Shader::Library.Initialize();
 
 		ImGui::CreateContext();
 		ImGui_ImplSDL2_InitForOpenGL(static_cast<SDL_Window*>(*_window), static_cast<SDL_GLContext*>(*_window));
@@ -331,11 +331,11 @@ namespace Freeking
 			SpriteBatch::ViewportHeight = static_cast<float>(_viewportHeight);
 
 			map->Tick(deltaTime);
-			map->Render(viewProjectionMatrix);
+			map->Render();
 
 			for (const auto& thug : thugs)
 			{
-				thug->Render(viewProjectionMatrix, deltaTime);
+				thug->Render(deltaTime);
 			}
 
 			md2Shader->SetParameterValue("delta", 0.0f);

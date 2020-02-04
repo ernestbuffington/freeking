@@ -15,14 +15,13 @@ namespace Freeking
 		virtual void Initialize() override;
 		virtual void Tick(double dt) override;
 
-		virtual void RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<Shader>& shader) override;
-		virtual void RenderTranslucent(const Matrix4x4& viewProjection, const std::shared_ptr<Shader>& shader) override;
+		virtual void PreRender(bool translucent) override;
+		virtual void RenderOpaque() override;
+		virtual void RenderTranslucent() override;
 
 	protected:
 
 		virtual bool SetProperty(const EntityProperty& property) override;
-
-		virtual std::shared_ptr<BrushModel> GetModel();
 
 		virtual bool HasSurf2Alpha() const { return false; }
 

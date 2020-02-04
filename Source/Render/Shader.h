@@ -17,6 +17,16 @@ namespace Freeking
 
 	class ShaderLibrary : public AssetLibrary<Shader>
 	{
+	public:
+
+		void Initialize();
+
+		std::shared_ptr<Shader> DebugLine;
+		std::shared_ptr<Shader> DynamicModel;
+		std::shared_ptr<Shader> Lightmapped;
+		std::shared_ptr<Shader> Sprite;
+		std::shared_ptr<Shader> Text;
+
 	protected:
 
 		virtual void UpdateLoaders() override;
@@ -315,7 +325,6 @@ namespace Freeking
 	private:
 
 		void InitializeParameter(const std::string& name, GLint location, GLenum glType);
-		void InitializeParameters();
 		void ApplyFloatParameters();
 		void ApplyIntParameters();
 		void ApplyMatrixParameters();

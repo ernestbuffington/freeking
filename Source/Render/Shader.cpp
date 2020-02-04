@@ -7,6 +7,15 @@
 
 namespace Freeking
 {
+	void ShaderLibrary::Initialize()
+	{
+		DebugLine = Get("Shaders/DebugLine.shader");
+		DynamicModel = Get("Shaders/DynamicModel.shader");
+		Lightmapped = Get("Shaders/Lightmapped.shader");
+		Sprite = Get("Shaders/Sprite.shader");
+		Text = Get("Shaders/Text.shader");
+	}
+
 	void ShaderLibrary::UpdateLoaders()
 	{
 		AddLoader<ShaderLoader>();
@@ -110,8 +119,11 @@ namespace Freeking
 			p.location = location;
 			p.prop.unset = true;
 			p.globalId = Globals.AddFloatProperty(name, type);
+
+			return;
 		}
-		else if (auto type = IntParameter::Property::CastType(glType);
+
+		if (auto type = IntParameter::Property::CastType(glType);
 			type != IntParameter::Property::Type::Invalid)
 		{
 			auto& p = _intParameters.AddParameter(name);
@@ -119,8 +131,11 @@ namespace Freeking
 			p.location = location;
 			p.prop.unset = true;
 			p.globalId = Globals.AddIntProperty(name, type);
+
+			return;
 		}
-		else if (auto type = MatrixParameter::Property::CastType(glType);
+
+		if (auto type = MatrixParameter::Property::CastType(glType);
 			type != MatrixParameter::Property::Type::Invalid)
 		{
 			auto& p = _matrixParameters.AddParameter(name);
@@ -128,8 +143,11 @@ namespace Freeking
 			p.location = location;
 			p.prop.unset = true;
 			p.globalId = Globals.AddMatrixProperty(name, type);
+
+			return;
 		}
-		else if (auto type = TextureParameter::Property::CastType(glType);
+
+		if (auto type = TextureParameter::Property::CastType(glType);
 			type != TextureParameter::Property::Type::Invalid)
 		{
 			auto& p = _textureParameters.AddParameter(name);
@@ -138,6 +156,8 @@ namespace Freeking
 			p.prop.unset = true;
 			p.globalId = Globals.AddTextureProperty(name, type);
 			p.unit = static_cast<int>(_textureParameters.GetCount()) - 1;
+
+			return;
 		}
 	}
 

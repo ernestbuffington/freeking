@@ -74,8 +74,8 @@ namespace Freeking
 	{
 	public:
 
-		void RenderOpaque(const Matrix4x4& viewProjection, const std::shared_ptr<Shader>& shader);
-		void RenderTranslucent(const Matrix4x4& viewProjection, const std::shared_ptr<Shader>& shader, bool forceTranslucent);
+		void RenderOpaque(Shader* shader);
+		void RenderTranslucent(Shader* shader, bool forceTranslucent);
 
 		struct MeshKey
 		{
@@ -109,7 +109,7 @@ namespace Freeking
 		Map(const BspFile& bspFile);
 
 		void Tick(double dt);
-		void Render(const Matrix4x4& viewProjection);
+		void Render();
 
 		const std::vector<EntityProperties>& GetEntityProperties() { return _entityKeyValues; }
 		const std::shared_ptr<BrushModel>& GetBrushModel(uint32_t index) const { return _models.at(index); }
@@ -123,7 +123,6 @@ namespace Freeking
 		std::vector<std::shared_ptr<BrushModel>> _models;
 		std::shared_ptr<Texture2D> _lightmapTexture;
 		std::vector<std::shared_ptr<Texture2D>> _textures;
-		std::shared_ptr<Shader> _shader;
 		std::vector<std::shared_ptr<BaseEntity>> _entities;
 		std::vector<std::shared_ptr<PrimitiveEntity>> _worldEntities;
 		std::vector<EntityProperties> _entityKeyValues;

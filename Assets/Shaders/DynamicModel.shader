@@ -10,6 +10,7 @@ out VertexData
 } vert;
 
 uniform mat4 viewProj;
+uniform mat4 model;
 uniform isamplerBuffer frameVertexBuffer;
 uniform samplerBuffer normalBuffer;
 uniform float delta;
@@ -57,7 +58,7 @@ void main()
 	vert.uv = uv;
 	vert.normal = lerpNormal;
 
-	gl_Position = viewProj * vec4(lerpPosition, 1.0);
+	gl_Position = viewProj * model * vec4(lerpPosition, 1.0);
 }
 
 #endif
