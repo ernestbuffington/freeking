@@ -93,11 +93,11 @@ namespace Freeking
 		const CommonVector& GetOriginProperty() const { return _origin; }
 		const CommonScalar& GetAngleProperty() const { return _angle; }
 
+		bool TryGetString(const std::string& key, std::string& value) const;
 		bool TryGetSplitString(const std::string& key, std::vector<std::string>& value) const;
 
 	private:
 
-		bool TryGetString(const std::string& key, std::string& value) const;
 		bool TryGetInt(const std::string& key, int& value) const;
 		bool TryGetFloat(const std::string& key, float& value) const;
 		bool TryGetVector(const std::string& key, Vector3f& value) const;

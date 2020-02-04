@@ -184,8 +184,6 @@ namespace Freeking
 
 		std::string mapName("sr1");
 
-		Skybox skybox("sr");
-
 		auto lineRenderer = std::make_shared<LineRenderer>(2000000);
 		auto spriteBatch = std::make_shared<SpriteBatch>(10000);
 		SpriteBatch::Debug = spriteBatch;
@@ -195,6 +193,8 @@ namespace Freeking
 		auto font = Font::Library.Get("Fonts/Roboto-Bold.json");
 		auto map = std::make_shared<Map>(BspFile::Create(FileSystem::GetFileData("maps/" + mapName + ".bsp").data()));
 
+		std::unique_ptr<Skybox> skybox;
+
 		auto navData = FileSystem::GetFileData("navdata/" + mapName + ".nav");
 		auto navNodes = NavFile::ReadNodes(navData.data());
 
@@ -203,6 +203,16 @@ namespace Freeking
 		for (const auto& entDef : map->GetEntityProperties())
 		{
 			std::string classname = entDef.GetClassnameProperty();
+
+			if (classname == "worldspawn")
+			{
+				std::string skyname;
+				if (entDef.TryGetString("sky", skyname))
+				{
+					skybox = std::make_unique<Skybox>(skyname);
+				}
+			}
+
 			if (classname.substr(0, 5) == "cast_")
 			{
 				if (classname == "cast_dog")
@@ -362,11 +372,14 @@ namespace Freeking
 
 			renderer.Flush();
 
-			glDepthFunc(GL_LEQUAL);
-			Matrix4x4 skyboxView = viewMatrix;
-			skyboxView.Translate(0);
-			skybox.Draw(projectionMatrix* skyboxView);
-			glDepthFunc(GL_LESS);
+			if (skybox)
+			{
+				glDepthFunc(GL_LEQUAL);
+				Matrix4x4 skyboxView = viewMatrix;
+				skyboxView.Translate(0);
+				skybox->Draw(projectionMatrix * skyboxView);
+				glDepthFunc(GL_LESS);
+			}
 
 			if (debug)
 			{
