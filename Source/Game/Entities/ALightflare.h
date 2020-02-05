@@ -1,23 +1,15 @@
 #pragma once
 
-#include "BaseEntity.h"
+#include "SceneEntity.h"
 
 namespace Freeking::Entity
 {
-    class ALightflare : public BaseEntity
+    class ALightflare : public SceneEntity
     {
     public:
 
         ALightflare();
 
-		virtual void Initialize() override;
-		virtual void Tick(double dt) override;
-
-	protected:
-
-		virtual bool SetProperty(const EntityProperty& property) override;
-
-    private:
-
+        virtual void Spawn() override;
     };
 }

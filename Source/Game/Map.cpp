@@ -277,6 +277,11 @@ namespace Freeking
 	double Map::Time = 0.0;
 	LightStyles Map::LightStyles;
 
+	float Map::GetLightStyleSample(size_t index)
+	{
+		return LightStyles.GetSample(index);
+	}
+
 	Map::Map(const std::string& mapName)
 	{
 		Map::Current = this;

@@ -16,6 +16,7 @@ namespace Freeking
 		Sprite = Get("Shaders/Sprite.shader");
 		Text = Get("Shaders/Text.shader");
 		Skybox = Get("Shaders/Skybox.shader");
+		Billboard = Get("Shaders/Billboard.shader");
 	}
 
 	void ShaderLibrary::UpdateLoaders()

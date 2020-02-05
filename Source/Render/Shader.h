@@ -28,6 +28,7 @@ namespace Freeking
 		std::shared_ptr<Shader> Sprite;
 		std::shared_ptr<Shader> Text;
 		std::shared_ptr<Shader> Skybox;
+		std::shared_ptr<Shader> Billboard;
 
 	protected:
 

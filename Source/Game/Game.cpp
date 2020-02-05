@@ -30,6 +30,7 @@
 #include "Audio/AudioClip.h"
 #include "Audio/AudioDevice.h"
 #include "Skybox.h"
+#include "BillboardBatch.h"
 #include <glad/gl.h>
 #include <iostream>
 #include <fstream>
@@ -189,6 +190,8 @@ namespace Freeking
 		auto pink = Texture2D::Library.Get("pink");
 
 		Renderer renderer;
+		BillboardBatch billboards;
+		LightFlares::Billboards = &billboards;
 
 		std::string mapName("sr1");
 
@@ -243,7 +246,10 @@ namespace Freeking
 		}
 
 		auto md2Shader = Shader::Library.Get("Shaders/DynamicModel.shader");
+		auto projectionMatrixId = Shader::Globals.GetMatrixId("projectionMatrix");
+		auto viewMatrixId = Shader::Globals.GetMatrixId("viewMatrix");
 		auto viewProjId = Shader::Globals.GetMatrixId("viewProj");
+		auto viewportSizeId = Shader::Globals.GetFloatId("viewportSize");
 		auto diffuseId = md2Shader->GetTextureParameterId("diffuse");
 		auto frameVertexBufferId = md2Shader->GetTextureParameterId("frameVertexBuffer");
 
@@ -346,7 +352,10 @@ namespace Freeking
 			Matrix4x4 viewMatrix = camera.GetTransform();
 			Matrix4x4 viewProjectionMatrix = projectionMatrix * viewMatrix;
 
+			Shader::Globals.SetValue(projectionMatrixId, projectionMatrix);
+			Shader::Globals.SetValue(viewMatrixId, viewMatrix);
 			Shader::Globals.SetValue(viewProjId, viewProjectionMatrix);
+			Shader::Globals.SetValue(viewportSizeId, Vector2f(static_cast<float>(_viewportWidth), static_cast<float>(_viewportHeight)));
 
 			SpriteBatch::ProjectionMatrix = projectionMatrix;
 			SpriteBatch::ViewMatrix = viewMatrix;
@@ -408,6 +417,8 @@ namespace Freeking
 				skybox->Draw(projectionMatrix * skyboxView);
 				glDepthFunc(GL_LESS);
 			}
+
+			billboards.Draw();
 
 			if (debug)
 			{

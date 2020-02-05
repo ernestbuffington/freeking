@@ -141,6 +141,8 @@ namespace Freeking
 		static double Time;
 		static class LightStyles LightStyles;
 
+		static float GetLightStyleSample(size_t index);
+
 	private:
 
 		void RecursiveHullCheck(int num, float p1f, float p2f, const Vector3f& mins, const Vector3f& maxs, const Vector3f& p1, const Vector3f& p2, TraceResult& trace, bool isPoint, const Vector3f& extents, const BspContentFlags& contents);

@@ -1,21 +1,16 @@
 #include "ALightflare.h"
+#include "BillboardBatch.h"
 
 namespace Freeking::Entity
 {
-	ALightflare::ALightflare() : BaseEntity()
+	ALightflare::ALightflare() : SceneEntity()
 	{
 	}
 
-	void ALightflare::Initialize()
+	void ALightflare::Spawn()
 	{
-	}
+		BaseEntity::Spawn();
 
-	void ALightflare::Tick(double dt)
-	{
-	}
-
-	bool ALightflare::SetProperty(const EntityProperty& property)
-	{
-		return false;
+		LightFlares::Billboards->AddInstance(GetPosition());
 	}
 }
