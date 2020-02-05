@@ -23,6 +23,8 @@ namespace Freeking
 		void Move(const Vector3f& force, float dt);
 		void LookDelta(float x, float y);
 
+		Vector3f NormalisedScreenPointToDirection(const Matrix4x4& projection, const Vector2f& point) const;
+
 	private:
 
 		void UpdateTransform();

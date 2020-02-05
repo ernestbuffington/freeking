@@ -11,6 +11,20 @@ namespace Freeking
 	{
 	public:
 
+		LumpArray() :
+			DataPtr(nullptr),
+			DataSize(0)
+		{
+		}
+
+		LumpArray& operator=(const LumpArray& other)
+		{
+			DataPtr = other.DataPtr;
+			DataSize = other.DataSize;
+
+			return *this;
+		}
+
 		inline int Num() const { return DataSize; }
 		inline const ElementType* Data() const { return DataPtr; }
 
@@ -23,14 +37,14 @@ namespace Freeking
 
 	private:
 
-		LumpArray(const ElementType* InData, int InDataSize) :
+		LumpArray(ElementType* InData, int InDataSize) :
 			DataPtr(InData),
 			DataSize(InDataSize)
 		{
 		}
 
-		const ElementType* DataPtr;
-		const int DataSize;
+		ElementType* DataPtr;
+		int DataSize;
 
 		friend struct BspFile;
 	};

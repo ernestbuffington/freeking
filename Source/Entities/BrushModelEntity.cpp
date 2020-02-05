@@ -19,7 +19,7 @@ namespace Freeking
 		{
 			LineRenderer::Debug->DrawBox(GetTransform(), GetLocalMinBounds(), GetLocalMaxBounds(), Vector4f(0, 1, 0, 1));
 
-			auto position = GetTransform() * (GetLocalMinBounds() + ((GetLocalMaxBounds() - GetLocalMinBounds()) * 0.5f));
+			auto position = GetTransformCenter().Translation();
 
 			Vector2f screenPosition;
 			if (Util::WorldPointToNormalisedScreenPoint(position, screenPosition, SpriteBatch::ProjectionMatrix, SpriteBatch::ViewMatrix, 2048.0f))

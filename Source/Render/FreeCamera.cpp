@@ -43,4 +43,14 @@ namespace Freeking
 		_roll = fmod(roll + (ceil(-roll / 360.0f) * 360.0f), 360.0f);
 		_rotation = Quaternion::FromDegreeAngles(_pitch, _yaw, _roll);
 	}
+
+	Vector3f FreeCamera::NormalisedScreenPointToDirection(const Matrix4x4& projection, const Vector2f& point) const
+	{
+		Vector3f v;
+		v.x = point.x / projection[0][0];
+		v.y = point.y / projection[1][1];
+		v.z = -1.0f;
+
+		return  _rotation * v;
+	}
 }

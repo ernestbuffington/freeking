@@ -2,12 +2,12 @@
 #include "Lightmap.h"
 #include "Texture2D.h"
 #include "Shader.h"
-#include "BspFile.h"
 #include "BspFlags.h"
 #include "DynamicModel.h"
 #include "Paths.h"
 #include "Profiler.h"
 #include "LineRenderer.h"
+#include "Util.h"
 #include "ThirdParty/rectpack2d/finders_interface.h"
 #include <array>
 
@@ -114,7 +114,7 @@ namespace Freeking
 				return;
 			}
 
-			time = fmod(time, static_cast<double>(numSamples) * (1.0 / _speed)) * _speed;
+			time = fmod(time, static_cast<double>(numSamples)* (1.0 / _speed))* _speed;
 			size_t index = static_cast<size_t>(floor(time));
 			double fraction = time - static_cast<double>(index);
 			index %= numSamples;
@@ -132,7 +132,7 @@ namespace Freeking
 				}
 				else
 				{
-					_lastSample = (a + static_cast<float>(fraction) * (b - a));
+					_lastSample = (a + static_cast<float>(fraction)* (b - a));
 				}
 			}
 			else
@@ -277,7 +277,7 @@ namespace Freeking
 	double Map::Time = 0.0;
 	LightStyles Map::LightStyles;
 
-	Map::Map(const BspFile& bspFile)
+	Map::Map(const std::string& mapName)
 	{
 		Map::Current = this;
 
@@ -288,6 +288,9 @@ namespace Freeking
 
 		Profiler pf;
 
+		_fileData = std::move(FileSystem::GetFileData("maps/" + mapName + ".bsp"));
+		const BspFile& bspFile = BspFile::Create(_fileData.data());
+
 		auto entities = bspFile.GetLumpArray<char>(bspFile.Header.Entities);
 		auto vertices = bspFile.GetLumpArray<Vector3f>(bspFile.Header.Vertices);
 		auto models = bspFile.GetLumpArray<BspModel>(bspFile.Header.Models);
@@ -295,8 +298,14 @@ namespace Freeking
 		auto edges = bspFile.GetLumpArray<BspEdge>(bspFile.Header.Edges);
 		auto faceEdges = bspFile.GetLumpArray<int32_t>(bspFile.Header.FaceEdges);
 		auto planes = bspFile.GetLumpArray<BspPlane>(bspFile.Header.Planes);
-		auto textureInfo = bspFile.GetLumpArray<BspTextureInfo>(bspFile.Header.TextureInfo);
 		auto lightmapData = bspFile.GetLumpArray<uint8_t>(bspFile.Header.Lightmaps);
+		_textureInfo = bspFile.GetLumpArray<BspTextureInfo>(bspFile.Header.TextureInfo);
+		_brushes = bspFile.GetLumpArray<BspBrush>(bspFile.Header.Brushes);
+		_brushSides = bspFile.GetLumpArray<BspBrushSide>(bspFile.Header.BrushSides);
+		_planes = bspFile.GetLumpArray<BspPlane>(bspFile.Header.Planes);
+		_nodes = bspFile.GetLumpArray<BspNode>(bspFile.Header.Nodes);
+		_leafs = bspFile.GetLumpArray<BspLeaf>(bspFile.Header.Leafs);
+		_leafBrushes = bspFile.GetLumpArray<int16_t>(bspFile.Header.LeafBrushes);
 
 		pf.Start();
 
@@ -312,9 +321,9 @@ namespace Freeking
 
 		std::unordered_map<std::string, uint32_t> textureIds;
 
-		for (int i = 0; i < textureInfo.Num(); ++i)
+		for (int i = 0; i < _textureInfo.Num(); ++i)
 		{
-			const auto& texInfo = textureInfo[i];
+			const auto& texInfo = _textureInfo[i];
 			auto textureName = std::string(texInfo.TextureName);
 
 			if (textureIds.find(textureName) == textureIds.end())
@@ -354,7 +363,7 @@ namespace Freeking
 			for (int faceIndex = model.FirstFace; faceIndex < (model.FirstFace + model.NumFaces); ++faceIndex)
 			{
 				const auto& face = faces[faceIndex];
-				const auto& faceTextureInfo = textureInfo[face.TextureInfo];
+				const auto& faceTextureInfo = _textureInfo[face.TextureInfo];
 
 				if ((faceTextureInfo.Flags[BspSurfaceFlags::NoDraw]) ||
 					(faceTextureInfo.Flags[BspSurfaceFlags::Sky]) ||
@@ -558,5 +567,328 @@ namespace Freeking
 		}
 
 		pf.Stop("Create entities");
+	}
+
+	void Map::RecursiveHullCheck(int num, float p1f, float p2f, const Vector3f& mins, const Vector3f& maxs, const Vector3f& p1, const Vector3f& p2, TraceResult& trace, bool isPoint, const Vector3f& extents, const BspContentFlags& contents)
+	{
+		if (trace.fraction <= p1f)
+		{
+			return;
+		}
+
+		if (num < 0)
+		{
+			TraceToLeaf(mins, maxs, trace, isPoint, -1 - num, contents);
+
+			return;
+		}
+
+		float t1, t2, offset;
+
+		const BspNode& node = _nodes[num];
+		const BspPlane& plane = _planes[node.PlaneNum];
+
+		if (plane.Type < 3)
+		{
+			t1 = p1[plane.Type] - plane.Distance;
+			t2 = p2[plane.Type] - plane.Distance;
+			offset = extents[plane.Type];
+		}
+		else
+		{
+			t1 = Vector3f::Dot(plane.Normal, p1) - plane.Distance;
+			t2 = Vector3f::Dot(plane.Normal, p2) - plane.Distance;
+
+			if (isPoint)
+			{
+				offset = 0;
+			}
+			else
+			{
+				offset = 
+					fabs(extents[0] * plane.Normal[0]) +
+					fabs(extents[1] * plane.Normal[1]) +
+					fabs(extents[2] * plane.Normal[2]);
+			}
+		}
+
+		if (t1 >= offset && t2 >= offset)
+		{
+			RecursiveHullCheck(node.Children[0], p1f, p2f, mins, maxs, p1, p2, trace, isPoint, extents, contents);
+
+			return;
+		}
+		if (t1 < -offset && t2 < -offset)
+		{
+			RecursiveHullCheck(node.Children[1], p1f, p2f, mins, maxs, p1, p2, trace, isPoint, extents, contents);
+
+			return;
+		}
+
+		int side;
+		float idist;
+		float frac;
+		float frac2;
+
+		if (t1 < t2)
+		{
+			idist = 1.0 / (t1 - t2);
+			side = 1;
+			frac2 = (t1 + offset + 0.03125) * idist;
+			frac = (t1 - offset + 0.03125) * idist;
+		}
+		else if (t1 > t2)
+		{
+			idist = 1.0 / (t1 - t2);
+			side = 0;
+			frac2 = (t1 - offset - 0.03125) * idist;
+			frac = (t1 + offset + 0.03125) * idist;
+		}
+		else
+		{
+			side = 0;
+			frac = 1;
+			frac2 = 0;
+		}
+
+		if (frac < 0)
+		{
+			frac = 0;
+		}
+
+		if (frac > 1)
+		{
+			frac = 1;
+		}
+
+		float midf = p1f + (p2f - p1f) * frac;
+		Vector3f mid;
+
+		for (int i = 0; i < 3; i++)
+		{
+			mid[i] = p1[i] + frac * (p2[i] - p1[i]);
+		}
+
+		RecursiveHullCheck(node.Children[side], p1f, midf, mins, maxs, p1, mid, trace, isPoint, extents, contents);
+
+		if (frac2 < 0)
+		{
+			frac2 = 0;
+		}
+
+		if (frac2 > 1)
+		{
+			frac2 = 1;
+		}
+
+		midf = p1f + (p2f - p1f) * frac2;
+
+		for (int i = 0; i < 3; i++)
+		{
+			mid[i] = p1[i] + frac2 * (p2[i] - p1[i]);
+		}
+
+		RecursiveHullCheck(node.Children[side ^ 1], midf, p2f, mins, maxs, mid, p2, trace, isPoint, extents, contents);
+	}
+
+	void Map::TraceToLeaf(const Vector3f& mins, const Vector3f& maxs, TraceResult& trace, bool isPoint, int leafIndex, const BspContentFlags& contents)
+	{
+		const BspLeaf& leaf = _leafs[leafIndex];
+
+		if (!leaf.Contents[contents])
+		{
+			return;
+		}
+
+		for (int k = 0; k < leaf.NumLeafBrushes; k++)
+		{
+			const BspBrush& brush = _brushes[_leafBrushes[leaf.FirstLeafBrush + k]];
+
+			if (!brush.Contents[contents])
+			{
+				continue;
+			}
+
+			ClipBoxToBrush(mins, maxs, trace.startPosition, trace.endPosition, trace, brush, isPoint);
+
+			if (!trace.fraction)
+			{
+				return;
+			}
+		}
+	}
+
+	void Map::ClipBoxToBrush(const Vector3f& mins, const Vector3f& maxs, const Vector3f& p1, const Vector3f& p2, TraceResult& trace, const BspBrush& brush, bool isPoint)
+	{
+		if (brush.NumSides == 0)
+		{
+			return;
+		}
+
+		bool getout = false;
+		bool startout = false;
+		float enterfrac = -1;
+		float leavefrac = 1;
+		float dist;
+		const BspBrushSide* clipBrushSide;
+
+		for (int i = 0; i < brush.NumSides; i++)
+		{
+			const BspBrushSide& side = _brushSides[brush.FirstSide + i];
+			const BspPlane& plane = _planes[side.PlaneNum];
+
+			if (!isPoint)
+			{
+				Vector3f ofs;
+
+				for (int j = 0; j < 3; j++)
+				{
+					if (plane.Normal[j] < 0.0f)
+					{
+						ofs[j] = maxs[j];
+					}
+					else
+					{
+						ofs[j] = mins[j];
+					}
+				}
+
+				dist = Vector3f::Dot(ofs, plane.Normal);
+				dist = plane.Distance - dist;
+			}
+			else
+			{
+				dist = plane.Distance;
+			}
+
+			float d1 = Vector3f::Dot(p1, plane.Normal) - dist;
+			float d2 = Vector3f::Dot(p2, plane.Normal) - dist;
+
+			if (d2 > 0)
+			{
+				getout = true;
+			}
+
+			if (d1 > 0)
+			{
+				startout = true;
+			}
+
+			if (d1 > 0 && d2 >= d1)
+			{
+				return;
+			}
+
+			if (d1 <= 0 && d2 <= 0)
+			{
+				continue;
+			}
+
+			if (d1 > d2)
+			{
+				float f = (d1 - 0.03125f) / (d1 - d2);
+				if (f > enterfrac)
+				{
+					enterfrac = f;
+					clipBrushSide = &side;
+				}
+			}
+			else
+			{
+				float f = (d1 + 0.03125f) / (d1 - d2);
+				if (f < leavefrac)
+				{
+					leavefrac = f;
+				}
+			}
+		}
+
+		if (!startout)
+		{
+			trace.startSolid = true;
+
+			if (!getout)
+			{
+				trace.allSolid = true;
+			}
+
+			return;
+		}
+
+		if (enterfrac < leavefrac)
+		{
+			if (enterfrac > -1 && enterfrac < trace.fraction)
+			{
+				if (enterfrac < 0)
+				{
+					enterfrac = 0;
+				}
+
+				const BspPlane& clipPlane = _planes[clipBrushSide->PlaneNum];
+				const BspTextureInfo& clipTextureInfo = _textureInfo[clipBrushSide->TexInfo];
+
+				trace.hit = true;
+				trace.fraction = enterfrac;
+				trace.planeNormal = clipPlane.Normal;
+				trace.planeDistance = clipPlane.Distance;
+				trace.axisU = Vector3f::Cross(clipPlane.Normal, clipTextureInfo.AxisU);
+
+				if (trace.axisU.Length() <= 0.0f)
+				{
+					trace.axisU = Vector3f::Cross(clipPlane.Normal, clipTextureInfo.AxisV);
+				}
+
+				trace.axisU = trace.axisU.Normalise();
+				trace.axisV = Vector3f::Cross(trace.axisU, clipPlane.Normal).Normalise();
+			}
+		}
+	}
+
+	TraceResult Map::BoxTrace(const Vector3f& start, const Vector3f& end, const Vector3f& mins, const Vector3f& maxs, int headNode, const BspContentFlags& brushMask)
+	{
+		Vector3f s(start.x, -start.z, start.y);
+		Vector3f e(end.x, -end.z, end.y);
+
+		TraceResult trace;
+		std::memset(&trace, 0, sizeof(trace));
+		trace.startPosition = s;
+		trace.endPosition = e;
+		trace.fraction = 1.0f;
+		trace.hit = false;
+
+		Vector3f extents;
+		bool isPoint;
+
+		if (mins[0] == 0 && mins[1] == 0 && mins[2] == 0 &&
+			maxs[0] == 0 && maxs[1] == 0 && maxs[2] == 0)
+		{
+			isPoint = true;
+			extents = Vector3f(0);
+		}
+		else
+		{
+			isPoint = false;
+			extents[0] = -mins[0] > maxs[0] ? -mins[0] : maxs[0];
+			extents[1] = -mins[1] > maxs[1] ? -mins[1] : maxs[1];
+			extents[2] = -mins[2] > maxs[2] ? -mins[2] : maxs[2];
+		}
+
+		RecursiveHullCheck(headNode, 0, 1, mins, maxs, s, e, trace, isPoint, extents, brushMask);
+
+		if (trace.hit)
+		{
+			for (int i = 0; i < 3; i++)
+			{
+				trace.endPosition[i] = s[i] + trace.fraction * (e[i] - s[i]);
+			}
+		}
+
+		trace.startPosition = Vector3f(trace.startPosition.x, trace.startPosition.z, -trace.startPosition.y);
+		trace.endPosition = Vector3f(trace.endPosition.x, trace.endPosition.z, -trace.endPosition.y);
+		trace.planeNormal = Vector3f(trace.planeNormal.x, trace.planeNormal.z, -trace.planeNormal.y);
+		trace.axisU = Vector3f(trace.axisU.x, trace.axisU.z, -trace.axisU.y);
+		trace.axisV = Vector3f(trace.axisV.x, trace.axisV.z, -trace.axisV.y);
+
+		return trace;
 	}
 }

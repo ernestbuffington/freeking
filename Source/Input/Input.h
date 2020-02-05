@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ButtonCodes.h"
+#include "Vector.h"
 #include <SDL.h>
 #include <map>
 #include <memory>
@@ -53,6 +54,7 @@ namespace Freeking
 		static bool JustReleased(Button button);
 		static float GetMouseDeltaX();
 		static float GetMouseDeltaY();
+		static Vector2i GetMousePosition();
 
 		template <class Instance, typename Callback>
 		static void CaptureTextEntry(Instance* instance, Callback callback)

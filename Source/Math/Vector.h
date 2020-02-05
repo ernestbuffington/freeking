@@ -468,9 +468,18 @@ namespace Freeking
 			return (x * v.x) + (y * v.y) + (z * v.z);
 		}
 
+		static float Dot(const Vector3<T>& a, const Vector3<T>& b)
+		{
+			return (a.x * b.x) + (a.y * b.y) + (a.z * b.z);
+		}
+
 		Vector3<T> Normalise() const
 		{
 			float l = Length();
+			if (l <= 0.0f)
+			{
+				return Vector3<T>(0);
+			}
 
 			return Vector3<T>(x / l, y / l, z / l);
 		}
@@ -488,6 +497,11 @@ namespace Freeking
 		Vector3<T> Cross(const Vector3<T>& v) const
 		{
 			return Vector3<T>(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x);
+		}
+
+		static Vector3<T> Cross(const Vector3<T>& a, const Vector3<T>& b)
+		{
+			return Vector3<T>(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
 		}
 
 		Vector2<T> XY() const

@@ -67,8 +67,8 @@ namespace Freeking
 
 	void SceneEntity::UpdateTransform()
 	{
-		_transformCenter = Matrix4x4::Translation(_position + _localBoundsCenter) * _rotation.ToMatrix4x4();
 		_transform = Matrix4x4::Translation(_position) * _rotation.ToMatrix4x4();
+		_transformCenter = _transform * Matrix4x4::Translation(_localBoundsCenter);
 	}
 
 	void SceneEntity::SetLocalBounds(const Vector3f& minBounds, const Vector3f& maxBounds)

@@ -3,6 +3,7 @@
 #include "BspFlags.h"
 #include "Vector.h"
 #include "EnumFlags.h"
+#include <array>
 #include <stdint.h>
 
 namespace Freeking
@@ -91,5 +92,41 @@ namespace Freeking
 		uint32_t Value;
 		char TextureName[32];
 		uint32_t NextTextureInfo;
+	};
+
+	struct BspBrushSide
+	{
+		uint16_t PlaneNum;
+		int16_t TexInfo;
+	};
+
+	struct BspBrush
+	{
+		int32_t FirstSide;
+		int32_t NumSides;
+		EnumFlags<BspContentFlags> Contents;
+	};
+
+	struct BspLeaf
+	{
+		EnumFlags<BspContentFlags> Contents;
+		int16_t Cluster;
+		int16_t Area;
+		std::array<int16_t, 3> Mins;
+		std::array<int16_t, 3> Maxs;
+		uint16_t FirstLeafFace;
+		uint16_t NumLeafFaces;
+		uint16_t FirstLeafBrush;
+		uint16_t NumLeafBrushes;
+	};
+
+	struct BspNode
+	{
+		int32_t PlaneNum;
+		std::array<int32_t, 2> Children;
+		std::array<int16_t, 3> Mins;
+		std::array<int16_t, 3> Maxs;
+		uint16_t FirstFace;
+		uint16_t NumFaces;
 	};
 }

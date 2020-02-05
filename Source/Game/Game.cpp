@@ -149,6 +149,14 @@ namespace Freeking
 		ImGui::End();
 	}
 
+	struct TraceHit
+	{
+		Vector3f position;
+		Vector3f normal;
+		Vector3f tangent;
+		Vector3f binormal;
+	};
+
 	void Game::Run()
 	{
 		Time::SetTimeApplicationStart();
@@ -191,7 +199,7 @@ namespace Freeking
 		FreeCamera camera;
 		bool debug = true;
 		auto font = Font::Library.Get("Fonts/Roboto-Bold.json");
-		auto map = std::make_shared<Map>(BspFile::Create(FileSystem::GetFileData("maps/" + mapName + ".bsp").data()));
+		auto map = std::make_shared<Map>(mapName);
 
 		std::unique_ptr<Skybox> skybox;
 
@@ -243,6 +251,8 @@ namespace Freeking
 		auto md2Texture = Texture2D::Library.Get(md2Mesh->Skins[0]);
 
 		audio.Play();
+
+		TraceResult tr;
 
 		while (running)
 		{
@@ -322,6 +332,7 @@ namespace Freeking
 			ImGui::End();
 
 
+
 			glEnable(GL_DEPTH_TEST);
 			glEnable(GL_BLEND);
 			glEnable(GL_CULL_FACE);
@@ -341,6 +352,24 @@ namespace Freeking
 			SpriteBatch::ViewMatrix = viewMatrix;
 			SpriteBatch::ViewportWidth = static_cast<float>(_viewportWidth);
 			SpriteBatch::ViewportHeight = static_cast<float>(_viewportHeight);
+
+			if (Input::JustPressed(Button::MouseLeft))
+			{
+				Vector2f normalisedPoint = Util::PixelPositionToScreenSpace(Input::GetMousePosition(), Vector4i(0, 0, _viewportWidth, _viewportHeight));
+				auto direction = camera.NormalisedScreenPointToDirection(projectionMatrix, normalisedPoint);
+				tr = map->BoxTrace(camera.GetPosition(), camera.GetPosition() + direction * 10000.0f, 0, 0, 0, BspContentFlags::MASK_PLAYERSOLID);
+			}
+
+			if (tr.hit)
+			{
+				lineRenderer->DrawArrow(
+					tr.endPosition,
+					tr.endPosition + tr.planeNormal * 25.0f,
+					tr.axisU,
+					tr.axisV,
+					4.0f,
+					Vector4f((tr.planeNormal.x + 1.0 * 0.5f), (tr.planeNormal.y + 1.0 * 0.5f), (tr.planeNormal.z + 1.0 * 0.5f), 1.0f));
+			}
 
 			map->Tick(deltaTime);
 			map->Render();

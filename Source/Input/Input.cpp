@@ -189,6 +189,14 @@ namespace Freeking
 		return MouseDeltaY;
 	}
 
+	Vector2i Input::GetMousePosition()
+	{
+		Vector2i xy;
+		SDL_GetMouseState(&xy.x, &xy.y);
+
+		return xy;
+	}
+
 	bool Input::IsDown(Button button)
 	{
 		return ButtonStates[to_underlying(button)].Down;

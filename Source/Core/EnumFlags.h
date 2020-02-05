@@ -14,11 +14,12 @@ public:
 	explicit EnumFlags(const T& v) : _value(static_cast<UnderlyingType>(v)) {}
 	explicit EnumFlags(const UnderlyingType& v) : _value(v) {}
 
-	EnumFlags<T>& operator=(const T& v) { return _value = static_cast<UnderlyingType>(v); return *this; }
-	EnumFlags<T>& operator=(const UnderlyingType& v) { _value = v; return *this; }
+	EnumFlags& operator=(const T& v) { return _value = static_cast<UnderlyingType>(v); return *this; }
+	EnumFlags& operator=(const UnderlyingType& v) { _value = v; return *this; }
 
 	constexpr bool operator&(const T& v) { return _value & static_cast<UnderlyingType>(v); }
 	constexpr bool operator[](const T& v) const { return _value & static_cast<UnderlyingType>(v); }
+	constexpr bool operator[](const EnumFlags& v) const { return _value & v._value; }
 
 private:
 

@@ -10,6 +10,13 @@ namespace Freeking
 			viewport.y + (viewport.w - ((point.y * 0.5f + 0.5f) * viewport.w)));
 	}
 
+	Vector2f Util::PixelPositionToScreenSpace(const Vector2f& point, const Vector4i& viewport)
+	{
+		return Vector2f(
+			(((point.x - viewport.x) / viewport.z) - 0.5f) * 2.0f,
+			(((point.y - viewport.y) / viewport.w) - 0.5f) * -2.0f);
+	}
+
 	bool Util::WorldPointToNormalisedScreenPoint(const Vector3f& position, Vector2f& result, const Matrix4x4& projectionMatrix, const Matrix4x4& viewMatrix, float maxDistance)
 	{
 		Vector4f in(position.x, position.y, position.z, 1.0f);
