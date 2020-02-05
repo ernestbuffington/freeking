@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Vector.h"
+#include "Color.h"
 #include "Matrix4x4.h"
 #include <map>
 #include <memory>
@@ -31,13 +32,13 @@ namespace Freeking
 
 		void Flush(const Matrix4x4&, float = 1.0f);
 		void Clear();
-		void DrawText(const Font*, const std::string&, const Vector2f&, const Vector4f&, float);
-		void Draw(Texture2D*, const Vector2f&, float, const Vector4f&);
-		void Draw(Texture2D*, const Vector2f&, const Vector2f&, const Vector4f&);
-		void Draw(Texture2D*, const Vector2f&, const Vector2f&, float, const Vector4f&);
-		void Draw(Texture2D*, const Vector2f&, const Vector2f&, const Vector2f&, const Vector2f&, const Vector4f&, bool = false);
-		void Draw9Slice(Texture2D*, const Vector2f&, const Vector2f&, const Vector4f&, const Vector4f&, bool = true);
-		void Draw9Slice(Texture2D*, const Vector2f&, const Vector2f&, const Vector2f&, const Vector2f&, const Vector4f&, const Vector4f&, bool = true);
+		void DrawText(const Font*, const std::string&, const Vector2f&, const LinearColor&, float);
+		void Draw(Texture2D*, const Vector2f&, float, const LinearColor&);
+		void Draw(Texture2D*, const Vector2f&, const Vector2f&, const LinearColor&);
+		void Draw(Texture2D*, const Vector2f&, const Vector2f&, float, const LinearColor&);
+		void Draw(Texture2D*, const Vector2f&, const Vector2f&, const Vector2f&, const Vector2f&, const LinearColor&, bool = false);
+		void Draw9Slice(Texture2D*, const Vector2f&, const Vector2f&, const Vector4f&, const LinearColor&, bool = true);
+		void Draw9Slice(Texture2D*, const Vector2f&, const Vector2f&, const Vector2f&, const Vector2f&, const Vector4f&, const LinearColor&, bool = true);
 
 		void EnableClipping(bool clipping) { _clipping = clipping; }
 		void SetClippingRect(const Vector4f& clippingRect) { _clippingRect = clippingRect; }
@@ -51,15 +52,15 @@ namespace Freeking
 
 		struct Sprite
 		{
-			Sprite(Texture2D*, const Vector2f&, const Vector2f&, float, const Vector4f&);
-			Sprite(Texture2D*, const Vector2f&, const Vector2f&, const Vector2f&, const Vector2f&, const Vector4f&);
+			Sprite(Texture2D*, const Vector2f&, const Vector2f&, float, const LinearColor&);
+			Sprite(Texture2D*, const Vector2f&, const Vector2f&, const Vector2f&, const Vector2f&, const LinearColor&);
 
 			Texture2D* _texture;
 			Vector2f _position;
 			Vector2f _size;
 			Vector2f _uv1;
 			Vector2f _uv2;
-			Vector4f _colour;
+			LinearColor _colour;
 			float _angle;
 		};
 
@@ -100,7 +101,7 @@ namespace Freeking
 		};
 
 		void DrawSprites(const Matrix4x4&, float, const std::shared_ptr<Shader>&, std::vector<SpriteBatch::Sprite>&);
-		void DrawSlice(Texture2D*, const Slice&, const Vector4f&);
+		void DrawSlice(Texture2D*, const Slice&, const LinearColor&);
 		static void TransformUV(Vector2f&, const Vector2f&, const Vector2f&, const Vector2f&);
 		static void TransformUVs(Slice&, const Vector2f&, const Vector2f&, const Vector2f&);
 		bool IsSpriteInsideClippingRect(const Vector2f&, const Vector2f&);

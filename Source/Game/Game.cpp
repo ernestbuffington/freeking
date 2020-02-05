@@ -368,7 +368,7 @@ namespace Freeking
 					tr.axisU,
 					tr.axisV,
 					4.0f,
-					Vector4f((tr.planeNormal.x + 1.0 * 0.5f), (tr.planeNormal.y + 1.0 * 0.5f), (tr.planeNormal.z + 1.0 * 0.5f), 1.0f));
+					LinearColor((tr.planeNormal.x + 1.0 * 0.5f), (tr.planeNormal.y + 1.0 * 0.5f), (tr.planeNormal.z + 1.0 * 0.5f), 1.0f));
 			}
 
 			map->Tick(deltaTime);
@@ -431,13 +431,13 @@ namespace Freeking
 					if (Util::WorldPointToNormalisedScreenPoint(origin, screenPosition, projectionMatrix, viewMatrix, 512.0f))
 					{
 						float alpha = 1.0f - (distance / 512.0f);
-						lineRenderer->DrawSphere(origin, 4.0f, 4, 4, Vector4f(0, 1, 1, alpha));
+						lineRenderer->DrawSphere(origin, 4.0f, 4, 4, LinearColor(0, 1, 1, alpha));
 						screenPosition = Util::ScreenSpaceToPixelPosition(screenPosition, Vector4i(0, 0, _viewportWidth, _viewportHeight));
 						screenPosition.x = Math::Round(screenPosition.x);
 						screenPosition.y = Math::Round(screenPosition.y);
 						auto text = *entDef.GetClassnameProperty() + " (" + *entDef.GetNameProperty() + ")";
-						spriteBatch->DrawText(font.get(), text, screenPosition + Vector2f(2, 2), Vector4f(0, 0, 0, alpha), 0.5f);
-						spriteBatch->DrawText(font.get(), text, screenPosition, Vector4f(1, 1, 1, alpha), 0.5f);
+						spriteBatch->DrawText(font.get(), text, screenPosition + Vector2f(2, 2), LinearColor(0, 0, 0, alpha), 0.5f);
+						spriteBatch->DrawText(font.get(), text, screenPosition, LinearColor(1, 1, 1, alpha), 0.5f);
 					}
 				}
 
@@ -457,13 +457,13 @@ namespace Freeking
 					if (Util::WorldPointToNormalisedScreenPoint(origin, screenPosition, projectionMatrix, viewMatrix, 512.0f))
 					{
 						float alpha = 1.0f - (distance / 512.0f);
-						lineRenderer->DrawAABBox(origin, Vector3f(-5, -5, -5), Vector3f(5, 5, 5), Vector4f(0, 1, 0, alpha));
+						lineRenderer->DrawAABBox(origin, Vector3f(-5, -5, -5), Vector3f(5, 5, 5), LinearColor(0, 1, 0, alpha));
 						screenPosition = Util::ScreenSpaceToPixelPosition(screenPosition, Vector4i(0, 0, _viewportWidth, _viewportHeight));
 						screenPosition.x = Math::Round(screenPosition.x);
 						screenPosition.y = Math::Round(screenPosition.y);
 						auto text = "node #" + std::to_string(i);
-						spriteBatch->DrawText(font.get(), text, screenPosition + Vector2f(2, 2), Vector4f(0, 0, 0, alpha), 0.5f);
-						spriteBatch->DrawText(font.get(), text, screenPosition, Vector4f(1, 1, 1, alpha), 0.5f);
+						spriteBatch->DrawText(font.get(), text, screenPosition + Vector2f(2, 2), LinearColor(0, 0, 0, alpha), 0.5f);
+						spriteBatch->DrawText(font.get(), text, screenPosition, LinearColor(1, 1, 1, alpha), 0.5f);
 					}
 				}
 
@@ -472,19 +472,19 @@ namespace Freeking
 				glEnable(GL_DEPTH_TEST);
 
 				auto fps = timer.GetFps();
-				Vector4f fpsColor = Vector4f(0, 1, 0, 1);
+				LinearColor fpsColor = LinearColor(0, 1, 0, 1);
 
 				if (fps < 30)
 				{
-					fpsColor = Vector4f(1, 0, 0, 1);
+					fpsColor = LinearColor(1, 0, 0, 1);
 				}
 				else if (fps < 60)
 				{
-					fpsColor = Vector4f(1, 1, 0, 1);
+					fpsColor = LinearColor(1, 1, 0, 1);
 				}
 
 				auto orthoProjection = Matrix4x4::Ortho(0, (float)_viewportWidth, (float)_viewportHeight, 0, -1.0f, 1.0f);
-				spriteBatch->DrawText(font.get(), std::to_string(fps), Vector2f(10, 2), Vector4f(0, 0, 0, 1), 1.0f);
+				spriteBatch->DrawText(font.get(), std::to_string(fps), Vector2f(10, 2), LinearColor(0, 0, 0, 1), 1.0f);
 				spriteBatch->DrawText(font.get(), std::to_string(fps), Vector2f(8, 0), fpsColor, 1.0f);
 				spriteBatch->Flush(orthoProjection);
 			}

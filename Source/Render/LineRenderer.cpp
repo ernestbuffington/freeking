@@ -50,13 +50,13 @@ namespace Freeking
 		_vertexCount = 0;
 	}
 
-	void LineRenderer::DrawLine(const Vector3f& p1, const Vector3f& p2, const Vector4f& colour)
+	void LineRenderer::DrawLine(const Vector3f& p1, const Vector3f& p2, const LinearColor& colour)
 	{
 		BufferVertex(p1, colour);
 		BufferVertex(p2, colour);
 	}
 
-	void LineRenderer::DrawBox(const Matrix4x4& transform, const Vector3f& mins, const Vector3f& maxs, const Vector4f& colour)
+	void LineRenderer::DrawBox(const Matrix4x4& transform, const Vector3f& mins, const Vector3f& maxs, const LinearColor& colour)
 	{
 		DrawLine(transform * Vector3f(mins.x, mins.y, mins.z), transform * Vector3f(maxs.x, mins.y, mins.z), colour);
 		DrawLine(transform * Vector3f(maxs.x, mins.y, mins.z), transform * Vector3f(maxs.x, maxs.y, mins.z), colour);
@@ -72,12 +72,12 @@ namespace Freeking
 		DrawLine(transform * Vector3f(mins.x, maxs.y, maxs.z), transform * Vector3f(mins.x, mins.y, maxs.z), colour);
 	}
 
-	void LineRenderer::DrawAABBox(const Vector3f& position, const Vector3f& mins, const Vector3f& maxs, const Vector4f& colour)
+	void LineRenderer::DrawAABBox(const Vector3f& position, const Vector3f& mins, const Vector3f& maxs, const LinearColor& colour)
 	{
 		DrawAABBox(position + mins, position + maxs, colour);
 	}
 
-	void LineRenderer::DrawAABBox(const Vector3f& mins, const Vector3f& maxs, const Vector4f& colour)
+	void LineRenderer::DrawAABBox(const Vector3f& mins, const Vector3f& maxs, const LinearColor& colour)
 	{
 		DrawLine(Vector3f(mins.x, mins.y, mins.z), Vector3f(maxs.x, mins.y, mins.z), colour);
 		DrawLine(Vector3f(maxs.x, mins.y, mins.z), Vector3f(maxs.x, maxs.y, mins.z), colour);
@@ -93,7 +93,7 @@ namespace Freeking
 		DrawLine(Vector3f(mins.x, maxs.y, maxs.z), Vector3f(mins.x, mins.y, maxs.z), colour);
 	}
 
-	void LineRenderer::DrawSphere(const Vector3f& position, float radius, int thetaSegments, int phiSegments, const Vector4f& colour)
+	void LineRenderer::DrawSphere(const Vector3f& position, float radius, int thetaSegments, int phiSegments, const LinearColor& colour)
 	{
 		int theta = thetaSegments + 1;
 		int phi = phiSegments;
@@ -140,12 +140,12 @@ namespace Freeking
 		Vector3f p2 = transform.Transform(Vector3f::OneY);
 		Vector3f p3 = transform.Transform(Vector3f::OneZ);
 
-		DrawArrow(start, start + p1 * length, p2, p3, size, Vector4f(1, 0, 0, 1));
-		DrawArrow(start, start + p2 * length, p3, p1, size, Vector4f(0, 1, 0, 1));
-		DrawArrow(start, start + p3 * length, p1, p2, size, Vector4f(0, 0, 1, 1));
+		DrawArrow(start, start + p1 * length, p2, p3, size, LinearColor::Red);
+		DrawArrow(start, start + p2 * length, p3, p1, size, LinearColor::Green);
+		DrawArrow(start, start + p3 * length, p1, p2, size, LinearColor::Blue);
 	}
 
-	void LineRenderer::DrawArrow(const Vector3f& start, const Vector3f& end, const Vector3f& up, const Vector3f& right, const float size, const Vector4f& color)
+	void LineRenderer::DrawArrow(const Vector3f& start, const Vector3f& end, const Vector3f& up, const Vector3f& right, const float size, const LinearColor& color)
 	{
 		static const float degreeStep = 30.0f;
 
@@ -178,7 +178,7 @@ namespace Freeking
 		}
 	}
 
-	void LineRenderer::BufferVertex(const Vector3f& position, const Vector4f& colour)
+	void LineRenderer::BufferVertex(const Vector3f& position, const LinearColor& colour)
 	{
 		if (_vertexCount >= _maxVertexCount)
 		{
@@ -187,7 +187,7 @@ namespace Freeking
 
 		uint8_t* vertexData = &_buffer[_vertexCount * VertexSize];
 		*(Vector3f*)(vertexData) = position;
-		*(Vector4f*)(vertexData + sizeof(Vector3f)) = colour;
+		*(LinearColor*)(vertexData + sizeof(Vector3f)) = colour;
 
 		_vertexCount++;
 	}

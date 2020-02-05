@@ -17,7 +17,7 @@ namespace Freeking
 
 		if (_model)
 		{
-			LineRenderer::Debug->DrawBox(GetTransform(), GetLocalMinBounds(), GetLocalMaxBounds(), Vector4f(0, 1, 0, 1));
+			LineRenderer::Debug->DrawBox(GetTransform(), GetLocalMinBounds(), GetLocalMaxBounds(), LinearColor(0, 1, 0, 1));
 
 			auto position = GetTransformCenter().Translation();
 
@@ -29,8 +29,8 @@ namespace Freeking
 				screenPosition.x = Math::Round(screenPosition.x);
 				screenPosition.y = Math::Round(screenPosition.y);
 				auto text = _classname + " (*" + std::to_string(_modelIndex) + ")";
-				SpriteBatch::Debug->DrawText(nullptr, text, screenPosition + Vector2f(2, 2), Vector4f(0, 0, 0, alpha), 0.5f);
-				SpriteBatch::Debug->DrawText(nullptr, text, screenPosition, Vector4f(0.5f, 1, 0.5f, alpha), 0.5f);
+				SpriteBatch::Debug->DrawText(nullptr, text, screenPosition + Vector2f(2, 2), LinearColor(0, 0, 0, alpha), 0.5f);
+				SpriteBatch::Debug->DrawText(nullptr, text, screenPosition, LinearColor(0.5f, 1, 0.5f, alpha), 0.5f);
 			}
 		}
 	}

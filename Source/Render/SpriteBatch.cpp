@@ -39,7 +39,7 @@ namespace Freeking
 		const Vector2f& position,
 		const Vector2f& size,
 		float angle,
-		const Vector4f& colour) :
+		const LinearColor& colour) :
 		_texture(texture),
 		_position(position),
 		_size(size),
@@ -56,7 +56,7 @@ namespace Freeking
 		const Vector2f& size,
 		const Vector2f& uv1,
 		const Vector2f& uv2,
-		const Vector4f& colour) :
+		const LinearColor& colour) :
 		_texture(texture),
 		_position(position),
 		_size(size),
@@ -91,7 +91,7 @@ namespace Freeking
 		_vertexData.resize(_maxSpriteCount * faceVertCount * vertSize);
 	}
 
-	void SpriteBatch::DrawText(const Font* font, const std::string& text, const Vector2f& position, const Vector4f& colour, float scale)
+	void SpriteBatch::DrawText(const Font* font, const std::string& text, const Vector2f& position, const LinearColor& colour, float scale)
 	{
 		if (font == nullptr)
 		{
@@ -143,7 +143,7 @@ namespace Freeking
 		Texture2D* texture,
 		const Vector2f& position,
 		float angle,
-		const Vector4f& colour)
+		const LinearColor& colour)
 	{
 		_spritesToDraw.push_back(Sprite(texture, position, Vector2f((float)texture->GetWidth(), (float)texture->GetHeight()), angle, colour));
 	}
@@ -152,7 +152,7 @@ namespace Freeking
 		Texture2D* texture,
 		const Vector2f& position,
 		const Vector2f& size,
-		const Vector4f& colour)
+		const LinearColor& colour)
 	{
 		float u1 = 0.0f;
 		float v1 = 0.0f;
@@ -203,7 +203,7 @@ namespace Freeking
 		const Vector2f& position,
 		const Vector2f& size,
 		float angle,
-		const Vector4f& colour)
+		const LinearColor& colour)
 	{
 		_spritesToDraw.push_back(Sprite(texture, position, size, angle, colour));
 	}
@@ -214,7 +214,7 @@ namespace Freeking
 		const Vector2f& uv1,
 		const Vector2f& uv2,
 		const Vector2f& size,
-		const Vector4f& colour,
+		const LinearColor& colour,
 		bool isText)
 	{
 		float u1 = uv1.x;
@@ -284,7 +284,7 @@ namespace Freeking
 	{
 	}
 
-	void SpriteBatch::DrawSlice(Texture2D* texture, const SpriteBatch::Slice& slice, const Vector4f& colour)
+	void SpriteBatch::DrawSlice(Texture2D* texture, const SpriteBatch::Slice& slice, const LinearColor& colour)
 	{
 		Draw(texture, slice._drawPosition, slice._uv1, slice._uv2, slice._drawSize, colour);
 	}
@@ -396,7 +396,7 @@ namespace Freeking
 		const Vector2f& position,
 		const Vector2f& size,
 		const Vector4f& margin,
-		const Vector4f& colour,
+		const LinearColor& colour,
 		bool drawCenter)
 	{
 		Slice slice;
@@ -451,7 +451,7 @@ namespace Freeking
 		const Vector2f& glyphPosition,
 		const Vector2f& glyphSize,
 		const Vector4f& margin,
-		const Vector4f& colour,
+		const LinearColor& colour,
 		bool drawCenter)
 	{
 		Slice slice;
@@ -574,10 +574,10 @@ namespace Freeking
 
 				for (size_t j = 0; j < faceVertCount; ++j)
 				{
-					buffer[4 + vertSize * j] = sprite._colour.x;
-					buffer[5 + vertSize * j] = sprite._colour.y;
-					buffer[6 + vertSize * j] = sprite._colour.z;
-					buffer[7 + vertSize * j] = sprite._colour.w;
+					buffer[4 + vertSize * j] = sprite._colour.r;
+					buffer[5 + vertSize * j] = sprite._colour.g;
+					buffer[6 + vertSize * j] = sprite._colour.b;
+					buffer[7 + vertSize * j] = sprite._colour.a;
 				}
 
 				Vector2f vertexPositions[4] = {
