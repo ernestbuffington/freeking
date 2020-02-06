@@ -10,6 +10,7 @@ namespace Freeking
 	class VertexBuffer;
 	class IndexBuffer;
 	class VertexBinding;
+	class Texture2D;
 	class Shader;
 
 	struct BillboardInstance
@@ -32,7 +33,7 @@ namespace Freeking
 
 		BillboardBatch();
 
-		void Draw();
+		void Draw(double dt, const Vector3f& eyePosition);
 		void AddInstance(const Vector3f& position);
 
 	private:

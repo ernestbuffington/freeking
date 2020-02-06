@@ -31,6 +31,7 @@
 #include "Audio/AudioDevice.h"
 #include "Skybox.h"
 #include "BillboardBatch.h"
+#include "RenderTarget.h"
 #include <glad/gl.h>
 #include <iostream>
 #include <fstream>
@@ -209,8 +210,6 @@ namespace Freeking
 		auto navData = FileSystem::GetFileData("navdata/" + mapName + ".nav");
 		auto navNodes = NavFile::ReadNodes(navData.data());
 
-		std::vector<std::shared_ptr<Thug>> thugs;
-
 		for (const auto& entDef : map->GetEntityProperties())
 		{
 			std::string classname = entDef.GetClassnameProperty();
@@ -223,38 +222,12 @@ namespace Freeking
 					skybox = std::make_unique<Skybox>(skyname);
 				}
 			}
-
-			if (classname.substr(0, 5) == "cast_")
-			{
-				if (classname == "cast_dog")
-				{
-					continue;
-				}
-
-				if (auto originProperty = entDef.GetOriginProperty())
-				{
-					Vector3f origin = originProperty;
-					auto thug = std::make_shared<Thug>(entDef);
-					origin = Vector3f(origin.x, origin.z, -origin.y);
-					thug->ModelMatrix = Matrix4x4::Translation(origin) * Matrix3x3::RotationY(Math::DegreesToRadians(entDef.GetAngleProperty()));
-					camera.MoveTo(origin);
-
-					thugs.push_back(std::move(thug));
-				}
-
-			}
 		}
 
-		auto md2Shader = Shader::Library.Get("Shaders/DynamicModel.shader");
 		auto projectionMatrixId = Shader::Globals.GetMatrixId("projectionMatrix");
 		auto viewMatrixId = Shader::Globals.GetMatrixId("viewMatrix");
 		auto viewProjId = Shader::Globals.GetMatrixId("viewProj");
 		auto viewportSizeId = Shader::Globals.GetFloatId("viewportSize");
-		auto diffuseId = md2Shader->GetTextureParameterId("diffuse");
-		auto frameVertexBufferId = md2Shader->GetTextureParameterId("frameVertexBuffer");
-
-		auto md2Mesh = DynamicModel::Library.Get("models/weapons/g_tomgun/tris.md2");
-		auto md2Texture = Texture2D::Library.Get(md2Mesh->Skins[0]);
 
 		audio.Play();
 
@@ -337,18 +310,15 @@ namespace Freeking
 			}
 			ImGui::End();
 
-
-
 			glEnable(GL_DEPTH_TEST);
 			glEnable(GL_BLEND);
 			glEnable(GL_CULL_FACE);
-
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 			glCullFace(GL_BACK);
 			glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-			Matrix4x4 projectionMatrix = Matrix4x4::Perspective(80, (float)_viewportWidth / (float)_viewportHeight, 0.1f, 10000.0f);
+			Matrix4x4 projectionMatrix = Matrix4x4::Perspective(80, (float)_viewportWidth / (float)_viewportHeight, 0.1f, 5000.0f);
 			Matrix4x4 viewMatrix = camera.GetTransform();
 			Matrix4x4 viewProjectionMatrix = projectionMatrix * viewMatrix;
 
@@ -383,42 +353,18 @@ namespace Freeking
 			map->Tick(deltaTime);
 			map->Render();
 
-			for (const auto& thug : thugs)
-			{
-				thug->Render(deltaTime);
-			}
-
-			md2Shader->SetParameterValue("delta", 0.0f);
-			md2Shader->SetParameterValue("normalBuffer", DynamicModel::GetNormalBuffer().get());
-
-			if (md2Mesh)
-			{
-				int md2Frame = 0;
-				md2Shader->SetParameterValue(diffuseId, md2Texture.get());
-				md2Shader->SetParameterValue(frameVertexBufferId, md2Mesh->GetFrameVertexBuffer().get());
-				md2Shader->SetParameterValue("frames[0].index", (int)(md2Frame * md2Mesh->GetFrameVertexCount()));
-				md2Shader->SetParameterValue("frames[0].translate", md2Mesh->FrameTransforms[md2Frame].translate);
-				md2Shader->SetParameterValue("frames[0].scale", md2Mesh->FrameTransforms[md2Frame].scale);
-				md2Shader->SetParameterValue("frames[1].index", (int)(md2Frame * md2Mesh->GetFrameVertexCount()));
-				md2Shader->SetParameterValue("frames[1].translate", md2Mesh->FrameTransforms[md2Frame].translate);
-				md2Shader->SetParameterValue("frames[1].scale", md2Mesh->FrameTransforms[md2Frame].scale);
-				md2Shader->Apply();
-
-				renderer.Draw(md2Mesh->GetBinding().get(), md2Shader.get());
-			}
-
-			renderer.Flush();
-
 			if (skybox)
 			{
+				glDepthMask(GL_FALSE);
 				glDepthFunc(GL_LEQUAL);
 				Matrix4x4 skyboxView = viewMatrix;
 				skyboxView.Translate(0);
 				skybox->Draw(projectionMatrix * skyboxView);
 				glDepthFunc(GL_LESS);
+				glDepthMask(GL_TRUE);
 			}
 
-			billboards.Draw();
+			billboards.Draw(deltaTime, camera.GetPosition());
 
 			if (debug)
 			{

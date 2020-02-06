@@ -9,7 +9,6 @@ out VertexData
 {
 	vec2 uv;
 	vec4 color;
-	float distance;
 } vert;
 
 uniform mat4 projectionMatrix;
@@ -21,8 +20,8 @@ void main()
 	vert.color = color;
 
 	vec4 p = viewMatrix * vec4(offset, 1.0);
-	vert.distance = length(p.xyz);
 	p.xy += position.xy * size.xy;
+
 	gl_Position = projectionMatrix * p;
 }
 
@@ -34,7 +33,6 @@ in VertexData
 {
 	vec2 uv;
 	vec4 color;
-	float distance;
 } vert;
 
 uniform sampler2D diffuse;
@@ -43,11 +41,9 @@ out vec4 fragColor;
 
 void main()
 {
-	float brightness = clamp(vert.distance / 100.0, 0, 1);
+	float brightness = 1.0;
 	vec4 diffuseColor = texture(diffuse, vert.uv);
 	fragColor = vec4((diffuseColor.rgb * vert.color.rgb) * ((diffuseColor.a * vert.color.a) * brightness), 1.0);
-
-	if (vert.distance > 1000) discard;
 }
 
 #endif

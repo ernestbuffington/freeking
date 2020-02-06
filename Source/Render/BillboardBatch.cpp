@@ -5,6 +5,7 @@
 #include "Shader.h"
 #include "Texture2D.h"
 #include "Map.h"
+#include "Math.h"
 #include <array>
 
 namespace Freeking
@@ -45,9 +46,29 @@ namespace Freeking
 		_shader->SetParameterValue("brightness", 1.0f);
 	}
 
-	void BillboardBatch::Draw()
+	void BillboardBatch::Draw(double dt, const Vector3f& eyePosition)
 	{
 		_shader->Apply();
+
+		for (auto& instance : _instances)
+		{
+			const auto& traceStart = instance.position;
+			const auto& traceEnd = eyePosition;
+			auto trace = Map::Current->BoxTrace(traceStart, traceEnd, 0, 0, 0, BspContentFlags::MASK_PLAYERSOLID);
+
+			if (trace.fraction < 1.0f)
+			{
+				instance.size.x = Math::Max(0.0f, instance.size.x - (4000.0f * (float)dt));
+				instance.size.y = Math::Max(0.0f, instance.size.y - (4000.0f * (float)dt));
+			}
+			else
+			{
+				instance.size = 200;
+			}
+		}
+
+		static const size_t instanceStride = sizeof(BillboardInstance);
+		_instanceBuffer->UpdateBuffer(_instances.data(), 0, _instances.size() * instanceStride);
 
 		glBlendFunc(GL_ONE, GL_ONE);
 		glDisable(GL_DEPTH_TEST);
