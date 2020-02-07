@@ -32,6 +32,11 @@ namespace Freeking::Entity::Target
 		SceneEntity::Tick(dt);
 	}
 
+	void ASpeaker::OnTrigger()
+	{
+		AudioDevice::Current->Play(AudioClip::Library.Get("sound/" + _noise + ".wav").get(), GetPosition());
+	}
+
 	bool ASpeaker::SetProperty(const EntityProperty& property)
 	{
 		if (property.IsKey("spawnflags"))

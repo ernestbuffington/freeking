@@ -5,11 +5,22 @@
 
 namespace Freeking
 {
+	class PrimitiveEntity;
+
 	struct TraceResult
 	{
 		TraceResult() :
 			hit(false),
-			fraction(1.0f)
+			fraction(1.0f),
+			entity(nullptr),
+			allSolid(false),
+			startSolid(false),
+			planeNormal(0),
+			planeDistance(0),
+			axisU(0),
+			axisV(0),
+			startPosition(0),
+			endPosition(0)
 		{
 		}
 
@@ -23,6 +34,7 @@ namespace Freeking
 		Vector3f axisV;
 		Vector3f startPosition;
 		Vector3f endPosition;
+		PrimitiveEntity* entity;
 	};
 
 	class PrimitiveEntity : public SceneEntity
@@ -37,10 +49,13 @@ namespace Freeking
 		virtual void RenderOpaque() = 0;
 		virtual void RenderTranslucent() = 0;
 
+		inline bool IsHidden() const { return _hidden; }
+
 		virtual void Trace(const Vector3f& start, const Vector3f& end, TraceResult& trace, const BspContentFlags& brushMask);
 
 	protected:
 
 		Shader* _shader;
+		bool _hidden;
 	};
 }

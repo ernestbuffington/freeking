@@ -136,6 +136,8 @@ namespace Freeking
 
 		int GetModelHeadNode(int modelIndex) { return _brushModels[modelIndex].RootNode; };
 
+		std::vector<std::shared_ptr<BaseEntity>> GetTargetEntities(const std::string& targetName);
+
 	private:
 
 		TraceResult LineTrace(const Vector3f& start, const Vector3f& end, int headNode, const BspContentFlags& brushMask);
@@ -150,6 +152,7 @@ namespace Freeking
 		std::vector<std::shared_ptr<Texture2D>> _textures;
 		std::vector<std::shared_ptr<BaseEntity>> _entities;
 		std::vector<std::shared_ptr<PrimitiveEntity>> _worldEntities;
+		std::unordered_map<std::string, std::vector<std::shared_ptr<BaseEntity>>> _targetEntities;
 		std::vector<EntityProperties> _entityKeyValues;
 
 		std::vector<uint8_t> _fileData;

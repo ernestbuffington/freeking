@@ -18,6 +18,15 @@ namespace Freeking
 		ShutdownOpenAL();
 	}
 
+	void AudioDevice::Play(AudioClip* audioClip, const Vector3f& position)
+	{
+		auto sourceId = _sourceIds[254];
+		alSourcei(sourceId, AL_BUFFER, audioClip->GetBufferId());
+		alSourcei(sourceId, AL_LOOPING, AL_FALSE);
+		alSource3f(sourceId, AL_POSITION, position.x, position.y, position.z);
+		alSourcePlay(sourceId);
+	}
+
 	void AudioDevice::Play()
 	{
 		for (int i = 0; i < Sounds.size(); ++i)

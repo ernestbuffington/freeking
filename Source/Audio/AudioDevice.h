@@ -29,6 +29,7 @@ namespace Freeking
 		~AudioDevice();
 
 		void Play();
+		void Play(AudioClip* audioClip, const Vector3f& position);
 
 		void SetListenerTransform(const Vector3f& position, const Quaternion& rotation);
 

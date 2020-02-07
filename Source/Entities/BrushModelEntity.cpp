@@ -15,7 +15,7 @@ namespace Freeking
 	{
 		PrimitiveEntity::Tick(dt);
 
-		if (_model)
+		if (_model && !_hidden)
 		{
 			LineRenderer::Debug->DrawBox(GetTransform(), GetLocalMinBounds(), GetLocalMaxBounds(), LinearColor(0, 1, 0, 1));
 
@@ -92,7 +92,7 @@ namespace Freeking
 
 	void BrushModelEntity::Trace(const Vector3f& start, const Vector3f& end, TraceResult& trace, const BspContentFlags& brushMask)
 	{
-		if (_modelIndex == 0)
+		if (_modelIndex == 0 || _hidden)
 		{
 			return;
 		}

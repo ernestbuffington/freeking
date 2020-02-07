@@ -332,11 +332,16 @@ namespace Freeking
 			SpriteBatch::ViewportWidth = static_cast<float>(_viewportWidth);
 			SpriteBatch::ViewportHeight = static_cast<float>(_viewportHeight);
 
-			if (Input::IsDown(Button::MouseLeft))
+			if (Input::JustPressed(Button::MouseLeft))
 			{
 				Vector2f normalisedPoint = Util::PixelPositionToScreenSpace(Input::GetMousePosition(), Vector4i(0, 0, _viewportWidth, _viewportHeight));
 				auto direction = camera.NormalisedScreenPointToDirection(projectionMatrix, normalisedPoint);
 				tr = map->LineTrace(camera.GetPosition(), camera.GetPosition() + direction * 10000.0f, BspContentFlags::MASK_SOLID);
+
+				if (tr.hit && tr.entity)
+				{
+					tr.entity->Trigger();
+				}
 			}
 
 			if (tr.hit)

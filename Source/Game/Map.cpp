@@ -260,6 +260,11 @@ namespace Freeking
 
 		for (const auto& entity : _worldEntities)
 		{
+			if (entity->IsHidden())
+			{
+				continue;
+			}
+
 			entity->PreRender(false);
 			entity->RenderOpaque();
 		}
@@ -268,6 +273,11 @@ namespace Freeking
 
 		for (const auto& entity : _worldEntities)
 		{
+			if (entity->IsHidden())
+			{
+				continue;
+			}
+
 			entity->PreRender(true);
 			entity->RenderTranslucent();
 		}
@@ -543,9 +553,9 @@ namespace Freeking
 
 		pf.Start();
 
-		for (const auto& e : _entityKeyValues)
+		for (const auto& entityProperties : _entityKeyValues)
 		{
-			std::string classname = e.GetClassnameProperty();
+			std::string classname = entityProperties.GetClassnameProperty();
 			if (classname.empty())
 			{
 				continue;
@@ -553,7 +563,12 @@ namespace Freeking
 
 			if (auto newEntity = BaseEntity::Make(classname))
 			{
-				newEntity->InitializeProperties(e);
+				if (const auto& targetname = entityProperties.GetTargetnameProperty())
+				{
+					_targetEntities[targetname].push_back(newEntity);
+				}
+
+				newEntity->InitializeProperties(entityProperties);
 				newEntity->Initialize();
 				newEntity->PostInitialize();
 				newEntity->Spawn();
@@ -572,6 +587,16 @@ namespace Freeking
 		}
 
 		pf.Stop("Create entities");
+	}
+
+	std::vector<std::shared_ptr<BaseEntity>> Map::GetTargetEntities(const std::string& targetName)
+	{
+		if (auto it = _targetEntities.find(targetName); it != _targetEntities.end())
+		{
+			return it->second;
+		}
+
+		return {};
 	}
 
 	void Map::RecursiveHullCheck(int num, float p1f, float p2f, const Vector3f& mins, const Vector3f& maxs, const Vector3f& p1, const Vector3f& p2, TraceResult& trace, bool isPoint, const Vector3f& extents, const BspContentFlags& contents)
@@ -637,33 +662,33 @@ namespace Freeking
 
 		if (t1 < t2)
 		{
-			idist = 1.0 / (t1 - t2);
+			idist = 1.0f / (t1 - t2);
 			side = 1;
-			frac2 = (t1 + offset + 0.03125) * idist;
-			frac = (t1 - offset + 0.03125) * idist;
+			frac2 = (t1 + offset + 0.03125f) * idist;
+			frac = (t1 - offset + 0.03125f) * idist;
 		}
 		else if (t1 > t2)
 		{
-			idist = 1.0 / (t1 - t2);
+			idist = 1.0f / (t1 - t2);
 			side = 0;
-			frac2 = (t1 - offset - 0.03125) * idist;
-			frac = (t1 + offset + 0.03125) * idist;
+			frac2 = (t1 - offset - 0.03125f) * idist;
+			frac = (t1 + offset + 0.03125f) * idist;
 		}
 		else
 		{
 			side = 0;
-			frac = 1;
-			frac2 = 0;
+			frac = 1.0f;
+			frac2 = 0.0f;
 		}
 
-		if (frac < 0)
+		if (frac < 0.0f)
 		{
-			frac = 0;
+			frac = 0.0f;
 		}
 
-		if (frac > 1)
+		if (frac > 1.0f)
 		{
-			frac = 1;
+			frac = 1.0f;
 		}
 
 		float midf = p1f + (p2f - p1f) * frac;
@@ -676,14 +701,14 @@ namespace Freeking
 
 		RecursiveHullCheck(node.Children[side], p1f, midf, mins, maxs, p1, mid, trace, isPoint, extents, contents);
 
-		if (frac2 < 0)
+		if (frac2 < 0.0f)
 		{
-			frac2 = 0;
+			frac2 = 0.0f;
 		}
 
-		if (frac2 > 1)
+		if (frac2 > 1.0f)
 		{
-			frac2 = 1;
+			frac2 = 1.0f;
 		}
 
 		midf = p1f + (p2f - p1f) * frac2;
@@ -735,7 +760,7 @@ namespace Freeking
 		float enterfrac = -1;
 		float leavefrac = 1;
 		float dist;
-		const BspBrushSide* clipBrushSide;
+		const BspBrushSide* clipBrushSide = nullptr;
 
 		for (int i = 0; i < brush.NumSides; i++)
 		{
@@ -829,22 +854,25 @@ namespace Freeking
 					enterfrac = 0;
 				}
 
-				const BspPlane& clipPlane = _planes[clipBrushSide->PlaneNum];
-				const BspTextureInfo& clipTextureInfo = _textureInfo[clipBrushSide->TexInfo];
-
-				trace.hit = true;
-				trace.fraction = enterfrac;
-				trace.planeNormal = clipPlane.Normal;
-				trace.planeDistance = clipPlane.Distance;
-				trace.axisU = Vector3f::Cross(clipPlane.Normal, clipTextureInfo.AxisU);
-
-				if (trace.axisU.Length() <= 0.0f)
+				if (clipBrushSide)
 				{
-					trace.axisU = Vector3f::Cross(clipPlane.Normal, clipTextureInfo.AxisV);
-				}
+					const BspPlane& clipPlane = _planes[clipBrushSide->PlaneNum];
+					const BspTextureInfo& clipTextureInfo = _textureInfo[clipBrushSide->TexInfo];
 
-				trace.axisU = trace.axisU.Normalise();
-				trace.axisV = Vector3f::Cross(trace.axisU, clipPlane.Normal).Normalise();
+					trace.hit = true;
+					trace.fraction = enterfrac;
+					trace.planeNormal = clipPlane.Normal;
+					trace.planeDistance = clipPlane.Distance;
+					trace.axisU = Vector3f::Cross(clipPlane.Normal, clipTextureInfo.AxisU);
+
+					if (trace.axisU.Length() <= 0.0f)
+					{
+						trace.axisU = Vector3f::Cross(clipPlane.Normal, clipTextureInfo.AxisV);
+					}
+
+					trace.axisU = trace.axisU.Normalise();
+					trace.axisV = Vector3f::Cross(trace.axisU, clipPlane.Normal).Normalise();
+				}
 			}
 		}
 	}
@@ -878,6 +906,8 @@ namespace Freeking
 			{
 				continue;
 			}
+
+			trace.entity = entity.get();
 
 			if (trace.allSolid || trace.startSolid || trace.fraction < tr.fraction)
 			{

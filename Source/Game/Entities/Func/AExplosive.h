@@ -13,6 +13,8 @@ namespace Freeking::Entity::Func
 
     protected:
 
+        virtual void OnTrigger() override;
+
         virtual bool SetProperty(const EntityProperty& property) override;
 
         virtual bool HasSurf2Alpha() const override { return _spawnFlags[SpawnFlags::Surf2Alpha]; }

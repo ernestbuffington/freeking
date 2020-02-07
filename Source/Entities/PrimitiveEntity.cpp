@@ -4,7 +4,8 @@
 namespace Freeking
 {
 	PrimitiveEntity::PrimitiveEntity() : SceneEntity(),
-		_shader(nullptr)
+		_shader(nullptr),
+		_hidden(false)
 	{
 	}
 
@@ -12,7 +13,10 @@ namespace Freeking
 	{
 		SceneEntity::Tick(dt);
 
-		LineRenderer::Debug->DrawAxis(GetTransformCenter(), 20.0f, 3.0f);
+		if (!_hidden)
+		{
+			LineRenderer::Debug->DrawAxis(GetTransformCenter(), 20.0f, 3.0f);
+		}
 	}
 
 	void PrimitiveEntity::Trace(const Vector3f& start, const Vector3f& end, TraceResult& trace, const BspContentFlags& brushMask)

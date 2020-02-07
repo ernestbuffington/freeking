@@ -82,7 +82,7 @@ namespace Freeking
 		glDepthMask(GL_FALSE);
 
 		_vertexBinding->Bind();
-		glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, _instances.size());
+		glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, static_cast<GLsizei>(_instances.size()));
 		_vertexBinding->Unbind();
 
 		glEnable(GL_DEPTH_TEST);

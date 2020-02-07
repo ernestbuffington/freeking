@@ -7,6 +7,11 @@ namespace Freeking::Entity::Func
 	{
 	}
 
+	void AExplosive::OnTrigger()
+	{
+		_hidden = true;
+	}
+
 	bool AExplosive::SetProperty(const EntityProperty& property)
 	{
 		if (property.IsKey("spawnflags"))

@@ -16,6 +16,8 @@ namespace Freeking::Entity::Target
 
 	protected:
 
+        virtual void OnTrigger() override;
+
 		virtual bool SetProperty(const EntityProperty& property) override;
 
     private:

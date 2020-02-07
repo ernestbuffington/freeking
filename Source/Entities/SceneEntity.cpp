@@ -12,12 +12,12 @@ namespace Freeking
 	{
 		BaseEntity::InitializeProperties(properties);
 
-		if (auto origin = properties.GetOriginProperty())
+		if (const auto& origin = properties.GetOriginProperty())
 		{
 			InitializeOriginProperty(origin);
 		}
 
-		if (auto angle = properties.GetAngleProperty())
+		if (const auto& angle = properties.GetAngleProperty())
 		{
 			InitializeAngleProperty(angle);
 		}
