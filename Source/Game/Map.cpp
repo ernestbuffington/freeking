@@ -934,19 +934,17 @@ namespace Freeking
 
 		RecursiveHullCheck(headNode, 0, 1, mins, maxs, s, e, trace, isPoint, extents, brushMask);
 
+		trace.startPosition = Vector3f(trace.startPosition.x, trace.startPosition.z, -trace.startPosition.y);
+
 		if (trace.hit)
 		{
-			for (int i = 0; i < 3; i++)
-			{
-				trace.endPosition[i] = s[i] + trace.fraction * (e[i] - s[i]);
-			}
+			trace.endPosition[0] = start[0] + trace.fraction * (end[0] - start[0]);
+			trace.endPosition[1] = start[1] + trace.fraction * (end[1] - start[1]);
+			trace.endPosition[2] = start[2] + trace.fraction * (end[2] - start[2]);
+			trace.planeNormal = Vector3f(trace.planeNormal.x, trace.planeNormal.z, -trace.planeNormal.y);
+			trace.axisU = Vector3f(trace.axisU.x, trace.axisU.z, -trace.axisU.y);
+			trace.axisV = Vector3f(trace.axisV.x, trace.axisV.z, -trace.axisV.y);
 		}
-
-		trace.startPosition = Vector3f(trace.startPosition.x, trace.startPosition.z, -trace.startPosition.y);
-		trace.endPosition = Vector3f(trace.endPosition.x, trace.endPosition.z, -trace.endPosition.y);
-		trace.planeNormal = Vector3f(trace.planeNormal.x, trace.planeNormal.z, -trace.planeNormal.y);
-		trace.axisU = Vector3f(trace.axisU.x, trace.axisU.z, -trace.axisU.y);
-		trace.axisV = Vector3f(trace.axisV.x, trace.axisV.z, -trace.axisV.y);
 
 		return trace;
 	}
@@ -961,20 +959,20 @@ namespace Freeking
 		const Vector3f& origin, 
 		const Quaternion& angles)
 	{
-		Vector3f start_l = start - origin;
-		Vector3f end_l = end - origin;
-		bool rotated = (angles[0] || angles[1] || angles[2] || angles[3] != 1.0);
+		Vector3f startLocal = start - origin;
+		Vector3f endLocal = end - origin;
+		bool isRotated = (angles[0] || angles[1] || angles[2] || angles[3] != 1.0);
 
-		if (rotated)
+		if (isRotated)
 		{
 			Quaternion anglesInverse = angles.Inverse();
-			start_l = anglesInverse * start_l;
-			end_l = anglesInverse * end_l;
+			startLocal = anglesInverse * startLocal;
+			endLocal = anglesInverse * endLocal;
 		}
 
-		TraceResult trace = BoxTrace(start_l, end_l, mins, maxs, headNode, brushMask);
+		TraceResult trace = BoxTrace(startLocal, endLocal, mins, maxs, headNode, brushMask);
 
-		if (rotated && trace.fraction != 1.0)
+		if (isRotated && trace.hit)
 		{
 			trace.planeNormal = angles * trace.planeNormal;
 			trace.axisU = angles * trace.axisU;
