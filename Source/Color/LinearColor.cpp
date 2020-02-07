@@ -24,7 +24,7 @@ namespace Freeking
 	{
 	}
 
-	LinearColor LinearColor::WithAlpha(float alpha)
+	LinearColor LinearColor::WithAlpha(float alpha) const
 	{
 		return LinearColor(r, g, b, alpha);
 	}

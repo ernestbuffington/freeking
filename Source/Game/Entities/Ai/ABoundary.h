@@ -1,23 +1,13 @@
 #pragma once
 
-#include "BaseEntity.h"
+#include "BrushModelEntity.h"
 
 namespace Freeking::Entity::Ai
 {
-    class ABoundary : public BaseEntity
+    class ABoundary : public BrushModelEntity
     {
     public:
 
         ABoundary();
-
-		virtual void Initialize() override;
-		virtual void Tick(double dt) override;
-
-	protected:
-
-		virtual bool SetProperty(const EntityProperty& property) override;
-
-    private:
-
     };
 }

@@ -23,7 +23,7 @@ namespace Freeking
 		void DrawAABBox(const Vector3f& mins, const Vector3f& maxs, const LinearColor& colour);
 		void DrawAABBox(const Vector3f& position, const Vector3f& mins, const Vector3f& maxs, const LinearColor& colour);
 		void DrawSphere(const Vector3f& position, float radius, int thetaSegments, int phiSegments, const LinearColor& colour);
-		void DrawAxis(const Matrix4x4& transform, float length, float size);
+		void DrawAxis(const Matrix4x4& transform, float length, float size, float alpha = 1.0f);
 		void DrawArrow(const Vector3f& start, const Vector3f& end, const Vector3f& up, const Vector3f& right, const float size, const LinearColor& color);
 
 		void Flush(Matrix4x4& viewProj);

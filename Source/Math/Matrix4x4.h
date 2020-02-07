@@ -20,6 +20,7 @@ namespace Freeking
 		void Identity();
 		void Translate(const Vector3f& position);
 		Vector3f Translation() const;
+		Vector3f InverseTranslation() const;
 		inline Vector4f Row(int index) const { return Vector4f(m[0][index], m[1][index], m[2][index], m[3][index]); }
 		static Matrix4x4 Translation(const Vector3f& position);
 		static Matrix4x4 Perspective(float fov, float aspect, float nearClip, float farClip);

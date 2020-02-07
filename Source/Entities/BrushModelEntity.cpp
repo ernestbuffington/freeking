@@ -17,20 +17,27 @@ namespace Freeking
 
 		if (_model && !_hidden)
 		{
-			LineRenderer::Debug->DrawBox(GetTransform(), GetLocalMinBounds(), GetLocalMaxBounds(), LinearColor(0, 1, 0, 1));
-
 			auto position = GetTransformCenter().Translation();
 
-			Vector2f screenPosition;
-			if (Util::WorldPointToNormalisedScreenPoint(position, screenPosition, SpriteBatch::ProjectionMatrix, SpriteBatch::ViewMatrix, 2048.0f))
+			const auto& viewMatrix = SpriteBatch::ViewMatrix;
+			float distance = position.LengthBetween(viewMatrix.InverseTranslation());
+
+			if (distance < 512.0f)
 			{
-				float alpha = 0.75f;
-				screenPosition = Util::ScreenSpaceToPixelPosition(screenPosition, Vector4i(0, 0, (int)SpriteBatch::ViewportWidth, (int)SpriteBatch::ViewportHeight));
-				screenPosition.x = Math::Round(screenPosition.x);
-				screenPosition.y = Math::Round(screenPosition.y);
-				auto text = _classname + " (*" + std::to_string(_modelIndex) + ")";
-				SpriteBatch::Debug->DrawText(nullptr, text, screenPosition + Vector2f(2, 2), LinearColor(0, 0, 0, alpha), 0.5f);
-				SpriteBatch::Debug->DrawText(nullptr, text, screenPosition, LinearColor(0.5f, 1, 0.5f, alpha), 0.5f);
+				float alpha = 1.0f - (distance / 512.0f);
+
+				LineRenderer::Debug->DrawBox(GetTransform(), GetLocalMinBounds(), GetLocalMaxBounds(), LinearColor(0, 1, 0, alpha));
+
+				Vector2f screenPosition;
+				if (Util::WorldPointToNormalisedScreenPoint(position, screenPosition, SpriteBatch::ProjectionMatrix, SpriteBatch::ViewMatrix, 2048.0f))
+				{
+					screenPosition = Util::ScreenSpaceToPixelPosition(screenPosition, Vector4i(0, 0, (int)SpriteBatch::ViewportWidth, (int)SpriteBatch::ViewportHeight));
+					screenPosition.x = Math::Round(screenPosition.x);
+					screenPosition.y = Math::Round(screenPosition.y);
+					auto text = _classname + " (*" + std::to_string(_modelIndex) + ")";
+					SpriteBatch::Debug->DrawText(nullptr, text, screenPosition + Vector2f(2, 2), LinearColor(0, 0, 0, alpha), 0.5f);
+					SpriteBatch::Debug->DrawText(nullptr, text, screenPosition, LinearColor(0.5f, 1, 0.5f, alpha), 0.5f);
+				}
 			}
 		}
 	}

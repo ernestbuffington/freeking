@@ -2,20 +2,7 @@
 
 namespace Freeking::Entity::Ai
 {
-	ABoundary::ABoundary() : BaseEntity()
+	ABoundary::ABoundary() : BrushModelEntity()
 	{
-	}
-
-	void ABoundary::Initialize()
-	{
-	}
-
-	void ABoundary::Tick(double dt)
-	{
-	}
-
-	bool ABoundary::SetProperty(const EntityProperty& property)
-	{
-		return false;
 	}
 }

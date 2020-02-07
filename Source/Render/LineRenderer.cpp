@@ -133,16 +133,16 @@ namespace Freeking
 		}
 	}
 
-	void LineRenderer::DrawAxis(const Matrix4x4& transform, float length, float size)
+	void LineRenderer::DrawAxis(const Matrix4x4& transform, float length, float size, float alpha)
 	{
 		Vector3f start = transform.Translation();
 		Vector3f p1 = transform.Transform(Vector3f::OneX);
 		Vector3f p2 = transform.Transform(Vector3f::OneY);
 		Vector3f p3 = transform.Transform(Vector3f::OneZ);
 
-		DrawArrow(start, start + p1 * length, p2, p3, size, LinearColor::Red);
-		DrawArrow(start, start + p2 * length, p3, p1, size, LinearColor::Green);
-		DrawArrow(start, start + p3 * length, p1, p2, size, LinearColor::Blue);
+		DrawArrow(start, start + p1 * length, p2, p3, size, LinearColor::Red.WithAlpha(alpha));
+		DrawArrow(start, start + p2 * length, p3, p1, size, LinearColor::Green.WithAlpha(alpha));
+		DrawArrow(start, start + p3 * length, p1, p2, size, LinearColor::Blue.WithAlpha(alpha));
 	}
 
 	void LineRenderer::DrawArrow(const Vector3f& start, const Vector3f& end, const Vector3f& up, const Vector3f& right, const float size, const LinearColor& color)

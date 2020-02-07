@@ -58,6 +58,12 @@ namespace Freeking
 		return Vector3f(m[3][0], m[3][1], m[3][2]);
 	}
 
+	Vector3f Matrix4x4::InverseTranslation() const
+	{
+		return Vector3f(-m[3][0], -m[3][1], -m[3][2]) *
+			   Matrix3x3(m[0][0], m[1][0], m[2][0], m[0][1], m[1][1], m[2][1], m[0][2], m[1][2], m[2][2]);
+	}
+
 	Matrix4x4 Matrix4x4::Perspective(float fov, float aspect, float nearClip, float farClip)
 	{
 		float f = 1.0f / tan(Math::DegreesToRadians(fov) / 2.0f);

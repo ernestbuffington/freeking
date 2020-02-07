@@ -2,20 +2,7 @@
 
 namespace Freeking::Entity::Trigger
 {
-	AMultiple::AMultiple() : BaseEntity()
+	AMultiple::AMultiple() : BrushModelEntity()
 	{
-	}
-
-	void AMultiple::Initialize()
-	{
-	}
-
-	void AMultiple::Tick(double dt)
-	{
-	}
-
-	bool AMultiple::SetProperty(const EntityProperty& property)
-	{
-		return false;
 	}
 }

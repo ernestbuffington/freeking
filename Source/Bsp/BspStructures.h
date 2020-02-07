@@ -66,7 +66,7 @@ namespace Freeking
 		uint16_t NumEdges;
 		uint16_t TextureInfo;
 		uint8_t LightmapStyles[4];
-		uint32_t LightmapOffset;
+		int32_t LightmapOffset;
 	};
 
 	struct BspEdge

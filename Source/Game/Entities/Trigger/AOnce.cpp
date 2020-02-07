@@ -2,20 +2,7 @@
 
 namespace Freeking::Entity::Trigger
 {
-	AOnce::AOnce() : BaseEntity()
+	AOnce::AOnce() : BrushModelEntity()
 	{
-	}
-
-	void AOnce::Initialize()
-	{
-	}
-
-	void AOnce::Tick(double dt)
-	{
-	}
-
-	bool AOnce::SetProperty(const EntityProperty& property)
-	{
-		return false;
 	}
 }

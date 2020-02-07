@@ -16,6 +16,15 @@ namespace Freeking
 		m[2] = c2;
 	}
 
+	Matrix3x3::Matrix3x3(float xx, float xy, float xz,
+		float yx, float yy, float yz,
+		float zx, float zy, float zz)
+	{
+		m[0][0] = xx; m[0][1] = xy; m[0][2] = xz;;
+		m[1][0] = yx; m[1][1] = yy; m[1][2] = yz;;
+		m[2][0] = zx; m[2][1] = zy; m[2][2] = zz;;
+	}
+
 	void Matrix3x3::Identity()
 	{
 		m[0] = Vector3f(1, 0, 0);

@@ -2,20 +2,7 @@
 
 namespace Freeking::Entity::Ai
 {
-	ATerritory::ATerritory() : BaseEntity()
+	ATerritory::ATerritory() : BrushModelEntity()
 	{
-	}
-
-	void ATerritory::Initialize()
-	{
-	}
-
-	void ATerritory::Tick(double dt)
-	{
-	}
-
-	bool ATerritory::SetProperty(const EntityProperty& property)
-	{
-		return false;
 	}
 }

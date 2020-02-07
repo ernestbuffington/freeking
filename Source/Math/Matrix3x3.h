@@ -13,6 +13,10 @@ namespace Freeking
 
 		Matrix3x3();
 		Matrix3x3(const Vector3f& c0, const Vector3f& c1, const Vector3f& c2);
+		Matrix3x3(
+			float xx, float xy, float xz,
+			float yx, float yy, float yz,
+			float zx, float zy, float zz);
 
 		void Identity();
 		Matrix3x3 Transpose() const;

@@ -1,5 +1,6 @@
 #include "PrimitiveEntity.h"
 #include "LineRenderer.h"
+#include "SpriteBatch.h"
 
 namespace Freeking
 {
@@ -15,7 +16,15 @@ namespace Freeking
 
 		if (!_hidden)
 		{
-			LineRenderer::Debug->DrawAxis(GetTransformCenter(), 20.0f, 3.0f);
+			const auto& transformCenter = GetTransformCenter();
+			const auto& viewMatrix = SpriteBatch::ViewMatrix;
+			float distance = transformCenter.Translation().LengthBetween(viewMatrix.InverseTranslation());
+
+			if (distance < 512.0f)
+			{
+				float alpha = 1.0f - (distance / 512.0f);
+				LineRenderer::Debug->DrawAxis(transformCenter, 20.0f, 3.0f, alpha);
+			}
 		}
 	}
 

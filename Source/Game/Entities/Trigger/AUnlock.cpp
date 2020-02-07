@@ -2,20 +2,7 @@
 
 namespace Freeking::Entity::Trigger
 {
-	AUnlock::AUnlock() : BaseEntity()
+	AUnlock::AUnlock() : BrushModelEntity()
 	{
-	}
-
-	void AUnlock::Initialize()
-	{
-	}
-
-	void AUnlock::Tick(double dt)
-	{
-	}
-
-	bool AUnlock::SetProperty(const EntityProperty& property)
-	{
-		return false;
 	}
 }

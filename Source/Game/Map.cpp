@@ -355,15 +355,12 @@ namespace Freeking
 
 		pf.Start();
 
-		int lmSize = 2048;
+		int lmSize = 4096;
 		auto lightmapImage = std::make_shared<LightmapImage>(lmSize, lmSize);
 
 		std::array<uint8_t, (16 * 16) * 3> blackPixels = { 0 };
 		lightmapImage->Insert(0, 0, 16, 16, blackPixels.data());
-		Vector2f firstLightmapUV(8.0f / lightmapImage->GetWidth(), 8.0f / lightmapImage->GetHeight());
-
 		auto packingRoot = rectpack2D::empty_spaces<false>({ lmSize, lmSize });
-		packingRoot.insert({ 16, 16 });
 
 		for (int modelIndex = 0; modelIndex < _brushModels.Num(); ++modelIndex)
 		{
@@ -383,6 +380,11 @@ namespace Freeking
 				if ((faceTextureInfo.Flags[BspSurfaceFlags::NoDraw]) ||
 					(faceTextureInfo.Flags[BspSurfaceFlags::Sky]) ||
 					(faceTextureInfo.Flags[BspSurfaceFlags::Warp]))
+				{
+					continue;
+				}
+
+				if (face.LightmapOffset < 0)
 				{
 					continue;
 				}
@@ -453,10 +455,9 @@ namespace Freeking
 					u /= (float)textureWidth;
 					v /= (float)textureHeight;
 
-					faceVertices[edgeIndex] = { position, normal, { Vector2f(u, v), firstLightmapUV, firstLightmapUV } };
+					faceVertices[edgeIndex] = { position, normal, { Vector2f(u, v), 0, 0 } };
 				}
 
-				if (face.LightmapOffset != 0)
 				{
 					float lminu = floor(umin / 16.0f);
 					float lmaxu = ceil(umax / 16.0f);
