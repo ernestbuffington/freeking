@@ -189,6 +189,7 @@ namespace Freeking
 
 		Texture2D::Library.SetSpecialNamed("pink", std::make_shared<Texture2D>(2, 2, (uint8_t)255, (uint8_t)0, (uint8_t)255));
 		auto pink = Texture2D::Library.Get("pink");
+		auto crosshair = Texture2D::Library.Get("Textures/crosshair.tga");
 
 		Renderer renderer;
 		BillboardBatch billboards;
@@ -334,7 +335,7 @@ namespace Freeking
 
 			if (Input::JustPressed(Button::MouseLeft))
 			{
-				Vector2f normalisedPoint = Util::PixelPositionToScreenSpace(Input::GetMousePosition(), Vector4i(0, 0, _viewportWidth, _viewportHeight));
+				Vector2f normalisedPoint = _mouseLocked ? 0.0f : Util::PixelPositionToScreenSpace(Input::GetMousePosition(), Vector4i(0, 0, _viewportWidth, _viewportHeight));
 				auto direction = camera.NormalisedScreenPointToDirection(projectionMatrix, normalisedPoint);
 				tr = map->LineTrace(camera.GetPosition(), camera.GetPosition() + direction * 10000.0f, BspContentFlags::MASK_SOLID);
 
@@ -431,25 +432,27 @@ namespace Freeking
 
 				glDisable(GL_DEPTH_TEST);
 				lineRenderer->Flush(viewProjectionMatrix);
-				glEnable(GL_DEPTH_TEST);
-
-				auto fps = timer.GetFps();
-				LinearColor fpsColor = LinearColor(0, 1, 0, 1);
-
-				if (fps < 30)
-				{
-					fpsColor = LinearColor(1, 0, 0, 1);
-				}
-				else if (fps < 60)
-				{
-					fpsColor = LinearColor(1, 1, 0, 1);
-				}
-
-				auto orthoProjection = Matrix4x4::Ortho(0, (float)_viewportWidth, (float)_viewportHeight, 0, -1.0f, 1.0f);
-				spriteBatch->DrawText(font.get(), std::to_string(fps), Vector2f(10, 2), LinearColor(0, 0, 0, 1), 1.0f);
-				spriteBatch->DrawText(font.get(), std::to_string(fps), Vector2f(8, 0), fpsColor, 1.0f);
-				spriteBatch->Flush(orthoProjection);
+				glEnable(GL_DEPTH_TEST);;
 			}
+
+			spriteBatch->Draw(crosshair.get(), Vector2f((_viewportWidth * 0.5f) - 16, (_viewportHeight * 0.5f) - 16), Vector2f(32), LinearColor::White.WithAlpha(0.75f));
+
+			auto fps = timer.GetFps();
+			LinearColor fpsColor = LinearColor(0, 1, 0, 1);
+
+			if (fps < 30)
+			{
+				fpsColor = LinearColor(1, 0, 0, 1);
+			}
+			else if (fps < 60)
+			{
+				fpsColor = LinearColor(1, 1, 0, 1);
+			}
+
+			auto orthoProjection = Matrix4x4::Ortho(0, (float)_viewportWidth, (float)_viewportHeight, 0, -1.0f, 1.0f);
+			spriteBatch->DrawText(font.get(), std::to_string(fps), Vector2f(10, 2), LinearColor(0, 0, 0, 1), 1.0f);
+			spriteBatch->DrawText(font.get(), std::to_string(fps), Vector2f(8, 0), fpsColor, 1.0f);
+			spriteBatch->Flush(orthoProjection);
 
 			lineRenderer->Clear();
 			spriteBatch->Clear();

@@ -15,6 +15,11 @@ namespace Freeking
 
 	protected:
 
+		void Open();
+		void Close();
+
+		virtual void OnTrigger() override;
+
 		virtual bool SetProperty(const EntityProperty& property) override;
 
 		virtual void InitializeAngleProperty(float angle) override;
@@ -24,6 +29,10 @@ namespace Freeking
 		float _speed;
 		float _angle;
 		float _distance;
+		float _currentDistance;
+		float _wait;
+		double _timeToClose;
+		bool _open;
 		Vector3f _initialPosition;
 	};
 }

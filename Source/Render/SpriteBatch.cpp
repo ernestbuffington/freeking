@@ -511,16 +511,16 @@ namespace Freeking
 
 		_vertexBinding->Bind();
 
-		const auto& spriteShader = GetSpriteShader();
-		if (spriteShader)
-		{
-			DrawSprites(proj, scale, spriteShader, _spritesToDraw);
-		}
-
 		const auto& textShader = GetTextShader();
 		if (textShader)
 		{
 			DrawSprites(proj, scale, textShader, _textToDraw);
+		}
+
+		const auto& spriteShader = GetSpriteShader();
+		if (spriteShader)
+		{
+			DrawSprites(proj, scale, spriteShader, _spritesToDraw);
 		}
 
 		glBindSampler(0, 0);

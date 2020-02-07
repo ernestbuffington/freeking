@@ -355,7 +355,7 @@ namespace Freeking
 
 		pf.Start();
 
-		int lmSize = 4096;
+		int lmSize = 2048;
 		auto lightmapImage = std::make_shared<LightmapImage>(lmSize, lmSize);
 
 		std::array<uint8_t, (16 * 16) * 3> blackPixels = { 0 };

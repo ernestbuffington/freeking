@@ -25,12 +25,14 @@ namespace Freeking
 		virtual void PostTick();
 		virtual void Spawn();
 
+		void TakeDamage();
 		void Trigger();
 
 		static SharedPtr Make(const std::string_view& classname);
 
 	protected:
 
+		virtual void OnTakeDamage();
 		virtual void OnTrigger();
 
 		virtual bool SetProperty(const EntityProperty& property);

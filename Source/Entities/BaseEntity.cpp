@@ -43,6 +43,11 @@ namespace Freeking
 		_timeSpawned = Time::Now();
 	}
 
+	void BaseEntity::TakeDamage()
+	{
+		OnTakeDamage();
+	}
+
 	void BaseEntity::Trigger()
 	{
 		OnTrigger();
@@ -57,6 +62,10 @@ namespace Freeking
 	}
 
 	void BaseEntity::OnTrigger()
+	{
+	}
+
+	void BaseEntity::OnTakeDamage()
 	{
 	}
 
