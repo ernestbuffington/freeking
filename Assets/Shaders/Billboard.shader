@@ -41,9 +41,8 @@ out vec4 fragColor;
 
 void main()
 {
-	float brightness = 1.0;
 	vec4 diffuseColor = texture(diffuse, vert.uv);
-	fragColor = vec4((diffuseColor.rgb * vert.color.rgb) * ((diffuseColor.a * vert.color.a) * brightness), 1.0);
+	fragColor = vec4((diffuseColor.rgb * vert.color.rgb) * (diffuseColor.a * vert.color.a), 1.0);
 }
 
 #endif

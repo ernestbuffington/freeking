@@ -4,29 +4,6 @@
 
 namespace Freeking
 {
-	void Renderer::Draw(VertexBinding* binding, Shader* shader, DrawPrimitive primitive, int offset, int count, int instances)
-	{
-		if (shader == nullptr || binding == nullptr)
-		{
-			return;
-		}
-
-		if (count == 0)
-		{
-			count = binding->GetNumElements();
-		}
-
-		_drawCalls.push_back(
-			{ 
-				binding,
-				shader,
-				primitive,
-				offset,
-				count,
-				instances
-			});
-	}
-
 	static inline GLenum GLDrawPrimitive(DrawPrimitive e)
 	{
 		switch (e)
@@ -38,62 +15,57 @@ namespace Freeking
 		return GL_INVALID_ENUM;
 	}
 
-	void Renderer::Flush()
+	void Renderer::Draw(VertexBinding* binding, Shader* shader, DrawPrimitive primitive, int offset, int count, int instances)
 	{
-		for (auto& drawCall : _drawCalls)
+		auto mode = GLDrawPrimitive(primitive);
+		if (mode == GL_INVALID_ENUM)
 		{
-			auto mode = GLDrawPrimitive(drawCall.primitive);
-			if (mode == GL_INVALID_ENUM)
+			return;
+		}
+
+		shader->Apply();
+		binding->Bind();
+
+		if (binding->HasIndices())
+		{
+			GLenum indexType = static_cast<GLenum>(binding->GetIndexType());
+
+			if (offset > 0)
 			{
-				continue;
-			}
-
-			drawCall.shader->Apply();
-			drawCall.binding->Bind();
-
-			if (drawCall.binding->HasIndices())
-			{
-				GLenum indexType = static_cast<GLenum>(drawCall.binding->GetIndexType());
-
-				if (drawCall.offset > 0)
+				if (instances > 1)
 				{
-					if (drawCall.instances > 1)
-					{
-						glDrawElementsInstancedBaseVertex(mode, drawCall.count, indexType, nullptr, drawCall.instances, drawCall.offset);
-					}
-					else
-					{
-						glDrawElementsBaseVertex(mode, drawCall.count, indexType, nullptr, drawCall.offset);
-					}
+					glDrawElementsInstancedBaseVertex(mode, count, indexType, nullptr, instances, offset);
 				}
 				else
 				{
-					if (drawCall.instances > 1)
-					{
-						glDrawElementsInstanced(mode, drawCall.count, indexType, nullptr, drawCall.instances);
-					}
-					else
-					{
-						glDrawElements(mode, drawCall.count, indexType, nullptr);
-					}
+					glDrawElementsBaseVertex(mode, count, indexType, nullptr, offset);
 				}
 			}
 			else
 			{
-				if (drawCall.instances > 1)
+				if (instances > 1)
 				{
-					glDrawArraysInstanced(mode, drawCall.offset, drawCall.count, drawCall.instances);
+					glDrawElementsInstanced(mode, count, indexType, nullptr, instances);
 				}
 				else
 				{
-					glDrawArrays(mode, drawCall.offset, drawCall.count);
+					glDrawElements(mode, count, indexType, nullptr);
 				}
 			}
-
-			drawCall.binding->Unbind();
-			drawCall.shader->Unbind();
+		}
+		else
+		{
+			if (instances > 1)
+			{
+				glDrawArraysInstanced(mode, offset, count, instances);
+			}
+			else
+			{
+				glDrawArrays(mode, offset, count);
+			}
 		}
 
-		_drawCalls.clear();
+		binding->Unbind();
+		shader->Unbind();
 	}
 }

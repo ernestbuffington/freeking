@@ -4,6 +4,8 @@
 
 namespace Freeking
 {
+	struct TraceResult;
+
 	class SceneEntity : public BaseEntity
 	{
 	public:

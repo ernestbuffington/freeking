@@ -33,7 +33,7 @@ namespace Freeking
 
 		BillboardBatch();
 
-		void Draw(double dt, const Vector3f& eyePosition);
+		void Draw(double dt, const Vector3f& eyePosition, const Vector3f& eyeDirection);
 		void AddInstance(const Vector3f& position);
 
 	private:

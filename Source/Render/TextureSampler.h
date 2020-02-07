@@ -21,17 +21,17 @@ namespace Freeking
 		NearestNoMip,
 	};
 
-	struct TextureSamplerSettings
+	struct TextureSamplerInitializer
 	{
 		TextureWrapMode wrap;
 		TextureFilterMode filter;
 
-		bool operator==(const TextureSamplerSettings& other) const
+		bool operator==(const TextureSamplerInitializer& other) const
 		{
 			return (wrap == other.wrap && filter == other.filter);
 		}
 
-		std::size_t operator()(const TextureSamplerSettings& other) const
+		std::size_t operator()(const TextureSamplerInitializer& other) const
 		{
 			return ((std::hash<TextureWrapMode>()(other.wrap) ^ (std::hash<TextureFilterMode>()(other.filter) << 1)) >> 1);
 		}
@@ -45,11 +45,11 @@ namespace Freeking
 
 		using TextureSamplerPtr = std::shared_ptr<TextureSampler>;
 
-		const TextureSamplerPtr& Get(const TextureSamplerSettings& settings);
+		const TextureSamplerPtr& Get(const TextureSamplerInitializer& settings);
 
 	private:
 
-		std::unordered_map<TextureSamplerSettings, TextureSamplerPtr, TextureSamplerSettings> _samplers;
+		std::unordered_map<TextureSamplerInitializer, TextureSamplerPtr, TextureSamplerInitializer> _samplers;
 	};
 
 	class TextureSampler
@@ -59,7 +59,7 @@ namespace Freeking
 		static TextureSamplerLibrary Library;
 		static std::shared_ptr<TextureSampler> GetDefault();
 
-		TextureSampler(const TextureSamplerSettings& settings);
+		TextureSampler(const TextureSamplerInitializer& settings);
 		~TextureSampler();
 
 		void Bind(GLuint unit);

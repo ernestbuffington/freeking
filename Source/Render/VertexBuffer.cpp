@@ -3,25 +3,32 @@
 
 namespace Freeking
 {
-	VertexBuffer::VertexBuffer(const void* vertices, std::size_t vertexCount, size_t strideBytes,
-		GLuint hint) :
+	VertexBuffer::VertexBuffer(const void* vertices, std::size_t vertexCount, size_t strideBytes, GLuint hint) :
+		_vbo(0),
 		_vertexCount(vertexCount),
-		_strideBytes(strideBytes), _hint(hint)
+		_strideBytes(strideBytes),
+		_hint(hint)
 	{
 		assert(vertexCount > 0);
 		assert(strideBytes > 0);
 
 		glGenBuffers(1, &_vbo);
+
 		if (glGetError() == GL_NO_ERROR)
 		{
 			glBindBuffer(GL_ARRAY_BUFFER, _vbo);
 			glBufferData(GL_ARRAY_BUFFER, vertexCount * strideBytes, vertices, _hint);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+		}
+		else
+		{
+			_vbo = 0;
 		}
 	}
 
 	VertexBuffer::~VertexBuffer()
 	{
-		if (_vbo != 0)
+		if (_vbo)
 		{
 			glDeleteBuffers(1, &_vbo);
 		}
@@ -29,9 +36,12 @@ namespace Freeking
 
 	void VertexBuffer::UpdateBuffer(const void* data, size_t offset, size_t size)
 	{
-		glBindBuffer(GL_ARRAY_BUFFER, _vbo);
-		glBufferSubData(GL_ARRAY_BUFFER, offset, size, data);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		if (_vbo)
+		{
+			glBindBuffer(GL_ARRAY_BUFFER, _vbo);
+			glBufferSubData(GL_ARRAY_BUFFER, offset, size, data);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+		}
 	}
 
 	std::size_t VertexBuffer::GetVertexCount() const noexcept

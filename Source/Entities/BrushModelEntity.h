@@ -19,6 +19,8 @@ namespace Freeking
 		virtual void RenderOpaque() override;
 		virtual void RenderTranslucent() override;
 
+		virtual void Trace(const Vector3f& start, const Vector3f& end, TraceResult& trace, const BspContentFlags& brushMask) override;
+
 	protected:
 
 		virtual bool SetProperty(const EntityProperty& property) override;

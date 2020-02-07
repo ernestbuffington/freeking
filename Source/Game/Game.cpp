@@ -332,11 +332,11 @@ namespace Freeking
 			SpriteBatch::ViewportWidth = static_cast<float>(_viewportWidth);
 			SpriteBatch::ViewportHeight = static_cast<float>(_viewportHeight);
 
-			if (Input::JustPressed(Button::MouseLeft))
+			if (Input::IsDown(Button::MouseLeft))
 			{
 				Vector2f normalisedPoint = Util::PixelPositionToScreenSpace(Input::GetMousePosition(), Vector4i(0, 0, _viewportWidth, _viewportHeight));
 				auto direction = camera.NormalisedScreenPointToDirection(projectionMatrix, normalisedPoint);
-				tr = map->BoxTrace(camera.GetPosition(), camera.GetPosition() + direction * 10000.0f, 0, 0, 0, BspContentFlags::MASK_PLAYERSOLID);
+				tr = map->LineTrace(camera.GetPosition(), camera.GetPosition() + direction * 10000.0f, BspContentFlags::MASK_SOLID);
 			}
 
 			if (tr.hit)
@@ -364,7 +364,7 @@ namespace Freeking
 				glDepthMask(GL_TRUE);
 			}
 
-			billboards.Draw(deltaTime, camera.GetPosition());
+			billboards.Draw(deltaTime, camera.GetPosition(), camera.GetRotation().Forward());
 
 			if (debug)
 			{

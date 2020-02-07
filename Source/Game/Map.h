@@ -103,26 +103,6 @@ namespace Freeking
 		Vector3f Origin;
 	};
 
-	struct TraceResult
-	{
-		TraceResult() :
-			hit(false),
-			fraction(1.0f)
-		{
-		}
-
-		bool allSolid;
-		bool startSolid;
-		float fraction;
-		bool hit;
-		Vector3f planeNormal;
-		float planeDistance;
-		Vector3f axisU;
-		Vector3f axisV;
-		Vector3f startPosition;
-		Vector3f endPosition;
-	};
-
 	class Map
 	{
 	public:
@@ -132,7 +112,18 @@ namespace Freeking
 		void Tick(double dt);
 		void Render();
 
-		TraceResult BoxTrace(const Vector3f& start, const Vector3f& end, const Vector3f& mins, const Vector3f& maxs, int headNode, const BspContentFlags& brushMask);
+		TraceResult LineTrace(const Vector3f& start, const Vector3f& end, const BspContentFlags& brushMask);
+		TraceResult BoxTrace(const Vector3f& start, const Vector3f& end, const Vector3f& mins, const Vector3f& maxs, const BspContentFlags& brushMask);
+
+		TraceResult TransformedBoxTrace(
+			const Vector3f& start,
+			const Vector3f& end,
+			const Vector3f& mins,
+			const Vector3f& maxs,
+			int headNode,
+			const BspContentFlags& brushMask,
+			const Vector3f& origin,
+			const Quaternion& angles);
 
 		const std::vector<EntityProperties>& GetEntityProperties() { return _entityKeyValues; }
 		const std::shared_ptr<BrushModel>& GetBrushModel(uint32_t index) const { return _models.at(index); }
@@ -143,11 +134,16 @@ namespace Freeking
 
 		static float GetLightStyleSample(size_t index);
 
+		int GetModelHeadNode(int modelIndex) { return _brushModels[modelIndex].RootNode; };
+
 	private:
 
+		TraceResult LineTrace(const Vector3f& start, const Vector3f& end, int headNode, const BspContentFlags& brushMask);
+		TraceResult BoxTrace(const Vector3f& start, const Vector3f& end, const Vector3f& mins, const Vector3f& maxs, int headNode, const BspContentFlags& brushMask);
 		void RecursiveHullCheck(int num, float p1f, float p2f, const Vector3f& mins, const Vector3f& maxs, const Vector3f& p1, const Vector3f& p2, TraceResult& trace, bool isPoint, const Vector3f& extents, const BspContentFlags& contents);
 		void TraceToLeaf(const Vector3f& mins, const Vector3f& maxs, TraceResult& trace, bool isPoint, int leafIndex, const BspContentFlags& contents);
 		void ClipBoxToBrush(const Vector3f& mins, const Vector3f& maxs, const Vector3f& p1, const Vector3f& p2, TraceResult& trace, const BspBrush& brush, bool isPoint);
+		void ClipBoxToEntities(const Vector3f& start, const Vector3f& end, TraceResult& tr, const BspContentFlags& brushMask);
 
 		std::vector<std::shared_ptr<BrushModel>> _models;
 		std::shared_ptr<Texture2D> _lightmapTexture;
@@ -164,5 +160,6 @@ namespace Freeking
 		LumpArray<BspLeaf> _leafs;
 		LumpArray<int16_t> _leafBrushes;
 		LumpArray<BspTextureInfo> _textureInfo;
+		LumpArray<BspModel> _brushModels;
 	};
 }

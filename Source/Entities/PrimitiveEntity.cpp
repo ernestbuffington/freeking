@@ -14,4 +14,8 @@ namespace Freeking
 
 		LineRenderer::Debug->DrawAxis(GetTransformCenter(), 20.0f, 3.0f);
 	}
+
+	void PrimitiveEntity::Trace(const Vector3f& start, const Vector3f& end, TraceResult& trace, const BspContentFlags& brushMask)
+	{
+	}
 }

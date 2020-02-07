@@ -24,7 +24,6 @@ namespace Freeking
 		GLuint GetHint() const noexcept;
 		GLuint GetVBO() const noexcept;
 
-		inline void Bind() { glBindBuffer(GL_ARRAY_BUFFER, _vbo); }
 		void UpdateBuffer(const void* data, size_t offset, size_t size);
 
 	private:

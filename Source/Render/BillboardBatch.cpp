@@ -11,6 +11,8 @@
 namespace Freeking
 {
 	BillboardBatch* LightFlares::Billboards = nullptr;
+	static const size_t instanceStride = sizeof(BillboardInstance);
+	static const size_t vertStride = sizeof(Vector2f);
 
 	static const std::array<Vector2f, 4> quadVertices =
 	{
@@ -24,9 +26,6 @@ namespace Freeking
 
 	BillboardBatch::BillboardBatch()
 	{
-		static const size_t vertStride = sizeof(Vector2f);
-		static const size_t instanceStride = sizeof(BillboardInstance);
-
 		_vertexBuffer = std::make_shared<VertexBuffer>(quadVertices.data(), quadVertices.size(), vertStride);
 		_indexBuffer = std::make_shared<IndexBuffer>(quadIndices.data(), quadIndices.size(), GL_UNSIGNED_INT);
 		_instanceBuffer = std::make_shared<VertexBuffer>(_instances.data(), 1000, instanceStride);
@@ -43,10 +42,9 @@ namespace Freeking
 
 		_shader = Shader::Library.Billboard;
 		_shader->SetParameterValue("diffuse", Texture2D::Library.Get("sprites/corona_a.tga").get());
-		_shader->SetParameterValue("brightness", 1.0f);
 	}
 
-	void BillboardBatch::Draw(double dt, const Vector3f& eyePosition)
+	void BillboardBatch::Draw(double dt, const Vector3f& eyePosition, const Vector3f& eyeDirection)
 	{
 		_shader->Apply();
 
@@ -54,20 +52,29 @@ namespace Freeking
 		{
 			const auto& traceStart = instance.position;
 			const auto& traceEnd = eyePosition;
-			auto trace = Map::Current->BoxTrace(traceStart, traceEnd, 0, 0, 0, BspContentFlags::MASK_PLAYERSOLID);
+			bool hidden = true;
 
-			if (trace.fraction < 1.0f)
+			if (eyeDirection.Dot((traceStart - traceEnd).Normalise()) > 0.0f)
 			{
-				instance.size.x = Math::Max(0.0f, instance.size.x - (4000.0f * (float)dt));
-				instance.size.y = Math::Max(0.0f, instance.size.y - (4000.0f * (float)dt));
+				auto trace = Map::Current->LineTrace(traceStart, traceEnd, BspContentFlags::MASK_OPAQUE);
+				hidden = (trace.fraction < 1.0f);
+			}
+
+			const float size = 200.0f;
+			const float sizeSpeed = size * 10.0f;
+
+			if (hidden)
+			{
+				instance.size.x = Math::Max(0.0f, instance.size.x - (sizeSpeed * (float)dt));
+				instance.size.y = Math::Max(0.0f, instance.size.y - (sizeSpeed * (float)dt));
 			}
 			else
 			{
-				instance.size = 200;
+				instance.size.x = Math::Min(size, instance.size.x + (sizeSpeed * (float)dt));
+				instance.size.y = Math::Min(size, instance.size.y + (sizeSpeed * (float)dt));
 			}
 		}
 
-		static const size_t instanceStride = sizeof(BillboardInstance);
 		_instanceBuffer->UpdateBuffer(_instances.data(), 0, _instances.size() * instanceStride);
 
 		glBlendFunc(GL_ONE, GL_ONE);
@@ -87,9 +94,7 @@ namespace Freeking
 
 	void BillboardBatch::AddInstance(const Vector3f& position)
 	{
-		static const size_t instanceStride = sizeof(BillboardInstance);
-
-		_instances.push_back({ position, Vector2f(200, 200), Vector4f(1, 1, 1, 1) });
+		_instances.push_back({ position, Vector2f(0, 0), Vector4f(1, 1, 1, 1) });
 		_instanceBuffer->UpdateBuffer(&_instances[_instances.size() - 1], (_instances.size() - 1) * instanceStride, instanceStride);
 	}
 }

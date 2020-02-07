@@ -32,7 +32,7 @@ namespace Freeking
 		return sampler;
 	}
 
-	const TextureSamplerLibrary::TextureSamplerPtr& TextureSamplerLibrary::Get(const TextureSamplerSettings& settings)
+	const TextureSamplerLibrary::TextureSamplerPtr& TextureSamplerLibrary::Get(const TextureSamplerInitializer& settings)
 	{
 		if (auto it = _samplers.find(settings); it != _samplers.end())
 		{
@@ -44,7 +44,7 @@ namespace Freeking
 		}
 	}
 
-	TextureSampler::TextureSampler(const TextureSamplerSettings& settings) :
+	TextureSampler::TextureSampler(const TextureSamplerInitializer& settings) :
 		_handle(0)
 	{
 		glGenSamplers(1, &_handle);

@@ -89,4 +89,14 @@ namespace Freeking
 
 		return PrimitiveEntity::SetProperty(property);
 	}
+
+	void BrushModelEntity::Trace(const Vector3f& start, const Vector3f& end, TraceResult& trace, const BspContentFlags& brushMask)
+	{
+		if (_modelIndex == 0)
+		{
+			return;
+		}
+
+		trace = Map::Current->TransformedBoxTrace(start, end, 0, 0, Map::Current->GetModelHeadNode(_modelIndex), brushMask, GetPosition(), GetRotation());
+	}
 }

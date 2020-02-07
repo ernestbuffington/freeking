@@ -298,7 +298,7 @@ namespace Freeking
 
 		auto entities = bspFile.GetLumpArray<char>(bspFile.Header.Entities);
 		auto vertices = bspFile.GetLumpArray<Vector3f>(bspFile.Header.Vertices);
-		auto models = bspFile.GetLumpArray<BspModel>(bspFile.Header.Models);
+		_brushModels = bspFile.GetLumpArray<BspModel>(bspFile.Header.Models);
 		auto faces = bspFile.GetLumpArray<BspFace>(bspFile.Header.Faces);
 		auto edges = bspFile.GetLumpArray<BspEdge>(bspFile.Header.Edges);
 		auto faceEdges = bspFile.GetLumpArray<int32_t>(bspFile.Header.FaceEdges);
@@ -355,9 +355,9 @@ namespace Freeking
 		auto packingRoot = rectpack2D::empty_spaces<false>({ lmSize, lmSize });
 		packingRoot.insert({ 16, 16 });
 
-		for (int modelIndex = 0; modelIndex < models.Num(); ++modelIndex)
+		for (int modelIndex = 0; modelIndex < _brushModels.Num(); ++modelIndex)
 		{
-			const auto& model = models[modelIndex];
+			const auto& model = _brushModels[modelIndex];
 			auto brushModel = std::make_shared<BrushModel>();
 			Vector3f boundsMin(model.BoundsMin.x, model.BoundsMin.z, -model.BoundsMin.y);
 			Vector3f boundsMax(model.BoundsMax.x, model.BoundsMax.z, -model.BoundsMax.y);
@@ -849,6 +849,60 @@ namespace Freeking
 		}
 	}
 
+	TraceResult Map::LineTrace(const Vector3f& start, const Vector3f& end, const BspContentFlags& brushMask)
+	{
+		return BoxTrace(start, end, 0, 0, brushMask);
+	}
+
+	TraceResult Map::BoxTrace(const Vector3f& start, const Vector3f& end, const Vector3f& mins, const Vector3f& maxs, const BspContentFlags& brushMask)
+	{
+		TraceResult trace = BoxTrace(start, end, mins, maxs, 0, brushMask);
+		ClipBoxToEntities(start, end, trace, brushMask);
+
+		return trace;
+	}
+
+	void Map::ClipBoxToEntities(const Vector3f& start, const Vector3f& end, TraceResult& tr, const BspContentFlags& brushMask)
+	{
+		for (const auto& entity : _worldEntities)
+		{
+			if (tr.allSolid)
+			{
+				return;
+			}
+
+			TraceResult trace;
+			entity->Trace(start, end, trace, brushMask);
+
+			if (!trace.hit)
+			{
+				continue;
+			}
+
+			if (trace.allSolid || trace.startSolid || trace.fraction < tr.fraction)
+			{
+				if (tr.startSolid)
+				{
+					tr = trace;
+					tr.startSolid = true;
+				}
+				else
+				{
+					tr = trace;
+				}
+			}
+			else if (trace.startSolid)
+			{
+				tr.startSolid = true;
+			}
+		}
+	}
+
+	TraceResult Map::LineTrace(const Vector3f& start, const Vector3f& end, int headNode, const BspContentFlags& brushMask)
+	{
+		return BoxTrace(start, end, 0, 0, headNode, brushMask);
+	}
+
 	TraceResult Map::BoxTrace(const Vector3f& start, const Vector3f& end, const Vector3f& mins, const Vector3f& maxs, int headNode, const BspContentFlags& brushMask)
 	{
 		Vector3f s(start.x, -start.z, start.y);
@@ -893,6 +947,44 @@ namespace Freeking
 		trace.planeNormal = Vector3f(trace.planeNormal.x, trace.planeNormal.z, -trace.planeNormal.y);
 		trace.axisU = Vector3f(trace.axisU.x, trace.axisU.z, -trace.axisU.y);
 		trace.axisV = Vector3f(trace.axisV.x, trace.axisV.z, -trace.axisV.y);
+
+		return trace;
+	}
+
+	TraceResult Map::TransformedBoxTrace(
+		const Vector3f& start,
+		const Vector3f& end,
+		const Vector3f& mins, 
+		const Vector3f& maxs,
+		int headNode,
+		const BspContentFlags& brushMask,
+		const Vector3f& origin, 
+		const Quaternion& angles)
+	{
+		Vector3f start_l = start - origin;
+		Vector3f end_l = end - origin;
+		bool rotated = (angles[0] || angles[1] || angles[2] || angles[3] != 1.0);
+
+		if (rotated)
+		{
+			Quaternion anglesInverse = angles.Inverse();
+			start_l = anglesInverse * start_l;
+			end_l = anglesInverse * end_l;
+		}
+
+		TraceResult trace = BoxTrace(start_l, end_l, mins, maxs, headNode, brushMask);
+
+		if (rotated && trace.fraction != 1.0)
+		{
+			trace.planeNormal = angles * trace.planeNormal;
+			trace.axisU = angles * trace.axisU;
+			trace.axisV = angles * trace.axisV;
+		}
+
+		trace.startPosition = start;
+		trace.endPosition[0] = start[0] + trace.fraction * (end[0] - start[0]);
+		trace.endPosition[1] = start[1] + trace.fraction * (end[1] - start[1]);
+		trace.endPosition[2] = start[2] + trace.fraction * (end[2] - start[2]);
 
 		return trace;
 	}
