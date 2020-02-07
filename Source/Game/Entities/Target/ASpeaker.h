@@ -3,6 +3,11 @@
 #include "SceneEntity.h"
 #include "EnumFlags.h"
 
+namespace Freeking
+{
+    class AudioClip;
+}
+
 namespace Freeking::Entity::Target
 {
     class ASpeaker : public SceneEntity
@@ -34,5 +39,7 @@ namespace Freeking::Entity::Target
         int _attenuation;
         float _volume;
         EnumFlags<SpawnFlags> _spawnFlags;
+
+        AudioClip* _audioClip;
     };
 }

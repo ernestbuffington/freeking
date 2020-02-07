@@ -2,6 +2,7 @@
 #include "LineRenderer.h"
 #include "Audio/AudioDevice.h"
 #include "Audio/AudioClip.h"
+#include <filesystem>
 
 namespace Freeking::Entity::Target
 {
@@ -9,7 +10,8 @@ namespace Freeking::Entity::Target
 		_spawnFlags(SpawnFlags::None),
 		_noise(""),
 		_attenuation(1),
-		_volume(1.0f)
+		_volume(1.0f),
+		_audioClip(nullptr)
 	{
 	}
 
@@ -17,12 +19,17 @@ namespace Freeking::Entity::Target
 	{
 		SceneEntity::Initialize();
 
-		if (_spawnFlags[SpawnFlags::LoopedOn])
+		auto noisePath = std::filesystem::path("sound") / _noise;
+		noisePath.replace_extension("wav");
+
+		if (const auto& audioClip = AudioClip::Library.Get(noisePath.string()))
 		{
-			const auto& sound = AudioClip::Library.Get("sound/" + _noise + ".wav");
-			if (sound)
+			if (_audioClip = audioClip.get())
 			{
-				AudioDevice::Current->Sounds.push_back({ sound->GetBufferId(), GetPosition() });
+				if (_spawnFlags[SpawnFlags::LoopedOn])
+				{
+					AudioDevice::Current->Sounds.push_back({ _audioClip->GetBufferId(), GetPosition() });
+				}
 			}
 		}
 	}
@@ -34,7 +41,10 @@ namespace Freeking::Entity::Target
 
 	void ASpeaker::OnTrigger()
 	{
-		AudioDevice::Current->Play(AudioClip::Library.Get("sound/" + _noise + ".wav").get(), GetPosition());
+		if (_audioClip)
+		{
+			AudioDevice::Current->Play(_audioClip, GetPosition());
+		}
 	}
 
 	bool ASpeaker::SetProperty(const EntityProperty& property)
@@ -43,7 +53,7 @@ namespace Freeking::Entity::Target
 		{
 			return property.ValueAsFlags(_spawnFlags);
 		}
-		else if(property.IsKey("noise"))
+		else if (property.IsKey("noise"))
 		{
 			_noise = property.Value();
 

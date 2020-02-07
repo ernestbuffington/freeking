@@ -20,7 +20,13 @@ namespace Freeking
 
 	void AudioDevice::Play(AudioClip* audioClip, const Vector3f& position)
 	{
+		if (audioClip == nullptr)
+		{
+			return;
+		}
+
 		auto sourceId = _sourceIds[254];
+		alSourceStop(sourceId);
 		alSourcei(sourceId, AL_BUFFER, audioClip->GetBufferId());
 		alSourcei(sourceId, AL_LOOPING, AL_FALSE);
 		alSource3f(sourceId, AL_POSITION, position.x, position.y, position.z);
