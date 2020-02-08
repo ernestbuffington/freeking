@@ -10,14 +10,18 @@ namespace Freeking::Entity::Trigger
 
         ARelay();
 
-		virtual void Initialize() override;
 		virtual void Tick(double dt) override;
 
 	protected:
+
+        virtual void Trigger() override;
 
 		virtual bool SetProperty(const EntityProperty& property) override;
 
     private:
 
+        float _delay;
+        double _timeToTrigger;
+        bool _triggered;
     };
 }

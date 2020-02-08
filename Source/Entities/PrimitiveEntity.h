@@ -44,6 +44,7 @@ namespace Freeking
 		PrimitiveEntity();
 
 		virtual void Tick(double dt) override;
+		virtual void PostTick() override;
 
 		virtual void PreRender(bool translucent) = 0;
 		virtual void RenderOpaque() = 0;

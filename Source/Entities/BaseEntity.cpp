@@ -51,7 +51,11 @@ namespace Freeking
 	void BaseEntity::Trigger()
 	{
 		OnTrigger();
+		TriggerTarget();
+	}
 
+	void BaseEntity::TriggerTarget()
+	{
 		if (!_target.empty())
 		{
 			for (const auto& targetEntity : Map::Current->GetTargetEntities(_target))

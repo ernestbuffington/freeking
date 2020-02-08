@@ -29,10 +29,12 @@ namespace Freeking
 		float _speed;
 		float _angle;
 		float _distance;
-		float _currentDistance;
 		float _wait;
+
+		float _currentDistance;
 		double _timeToClose;
 		bool _open;
+
 		Vector3f _initialPosition;
 	};
 }

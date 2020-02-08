@@ -13,6 +13,11 @@ namespace Freeking
 	void PrimitiveEntity::Tick(double dt)
 	{
 		SceneEntity::Tick(dt);
+	}
+
+	void PrimitiveEntity::PostTick()
+	{
+		SceneEntity::PostTick();
 
 		if (!_hidden && SpriteBatch::DebugDraw)
 		{

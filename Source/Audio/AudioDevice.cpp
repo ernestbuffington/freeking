@@ -25,12 +25,25 @@ namespace Freeking
 			return;
 		}
 
-		auto sourceId = _sourceIds[254];
-		alSourceStop(sourceId);
-		alSourcei(sourceId, AL_BUFFER, audioClip->GetBufferId());
-		alSourcei(sourceId, AL_LOOPING, AL_FALSE);
-		alSource3f(sourceId, AL_POSITION, position.x, position.y, position.z);
-		alSourcePlay(sourceId);
+		for (int i = 0; i < _sourceIds.size(); ++i)
+		{
+			ALenum state;
+			auto sourceId = _sourceIds[i];
+			alGetSourcei(sourceId, AL_SOURCE_STATE, &state);
+
+			if (state == AL_PLAYING)
+			{
+				continue;
+			}
+
+			alSourceStop(sourceId);
+			alSourcei(sourceId, AL_BUFFER, audioClip->GetBufferId());
+			alSourcei(sourceId, AL_LOOPING, AL_FALSE);
+			alSource3f(sourceId, AL_POSITION, position.x, position.y, position.z);
+			alSourcePlay(sourceId);
+
+			break;
+		}
 	}
 
 	void AudioDevice::Play()

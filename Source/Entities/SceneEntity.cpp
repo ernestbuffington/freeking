@@ -41,6 +41,8 @@ namespace Freeking
 	void SceneEntity::PostInitialize()
 	{
 		BaseEntity::PostInitialize();
+
+		UpdateTransform();
 	}
 
 	void SceneEntity::Tick(double dt)

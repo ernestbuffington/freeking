@@ -14,6 +14,7 @@ namespace Freeking
 
 		virtual void Initialize() override;
 		virtual void Tick(double dt) override;
+		virtual void PostTick() override;
 
 		virtual void PreRender(bool translucent) override;
 		virtual void RenderOpaque() override;

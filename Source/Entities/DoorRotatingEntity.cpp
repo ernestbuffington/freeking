@@ -1,12 +1,18 @@
 #include "DoorRotatingEntity.h"
 #include "TimeUtil.h"
+#include "Audio/AudioDevice.h"
+#include "Audio/AudioClip.h"
 
 namespace Freeking
 {
 	DoorRotatingEntity::DoorRotatingEntity() : BrushModelEntity(),
 		_speed(100.0f),
 		_angle(0.0f),
-		_distance(0.0f)
+		_distance(0.0f),
+		_wait(3.0f),
+		_currentDistance(0.0f),
+		_timeToClose(0.0),
+		_open(false)
 	{
 	}
 
@@ -14,7 +20,38 @@ namespace Freeking
 	{
 		BrushModelEntity::Tick(dt);
 
-		SetRotation(Quaternion::FromDegreeYaw(_distance * (Math::SineWave(Time::Now() - _timeSpawned, Math::DegreesToRadians(_speed)) * -1.0f)));
+		if (_open && _wait > 0.0f && Time::Now() >= _timeToClose)
+		{
+			Close();
+		}
+
+		_currentDistance += ((_speed * dt) * (_open ? 1.0f : -1.0f));
+		_currentDistance = Math::Clamp(_currentDistance, 0.0f, _distance);
+
+		SetRotation(Quaternion::FromDegreeYaw(_currentDistance * -1.0f));
+	}
+
+	void DoorRotatingEntity::OnTrigger()
+	{
+		if (!_open)
+		{
+			Open();
+		}
+	}
+
+	void DoorRotatingEntity::Open()
+	{
+		_open = true;
+		_timeToClose = Time::Now() + _wait;
+
+		AudioDevice::Current->Play(AudioClip::Library.Get("sound/world/doors/dr3_strt.wav").get(), GetTransformCenter().Translation());
+	}
+
+	void DoorRotatingEntity::Close()
+	{
+		_open = false;
+
+		AudioDevice::Current->Play(AudioClip::Library.Get("sound/world/doors/dr3_strt.wav").get(), GetTransformCenter().Translation());
 	}
 
 	bool DoorRotatingEntity::SetProperty(const EntityProperty& property)
@@ -26,6 +63,10 @@ namespace Freeking
 		else if (property.IsKey("distance"))
 		{
 			return property.ValueAsFloat(_distance);
+		}
+		else if (property.IsKey("wait"))
+		{
+			return property.ValueAsFloat(_wait);
 		}
 
 		return BrushModelEntity::SetProperty(property);

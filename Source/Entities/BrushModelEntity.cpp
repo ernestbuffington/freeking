@@ -14,6 +14,11 @@ namespace Freeking
 	void BrushModelEntity::Tick(double dt)
 	{
 		PrimitiveEntity::Tick(dt);
+	}
+
+	void BrushModelEntity::PostTick()
+	{
+		PrimitiveEntity::PostTick();
 
 		if (_model && !_hidden && SpriteBatch::DebugDraw)
 		{
