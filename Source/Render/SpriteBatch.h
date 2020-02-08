@@ -27,6 +27,7 @@ namespace Freeking
 		static Matrix4x4 ViewMatrix;
 		static float ViewportWidth;
 		static float ViewportHeight;
+		static bool DebugDraw;
 
 		SpriteBatch(size_t = 1000);
 

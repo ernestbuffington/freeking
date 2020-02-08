@@ -15,6 +15,7 @@ namespace Freeking
 	Matrix4x4 SpriteBatch::ViewMatrix;
 	float SpriteBatch::ViewportWidth;
 	float SpriteBatch::ViewportHeight;
+	bool SpriteBatch::DebugDraw = true;
 
 	std::shared_ptr<Shader> SpriteBatch::GetSpriteShader()
 	{

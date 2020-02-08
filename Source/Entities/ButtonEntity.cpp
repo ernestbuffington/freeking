@@ -1,6 +1,8 @@
 #include "ButtonEntity.h"
 #include "Map.h"
 #include "TimeUtil.h"
+#include "Audio/AudioDevice.h"
+#include "Audio/AudioClip.h"
 
 namespace Freeking
 {
@@ -28,6 +30,11 @@ namespace Freeking
 		BrushModelEntity::Tick(dt);
 
 		SetPosition(_initialPosition.MulAdd(_moveDistance * Math::SineWave(Time::Now() - _timeSpawned, _speed), _moveDirection));
+	}
+
+	void ButtonEntity::OnTrigger()
+	{
+		AudioDevice::Current->Play(AudioClip::Library.Get("sound/world/switches/wheel.wav").get(), GetTransformCenter().Translation());
 	}
 
 	bool ButtonEntity::SetProperty(const EntityProperty& property)

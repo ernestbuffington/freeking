@@ -202,7 +202,6 @@ namespace Freeking
 		SpriteBatch::Debug = spriteBatch;
 		LineRenderer::Debug = lineRenderer;
 		FreeCamera camera;
-		bool debug = true;
 		auto font = Font::Library.Get("Fonts/Roboto-Bold.json");
 		auto map = std::make_shared<Map>(mapName);
 
@@ -277,7 +276,7 @@ namespace Freeking
 
 			if (Input::JustPressed(Button::KeySPACE))
 			{
-				debug = !debug;
+				SpriteBatch::DebugDraw = !SpriteBatch::DebugDraw;
 			}
 
 			auto inputForce = Vector3f(0.0f, 0.0f, 0.0f);
@@ -372,7 +371,7 @@ namespace Freeking
 
 			billboards.Draw(deltaTime, camera.GetPosition(), camera.GetRotation().Forward());
 
-			if (debug)
+			if (SpriteBatch::DebugDraw)
 			{
 				for (const auto& entDef : map->GetEntityProperties())
 				{

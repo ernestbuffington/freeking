@@ -15,6 +15,8 @@ namespace Freeking
 
 	protected:
 
+		virtual void OnTrigger() override;
+
 		virtual bool SetProperty(const EntityProperty& property) override;
 
 		virtual void InitializeAngleProperty(float angle) override;

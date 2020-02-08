@@ -15,7 +15,7 @@ namespace Freeking
 	{
 		PrimitiveEntity::Tick(dt);
 
-		if (_model && !_hidden)
+		if (_model && !_hidden && SpriteBatch::DebugDraw)
 		{
 			auto position = GetTransformCenter().Translation();
 

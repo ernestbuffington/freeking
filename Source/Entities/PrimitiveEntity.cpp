@@ -14,7 +14,7 @@ namespace Freeking
 	{
 		SceneEntity::Tick(dt);
 
-		if (!_hidden)
+		if (!_hidden && SpriteBatch::DebugDraw)
 		{
 			const auto& transformCenter = GetTransformCenter();
 			const auto& viewMatrix = SpriteBatch::ViewMatrix;
