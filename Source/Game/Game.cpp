@@ -229,8 +229,6 @@ namespace Freeking
 		auto viewProjId = Shader::Globals.GetMatrixId("viewProj");
 		auto viewportSizeId = Shader::Globals.GetFloatId("viewportSize");
 
-		audio.Play();
-
 		TraceResult tr;
 
 		while (running)

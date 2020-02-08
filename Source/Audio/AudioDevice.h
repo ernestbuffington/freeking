@@ -13,12 +13,6 @@ namespace Freeking
 {
 	class AudioClip;
 
-	struct PlaySound
-	{
-		uint32_t bufferId;
-		Vector3f position;
-	};
-
 	class AudioDevice
 	{
 	public:
@@ -28,12 +22,9 @@ namespace Freeking
 		AudioDevice();
 		~AudioDevice();
 
-		void Play();
-		void Play(AudioClip* audioClip, const Vector3f& position);
+		void Play(AudioClip* audioClip, const Vector3f& position, bool loop = false, bool relative = false);
 
 		void SetListenerTransform(const Vector3f& position, const Quaternion& rotation);
-
-		std::vector<PlaySound> Sounds;
 
 	private:
 

@@ -17,5 +17,6 @@ namespace Freeking
 		static bool TryParseVector(const std::string& s, Vector3f& v);
 		static std::vector<std::string> SplitString(const std::string& s, const std::string& delimiter);
 		static inline Vector3f ConvertVector(const Vector3f& v) { return Vector3f(v.x, v.z, -v.y); }
+		static float RandomFloat(float a, float b);
 	};
 }

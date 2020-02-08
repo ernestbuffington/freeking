@@ -18,7 +18,7 @@ namespace Freeking
 		ShutdownOpenAL();
 	}
 
-	void AudioDevice::Play(AudioClip* audioClip, const Vector3f& position)
+	void AudioDevice::Play(AudioClip* audioClip, const Vector3f& position, bool loop, bool relative)
 	{
 		if (audioClip == nullptr)
 		{
@@ -38,27 +38,22 @@ namespace Freeking
 
 			alSourceStop(sourceId);
 			alSourcei(sourceId, AL_BUFFER, audioClip->GetBufferId());
-			alSourcei(sourceId, AL_LOOPING, AL_FALSE);
-			alSource3f(sourceId, AL_POSITION, position.x, position.y, position.z);
+			alSourcei(sourceId, AL_LOOPING, loop ? AL_TRUE : AL_FALSE);
+			alSourcei(sourceId, AL_SOURCE_RELATIVE, relative ? AL_TRUE : AL_FALSE);
+
+			if (relative)
+			{
+				alSource3f(sourceId, AL_POSITION, 0, 0, 0);
+			}
+			else
+			{
+				alSource3f(sourceId, AL_POSITION, position.x, position.y, position.z);
+			}
+
 			alSourcePlay(sourceId);
 
 			break;
 		}
-	}
-
-	void AudioDevice::Play()
-	{
-		for (int i = 0; i < Sounds.size(); ++i)
-		{
-			const auto& sound = Sounds[i];
-			auto sourceId = _sourceIds[i];
-			alSourcei(sourceId, AL_BUFFER, sound.bufferId);
-			alSource3f(sourceId, AL_POSITION, sound.position.x, sound.position.y, sound.position.z);
-		}
-
-		alSourcePlayv((int)Sounds.size(), _sourceIds.data());
-
-		Sounds.clear();
 	}
 
 	void AudioDevice::SetListenerTransform(const Vector3f& position, const Quaternion& rotation)
@@ -93,7 +88,7 @@ namespace Freeking
 
 		for (const auto& sourceId : _sourceIds)
 		{
-			alSourcei(sourceId, AL_LOOPING, AL_TRUE);
+			alSourcei(sourceId, AL_LOOPING, AL_FALSE);
 			alSourcef(sourceId, AL_PITCH, 1);
 			alSourcef(sourceId, AL_GAIN, 1);
 			alSourcei(sourceId, AL_SOURCE_RELATIVE, AL_FALSE);

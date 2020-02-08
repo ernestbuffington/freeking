@@ -12,6 +12,8 @@ namespace Freeking::Entity::Trigger
 
 	void ARelay::Tick(double dt)
 	{
+		BaseEntity::Tick(dt);
+
 		if (_triggered && _timeToTrigger < Time::Now())
 		{
 			_triggered = false;

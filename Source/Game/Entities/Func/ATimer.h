@@ -19,5 +19,8 @@ namespace Freeking::Entity::Func
 
     private:
 
+        float _wait;
+        float _random;
+        double _nextTriggerTime;
     };
 }

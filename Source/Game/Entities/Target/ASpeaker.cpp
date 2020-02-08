@@ -28,7 +28,7 @@ namespace Freeking::Entity::Target
 			{
 				if (_spawnFlags[SpawnFlags::LoopedOn])
 				{
-					AudioDevice::Current->Sounds.push_back({ _audioClip->GetBufferId(), GetPosition() });
+					AudioDevice::Current->Play(_audioClip, GetPosition(), true);
 				}
 			}
 		}
@@ -43,7 +43,7 @@ namespace Freeking::Entity::Target
 	{
 		if (_audioClip)
 		{
-			AudioDevice::Current->Play(_audioClip, GetPosition());
+			AudioDevice::Current->Play(_audioClip, GetPosition(), false, _attenuation == -1);
 		}
 	}
 
@@ -61,18 +61,7 @@ namespace Freeking::Entity::Target
 		}
 		else if (property.IsKey("attenuation"))
 		{
-			int attenuation;
-
-			if (property.ValueAsInt(attenuation))
-			{
-				if (attenuation == 0) _attenuation = 1;
-				else if (attenuation == -1) _attenuation = 0;
-				else _attenuation = attenuation;
-
-				return true;
-			}
-
-			return false;
+			return property.ValueAsInt(_attenuation);
 		}
 		else if (property.IsKey("volume"))
 		{

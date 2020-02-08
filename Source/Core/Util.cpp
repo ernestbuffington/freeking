@@ -1,8 +1,16 @@
 #include "Util.h"
 #include <charconv>
+#include <random>
 
 namespace Freeking
 {
+	float Util::RandomFloat(float a, float b)
+	{
+		static std::random_device rd;
+		static std::mt19937 mt(rd());
+		return std::uniform_real_distribution<float>(a, b)(mt);
+	}
+
 	Vector2f Util::ScreenSpaceToPixelPosition(const Vector2f& point, const Vector4i& viewport)
 	{
 		return Vector2f(
