@@ -28,7 +28,7 @@ namespace Freeking::Entity::Target
 			{
 				if (_spawnFlags[SpawnFlags::LoopedOn])
 				{
-					AudioDevice::Current->Play(_audioClip, GetPosition(), true);
+					AudioDevice::Current->Play(_audioClip, GetPosition(), true, false, true);
 				}
 			}
 		}

@@ -22,11 +22,20 @@ namespace Freeking
 		AudioDevice();
 		~AudioDevice();
 
-		void Play(AudioClip* audioClip, const Vector3f& position, bool loop = false, bool relative = false);
+		void Play(AudioClip* audioClip, const Vector3f& position, bool loop = false, bool relative = false, bool queued = false);
+		void FlushQueue();
 
 		void SetListenerTransform(const Vector3f& position, const Quaternion& rotation);
 
 	private:
+
+		struct QueuedAudio
+		{
+			AudioClip* audioClip;
+			Vector3f position;
+			bool loop;
+			bool relative;
+		};
 
 		void InitializeOpenAl();
 		void ShutdownOpenAL();
@@ -38,5 +47,7 @@ namespace Freeking
 
 		ALCint _numMonoSources;
 		ALCint _numStereoSources;
+
+		std::vector<QueuedAudio> _audioQueue;
 	};
 }

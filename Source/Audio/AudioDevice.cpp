@@ -18,10 +18,77 @@ namespace Freeking
 		ShutdownOpenAL();
 	}
 
-	void AudioDevice::Play(AudioClip* audioClip, const Vector3f& position, bool loop, bool relative)
+	void AudioDevice::FlushQueue()
+	{
+		if (_audioQueue.empty())
+		{
+			return;
+		}
+
+		std::vector<uint32_t> sourceIds;
+
+		for (int i = 0, queueIndex = 0; i < _sourceIds.size(); ++i)
+		{
+			ALenum state;
+			auto sourceId = _sourceIds[i];
+			alGetSourcei(sourceId, AL_SOURCE_STATE, &state);
+
+			if (state == AL_PLAYING)
+			{
+				continue;
+			}
+
+			const auto& queuedAudio = _audioQueue.at(queueIndex);
+			sourceIds.push_back(sourceId);
+
+			alSourceStop(sourceId);
+			alSourcei(sourceId, AL_BUFFER, queuedAudio.audioClip->GetBufferId());
+			alSourcei(sourceId, AL_LOOPING, queuedAudio.loop ? AL_TRUE : AL_FALSE);
+			alSourcei(sourceId, AL_SOURCE_RELATIVE, queuedAudio.relative ? AL_TRUE : AL_FALSE);
+
+			if (queuedAudio.relative)
+			{
+				alSource3f(sourceId, AL_POSITION, 0, 0, 0);
+			}
+			else
+			{
+				alSource3f(sourceId, AL_POSITION, queuedAudio.position.x, queuedAudio.position.y, queuedAudio.position.z);
+			}
+
+			queueIndex++;
+
+			if (queueIndex < _audioQueue.size())
+			{
+				continue;
+			}
+			else
+			{
+				break;
+			}
+		}
+
+		alSourcePlayv(sourceIds.size(), sourceIds.data());
+
+		_audioQueue.clear();
+	}
+
+	void AudioDevice::Play(AudioClip* audioClip, const Vector3f& position, bool loop, bool relative, bool queued)
 	{
 		if (audioClip == nullptr)
 		{
+			return;
+		}
+
+		if (queued)
+		{
+			_audioQueue.push_back(
+				{
+					audioClip,
+					position,
+					loop,
+					relative
+				});
+
 			return;
 		}
 
