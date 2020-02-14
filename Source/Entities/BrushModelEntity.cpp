@@ -3,6 +3,7 @@
 #include "Util.h"
 #include "LineRenderer.h"
 #include "SpriteBatch.h"
+#include "Renderer.h"
 
 namespace Freeking
 {
@@ -26,11 +27,11 @@ namespace Freeking
 	{
 		PrimitiveEntity::PostTick();
 
-		if (_model && !_hidden && SpriteBatch::DebugDraw)
+		if (_model && !_hidden && Renderer::DebugDraw)
 		{
 			auto position = GetTransformCenter().Translation();
 
-			const auto& viewMatrix = SpriteBatch::ViewMatrix;
+			const auto& viewMatrix = Renderer::ViewMatrix;
 			float distance = position.LengthBetween(viewMatrix.InverseTranslation());
 
 			if (distance < 512.0f)
@@ -40,9 +41,9 @@ namespace Freeking
 				LineRenderer::Debug->DrawBox(GetTransform(), GetLocalMinBounds(), GetLocalMaxBounds(), LinearColor(0, 1, 0, alpha));
 
 				Vector2f screenPosition;
-				if (Util::WorldPointToNormalisedScreenPoint(position, screenPosition, SpriteBatch::ProjectionMatrix, SpriteBatch::ViewMatrix, 2048.0f))
+				if (Util::WorldPointToNormalisedScreenPoint(position, screenPosition, Renderer::ProjectionMatrix, Renderer::ViewMatrix, 2048.0f))
 				{
-					screenPosition = Util::ScreenSpaceToPixelPosition(screenPosition, Vector4i(0, 0, (int)SpriteBatch::ViewportWidth, (int)SpriteBatch::ViewportHeight));
+					screenPosition = Util::ScreenSpaceToPixelPosition(screenPosition, Vector4i(0, 0, (int)Renderer::ViewportWidth, (int)Renderer::ViewportHeight));
 					screenPosition.x = Math::Round(screenPosition.x);
 					screenPosition.y = Math::Round(screenPosition.y);
 					auto text = _classname + " (*" + std::to_string(_modelIndex) + ")";

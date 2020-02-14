@@ -1,6 +1,6 @@
 #include "PrimitiveEntity.h"
 #include "LineRenderer.h"
-#include "SpriteBatch.h"
+#include "Renderer.h"
 
 namespace Freeking
 {
@@ -20,10 +20,10 @@ namespace Freeking
 	{
 		SceneEntity::PostTick();
 
-		if (!_hidden && SpriteBatch::DebugDraw)
+		if (!_hidden && Renderer::DebugDraw)
 		{
 			const auto& transformCenter = GetTransformCenter();
-			const auto& viewMatrix = SpriteBatch::ViewMatrix;
+			const auto& viewMatrix = Renderer::ViewMatrix;
 			float distance = transformCenter.Translation().LengthBetween(viewMatrix.InverseTranslation());
 
 			if (distance < 512.0f)

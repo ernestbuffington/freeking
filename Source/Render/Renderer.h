@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Matrix4x4.h"
 #include <vector>
 
 namespace Freeking
@@ -16,6 +17,12 @@ namespace Freeking
 	class Renderer
 	{
 	public:
+
+		static Matrix4x4 ProjectionMatrix;
+		static Matrix4x4 ViewMatrix;
+		static float ViewportWidth;
+		static float ViewportHeight;
+		static bool DebugDraw;
 
 		static void Draw(
 			VertexBinding* binding,

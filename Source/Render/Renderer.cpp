@@ -4,6 +4,12 @@
 
 namespace Freeking
 {
+	Matrix4x4 Renderer::ProjectionMatrix;
+	Matrix4x4 Renderer::ViewMatrix;
+	float Renderer::ViewportWidth;
+	float Renderer::ViewportHeight;
+	bool Renderer::DebugDraw = true;
+
 	static inline GLenum GLDrawPrimitive(DrawPrimitive e)
 	{
 		switch (e)

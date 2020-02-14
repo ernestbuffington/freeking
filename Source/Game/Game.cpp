@@ -151,14 +151,6 @@ namespace Freeking
 		ImGui::End();
 	}
 
-	struct TraceHit
-	{
-		Vector3f position;
-		Vector3f normal;
-		Vector3f tangent;
-		Vector3f binormal;
-	};
-
 	void Game::Run()
 	{
 		Time::SetTimeApplicationStart();
@@ -191,7 +183,6 @@ namespace Freeking
 		auto pink = Texture2D::Library.Get("pink");
 		auto crosshair = Texture2D::Library.Get("Textures/crosshair.tga");
 
-		Renderer renderer;
 		BillboardBatch billboards;
 		LightFlares::Billboards = &billboards;
 
@@ -275,7 +266,7 @@ namespace Freeking
 
 			if (Input::JustPressed(Button::F1))
 			{
-				SpriteBatch::DebugDraw = !SpriteBatch::DebugDraw;
+				Renderer::DebugDraw = !Renderer::DebugDraw;
 			}
 
 			auto inputForce = Vector3f(0.0f, 0.0f, 0.0f);
@@ -329,10 +320,10 @@ namespace Freeking
 			Shader::Globals.SetValue(viewProjId, viewProjectionMatrix);
 			Shader::Globals.SetValue(viewportSizeId, Vector2f(static_cast<float>(_viewportWidth), static_cast<float>(_viewportHeight)));
 
-			SpriteBatch::ProjectionMatrix = projectionMatrix;
-			SpriteBatch::ViewMatrix = viewMatrix;
-			SpriteBatch::ViewportWidth = static_cast<float>(_viewportWidth);
-			SpriteBatch::ViewportHeight = static_cast<float>(_viewportHeight);
+			Renderer::ProjectionMatrix = projectionMatrix;
+			Renderer::ViewMatrix = viewMatrix;
+			Renderer::ViewportWidth = static_cast<float>(_viewportWidth);
+			Renderer::ViewportHeight = static_cast<float>(_viewportHeight);
 
 			if (Input::JustPressed(Button::MouseLeft))
 			{
@@ -354,7 +345,7 @@ namespace Freeking
 					tr.axisU,
 					tr.axisV,
 					4.0f,
-					LinearColor((tr.planeNormal.x + 1.0 * 0.5f), (tr.planeNormal.y + 1.0 * 0.5f), (tr.planeNormal.z + 1.0 * 0.5f), 1.0f));
+					LinearColor((tr.planeNormal.x + 1.0f * 0.5f), (tr.planeNormal.y + 1.0f * 0.5f), (tr.planeNormal.z + 1.0f * 0.5f), 1.0f));
 			}
 
 			map->Tick(deltaTime);
@@ -373,7 +364,7 @@ namespace Freeking
 
 			billboards.Draw(deltaTime, camera.GetPosition(), camera.GetRotation().Forward());
 
-			if (SpriteBatch::DebugDraw)
+			if (Renderer::DebugDraw)
 			{
 				for (const auto& entDef : map->GetEntityProperties())
 				{
