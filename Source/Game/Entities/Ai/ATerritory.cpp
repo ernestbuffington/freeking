@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Ai
 {
-	ATerritory::ATerritory() : BrushModelEntity()
+	ATerritory::ATerritory() : BrushTriggerEntity()
 	{
 	}
 }

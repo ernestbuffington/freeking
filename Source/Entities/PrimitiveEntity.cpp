@@ -6,7 +6,8 @@ namespace Freeking
 {
 	PrimitiveEntity::PrimitiveEntity() : SceneEntity(),
 		_shader(nullptr),
-		_hidden(false)
+		_hidden(false),
+		_collisionEnabled(false)
 	{
 	}
 
@@ -33,7 +34,7 @@ namespace Freeking
 		}
 	}
 
-	void PrimitiveEntity::Trace(const Vector3f& start, const Vector3f& end, TraceResult& trace, const BspContentFlags& brushMask)
+	void PrimitiveEntity::Trace(const Vector3f& start, const Vector3f& end, const Vector3f& mins, const Vector3f& maxs, TraceResult& trace, const BspContentFlags& brushMask)
 	{
 	}
 }

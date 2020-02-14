@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Ai
 {
-    class ATerritory : public BrushModelEntity
+    class ATerritory : public BrushTriggerEntity
     {
     public:
 

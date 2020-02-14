@@ -202,6 +202,7 @@ namespace Freeking
 		SpriteBatch::Debug = spriteBatch;
 		LineRenderer::Debug = lineRenderer;
 		FreeCamera camera;
+		camera.MoveTo(Vector3f::Up * 100.0f);
 		auto font = Font::Library.Get("Fonts/Roboto-Bold.json");
 		auto map = std::make_shared<Map>(mapName);
 
@@ -272,7 +273,7 @@ namespace Freeking
 				camera.LookDelta(mouseDeltaX * 0.25f, mouseDeltaY * 0.25f);
 			}
 
-			if (Input::JustPressed(Button::KeySPACE))
+			if (Input::JustPressed(Button::F1))
 			{
 				SpriteBatch::DebugDraw = !SpriteBatch::DebugDraw;
 			}
@@ -282,12 +283,14 @@ namespace Freeking
 			if (Input::IsDown(Button::KeyS)) inputForce -= Vector3f(0.0f, 0.0f, 1.0f);
 			if (Input::IsDown(Button::KeyA)) inputForce += Vector3f(1.0f, 0.0f, 0.0f);
 			if (Input::IsDown(Button::KeyD)) inputForce -= Vector3f(1.0f, 0.0f, 0.0f);
+			
 			if (inputForce.SquaredLength() > 0.0f)
 			{
 				inputForce = inputForce.Normalise();
-				inputForce *= Input::IsDown(Button::KeyLSHIFT) ? 600.0f : 100.0f;
-				camera.Move(inputForce, static_cast<float>(deltaTime));
+				inputForce *= Input::IsDown(Button::KeyLSHIFT) ? 1000.0f : (Input::IsDown(Button::KeyLCONTROL) ? 50.0f : 500.0f);
 			}
+
+			camera.Move(inputForce, static_cast<float>(deltaTime));
 
 			audio.SetListenerTransform(camera.GetPosition(), camera.GetRotation());
 			audio.FlushQueue();

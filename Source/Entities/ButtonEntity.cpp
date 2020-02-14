@@ -10,7 +10,10 @@ namespace Freeking
 		_speed(40.0f),
 		_angle(0.0f),
 		_lip(4.0f),
-		_moveDistance(0.0f)
+		_moveDistance(0.0f),
+		_currentDistance(0.0f),
+		_timeToUnpress(0.0),
+		_pressed(false)
 	{
 	}
 
@@ -29,11 +32,27 @@ namespace Freeking
 	{
 		BrushModelEntity::Tick(dt);
 
-		SetPosition(_initialPosition.MulAdd(_moveDistance * Math::SineWave(Time::Now() - _timeSpawned, _speed), _moveDirection));
+		if (_pressed && Time::Now() >= _timeToUnpress)
+		{
+			_pressed = false;
+		}
+
+		_currentDistance += ((_speed * dt) * (_pressed ? 1.0f : -1.0f));
+		_currentDistance = Math::Clamp(_currentDistance, 0.0f, _moveDistance);
+
+		SetPosition(_initialPosition.MulAdd(_currentDistance, _moveDirection));
 	}
 
 	void ButtonEntity::OnTrigger()
 	{
+		if (_pressed)
+		{
+			return;
+		}
+
+		_pressed = true;
+		_timeToUnpress = Time::Now() + 3.0;
+
 		AudioDevice::Current->Play(AudioClip::Library.Get("sound/world/switches/wheel.wav").get(), GetTransformCenter().Translation());
 	}
 

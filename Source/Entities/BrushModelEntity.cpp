@@ -6,9 +6,15 @@
 
 namespace Freeking
 {
+	BrushTriggerEntity::BrushTriggerEntity() : BrushModelEntity()
+	{
+		_collisionEnabled = false;
+	}
+
 	BrushModelEntity::BrushModelEntity() : PrimitiveEntity(),
 		_modelIndex(-1)
 	{
+		_collisionEnabled = true;
 	}
 
 	void BrushModelEntity::Tick(double dt)
@@ -102,13 +108,13 @@ namespace Freeking
 		return PrimitiveEntity::SetProperty(property);
 	}
 
-	void BrushModelEntity::Trace(const Vector3f& start, const Vector3f& end, TraceResult& trace, const BspContentFlags& brushMask)
+	void BrushModelEntity::Trace(const Vector3f& start, const Vector3f& end, const Vector3f& mins, const Vector3f& maxs, TraceResult& trace, const BspContentFlags& brushMask)
 	{
 		if (_modelIndex == 0 || _hidden)
 		{
 			return;
 		}
 
-		trace = Map::Current->TransformedBoxTrace(start, end, 0, 0, Map::Current->GetModelHeadNode(_modelIndex), brushMask, GetPosition(), GetRotation());
+		trace = Map::Current->TransformedBoxTrace(start, end, mins, maxs, Map::Current->GetModelHeadNode(_modelIndex), brushMask, GetPosition(), GetRotation());
 	}
 }

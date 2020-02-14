@@ -392,7 +392,7 @@ namespace Freeking
 
 		bool operator!=(const Vector3<T>& v) const
 		{
-			return !(*this == v);
+			return (v.x != x) || (v.y != y) || (v.z != z);
 		}
 
 		bool operator<(const Vector3<T>& v) const
@@ -569,6 +569,25 @@ namespace Freeking
 		Vector3<T> MulAdd(T a, const Vector3<T>& b) const
 		{
 			return Vector3<T>(std::fma(b.x, a, x), std::fma(b.y, a, y), std::fma(b.z, a, z));
+		}
+
+		void ProjectOntoPlane(const Vector3<T>& normal, const float overBounce = 1.0f)
+		{
+			float backoff = Dot(normal);
+
+			if (overBounce != 1.0)
+			{
+				if (backoff < 0)
+				{
+					backoff *= overBounce;
+				}
+				else
+				{
+					backoff /= overBounce;
+				}
+			}
+
+			*this -= backoff * normal;
 		}
 
 		const T* Base() const

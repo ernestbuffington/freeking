@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Trigger
 {
-	AMultiple::AMultiple() : BrushModelEntity()
+	AMultiple::AMultiple() : BrushTriggerEntity()
 	{
 	}
 }

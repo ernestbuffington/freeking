@@ -30,6 +30,12 @@ namespace Freeking
 		void UpdateTransform();
 		void SetRotation(float pitch, float yaw, float roll);
 
+		void ApplyGravity(double dt);
+		void ApplyFriction(double friction, double dt);
+		void ApplyAcceleration(const Vector3f& wishDirection, double wishSpeed, double acceleration, double dt);
+
+		void FlyMove(const Vector3f& force, float dt);
+
 		float _pitch;
 		float _yaw;
 		float _roll;
@@ -37,5 +43,9 @@ namespace Freeking
 		Vector3f _position;
 		Quaternion _rotation;
 		Matrix4x4 _transform;
+
+		Vector3f _movementPosition;
+		Vector3f _movementVelocity;
+		bool _noclip;
 	};
 }

@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Trigger
 {
-	AUnlock::AUnlock() : BrushModelEntity()
+	AUnlock::AUnlock() : BrushTriggerEntity()
 	{
 	}
 }

@@ -355,11 +355,8 @@ namespace Freeking
 
 		pf.Start();
 
-		int lmSize = 2048;
+		int lmSize = 4096;
 		auto lightmapImage = std::make_shared<LightmapImage>(lmSize, lmSize);
-
-		std::array<uint8_t, (16 * 16) * 3> blackPixels = { 0 };
-		lightmapImage->Insert(0, 0, 16, 16, blackPixels.data());
 		auto packingRoot = rectpack2D::empty_spaces<false>({ lmSize, lmSize });
 
 		for (int modelIndex = 0; modelIndex < _brushModels.Num(); ++modelIndex)
@@ -636,7 +633,7 @@ namespace Freeking
 			}
 			else
 			{
-				offset = 
+				offset =
 					fabs(extents[0] * plane.Normal[0]) +
 					fabs(extents[1] * plane.Normal[1]) +
 					fabs(extents[2] * plane.Normal[2]);
@@ -740,7 +737,7 @@ namespace Freeking
 				continue;
 			}
 
-			ClipBoxToBrush(mins, maxs, trace.startPosition, trace.endPosition, trace, brush, isPoint);
+			ClipBoxToBrush(trace.startPosition, trace.endPosition, mins, maxs, trace, brush, isPoint);
 
 			if (!trace.fraction)
 			{
@@ -749,24 +746,25 @@ namespace Freeking
 		}
 	}
 
-	void Map::ClipBoxToBrush(const Vector3f& mins, const Vector3f& maxs, const Vector3f& p1, const Vector3f& p2, TraceResult& trace, const BspBrush& brush, bool isPoint)
+	void Map::ClipBoxToBrush(const Vector3f& start, const Vector3f& end, const Vector3f& mins, const Vector3f& maxs, TraceResult& trace, const BspBrush& brush, bool isPoint)
 	{
 		if (brush.NumSides == 0)
 		{
 			return;
 		}
 
+		float enterFrac = -1.0;
+		float leaveFrac = 1.0;
 		bool getout = false;
 		bool startout = false;
-		float enterfrac = -1;
-		float leavefrac = 1;
-		float dist;
 		const BspBrushSide* clipBrushSide = nullptr;
 
 		for (int i = 0; i < brush.NumSides; i++)
 		{
 			const BspBrushSide& side = _brushSides[brush.FirstSide + i];
 			const BspPlane& plane = _planes[side.PlaneNum];
+
+			float dist = plane.Distance;
 
 			if (!isPoint)
 			{
@@ -784,16 +782,15 @@ namespace Freeking
 					}
 				}
 
-				dist = Vector3f::Dot(ofs, plane.Normal);
-				dist = plane.Distance - dist;
+				dist -= Vector3f::Dot(ofs, plane.Normal);
 			}
 			else
 			{
 				dist = plane.Distance;
 			}
 
-			float d1 = Vector3f::Dot(p1, plane.Normal) - dist;
-			float d2 = Vector3f::Dot(p2, plane.Normal) - dist;
+			float d1 = Vector3f::Dot(start, plane.Normal) - dist;
+			float d2 = Vector3f::Dot(end, plane.Normal) - dist;
 
 			if (d2 > 0)
 			{
@@ -805,7 +802,7 @@ namespace Freeking
 				startout = true;
 			}
 
-			if (d1 > 0 && d2 >= d1)
+			if (d1 > 0 && (d2 >= 0.125 || d2 >= d1))
 			{
 				return;
 			}
@@ -817,19 +814,31 @@ namespace Freeking
 
 			if (d1 > d2)
 			{
-				float f = (d1 - 0.03125f) / (d1 - d2);
-				if (f > enterfrac)
+				float f = (d1 - 0.125) / (d1 - d2);
+
+				if (f < 0)
 				{
-					enterfrac = f;
+					f = 0;
+				}
+
+				if (f > enterFrac)
+				{
+					enterFrac = f;
 					clipBrushSide = &side;
 				}
 			}
 			else
 			{
-				float f = (d1 + 0.03125f) / (d1 - d2);
-				if (f < leavefrac)
+				float f = (d1 + 0.125) / (d1 - d2);
+
+				if (f > 1)
 				{
-					leavefrac = f;
+					f = 1;
+				}
+
+				if (f < leaveFrac)
+				{
+					leaveFrac = f;
 				}
 			}
 		}
@@ -841,18 +850,19 @@ namespace Freeking
 			if (!getout)
 			{
 				trace.allSolid = true;
+				trace.fraction = 0;
 			}
 
 			return;
 		}
 
-		if (enterfrac < leavefrac)
+		if (enterFrac < leaveFrac)
 		{
-			if (enterfrac > -1 && enterfrac < trace.fraction)
+			if (enterFrac > -1 && enterFrac < trace.fraction)
 			{
-				if (enterfrac < 0)
+				if (enterFrac < 0)
 				{
-					enterfrac = 0;
+					enterFrac = 0;
 				}
 
 				if (clipBrushSide)
@@ -861,7 +871,7 @@ namespace Freeking
 					const BspTextureInfo& clipTextureInfo = _textureInfo[clipBrushSide->TexInfo];
 
 					trace.hit = true;
-					trace.fraction = enterfrac;
+					trace.fraction = Math::Clamp(enterFrac, 0.0f, 1.0f);
 					trace.planeNormal = clipPlane.Normal;
 					trace.planeDistance = clipPlane.Distance;
 					trace.axisU = Vector3f::Cross(clipPlane.Normal, clipTextureInfo.AxisU);
@@ -886,12 +896,12 @@ namespace Freeking
 	TraceResult Map::BoxTrace(const Vector3f& start, const Vector3f& end, const Vector3f& mins, const Vector3f& maxs, const BspContentFlags& brushMask)
 	{
 		TraceResult trace = BoxTrace(start, end, mins, maxs, 0, brushMask);
-		ClipBoxToEntities(start, end, trace, brushMask);
+		ClipBoxToEntities(start, end, mins, maxs, trace, brushMask);
 
 		return trace;
 	}
 
-	void Map::ClipBoxToEntities(const Vector3f& start, const Vector3f& end, TraceResult& tr, const BspContentFlags& brushMask)
+	void Map::ClipBoxToEntities(const Vector3f& start, const Vector3f& end, const Vector3f& mins, const Vector3f& maxs, TraceResult& tr, const BspContentFlags& brushMask)
 	{
 		for (const auto& entity : _worldEntities)
 		{
@@ -900,8 +910,13 @@ namespace Freeking
 				return;
 			}
 
+			if (!entity->IsCollisionEnabled())
+			{
+				continue;
+			}
+
 			TraceResult trace;
-			entity->Trace(start, end, trace, brushMask);
+			entity->Trace(start, end, mins, maxs, trace, brushMask);
 
 			if (!trace.hit)
 			{
@@ -941,8 +956,6 @@ namespace Freeking
 
 		TraceResult trace;
 		std::memset(&trace, 0, sizeof(trace));
-		trace.startPosition = s;
-		trace.endPosition = e;
 		trace.fraction = 1.0f;
 		trace.hit = false;
 
@@ -958,10 +971,11 @@ namespace Freeking
 		else
 		{
 			isPoint = false;
-			extents[0] = -mins[0] > maxs[0] ? -mins[0] : maxs[0];
-			extents[1] = -mins[1] > maxs[1] ? -mins[1] : maxs[1];
-			extents[2] = -mins[2] > maxs[2] ? -mins[2] : maxs[2];
+			extents = (maxs - mins);
 		}
+
+		trace.startPosition = s;
+		trace.endPosition = e;
 
 		RecursiveHullCheck(headNode, 0, 1, mins, maxs, s, e, trace, isPoint, extents, brushMask);
 
@@ -972,9 +986,13 @@ namespace Freeking
 			trace.endPosition[0] = start[0] + trace.fraction * (end[0] - start[0]);
 			trace.endPosition[1] = start[1] + trace.fraction * (end[1] - start[1]);
 			trace.endPosition[2] = start[2] + trace.fraction * (end[2] - start[2]);
-			trace.planeNormal = Vector3f(trace.planeNormal.x, trace.planeNormal.z, -trace.planeNormal.y);
+			trace.planeNormal = Vector3f(trace.planeNormal.x, trace.planeNormal.z, -trace.planeNormal.y).Normalise();
 			trace.axisU = Vector3f(trace.axisU.x, trace.axisU.z, -trace.axisU.y);
 			trace.axisV = Vector3f(trace.axisV.x, trace.axisV.z, -trace.axisV.y);
+		}
+		else
+		{
+			trace.endPosition = end;
 		}
 
 		return trace;
@@ -983,11 +1001,11 @@ namespace Freeking
 	TraceResult Map::TransformedBoxTrace(
 		const Vector3f& start,
 		const Vector3f& end,
-		const Vector3f& mins, 
+		const Vector3f& mins,
 		const Vector3f& maxs,
 		int headNode,
 		const BspContentFlags& brushMask,
-		const Vector3f& origin, 
+		const Vector3f& origin,
 		const Quaternion& angles)
 	{
 		Vector3f startLocal = start - origin;
@@ -1005,7 +1023,7 @@ namespace Freeking
 
 		if (isRotated && trace.hit)
 		{
-			trace.planeNormal = angles * trace.planeNormal;
+			trace.planeNormal = angles * trace.planeNormal.Normalise();
 			trace.axisU = angles * trace.axisU;
 			trace.axisV = angles * trace.axisV;
 		}
@@ -1016,5 +1034,205 @@ namespace Freeking
 		trace.endPosition[2] = start[2] + trace.fraction * (end[2] - start[2]);
 
 		return trace;
+	}
+
+	static void ClipVelocity(const Vector3f& in, const Vector3f& normal, Vector3f& out, float overbounce)
+	{
+		float backoff = Vector3f::Dot(in, normal) * overbounce;
+
+		for (int i = 0; i < 3; i++)
+		{
+			float change = normal[i] * backoff;
+			out[i] = in[i] - change;
+		}
+
+		if (float adjust = Vector3f::Dot(out, normal);
+			adjust < 0.0f)
+		{
+			out -= (normal * adjust);
+		}
+	}
+
+	bool Map::SlideMove(float time, Vector3f& origin, Vector3f& velocity, const Vector3f& mins, const Vector3f& maxs, const BspContentFlags& mask, bool gravity, bool grounded, const Vector3f& groundPlane)
+	{
+		int numBumps = 4;
+		float remainingTime = time;
+		Vector3f planes[5];
+		int planeCount = 0;
+		int bumpCount = 0;
+		Vector3f clipVelocity;
+		int i;
+
+		if (!gravity)
+		{
+			planeCount = 1;
+			planes[0] = groundPlane;
+		}
+		else
+		{
+			planeCount = 0;
+		}
+
+		planes[planeCount] = velocity.Normalise();
+		planeCount++;
+
+		for (bumpCount = 0; bumpCount < numBumps; bumpCount++)
+		{
+			Vector3f end = origin + velocity * remainingTime;
+			TraceResult trace = BoxTrace(origin, end, mins, maxs, mask);
+
+			if (trace.allSolid)
+			{
+				velocity[1] = 0;
+
+				return true;
+			}
+
+			if (trace.fraction > 0)
+			{
+				origin = trace.endPosition;
+			}
+
+			if (trace.fraction == 1)
+			{
+				break;
+			}
+
+			remainingTime -= remainingTime * trace.fraction;
+
+			if (true)
+			{
+				bool nearGround = grounded;
+
+				if (!nearGround)
+				{
+					Vector3f stepEnd = origin + (Vector3f::Down * 18.0f);
+					TraceResult downTrace = BoxTrace(origin, stepEnd, mins, maxs, mask);
+					nearGround = (downTrace.fraction < 1.0f && downTrace.planeNormal[1] > 0.7f);
+				}
+
+				if (nearGround)
+				{
+					Vector3f stepEnd = origin - (Vector3f::Down * 18.0f);
+					TraceResult downTrace = BoxTrace(origin, stepEnd, mins, maxs, mask);
+
+					stepEnd = downTrace.endPosition + (velocity * remainingTime);
+					TraceResult stepTrace = BoxTrace(downTrace.endPosition, stepEnd, mins, maxs, mask);
+
+					stepEnd = stepTrace.endPosition + (Vector3f::Down * 18.0f);
+					downTrace = BoxTrace(stepTrace.endPosition, stepEnd, mins, maxs, mask);
+
+					if (downTrace.fraction >= 1.0f || downTrace.planeNormal[1] > 0.7f)
+					{
+						if (!stepTrace.hit)
+						{
+							remainingTime = 0;
+							origin = downTrace.endPosition;
+
+							break;
+						}
+
+						if (stepTrace.fraction > trace.fraction)
+						{
+							remainingTime -= remainingTime * stepTrace.fraction;
+							origin = downTrace.endPosition;
+							trace = stepTrace;
+						}
+					}
+				}
+			}
+
+			if (planeCount >= 5)
+			{
+				velocity = 0;
+
+				return true;
+			}
+
+			for (i = 0; i < planeCount; i++)
+			{
+				if (Vector3f::Dot(trace.planeNormal, planes[i]) > 0.99)
+				{
+					velocity = trace.planeNormal + velocity;
+
+					break;
+				}
+			}
+
+			if (i < planeCount)
+			{
+				continue;
+			}
+
+			planes[planeCount] = trace.planeNormal;
+			planeCount++;
+
+			for (i = 0; i < planeCount; i++)
+			{
+				if (Vector3f::Dot(velocity, planes[i]) >= 0.1)
+				{
+					continue;
+				}
+
+				ClipVelocity(velocity, planes[i], clipVelocity, 1.001f);
+
+				for (int j = 0; j < planeCount; j++)
+				{
+					if (j == i)
+					{
+						continue;
+					}
+
+					if (Vector3f::Dot(clipVelocity, planes[j]) >= 0.1)
+					{
+						continue;
+					}
+
+					ClipVelocity(clipVelocity, planes[j], clipVelocity, 1.001f);
+
+					if (Vector3f::Dot(clipVelocity, planes[i]) >= 0)
+					{
+						continue;
+					}
+
+					Vector3f dir = Vector3f::Cross(planes[i], planes[j]).Normalise();
+					clipVelocity = dir * Vector3f::Dot(dir, velocity);
+
+					for (int k = 0; k < planeCount; k++)
+					{
+						if (k == i || k == j)
+						{
+							continue;
+						}
+
+						if (Vector3f::Dot(clipVelocity, planes[k]) >= 0.1)
+						{
+							continue;
+						}
+
+						velocity = 0;
+
+						return true;
+					}
+				}
+
+				velocity = clipVelocity;
+
+				break;
+			}
+		}
+
+		if (grounded)
+		{
+			Vector3f stepEnd = origin + Vector3f::Down * 18.0f;
+			TraceResult downTrace = BoxTrace(origin, stepEnd, mins, maxs, mask);
+
+			if (downTrace.hit && downTrace.fraction > 0.01f && downTrace.fraction < 1.0f)
+			{
+				origin = downTrace.endPosition;
+			}
+		}
+
+		return (numBumps != 0);
 	}
 }

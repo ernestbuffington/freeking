@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Ai
 {
-    class AEventHostile : public BrushModelEntity
+    class AEventHostile : public BrushTriggerEntity
     {
     public:
 

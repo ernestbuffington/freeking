@@ -18,5 +18,6 @@ namespace Freeking
 		static std::vector<std::string> SplitString(const std::string& s, const std::string& delimiter);
 		static inline Vector3f ConvertVector(const Vector3f& v) { return Vector3f(v.x, v.z, -v.y); }
 		static float RandomFloat(float a, float b);
+		static int RandomInt(int a, int b);
 	};
 }

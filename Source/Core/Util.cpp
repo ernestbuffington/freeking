@@ -4,13 +4,6 @@
 
 namespace Freeking
 {
-	float Util::RandomFloat(float a, float b)
-	{
-		static std::random_device rd;
-		static std::mt19937 mt(rd());
-		return std::uniform_real_distribution<float>(a, b)(mt);
-	}
-
 	Vector2f Util::ScreenSpaceToPixelPosition(const Vector2f& point, const Vector4i& viewport)
 	{
 		return Vector2f(
@@ -95,5 +88,19 @@ namespace Freeking
 		} while (end != std::string::npos);
 
 		return result;
+	}
+
+	float Util::RandomFloat(float a, float b)
+	{
+		static std::random_device rd;
+		static std::mt19937 mt(rd());
+		return std::uniform_real_distribution<float>(a, b)(mt);
+	}
+
+	int Util::RandomInt(int a, int b)
+	{
+		static std::random_device rd;
+		static std::mt19937 mt(rd());
+		return std::uniform_int_distribution<int>(a, b)(mt);
 	}
 }

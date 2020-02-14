@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Ai
 {
-	AEventHostile::AEventHostile() : BrushModelEntity()
+	AEventHostile::AEventHostile() : BrushTriggerEntity()
 	{
 	}
 }

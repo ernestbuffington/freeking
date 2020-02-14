@@ -4,7 +4,7 @@
 
 namespace Freeking::Entity::Trigger
 {
-    class AOnce : public BrushModelEntity
+    class AOnce : public BrushTriggerEntity
     {
     public:
 

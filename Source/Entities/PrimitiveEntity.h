@@ -51,12 +51,14 @@ namespace Freeking
 		virtual void RenderTranslucent() = 0;
 
 		inline bool IsHidden() const { return _hidden; }
+		inline bool IsCollisionEnabled() const { return _collisionEnabled; }
 
-		virtual void Trace(const Vector3f& start, const Vector3f& end, TraceResult& trace, const BspContentFlags& brushMask);
+		virtual void Trace(const Vector3f& start, const Vector3f& end, const Vector3f& mins, const Vector3f& maxs, TraceResult& trace, const BspContentFlags& brushMask);
 
 	protected:
 
 		Shader* _shader;
 		bool _hidden;
+		bool _collisionEnabled;
 	};
 }

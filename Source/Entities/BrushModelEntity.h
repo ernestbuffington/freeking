@@ -20,7 +20,7 @@ namespace Freeking
 		virtual void RenderOpaque() override;
 		virtual void RenderTranslucent() override;
 
-		virtual void Trace(const Vector3f& start, const Vector3f& end, TraceResult& trace, const BspContentFlags& brushMask) override;
+		virtual void Trace(const Vector3f& start, const Vector3f& end, const Vector3f& mins, const Vector3f& maxs, TraceResult& trace, const BspContentFlags& brushMask) override;
 
 	protected:
 
@@ -32,5 +32,12 @@ namespace Freeking
 
 		int _modelIndex;
 		std::shared_ptr<BrushModel> _model;
+	};
+
+	class BrushTriggerEntity : public BrushModelEntity
+	{
+	public:
+
+		BrushTriggerEntity();
 	};
 }

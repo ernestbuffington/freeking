@@ -138,14 +138,16 @@ namespace Freeking
 
 		std::vector<std::shared_ptr<BaseEntity>> GetTargetEntities(const std::string& targetName);
 
+		bool SlideMove(float time, Vector3f& origin, Vector3f& velocity, const Vector3f& mins, const Vector3f& maxs, const BspContentFlags& mask, bool gravity, bool grounded, const Vector3f& groundPlane);
+
 	private:
 
 		TraceResult LineTrace(const Vector3f& start, const Vector3f& end, int headNode, const BspContentFlags& brushMask);
 		TraceResult BoxTrace(const Vector3f& start, const Vector3f& end, const Vector3f& mins, const Vector3f& maxs, int headNode, const BspContentFlags& brushMask);
 		void RecursiveHullCheck(int num, float p1f, float p2f, const Vector3f& mins, const Vector3f& maxs, const Vector3f& p1, const Vector3f& p2, TraceResult& trace, bool isPoint, const Vector3f& extents, const BspContentFlags& contents);
 		void TraceToLeaf(const Vector3f& mins, const Vector3f& maxs, TraceResult& trace, bool isPoint, int leafIndex, const BspContentFlags& contents);
-		void ClipBoxToBrush(const Vector3f& mins, const Vector3f& maxs, const Vector3f& p1, const Vector3f& p2, TraceResult& trace, const BspBrush& brush, bool isPoint);
-		void ClipBoxToEntities(const Vector3f& start, const Vector3f& end, TraceResult& tr, const BspContentFlags& brushMask);
+		void ClipBoxToBrush(const Vector3f& start, const Vector3f& end, const Vector3f& mins, const Vector3f& maxs, TraceResult& trace, const BspBrush& brush, bool isPoint);
+		void ClipBoxToEntities(const Vector3f& start, const Vector3f& end, const Vector3f& mins, const Vector3f& maxs, TraceResult& tr, const BspContentFlags& brushMask);
 
 		std::vector<std::shared_ptr<BrushModel>> _models;
 		std::shared_ptr<Texture2D> _lightmapTexture;

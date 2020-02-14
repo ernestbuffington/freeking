@@ -2,7 +2,7 @@
 
 namespace Freeking::Entity::Ai
 {
-	ABoundary::ABoundary() : BrushModelEntity()
+	ABoundary::ABoundary() : BrushTriggerEntity()
 	{
 	}
 }

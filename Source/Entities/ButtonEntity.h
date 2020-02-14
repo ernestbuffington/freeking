@@ -29,6 +29,10 @@ namespace Freeking
 		float _moveDistance;
 		Vector3f _moveDirection;
 		Vector3f _initialPosition;
+
+		float _currentDistance;
+		double _timeToUnpress;
+		bool _pressed;
 	};
 
 }
