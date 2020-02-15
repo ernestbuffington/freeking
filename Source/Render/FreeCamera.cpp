@@ -21,7 +21,14 @@ namespace Freeking
 		_position(0),
 		_movementPosition(0),
 		_movementVelocity(0),
-		_noclip(false)
+		_noclip(false),
+		_swingOffset(0),
+		_returnSpeed(4.0f),
+		_swingInfluence(0.01f),
+		_maxOffsetLength(5.0f),
+		_prevPitch(0),
+		_prevYaw(0),
+		_viewModelOffset(0)
 	{
 		SetRotation(0.0f, 0.0f, 0.0f);
 		UpdateTransform();
@@ -53,6 +60,10 @@ namespace Freeking
 
 	void FreeCamera::Move(const Vector3f& force, float dt)
 	{
+		float pitchDelta = Math::DeltaAngleDegrees(_pitch, _prevPitch);
+		float yawDelta = Math::DeltaAngleDegrees(_yaw, _prevYaw);
+		_viewModelOffset = CalcSwingOffset(pitchDelta, yawDelta, dt);
+
 		if (Input::JustPressed(Button::KeyV))
 		{
 			_noclip = !_noclip;
@@ -142,11 +153,15 @@ namespace Freeking
 	{
 		_movementVelocity = (_rotation * (force * -1.0f));
 		_movementPosition += _movementVelocity * dt;
+
 		UpdateTransform();
 	}
 
 	void FreeCamera::LookDelta(float x, float y)
 	{
+		_prevPitch = _pitch;
+		_prevYaw = _yaw;
+
 		SetRotation(_pitch - y, _yaw - x, _roll);
 		UpdateTransform();
 	}
@@ -207,6 +222,21 @@ namespace Freeking
 		}
 
 		_movementVelocity += accelerationSpeed * wishDirection;
+	}
+
+	Vector3f FreeCamera::CalcSwingOffset(float pitchDelta, float yawDelta, double dt)
+	{
+		Vector3f swingVelocity(-yawDelta, pitchDelta, 0);
+
+		_swingOffset -= _swingOffset * _returnSpeed * dt;
+		_swingOffset += (swingVelocity * _swingInfluence);
+
+		if (_swingOffset.Length() > _maxOffsetLength)
+		{
+			_swingOffset = _swingOffset.Normalise() * _maxOffsetLength;
+		}
+
+		return _swingOffset;
 	}
 
 	Vector3f FreeCamera::NormalisedScreenPointToDirection(const Matrix4x4& projection, const Vector2f& point) const

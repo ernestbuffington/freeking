@@ -18,6 +18,7 @@ namespace Freeking
 		inline const float GetPitch() const { return _pitch; }
 		inline const float GetYaw() const { return _yaw; }
 		inline const float GetRoll() const { return _roll; }
+		inline const Vector3f& GetViewModelOffset() const { return _viewModelOffset; }
 
 		void MoveTo(const Vector3f& position);
 		void Move(const Vector3f& force, float dt);
@@ -36,9 +37,14 @@ namespace Freeking
 
 		void FlyMove(const Vector3f& force, float dt);
 
+		Vector3f CalcSwingOffset(float pitchDelta, float yawDelta, double dt);
+
 		float _pitch;
 		float _yaw;
 		float _roll;
+
+		float _prevPitch;
+		float _prevYaw;
 
 		Vector3f _position;
 		Quaternion _rotation;
@@ -47,5 +53,11 @@ namespace Freeking
 		Vector3f _movementPosition;
 		Vector3f _movementVelocity;
 		bool _noclip;
+
+		Vector3f _swingOffset;
+		Vector3f _viewModelOffset;
+		float _returnSpeed;
+		float _swingInfluence;
+		float _maxOffsetLength;
 	};
 }

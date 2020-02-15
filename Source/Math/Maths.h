@@ -51,6 +51,16 @@ namespace Freeking
 			return 0.0f;
 		}
 
+		static inline double DeltaAngleDegrees(float a, float b)
+		{
+			float delta = b - a;
+
+			while (delta > 180.0f) delta = delta - 360.0f;
+			while (delta < -180.0f) delta = delta + 360.0f;
+
+			return delta;
+		}
+
 		template<typename T>
 		static inline T Min(T a, T b) { return (a < b) ? a : b; }
 

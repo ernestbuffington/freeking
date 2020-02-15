@@ -7,9 +7,12 @@ out VertexData
 {
 	vec3 normal;
 	vec2 uv;
+	vec3 pos_eye;
+	vec3 n_eye;
 } vert;
 
 uniform mat4 viewProj;
+uniform mat4 viewMatrix;
 uniform mat4 model;
 uniform isamplerBuffer frameVertexBuffer;
 uniform samplerBuffer normalBuffer;
@@ -58,6 +61,9 @@ void main()
 	vert.uv = uv;
 	vert.normal = lerpNormal;
 
+	vert.pos_eye = vec3(viewMatrix * model * vec4(lerpPosition, 1.0));
+  	vert.n_eye = vec3(viewMatrix * model * vec4(lerpNormal, 0.0));
+
 	gl_Position = viewProj * model * vec4(lerpPosition, 1.0);
 }
 
@@ -65,26 +71,29 @@ void main()
 
 #ifdef FRAGMENT
 
+uniform mat4 viewMatrix;
 uniform sampler2D diffuse;
+uniform samplerCube cubemap;
 
 in VertexData
 {
 	vec3 normal;
 	vec2 uv;
+	vec3 pos_eye;
+	vec3 n_eye;
 } vert;
 
 out vec4 fragColor;
 
 void main()
 {
-	vec3 textureColor = texture(diffuse, vert.uv).rgb;
-	vec3 normal = normalize(vert.normal);
+  	vec3 incident_eye = normalize(vert.pos_eye);
+  	vec3 normal = normalize(vert.n_eye);
+  	vec3 reflected = reflect(incident_eye, normal);
 
-	float gamma = 1.5;
-	vec3 finalColor = textureColor.rgb;
-	finalColor.rgb = pow(finalColor.rgb, vec3(1.0 / gamma));
-
-    fragColor = vec4(finalColor.rgb, 1.0);
+	vec4 textureColor = texture(diffuse, vert.uv);
+	vec4 cubemapColor = texture(cubemap, reflected);
+    fragColor = vec4(mix(cubemapColor.rgb * 2.0, textureColor.rgb, textureColor.a), 1.0);
 }
 
 #endif

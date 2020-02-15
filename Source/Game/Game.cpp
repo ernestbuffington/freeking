@@ -373,12 +373,17 @@ namespace Freeking
 
 				int frame = 33;
 
-				Matrix4x4 viewmodelProjectionMatrix = Matrix4x4::Perspective(73, (float)_viewportWidth / (float)_viewportHeight, 0.1f, 5000.0f);
+				Matrix4x4 viewmodelProjectionMatrix = Matrix4x4::Perspective(73, (float)_viewportWidth / (float)_viewportHeight, 0.1f, 100.0f);
+				Matrix4x4 viewmodelViewMatrix = viewMatrix;
+				viewmodelViewMatrix.Translate(0);
+
 				Shader::Globals.SetValue(viewProjId, viewmodelProjectionMatrix);
+				Shader::Globals.SetValue(viewMatrixId, viewmodelViewMatrix);
 
 				shader->SetParameterValue("delta", 0);
-				shader->SetParameterValue("model", Matrix4x4::Translation(Vector3f(0, 0, 0)) * Matrix3x3::RotationY(Math::DegreesToRadians(90)).ToMatrix4x4());
+				shader->SetParameterValue("model", Matrix4x4::Translation(camera.GetViewModelOffset()) * Matrix3x3::RotationY(Math::DegreesToRadians(90)).ToMatrix4x4());
 				shader->SetParameterValue("normalBuffer", DynamicModel::GetNormalBuffer().get());
+				shader->SetParameterValue("cubemap", skybox->GetCubemap(), TextureSampler::Library.Get({ TextureWrapMode::ClampEdge, TextureFilterMode::Linear }).get());
 
 				shader->SetParameterValue("diffuse", Texture2D::Library.Get(viewmodel->Skins[0]).get());
 				shader->SetParameterValue("frameVertexBuffer", viewmodel->GetFrameVertexBuffer().get());
@@ -405,6 +410,7 @@ namespace Freeking
 				viewmodel2->Draw();
 
 				Shader::Globals.SetValue(viewProjId, viewProjectionMatrix);
+				Shader::Globals.SetValue(viewMatrixId, viewMatrix);
 			}
 
 			if (Renderer::DebugDraw)

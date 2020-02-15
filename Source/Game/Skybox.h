@@ -21,6 +21,8 @@ namespace Freeking
 
 		void Draw(const Matrix4x4& viewProj);
 
+		TextureCube* GetCubemap() { return _cubemap.get(); }
+
 	private:
 
 		std::unique_ptr<VertexBinding> _vertexBinding;
