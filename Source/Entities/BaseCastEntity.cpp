@@ -90,6 +90,15 @@ namespace Freeking
 		_frame += animFrameIndex.firstFrame;
 		_nextFrame += animFrameIndex.firstFrame;
 		_frameDelta = Math::Clamp(_frameDelta, 0.0f, 1.0f);
+
+		Vector3f traceStart = GetTransform().Translation() + Vector3f::Up * 70.0f;
+		Vector3f traceEnd = Renderer::ViewMatrix.InverseTranslation();
+		if (auto trace = Map::Current->LineTrace(traceStart, traceEnd, BspContentFlags::MaskOpaque);
+			trace.hit == false)
+		{
+			auto traceDirection = traceEnd - traceStart;
+			SetRotation(Quaternion::FromRadianYaw(atan2(traceDirection.x, traceDirection.z) - Math::HalfPi));
+		}
 	}
 
 	void BaseCastEntity::PostTick()
