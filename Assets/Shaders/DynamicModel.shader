@@ -79,8 +79,12 @@ void main()
 {
 	vec3 textureColor = texture(diffuse, vert.uv).rgb;
 	vec3 normal = normalize(vert.normal);
-	
-    fragColor = vec4(textureColor.rgb, 1.0);
+
+	float gamma = 1.5;
+	vec3 finalColor = textureColor.rgb;
+	finalColor.rgb = pow(finalColor.rgb, vec3(1.0 / gamma));
+
+    fragColor = vec4(finalColor.rgb, 1.0);
 }
 
 #endif

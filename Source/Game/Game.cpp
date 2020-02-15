@@ -185,6 +185,9 @@ namespace Freeking
 		BillboardBatch billboards;
 		LightFlares::Billboards = &billboards;
 
+		auto viewmodel = DynamicModel::Library.Get("models/weapons/shotgun/shotgun.mdx");
+		auto viewmodel2 = DynamicModel::Library.Get("models/weapons/shotgun/hand.mdx");
+
 		std::string mapName("sr1");
 
 		auto lineRenderer = std::make_shared<LineRenderer>(2000000);
@@ -362,6 +365,47 @@ namespace Freeking
 			}
 
 			billboards.Draw(deltaTime, camera.GetPosition(), camera.GetRotation().Forward());
+
+			{
+				glClear(GL_DEPTH_BUFFER_BIT);
+
+				const auto& shader = Shader::Library.DynamicModel;
+
+				int frame = 33;
+
+				Matrix4x4 viewmodelProjectionMatrix = Matrix4x4::Perspective(73, (float)_viewportWidth / (float)_viewportHeight, 0.1f, 5000.0f);
+				Shader::Globals.SetValue(viewProjId, viewmodelProjectionMatrix);
+
+				shader->SetParameterValue("delta", 0);
+				shader->SetParameterValue("model", Matrix4x4::Translation(Vector3f(0, 0, 0)) * Matrix3x3::RotationY(Math::DegreesToRadians(90)).ToMatrix4x4());
+				shader->SetParameterValue("normalBuffer", DynamicModel::GetNormalBuffer().get());
+
+				shader->SetParameterValue("diffuse", Texture2D::Library.Get(viewmodel->Skins[0]).get());
+				shader->SetParameterValue("frameVertexBuffer", viewmodel->GetFrameVertexBuffer().get());
+				shader->SetParameterValue("frames[0].index", (int)(frame * viewmodel->GetFrameVertexCount()));
+				shader->SetParameterValue("frames[0].translate", viewmodel->FrameTransforms[frame].translate);
+				shader->SetParameterValue("frames[0].scale", viewmodel->FrameTransforms[frame].scale);
+				shader->SetParameterValue("frames[1].index", (int)(frame * viewmodel->GetFrameVertexCount()));
+				shader->SetParameterValue("frames[1].translate", viewmodel->FrameTransforms[frame].translate);
+				shader->SetParameterValue("frames[1].scale", viewmodel->FrameTransforms[frame].scale);
+				shader->Apply();
+
+				viewmodel->Draw();
+
+				shader->SetParameterValue("diffuse", Texture2D::Library.Get(viewmodel2->Skins[0]).get());
+				shader->SetParameterValue("frameVertexBuffer", viewmodel2->GetFrameVertexBuffer().get());
+				shader->SetParameterValue("frames[0].index", (int)(frame * viewmodel2->GetFrameVertexCount()));
+				shader->SetParameterValue("frames[0].translate", viewmodel2->FrameTransforms[frame].translate);
+				shader->SetParameterValue("frames[0].scale", viewmodel2->FrameTransforms[frame].scale);
+				shader->SetParameterValue("frames[1].index", (int)(frame * viewmodel2->GetFrameVertexCount()));
+				shader->SetParameterValue("frames[1].translate", viewmodel2->FrameTransforms[frame].translate);
+				shader->SetParameterValue("frames[1].scale", viewmodel2->FrameTransforms[frame].scale);
+				shader->Apply();
+
+				viewmodel2->Draw();
+
+				Shader::Globals.SetValue(viewProjId, viewProjectionMatrix);
+			}
 
 			if (Renderer::DebugDraw)
 			{

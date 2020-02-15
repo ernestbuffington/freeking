@@ -114,6 +114,11 @@ namespace Freeking
 			AudioDevice::Current->Play(AudioClip::Library.Get("sound/actors/player/male/jump" + std::to_string(Util::RandomInt(1, 3)) + ".wav").get(), 0, false, true);
 		}
 
+		if (Input::JustPressed(Button::KeyF))
+		{
+			AudioDevice::Current->Play(AudioClip::Library.Get("sound/actors/player/male/profanity/level2/cuss2-" + std::to_string(Util::RandomInt(1, 17)) + ".wav").get(), 0, false, true);
+		}
+
 		if (!isWalking)
 		{
 			ApplyGravity(dt);
