@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PrimitiveEntity.h"
+#include "DynamicModel.h"
 #include <array>
 
 namespace Freeking
@@ -33,21 +34,10 @@ namespace Freeking
 
 	private:
 
-		struct AnimFrameIndex
-		{
-			size_t firstFrame;
-			size_t numFrames;
-		};
-
 		std::vector<std::shared_ptr<DynamicModel>> _meshes;
 		std::vector<std::shared_ptr<Texture2D>> _meshTextures;
-		std::vector<AnimFrameIndex> _animFrameIndex;
 		std::shared_ptr<Shader> _shader;
-		double _frameTime;
-		int _animIndex;
 
-		size_t _frame;
-		size_t _nextFrame;
-		float _frameDelta;
+		FrameAnimator _animator;
 	};
 }

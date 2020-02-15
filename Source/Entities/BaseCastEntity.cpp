@@ -1,5 +1,4 @@
 #include "BaseCastEntity.h"
-#include "DynamicModel.h"
 #include "Shader.h"
 #include "Renderer.h"
 #include "LineRenderer.h"
@@ -7,12 +6,7 @@
 
 namespace Freeking
 {
-	BaseCastEntity::BaseCastEntity() :
-		_frameTime(0),
-		_animIndex(0),
-		_frame(0),
-		_nextFrame(0),
-		_frameDelta(0)
+	BaseCastEntity::BaseCastEntity()
 	{
 	}
 
@@ -42,54 +36,21 @@ namespace Freeking
 			bodyPartIndex++;
 		}
 
-		if (!_meshes.empty())
-		{
-			std::string currentFrameName = "";
-			size_t currentFrameIndex = 0;
-
-			for (auto frameTransform : _meshes.front()->FrameTransforms)
-			{
-				auto indexStart = frameTransform.name.find_last_of('_');
-				auto frameName = frameTransform.name.substr(0, indexStart);
-
-				if (currentFrameName != frameName)
-				{
-					currentFrameName = frameName;
-					_animFrameIndex.push_back({ currentFrameIndex, 0 });
-				}
-
-				auto& animFrameIndex = _animFrameIndex.back();
-				animFrameIndex.numFrames += 1;
-
-				currentFrameIndex++;
-			}
-		}
-
 		_shader = Shader::Library.DynamicModel;
 
 		SetLocalBounds(Vector3f(-16, -24, -16), Vector3f(16, 50, 16));
+
+		for (const auto& frameAnimation : _meshes.front()->GetFrameAnimations())
+		{
+			_animator.AddAnimation(frameAnimation.name, frameAnimation.firstFrame, frameAnimation.numFrames);
+		}
 	}
 
 	void BaseCastEntity::Tick(double dt)
 	{
 		PrimitiveEntity::Tick(dt);
 
-		_animIndex = Math::Clamp(_animIndex, 0, (int)_animFrameIndex.size() - 1);
-
-		auto animFrameIndex = _animFrameIndex[_animIndex];
-		auto frameCount = animFrameIndex.numFrames;
-
-		_frameTime += (10.0 * dt);
-		_frameTime = fmod(_frameTime, (float)frameCount);
-
-		_frame = (size_t)floor(_frameTime);
-		_frame %= frameCount;
-		_nextFrame = (_frame + 1) % frameCount;
-		_frameDelta = (float)_frameTime - (float)_frame;
-
-		_frame += animFrameIndex.firstFrame;
-		_nextFrame += animFrameIndex.firstFrame;
-		_frameDelta = Math::Clamp(_frameDelta, 0.0f, 1.0f);
+		_animator.Tick(dt);
 
 		Vector3f traceStart = GetTransform().Translation() + Vector3f::Up * 70.0f;
 		Vector3f traceEnd = Renderer::ViewMatrix.InverseTranslation();
@@ -117,10 +78,10 @@ namespace Freeking
 
 				for (const auto& mesh : _meshes)
 				{
-					const auto& frameTransform = mesh->FrameTransforms.at(_frame);
-					const auto& nextFrameTransform = mesh->FrameTransforms.at(_nextFrame);
-					auto boundsMin = Vector3f::Lerp(frameTransform.boundsMin, nextFrameTransform.boundsMin, _frameDelta);
-					auto boundsMax = Vector3f::Lerp(frameTransform.boundsMax, nextFrameTransform.boundsMax, _frameDelta);
+					const auto& frameTransform = mesh->FrameTransforms.at(_animator.GetFrame());
+					const auto& nextFrameTransform = mesh->FrameTransforms.at(_animator.GetNextFrame());
+					auto boundsMin = Vector3f::Lerp(frameTransform.boundsMin, nextFrameTransform.boundsMin, _animator.GetFrameDelta());
+					auto boundsMax = Vector3f::Lerp(frameTransform.boundsMax, nextFrameTransform.boundsMax, _animator.GetFrameDelta());
 					
 					LineRenderer::Debug->DrawBox(GetTransform(), boundsMin, boundsMax, LinearColor(0, 1, 1, alpha));
 				}
@@ -132,7 +93,7 @@ namespace Freeking
 
 	void BaseCastEntity::PreRender(bool translucent)
 	{
-		_shader->SetParameterValue("delta", _frameDelta);
+		_shader->SetParameterValue("delta", _animator.GetFrameDelta());
 		_shader->SetParameterValue("model", GetTransform());
 		_shader->SetParameterValue("normalBuffer", DynamicModel::GetNormalBuffer().get());
 	}
@@ -146,12 +107,12 @@ namespace Freeking
 
 			_shader->SetParameterValue("diffuse", meshTexture.get());
 			_shader->SetParameterValue("frameVertexBuffer", mesh->GetFrameVertexBuffer().get());
-			_shader->SetParameterValue("frames[0].index", (int)(_frame * mesh->GetFrameVertexCount()));
-			_shader->SetParameterValue("frames[0].translate", mesh->FrameTransforms[_frame].translate);
-			_shader->SetParameterValue("frames[0].scale", mesh->FrameTransforms[_frame].scale);
-			_shader->SetParameterValue("frames[1].index", (int)(_nextFrame * mesh->GetFrameVertexCount()));
-			_shader->SetParameterValue("frames[1].translate", mesh->FrameTransforms[_nextFrame].translate);
-			_shader->SetParameterValue("frames[1].scale", mesh->FrameTransforms[_nextFrame].scale);
+			_shader->SetParameterValue("frames[0].index", (int)(_animator.GetFrame() * mesh->GetFrameVertexCount()));
+			_shader->SetParameterValue("frames[0].translate", mesh->FrameTransforms[_animator.GetFrame()].translate);
+			_shader->SetParameterValue("frames[0].scale", mesh->FrameTransforms[_animator.GetFrame()].scale);
+			_shader->SetParameterValue("frames[1].index", (int)(_animator.GetNextFrame() * mesh->GetFrameVertexCount()));
+			_shader->SetParameterValue("frames[1].translate", mesh->FrameTransforms[_animator.GetNextFrame()].translate);
+			_shader->SetParameterValue("frames[1].scale", mesh->FrameTransforms[_animator.GetNextFrame()].scale);
 			_shader->Apply();
 
 			mesh->Draw();

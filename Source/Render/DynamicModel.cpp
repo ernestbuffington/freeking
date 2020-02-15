@@ -43,4 +43,31 @@ namespace Freeking
 		_vertexBinding = std::make_unique<VertexBinding>();
 		_vertexBinding->Create(vertexLayout, 2, *_indexBuffer, ElementType::UInt);
 	}
+
+	std::vector<FrameAnimation> DynamicModel::GetFrameAnimations() const
+	{
+		std::vector<FrameAnimation> animations;
+
+		std::string currentFrameName = "";
+		size_t currentFrameIndex = 0;
+
+		for (auto frameTransform : FrameTransforms)
+		{
+			auto indexStart = frameTransform.name.find_last_of('_');
+			auto frameName = frameTransform.name.substr(0, indexStart);
+
+			if (currentFrameName != frameName)
+			{
+				currentFrameName = frameName;
+				animations.push_back({ frameName, currentFrameIndex, 0 });
+			}
+
+			auto& animFrameIndex = animations.back();
+			animFrameIndex.numFrames += 1;
+
+			currentFrameIndex++;
+		}
+
+		return animations;
+	}
 }

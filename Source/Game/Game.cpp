@@ -187,6 +187,13 @@ namespace Freeking
 
 		auto viewmodel = DynamicModel::Library.Get("models/weapons/shotgun/shotgun.mdx");
 		auto viewmodel2 = DynamicModel::Library.Get("models/weapons/shotgun/hand.mdx");
+		FrameAnimator animator;
+		animator.SetAnimation(6);
+
+		for (const auto& frameAnimation : viewmodel->GetFrameAnimations())
+		{
+			animator.AddAnimation(frameAnimation.name, frameAnimation.firstFrame, frameAnimation.numFrames);
+		}
 
 		std::string mapName("sr1");
 
@@ -371,7 +378,10 @@ namespace Freeking
 
 				const auto& shader = Shader::Library.DynamicModel;
 
-				int frame = 33;
+				animator.Tick(deltaTime);
+
+				int frame = animator.GetFrame();
+				int nextFrame = animator.GetNextFrame();
 
 				Matrix4x4 viewmodelProjectionMatrix = Matrix4x4::Perspective(73, (float)_viewportWidth / (float)_viewportHeight, 0.1f, 100.0f);
 				Matrix4x4 viewmodelViewMatrix = viewMatrix;
@@ -380,7 +390,7 @@ namespace Freeking
 				Shader::Globals.SetValue(viewProjId, viewmodelProjectionMatrix);
 				Shader::Globals.SetValue(viewMatrixId, viewmodelViewMatrix);
 
-				shader->SetParameterValue("delta", 0);
+				shader->SetParameterValue("delta", animator.GetFrameDelta());
 				shader->SetParameterValue("model", Matrix4x4::Translation(camera.GetViewModelOffset()) * Matrix3x3::RotationY(Math::DegreesToRadians(90)).ToMatrix4x4());
 				shader->SetParameterValue("normalBuffer", DynamicModel::GetNormalBuffer().get());
 				shader->SetParameterValue("cubemap", skybox->GetCubemap(), TextureSampler::Library.Get({ TextureWrapMode::ClampEdge, TextureFilterMode::Linear }).get());
@@ -390,9 +400,9 @@ namespace Freeking
 				shader->SetParameterValue("frames[0].index", (int)(frame * viewmodel->GetFrameVertexCount()));
 				shader->SetParameterValue("frames[0].translate", viewmodel->FrameTransforms[frame].translate);
 				shader->SetParameterValue("frames[0].scale", viewmodel->FrameTransforms[frame].scale);
-				shader->SetParameterValue("frames[1].index", (int)(frame * viewmodel->GetFrameVertexCount()));
-				shader->SetParameterValue("frames[1].translate", viewmodel->FrameTransforms[frame].translate);
-				shader->SetParameterValue("frames[1].scale", viewmodel->FrameTransforms[frame].scale);
+				shader->SetParameterValue("frames[1].index", (int)(nextFrame * viewmodel->GetFrameVertexCount()));
+				shader->SetParameterValue("frames[1].translate", viewmodel->FrameTransforms[nextFrame].translate);
+				shader->SetParameterValue("frames[1].scale", viewmodel->FrameTransforms[nextFrame].scale);
 				shader->Apply();
 
 				viewmodel->Draw();
@@ -402,9 +412,9 @@ namespace Freeking
 				shader->SetParameterValue("frames[0].index", (int)(frame * viewmodel2->GetFrameVertexCount()));
 				shader->SetParameterValue("frames[0].translate", viewmodel2->FrameTransforms[frame].translate);
 				shader->SetParameterValue("frames[0].scale", viewmodel2->FrameTransforms[frame].scale);
-				shader->SetParameterValue("frames[1].index", (int)(frame * viewmodel2->GetFrameVertexCount()));
-				shader->SetParameterValue("frames[1].translate", viewmodel2->FrameTransforms[frame].translate);
-				shader->SetParameterValue("frames[1].scale", viewmodel2->FrameTransforms[frame].scale);
+				shader->SetParameterValue("frames[1].index", (int)(nextFrame * viewmodel2->GetFrameVertexCount()));
+				shader->SetParameterValue("frames[1].translate", viewmodel2->FrameTransforms[nextFrame].translate);
+				shader->SetParameterValue("frames[1].scale", viewmodel2->FrameTransforms[nextFrame].scale);
 				shader->Apply();
 
 				viewmodel2->Draw();
