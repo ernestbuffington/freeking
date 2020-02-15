@@ -2,20 +2,9 @@
 
 namespace Freeking::Entity::Cast
 {
-	ARunt::ARunt() : BaseEntity()
+	ARunt::ARunt() : BaseCastEntity()
 	{
-	}
-
-	void ARunt::Initialize()
-	{
-	}
-
-	void ARunt::Tick(double dt)
-	{
-	}
-
-	bool ARunt::SetProperty(const EntityProperty& property)
-	{
-		return false;
+		_modelFolder = "models/actors/runt";
+		_skinFolder = { "models/actors/runt", "models/actors/runt", "models/actors/thug" };
 	}
 }

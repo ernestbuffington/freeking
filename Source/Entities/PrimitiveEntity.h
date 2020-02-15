@@ -46,9 +46,9 @@ namespace Freeking
 		virtual void Tick(double dt) override;
 		virtual void PostTick() override;
 
-		virtual void PreRender(bool translucent) = 0;
-		virtual void RenderOpaque() = 0;
-		virtual void RenderTranslucent() = 0;
+		virtual void PreRender(bool translucent) {};
+		virtual void RenderOpaque() {};
+		virtual void RenderTranslucent() {};
 
 		inline bool IsHidden() const { return _hidden; }
 		inline bool IsCollisionEnabled() const { return _collisionEnabled; }

@@ -56,7 +56,7 @@ namespace Freeking
 
 			if (eyeDirection.Dot((traceStart - traceEnd).Normalise()) > 0.0f)
 			{
-				auto trace = Map::Current->LineTrace(traceStart, traceEnd, BspContentFlags::MASK_OPAQUE);
+				auto trace = Map::Current->LineTrace(traceStart, traceEnd, BspContentFlags::MaskOpaque);
 				hidden = (trace.fraction < 1.0f);
 			}
 

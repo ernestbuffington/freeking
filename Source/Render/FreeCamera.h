@@ -31,8 +31,8 @@ namespace Freeking
 		void SetRotation(float pitch, float yaw, float roll);
 
 		void ApplyGravity(double dt);
-		void ApplyFriction(double friction, double dt);
-		void ApplyAcceleration(const Vector3f& wishDirection, double wishSpeed, double acceleration, double dt);
+		void ApplyFriction(float friction, double dt);
+		void ApplyAcceleration(const Vector3f& wishDirection, float wishSpeed, float acceleration, double dt);
 
 		void FlyMove(const Vector3f& force, float dt);
 

@@ -18,6 +18,13 @@ namespace Freeking
 		return Util::TryParseInt(_value, v);
 	}
 
+	bool EntityProperty::ValueAsStringArray(std::vector<std::string>& v) const
+	{
+		v = Util::SplitString(_value, " ");
+
+		return !v.empty();
+	}
+
 	bool EntityProperty::ValueAsModelIndex(int& v) const
 	{
 		if (!_value.empty() && _value[0] == '*')

@@ -571,6 +571,11 @@ namespace Freeking
 			return Vector3<T>(std::fma(b.x, a, x), std::fma(b.y, a, y), std::fma(b.z, a, z));
 		}
 
+		static Vector3<T> Lerp(const Vector3<T>& a, const Vector3<T>& b, float f)
+		{
+			return Vector3<T>(a.x + f * (b.x - a.x), a.y + f * (b.y - a.y), a.z + f * (b.z - a.z));
+		}
+
 		void ProjectOntoPlane(const Vector3<T>& normal, const float overBounce = 1.0f)
 		{
 			float backoff = Dot(normal);

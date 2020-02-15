@@ -2,20 +2,9 @@
 
 namespace Freeking::Entity::Cast
 {
-	ABitch::ABitch() : BaseEntity()
+	ABitch::ABitch() : BaseCastEntity()
 	{
-	}
-
-	void ABitch::Initialize()
-	{
-	}
-
-	void ABitch::Tick(double dt)
-	{
-	}
-
-	bool ABitch::SetProperty(const EntityProperty& property)
-	{
-		return false;
+		_modelFolder = "models/actors/bitch";
+		_skinFolder = { "models/actors/bitch", "models/actors/bitch", "models/actors/bitch" };
 	}
 }

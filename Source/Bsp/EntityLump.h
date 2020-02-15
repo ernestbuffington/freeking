@@ -25,6 +25,7 @@ namespace Freeking
 		bool ValueAsVector(Vector3f& v) const;
 		bool ValueAsFloat(float& v) const;
 		bool ValueAsInt(int& v) const;
+		bool ValueAsStringArray(std::vector<std::string>& v) const;
 
 		template<typename T>
 		bool ValueAsFlags(EnumFlags<T>& v) const
@@ -94,13 +95,13 @@ namespace Freeking
 		const CommonScalar& GetAngleProperty() const { return _angle; }
 
 		bool TryGetString(const std::string& key, std::string& value) const;
-		bool TryGetSplitString(const std::string& key, std::vector<std::string>& value) const;
 
 	private:
 
 		bool TryGetInt(const std::string& key, int& value) const;
 		bool TryGetFloat(const std::string& key, float& value) const;
 		bool TryGetVector(const std::string& key, Vector3f& value) const;
+		bool TryGetSplitString(const std::string& key, std::vector<std::string>& value) const;
 
 		bool TryGetString(const std::string& key, CommonString& value) const;
 		bool TryGetVector(const std::string& key, CommonVector& value) const;

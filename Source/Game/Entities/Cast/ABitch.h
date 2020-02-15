@@ -1,23 +1,13 @@
 #pragma once
 
-#include "BaseEntity.h"
+#include "BaseCastEntity.h"
 
 namespace Freeking::Entity::Cast
 {
-    class ABitch : public BaseEntity
+    class ABitch : public BaseCastEntity
     {
     public:
 
         ABitch();
-
-		virtual void Initialize() override;
-		virtual void Tick(double dt) override;
-
-	protected:
-
-		virtual bool SetProperty(const EntityProperty& property) override;
-
-    private:
-
     };
 }

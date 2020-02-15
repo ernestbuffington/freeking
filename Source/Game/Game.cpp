@@ -21,7 +21,6 @@
 #include "Util.h"
 #include "Map.h"
 #include "Paths.h"
-#include "Thug.h"
 #include "Nav/NavFile.h"
 #include "PakFileSystem.h"
 #include "PhysicalFileSystem.h"
@@ -329,7 +328,7 @@ namespace Freeking
 			{
 				Vector2f normalisedPoint = _mouseLocked ? 0.0f : Util::PixelPositionToScreenSpace(Input::GetMousePosition(), Vector4i(0, 0, _viewportWidth, _viewportHeight));
 				auto direction = camera.NormalisedScreenPointToDirection(projectionMatrix, normalisedPoint);
-				tr = map->LineTrace(camera.GetPosition(), camera.GetPosition() + direction * 10000.0f, BspContentFlags::MASK_SOLID);
+				tr = map->LineTrace(camera.GetPosition(), camera.GetPosition() + direction * 10000.0f, BspContentFlags::MaskSolid);
 
 				if (tr.hit && tr.entity)
 				{

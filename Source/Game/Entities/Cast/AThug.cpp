@@ -2,20 +2,9 @@
 
 namespace Freeking::Entity::Cast
 {
-	AThug::AThug() : BaseEntity()
+	AThug::AThug() : BaseCastEntity()
 	{
-	}
-
-	void AThug::Initialize()
-	{
-	}
-
-	void AThug::Tick(double dt)
-	{
-	}
-
-	bool AThug::SetProperty(const EntityProperty& property)
-	{
-		return false;
+		_modelFolder = "models/actors/thug";
+		_skinFolder = { "models/actors/thug", "models/actors/thug", "models/actors/thug" };
 	}
 }

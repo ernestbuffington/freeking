@@ -44,6 +44,8 @@ namespace Freeking
 			std::string name;
 			Vector3f translate;
 			Vector3f scale;
+			Vector3f boundsMin;
+			Vector3f boundsMax;
 		};
 
 		void Draw();

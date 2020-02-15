@@ -802,7 +802,7 @@ namespace Freeking
 				startout = true;
 			}
 
-			if (d1 > 0 && (d2 >= 0.125 || d2 >= d1))
+			if (d1 > 0 && (d2 >= 0.125f || d2 >= d1))
 			{
 				return;
 			}
@@ -814,7 +814,7 @@ namespace Freeking
 
 			if (d1 > d2)
 			{
-				float f = (d1 - 0.125) / (d1 - d2);
+				float f = (d1 - 0.125f) / (d1 - d2);
 
 				if (f < 0)
 				{
@@ -829,7 +829,7 @@ namespace Freeking
 			}
 			else
 			{
-				float f = (d1 + 0.125) / (d1 - d2);
+				float f = (d1 + 0.125f) / (d1 - d2);
 
 				if (f > 1)
 				{

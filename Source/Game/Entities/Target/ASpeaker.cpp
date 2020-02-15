@@ -24,7 +24,7 @@ namespace Freeking::Entity::Target
 
 		if (const auto& audioClip = AudioClip::Library.Get(noisePath.string()))
 		{
-			if (_audioClip = audioClip.get())
+			if (_audioClip = audioClip.get(); _audioClip)
 			{
 				if (_spawnFlags[SpawnFlags::LoopedOn])
 				{

@@ -112,6 +112,15 @@ namespace Freeking
 				mesh->Skins.push_back(skinName);
 			}
 
+			pos = file.Header.OffsetBBoxFrames;
+			for (int frameIndex = 0; frameIndex < file.Header.NumFrames; ++frameIndex)
+			{
+				const auto& bbox = file.Read<MDXBBox>(pos, 1);
+				auto& frameTransform = mesh->FrameTransforms.at(frameIndex);
+				frameTransform.boundsMin = Vector3f(bbox->MinX, bbox->MinZ, -bbox->MinY);
+				frameTransform.boundsMax = Vector3f(bbox->MaxX, bbox->MaxZ, -bbox->MaxY);
+			}
+
 			mesh->Commit();
 
 			return mesh;

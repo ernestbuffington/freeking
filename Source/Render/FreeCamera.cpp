@@ -8,14 +8,14 @@
 
 namespace Freeking
 {
-	static const double Speed = 300.0f;
-	static const double AirSpeed = 50.0f;
-	static const double Acceleration = 10.0f;
-	static const double AirAcceleration = 100.0f;
-	static const double GroundFriction = 8.0f;
-	static const double AirFriction = 0.0f;
-	static const double Gravity = 1000.0f;
-	static const double JumpHeight = 45.0f;
+	static const float Speed = 300.0f;
+	static const float AirSpeed = 50.0f;
+	static const float Acceleration = 10.0f;
+	static const float AirAcceleration = 100.0f;
+	static const float GroundFriction = 8.0f;
+	static const float AirFriction = 0.0f;
+	static const float Gravity = 1000.0f;
+	static const float JumpHeight = 45.0f;
 
 	FreeCamera::FreeCamera() :
 		_position(0),
@@ -70,7 +70,7 @@ namespace Freeking
 
 		bool isGrounded = false;
 		bool isWalking = false;
-		TraceResult trace = Map::Current->BoxTrace(_movementPosition, _movementPosition + (Vector3f::Down * 0.25f), mins, maxs, BspContentFlags::MASK_PLAYERSOLID);
+		TraceResult trace = Map::Current->BoxTrace(_movementPosition, _movementPosition + (Vector3f::Down * 0.25f), mins, maxs, BspContentFlags::MaskPlayerSolid);
 
 		if (trace.hit)
 		{
@@ -126,7 +126,7 @@ namespace Freeking
 			_movementVelocity.ProjectOntoPlane(trace.planeNormal, 1.001f);
 		}
 
-		Map::Current->SlideMove(dt, _movementPosition, _movementVelocity, mins, maxs, BspContentFlags::MASK_PLAYERSOLID, !isWalking, isGrounded, trace.planeNormal);
+		Map::Current->SlideMove(dt, _movementPosition, _movementVelocity, mins, maxs, BspContentFlags::MaskPlayerSolid, !isWalking, isGrounded, trace.planeNormal);
 
 		SetRotation(_pitch, _yaw, CalculateEyeRoll(_movementVelocity, yawRotation.Right(), 500.0f, 4.0f));
 
@@ -162,13 +162,13 @@ namespace Freeking
 
 	void FreeCamera::ApplyGravity(double dt)
 	{
-		_movementVelocity += (Vector3f::Down * (Gravity * dt));
+		_movementVelocity += (Vector3f::Down * (Gravity * (float)dt));
 	}
 
-	void FreeCamera::ApplyFriction(double friction, double dt)
+	void FreeCamera::ApplyFriction(float friction, double dt)
 	{
 		float speed = _movementVelocity.Length();
-		float drop = speed * friction * dt;
+		float drop = speed * friction * (float)dt;
 		float newSpeed = speed - drop;
 
 		if (newSpeed < 0.0f)
@@ -184,7 +184,7 @@ namespace Freeking
 		_movementVelocity *= newSpeed;
 	}
 
-	void FreeCamera::ApplyAcceleration(const Vector3f& wishDirection, double wishSpeed, double acceleration, double dt)
+	void FreeCamera::ApplyAcceleration(const Vector3f& wishDirection, float wishSpeed, float acceleration, double dt)
 	{
 		float currentSpeed = Vector3f::Dot(wishDirection, _movementVelocity);
 		float addSpeed = wishSpeed - currentSpeed;
@@ -194,7 +194,7 @@ namespace Freeking
 			return;
 		}
 
-		float accelerationSpeed = acceleration * dt * wishSpeed;
+		float accelerationSpeed = acceleration * (float)dt * wishSpeed;
 
 		if (accelerationSpeed > addSpeed)
 		{
