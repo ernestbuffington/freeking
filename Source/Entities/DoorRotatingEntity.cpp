@@ -25,7 +25,7 @@ namespace Freeking
 			Close();
 		}
 
-		_currentDistance += ((_speed * dt) * (_open ? 1.0f : -1.0f));
+		_currentDistance += ((_speed * (float)dt) * (_open ? 1.0f : -1.0f));
 		_currentDistance = Math::Clamp(_currentDistance, 0.0f, _distance);
 
 		SetRotation(Quaternion::FromDegreeYaw(_currentDistance * -1.0f));

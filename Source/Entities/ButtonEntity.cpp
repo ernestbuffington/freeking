@@ -37,7 +37,7 @@ namespace Freeking
 			_pressed = false;
 		}
 
-		_currentDistance += ((_speed * dt) * (_pressed ? 1.0f : -1.0f));
+		_currentDistance += ((_speed * (float)dt) * (_pressed ? 1.0f : -1.0f));
 		_currentDistance = Math::Clamp(_currentDistance, 0.0f, _moveDistance);
 
 		SetPosition(_initialPosition.MulAdd(_currentDistance, _moveDirection));

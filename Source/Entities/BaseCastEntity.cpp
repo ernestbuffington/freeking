@@ -78,15 +78,18 @@ namespace Freeking
 
 				for (const auto& mesh : _meshes)
 				{
-					const auto& frameTransform = mesh->FrameTransforms.at(_animator.GetFrame());
-					const auto& nextFrameTransform = mesh->FrameTransforms.at(_animator.GetNextFrame());
-					auto boundsMin = Vector3f::Lerp(frameTransform.boundsMin, nextFrameTransform.boundsMin, _animator.GetFrameDelta());
-					auto boundsMax = Vector3f::Lerp(frameTransform.boundsMax, nextFrameTransform.boundsMax, _animator.GetFrameDelta());
-					
-					LineRenderer::Debug->DrawBox(GetTransform(), boundsMin, boundsMax, LinearColor(0, 1, 1, alpha));
+					for (int i = 0; i < mesh->FrameBounds.size(); ++i)
+					{
+						const auto& frameBounds = mesh->FrameBounds.at(i).at(_animator.GetFrame());
+						const auto& nextFrameBounds = mesh->FrameBounds.at(i).at(_animator.GetNextFrame());
+						auto boundsMin = Vector3f::Lerp(frameBounds.boundsMin, nextFrameBounds.boundsMin, _animator.GetFrameDelta());
+						auto boundsMax = Vector3f::Lerp(frameBounds.boundsMax, nextFrameBounds.boundsMax, _animator.GetFrameDelta());
+
+						LineRenderer::Debug->DrawBox(GetTransform(), boundsMin, boundsMax, LinearColor(0, 1, 1, alpha));
+					}
 				}
 
-				LineRenderer::Debug->DrawBox(GetTransform(), GetLocalMinBounds(), GetLocalMaxBounds(), LinearColor(0, 1, 0, alpha));
+				LineRenderer::Debug->DrawAABBox(GetPosition(), GetLocalMinBounds(), GetLocalMaxBounds(), LinearColor(0, 1, 0, alpha));
 			}
 		}
 	}

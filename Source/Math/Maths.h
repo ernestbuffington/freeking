@@ -51,7 +51,7 @@ namespace Freeking
 			return 0.0f;
 		}
 
-		static inline double DeltaAngleDegrees(float a, float b)
+		static inline float DeltaAngleDegrees(float a, float b)
 		{
 			float delta = b - a;
 

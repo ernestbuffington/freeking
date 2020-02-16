@@ -380,8 +380,8 @@ namespace Freeking
 
 				animator.Tick(deltaTime);
 
-				int frame = animator.GetFrame();
-				int nextFrame = animator.GetNextFrame();
+				size_t frame = animator.GetFrame();
+				size_t nextFrame = animator.GetNextFrame();
 
 				Matrix4x4 viewmodelProjectionMatrix = Matrix4x4::Perspective(73, (float)_viewportWidth / (float)_viewportHeight, 0.1f, 100.0f);
 				Matrix4x4 viewmodelViewMatrix = viewMatrix;

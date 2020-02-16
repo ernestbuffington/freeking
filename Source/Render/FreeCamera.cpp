@@ -228,7 +228,7 @@ namespace Freeking
 	{
 		Vector3f swingVelocity(-yawDelta, pitchDelta, 0);
 
-		_swingOffset -= _swingOffset * _returnSpeed * dt;
+		_swingOffset -= _swingOffset * _returnSpeed * (float)dt;
 		_swingOffset += (swingVelocity * _swingInfluence);
 
 		if (_swingOffset.Length() > _maxOffsetLength)

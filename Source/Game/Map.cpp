@@ -1010,7 +1010,7 @@ namespace Freeking
 	{
 		Vector3f startLocal = start - origin;
 		Vector3f endLocal = end - origin;
-		bool isRotated = (angles[0] || angles[1] || angles[2] || angles[3] != 1.0);
+		bool isRotated = (angles[0] || angles[1] || angles[2] || angles[3] != 1.0f);
 
 		if (isRotated)
 		{
@@ -1100,7 +1100,6 @@ namespace Freeking
 
 			remainingTime -= remainingTime * trace.fraction;
 
-			if (true)
 			{
 				bool nearGround = grounded;
 
@@ -1151,7 +1150,7 @@ namespace Freeking
 
 			for (i = 0; i < planeCount; i++)
 			{
-				if (Vector3f::Dot(trace.planeNormal, planes[i]) > 0.99)
+				if (Vector3f::Dot(trace.planeNormal, planes[i]) > 0.99f)
 				{
 					velocity = trace.planeNormal + velocity;
 
@@ -1183,7 +1182,7 @@ namespace Freeking
 						continue;
 					}
 
-					if (Vector3f::Dot(clipVelocity, planes[j]) >= 0.1)
+					if (Vector3f::Dot(clipVelocity, planes[j]) >= 0.1f)
 					{
 						continue;
 					}
@@ -1205,7 +1204,7 @@ namespace Freeking
 							continue;
 						}
 
-						if (Vector3f::Dot(clipVelocity, planes[k]) >= 0.1)
+						if (Vector3f::Dot(clipVelocity, planes[k]) >= 0.1f)
 						{
 							continue;
 						}

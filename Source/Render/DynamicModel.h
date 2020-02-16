@@ -27,46 +27,11 @@ namespace Freeking
 	{
 	public:
 
-		FrameAnimator() :
-			_playTime(0),
-			_frame(0),
-			_nextFrame(0),
-			_frameDelta(0),
-			_currentAnimation(0)
-		{
-		}
+		FrameAnimator();
 
-		void Tick(double dt)
-		{
-			const auto& animation = _animations.at(_currentAnimation);
-			auto frameCount = animation.numFrames;
-
-			_playTime += (10.0 * dt);
-			_playTime = fmod(_playTime, (float)frameCount);
-
-			_frame = (size_t)floor(_playTime);
-			_frame %= frameCount;
-			_nextFrame = (_frame + 1) % frameCount;
-			_frameDelta = (float)_playTime - (float)_frame;
-
-			_frame += animation.firstFrame;
-			_nextFrame += animation.firstFrame;
-			_frameDelta = Math::Clamp(_frameDelta, 0.0f, 1.0f);
-		}
-
-		void AddAnimation(const std::string& name, size_t firstFrame, size_t numFrames)
-		{
-			_animations.push_back({ name, firstFrame, numFrames });
-		}
-
-		void SetAnimation(size_t index)
-		{
-			_currentAnimation = index;
-			_playTime = 0;
-			_frame = 0;
-			_nextFrame = 0;
-			_frameDelta = 0;
-		}
+		void Tick(double dt);
+		void AddAnimation(const std::string& name, size_t firstFrame, size_t numFrames);
+		void SetAnimation(size_t index);
 
 		inline double GetPlayTime() const { return _playTime; }
 		inline size_t GetFrame() const { return _frame; }
@@ -114,6 +79,10 @@ namespace Freeking
 			std::string name;
 			Vector3f translate;
 			Vector3f scale;
+		};
+
+		struct FrameBoundingBox
+		{
 			Vector3f boundsMin;
 			Vector3f boundsMax;
 		};
@@ -136,6 +105,7 @@ namespace Freeking
 		std::vector<uint32_t> Indices;
 		std::vector<FrameVertex> FrameVertices;
 		std::vector<FrameTransform> FrameTransforms;
+		std::vector<std::vector<FrameBoundingBox>> FrameBounds;
 		std::vector<std::string> Skins;
 
 	private:

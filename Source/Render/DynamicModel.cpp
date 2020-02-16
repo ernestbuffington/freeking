@@ -70,4 +70,45 @@ namespace Freeking
 
 		return animations;
 	}
+
+	FrameAnimator::FrameAnimator() :
+		_playTime(0),
+		_frame(0),
+		_nextFrame(0),
+		_frameDelta(0),
+		_currentAnimation(0)
+	{
+	}
+
+	void FrameAnimator::Tick(double dt)
+	{
+		const auto& animation = _animations.at(_currentAnimation);
+		auto frameCount = animation.numFrames;
+
+		_playTime += (10.0 * dt);
+		_playTime = fmod(_playTime, (float)frameCount);
+
+		_frame = (size_t)floor(_playTime);
+		_frame %= frameCount;
+		_nextFrame = (_frame + 1) % frameCount;
+		_frameDelta = (float)_playTime - (float)_frame;
+
+		_frame += animation.firstFrame;
+		_nextFrame += animation.firstFrame;
+		_frameDelta = Math::Clamp(_frameDelta, 0.0f, 1.0f);
+	}
+
+	void FrameAnimator::AddAnimation(const std::string& name, size_t firstFrame, size_t numFrames)
+	{
+		_animations.push_back({ name, firstFrame, numFrames });
+	}
+
+	void FrameAnimator::SetAnimation(size_t index)
+	{
+		_currentAnimation = index;
+		_playTime = 0;
+		_frame = 0;
+		_nextFrame = 0;
+		_frameDelta = 0;
+	}
 }
