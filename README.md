@@ -1,5 +1,7 @@
 # freeking
 
+Note: The code quality of this right now is very poor, rushing through things as this is just a hobby project.
+
 freeking is an open source reimplementation of [Kingpin: Life of Crime](https://en.wikipedia.org/wiki/Kingpin:_Life_of_Crime)
 written in modern C++ and modern OpenGL.
 
