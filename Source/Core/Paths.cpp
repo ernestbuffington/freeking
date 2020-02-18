@@ -1,8 +1,10 @@
 #include "Paths.h"
 #include "ThirdParty/ValveFileVDF/vdf_parser.hpp"
+
+#ifdef _WIN32
 #include <Windows.h>
 #include <winreg.h>
-#include <atlstr.h>
+#endif
 
 namespace Freeking
 {
@@ -12,6 +14,7 @@ namespace Freeking
 
 		if (dir.empty())
 		{
+#ifdef _WIN32
 			HKEY key;
 			TCHAR value[1024];
 			DWORD length = sizeof(value);
@@ -23,6 +26,7 @@ namespace Freeking
 
 				return value;
 			}
+#endif
 		}
 
 		return dir;
@@ -34,6 +38,7 @@ namespace Freeking
 
 		if (dir.empty())
 		{
+#ifdef _WIN32
 			HKEY key;
 			TCHAR value[1024];
 			DWORD length = sizeof(value);
@@ -49,6 +54,7 @@ namespace Freeking
 			{
 				dir = SteamGameDir(38430);
 			}
+#endif
 		}
 
 		return dir;
