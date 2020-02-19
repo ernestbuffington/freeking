@@ -58,7 +58,7 @@ namespace Freeking
 			trace.hit == false)
 		{
 			auto traceDirection = traceEnd - traceStart;
-			SetRotation(Quaternion::FromRadianYaw(atan2(traceDirection.x, traceDirection.z) - Math::HalfPi));
+			//SetRotation(Quaternion::FromRadianYaw(atan2(traceDirection.x, traceDirection.z) - Math::HalfPi));
 		}
 	}
 
@@ -118,7 +118,17 @@ namespace Freeking
 			_shader->SetParameterValue("frames[1].scale", mesh->FrameTransforms[_animator.GetNextFrame()].scale);
 			_shader->Apply();
 
-			mesh->Draw();
+			if (mesh->SubObjects.size() == 7)
+			{
+				mesh->DrawSubObject(0);
+				mesh->DrawSubObject(1);
+				mesh->DrawSubObject(2);
+				mesh->DrawSubObject(3);
+			}
+			else
+			{
+				mesh->Draw();
+			}
 		}
 	}
 

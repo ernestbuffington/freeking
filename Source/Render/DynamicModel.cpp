@@ -22,7 +22,24 @@ namespace Freeking
 	void DynamicModel::Draw()
 	{
 		_vertexBinding->Bind();
+
 		glDrawElements(GL_TRIANGLES, _vertexBinding->GetNumElements(), GL_UNSIGNED_INT, (void*)0);
+
+		_vertexBinding->Unbind();
+	}
+
+	void DynamicModel::DrawSubObject(int index)
+	{
+		if (index < 0 || index >= SubObjects.size())
+		{
+			return;
+		}
+
+		_vertexBinding->Bind();
+
+		const auto& subObject = SubObjects.at(index);
+		glDrawElements(GL_TRIANGLES, subObject.numIndices, GL_UNSIGNED_INT, (void*)(subObject.firstIndex * sizeof(uint32_t)));
+
 		_vertexBinding->Unbind();
 	}
 
@@ -100,7 +117,16 @@ namespace Freeking
 
 	void FrameAnimator::AddAnimation(const std::string& name, size_t firstFrame, size_t numFrames)
 	{
+		_animationNameIds.insert({ name, (int)_animations.size() });
 		_animations.push_back({ name, firstFrame, numFrames });
+	}
+
+	void FrameAnimator::SetAnimation(const std::string& name)
+	{
+		if (const auto& it = _animationNameIds.find(name); it != _animationNameIds.end())
+		{
+			SetAnimation(it->second);
+		}
 	}
 
 	void FrameAnimator::SetAnimation(size_t index)

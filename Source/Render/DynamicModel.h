@@ -10,6 +10,7 @@
 #include "Shader.h"
 #include "Util.h"
 #include <vector>
+#include <unordered_map>
 #include <memory>
 
 namespace Freeking
@@ -32,6 +33,7 @@ namespace Freeking
 		void Tick(double dt);
 		void AddAnimation(const std::string& name, size_t firstFrame, size_t numFrames);
 		void SetAnimation(size_t index);
+		void SetAnimation(const std::string& name);
 
 		inline double GetPlayTime() const { return _playTime; }
 		inline size_t GetFrame() const { return _frame; }
@@ -41,6 +43,7 @@ namespace Freeking
 
 	private:
 
+		std::unordered_map<std::string, int> _animationNameIds;
 		std::vector<FrameAnimation> _animations;
 
 		double _playTime;
@@ -87,7 +90,14 @@ namespace Freeking
 			Vector3f boundsMax;
 		};
 
+		struct SubObject
+		{
+			int firstIndex;
+			int numIndices;
+		};
+
 		void Draw();
+		void DrawSubObject(int index);
 		void Commit();
 
 		inline uint32_t GetFrameCount() const { return _frameCount; }
@@ -107,6 +117,7 @@ namespace Freeking
 		std::vector<FrameTransform> FrameTransforms;
 		std::vector<std::vector<FrameBoundingBox>> FrameBounds;
 		std::vector<std::string> Skins;
+		std::vector<SubObject> SubObjects;
 
 	private:
 

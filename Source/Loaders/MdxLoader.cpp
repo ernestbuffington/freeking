@@ -67,6 +67,13 @@ namespace Freeking
 
 				auto numCommandVertices = abs(command->TrisTypeNum);
 
+				if (mesh->SubObjects.size() == command->SubObjectID)
+				{
+					mesh->SubObjects.push_back({ (int)mesh->Indices.size(), 0 });
+				}
+				
+				mesh->SubObjects.back().numIndices += (numCommandVertices - 2) * 3;
+
 				for (int commandVertexIndex = 0; commandVertexIndex < numCommandVertices; ++commandVertexIndex)
 				{
 					auto commandVertex = file.Read<MDXCommandVertex>(pos, 1);
