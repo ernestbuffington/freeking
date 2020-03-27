@@ -35,17 +35,42 @@ namespace Freeking
 		virtual void UpdateLoaders() override;
 	};
 
+	class GlobalUniformBuffer
+	{
+	public:
+
+		GlobalUniformBuffer();
+		~GlobalUniformBuffer();
+
+		void Initialize();
+		void Update();
+
+		struct UniformBlock
+		{
+			Matrix4x4 viewMatrix;
+			Matrix4x4 projectionMatrix;
+			Matrix4x4 viewProjectionMatrix;
+		};
+
+		UniformBlock Uniforms;
+
+	private:
+
+		GLuint _bufferId;
+	};
+
 	class Shader
 	{
 	public:
 
-		class PropertyGlobals;
-
 		static ShaderLibrary Library;
-		static PropertyGlobals Globals;
+		static GlobalUniformBuffer GlobalUniforms;
+
+		static void Initialize();
 
 		Shader() = delete;
 		Shader(const std::string&);
+		~Shader();
 
 		void Apply();
 		void Unbind();
@@ -109,11 +134,11 @@ namespace Freeking
 				Type type;
 				float value[4];
 				bool unset;
+				bool dirty;
 			};
 
 			Property prop;
 			GLint location;
-			int globalId;
 		};
 
 		struct IntParameter
@@ -143,6 +168,7 @@ namespace Freeking
 				Type type;
 				int value[4];
 				bool unset;
+				bool dirty;
 			};
 
 			Property prop;
@@ -176,6 +202,7 @@ namespace Freeking
 				Type type;
 				float value[16];
 				bool unset;
+				bool dirty;
 			};
 
 			Property prop;
@@ -208,11 +235,26 @@ namespace Freeking
 					return Type::Invalid;
 				}
 
+				inline static GLenum CastTargetType(Type type)
+				{
+					switch (type)
+					{
+					case Type::Tex1D: return GL_TEXTURE_1D;
+					case Type::Tex2D: return GL_TEXTURE_2D;
+					case Type::Tex3D: return GL_TEXTURE_3D;
+					case Type::TexBuffer: return GL_TEXTURE_BUFFER;
+					case Type::TexCube: return GL_TEXTURE_CUBE_MAP;
+					}
+
+					return GL_INVALID_ENUM;
+				}
+
 				void SetTexture(const Texture2D*, const TextureSampler*);
 				void SetTexture(const TextureBuffer*);
 				void SetTexture(const TextureCube*, const TextureSampler*);
 
 				Type type;
+				GLenum targetType;
 				GLuint textureId;
 				GLuint samplerId;
 				bool unset;
@@ -224,112 +266,12 @@ namespace Freeking
 			int unit;
 		};
 
+	private:
+
 		using FloatPropertyType = FloatParameter::Property::Type;
 		using IntPropertyType = IntParameter::Property::Type;
 		using MatrixPropertyType = MatrixParameter::Property::Type;
 		using TexturePropertyType = TextureParameter::Property::Type;
-
-		class PropertyGlobals
-		{
-		public:
-
-			PropertyGlobals() = default;
-
-			void SetValue(const char*, int);
-			void SetValue(const char*, float);
-			void SetValue(const char*, const Vector2f&);
-			void SetValue(const char*, const Vector3f&);
-			void SetValue(const char*, const Vector4f&);
-			void SetValue(const char*, const Matrix3x3&);
-			void SetValue(const char*, const Matrix4x4&);
-			void SetValue(const char*, const Texture2D*);
-			void SetValue(const char*, const Texture2D*, const TextureSampler*);
-			void SetValue(const char*, const TextureBuffer*);
-
-			void SetValue(int, int);
-			void SetValue(int, float);
-			void SetValue(int, const Vector2f&);
-			void SetValue(int, const Vector3f&);
-			void SetValue(int, const Vector4f&);
-			void SetValue(int, const Matrix3x3&);
-			void SetValue(int, const Matrix4x4&);
-			void SetValue(int, const Texture2D*);
-			void SetValue(int, const Texture2D*, const TextureSampler*);
-			void SetValue(int, const TextureBuffer*);
-
-			int GetFloatId(const std::string& name) { return _floatProperties.GetId(name); }
-			int GetIntId(const std::string& name) { return _intProperties.GetId(name); }
-			int GetMatrixId(const std::string& name) { return _matrixProperties.GetId(name); }
-			int GetTextureId(const std::string& name) { return _textureProperties.GetId(name); }
-
-		private:
-
-			friend class Shader;
-
-			int AddFloatProperty(const std::string& name, FloatPropertyType type) { return _floatProperties.AddProperty(name, type); }
-			int AddIntProperty(const std::string& name, IntPropertyType type) { return _intProperties.AddProperty(name, type); }
-			int AddMatrixProperty(const std::string& name, MatrixPropertyType type) { return _matrixProperties.AddProperty(name, type); }
-			int AddTextureProperty(const std::string& name, TexturePropertyType type) { return _textureProperties.AddProperty(name, type); }
-
-			FloatParameter::Property* GetFloatProperty(int id) { return _floatProperties.GetProperty(id); }
-			IntParameter::Property* GetIntProperty(int id) { return _intProperties.GetProperty(id); }
-			MatrixParameter::Property* GetMatrixProperty(int id) { return _matrixProperties.GetProperty(id); }
-			TextureParameter::Property* GetTextureProperty(int id) { return _textureProperties.GetProperty(id); }
-
-			template <typename T>
-			struct Properties
-			{
-				int AddProperty(const std::string& name, const enum class T::Type& type)
-				{
-					if (auto it = _propertyNameIds.find(name);
-						it != _propertyNameIds.end())
-					{
-						return (type == _properties.at(it->second).type) ? it->second : -1;
-					}
-
-					int id = static_cast<int>(_properties.size());
-
-					T prop;
-					prop.type = type;
-					prop.unset = true;
-					_properties.push_back(prop);
-					_propertyNameIds.emplace(name, id);
-
-					return id;
-				}
-
-				int GetId(const std::string& name)
-				{
-					if (auto it = _propertyNameIds.find(name);
-						it != _propertyNameIds.end())
-					{
-						return it->second;
-					}
-
-					return -1;
-				}
-
-				T* GetProperty(int id)
-				{
-					if (id < 0 || id > _properties.size())
-					{
-						return nullptr;
-					}
-
-					return &_properties.at(id);
-				}
-
-				std::vector<T> _properties;
-				std::unordered_map<std::string, int> _propertyNameIds;
-			};
-
-			Properties<FloatParameter::Property> _floatProperties;
-			Properties<IntParameter::Property> _intProperties;
-			Properties<MatrixParameter::Property> _matrixProperties;
-			Properties<TextureParameter::Property> _textureProperties;
-		};
-
-	private:
 
 		void InitializeParameter(const std::string& name, GLint location, GLenum glType);
 		void ApplyFloatParameters();
@@ -392,5 +334,20 @@ namespace Freeking
 		Parameters<IntParameter> _intParameters;
 		Parameters<MatrixParameter> _matrixParameters;
 		Parameters<TextureParameter> _textureParameters;
+
+		struct TextureBindingState
+		{
+			TextureBindingState() :
+				textureId(0),
+				samplerId(0)
+			{
+			}
+
+			GLuint textureId;
+			GLuint samplerId;
+		};
+
+		static std::vector<TextureBindingState> _textureBindingStates;
+		static GLuint _activeProgramId;
 	};
 }

@@ -20,7 +20,7 @@ namespace Freeking
 			auto attachmentTexture = std::make_unique<Texture2D>(_width, _height, attachment.internalFormat, attachment.format, attachment.type, nullptr);
 
 			GLenum attachmentIndex = GL_COLOR_ATTACHMENT0 + i;
-			glFramebufferTexture2D(GL_FRAMEBUFFER, attachmentIndex, GL_TEXTURE_2D, attachmentTexture->GetHandle(), 0);
+			glFramebufferTexture2D(GL_FRAMEBUFFER, attachmentIndex, GL_TEXTURE_2D, attachmentTexture->GetId(), 0);
 			drawBuffers[i] = attachmentIndex;
 
 			_colorAttachements.push_back(std::move(attachmentTexture));
@@ -30,7 +30,7 @@ namespace Freeking
 			const auto& attachment = initializer.depthAttachement;
 			auto attachmentTexture = std::make_unique<Texture2D>(_width, _height, attachment.internalFormat, attachment.format, attachment.type, nullptr);
 
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, attachmentTexture->GetHandle(), 0);
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, attachmentTexture->GetId(), 0);
 
 			_depthAttachment = std::move(attachmentTexture);
 		}

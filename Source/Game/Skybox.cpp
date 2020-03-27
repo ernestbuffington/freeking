@@ -90,9 +90,8 @@ namespace Freeking
 			TextureSampler::Library.Get({ TextureWrapMode::ClampEdge, TextureFilterMode::Linear }).get());
 	}
 
-	void Skybox::Draw(const Matrix4x4& viewProj)
+	void Skybox::Draw()
 	{
-		_shader->SetParameterValue("viewProj", viewProj);
 		_shader->Apply();
 
 		_vertexBinding->Bind();

@@ -3,6 +3,13 @@
 layout(location = 0) in vec2 uv;
 layout(location = 1) in int vertexIndex;
 
+uniform GlobalUniforms
+{
+    mat4 viewMatrix;
+    mat4 projectionMatrix;
+    mat4 viewProjectionMatrix;
+};
+
 out VertexData
 {
 	vec3 normal;
@@ -11,9 +18,7 @@ out VertexData
 	vec3 n_eye;
 } vert;
 
-uniform mat4 viewProj;
-uniform mat4 viewMatrix;
-uniform mat4 model;
+uniform mat4 modelMatrix;
 uniform isamplerBuffer frameVertexBuffer;
 uniform samplerBuffer normalBuffer;
 uniform float delta;
@@ -61,17 +66,16 @@ void main()
 	vert.uv = uv;
 	vert.normal = lerpNormal;
 
-	vert.pos_eye = vec3(viewMatrix * model * vec4(lerpPosition, 1.0));
-  	vert.n_eye = vec3(viewMatrix * model * vec4(lerpNormal, 0.0));
+	vert.pos_eye = vec3(viewMatrix * modelMatrix * vec4(lerpPosition, 1.0));
+  	vert.n_eye = vec3(viewMatrix * modelMatrix * vec4(lerpNormal, 0.0));
 
-	gl_Position = viewProj * model * vec4(lerpPosition, 1.0);
+	gl_Position = viewProjectionMatrix * modelMatrix * vec4(lerpPosition, 1.0);
 }
 
 #endif
 
 #ifdef FRAGMENT
 
-uniform mat4 viewMatrix;
 uniform sampler2D diffuse;
 uniform samplerCube cubemap;
 

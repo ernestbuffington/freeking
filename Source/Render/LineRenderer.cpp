@@ -25,7 +25,7 @@ namespace Freeking
 		_shader = Shader::Library.Get("Shaders/DebugLine.shader");
 	}
 
-	void LineRenderer::Flush(Matrix4x4& viewProj)
+	void LineRenderer::Flush()
 	{
 		if (_vertexCount < 2)
 		{

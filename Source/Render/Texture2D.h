@@ -26,16 +26,13 @@ namespace Freeking
 		Texture2D(GLsizei width, GLsizei height, uint8_t r, uint8_t g, uint8_t b);
 		~Texture2D();
 
-		void Bind() const;
-		void Bind(int slot) const;
-
-		virtual const GLuint GetHandle() const override { return _handle; }
+		virtual const GLuint GetId() const override { return _id; }
 		const GLsizei GetWidth() const { return _width; }
 		const GLsizei GetHeight() const { return _height; }
 
 	private:
 
-		GLuint _handle;
+		GLuint _id;
 		GLsizei _width;
 		GLsizei _height;
 		GLenum _internalFormat;

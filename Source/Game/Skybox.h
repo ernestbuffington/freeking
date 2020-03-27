@@ -19,7 +19,7 @@ namespace Freeking
 		Skybox() = delete;
 		Skybox(const std::string& name);
 
-		void Draw(const Matrix4x4& viewProj);
+		void Draw();
 
 		TextureCube* GetCubemap() { return _cubemap.get(); }
 

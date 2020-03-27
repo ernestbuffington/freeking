@@ -18,10 +18,10 @@ namespace Freeking
 		_internalFormat(internalFormat),
 		_format(format),
 		_type(type),
-		_handle(0)
+		_id(0)
 	{
-		glGenTextures(1, &_handle);
-		glBindTexture(GL_TEXTURE_2D, _handle);
+		glGenTextures(1, &_id);
+		glBindTexture(GL_TEXTURE_2D, _id);
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 		glTexImage2D(GL_TEXTURE_2D, 0, _internalFormat, _width, _height, 0, _format, _type, data);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -29,6 +29,7 @@ namespace Freeking
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glGenerateMipmap(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
 	Texture2D::Texture2D(GLsizei width, GLsizei height, uint8_t r, uint8_t g, uint8_t b) :
@@ -37,7 +38,7 @@ namespace Freeking
 		_internalFormat(GL_RGBA8),
 		_format(GL_RGB),
 		_type(GL_UNSIGNED_BYTE),
-		_handle(0)
+		_id(0)
 	{
 		std::vector<uint8_t> buffer((width * height) * 3, 0);
 		uint8_t pixel[] { r, g, b };
@@ -46,29 +47,19 @@ namespace Freeking
 			std::memcpy(&buffer[i * 3], pixel, 3);
 		}
 
-		glGenTextures(1, &_handle);
-		glBindTexture(GL_TEXTURE_2D, _handle);
+		glGenTextures(1, &_id);
+		glBindTexture(GL_TEXTURE_2D, _id);
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 		glTexImage2D(GL_TEXTURE_2D, 0, _internalFormat, _width, _height, 0, _format, _type, (void*)buffer.data());
 		glGenerateMipmap(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
 	Texture2D::~Texture2D()
 	{
-		if (_handle != 0)
+		if (_id != 0)
 		{
-			glDeleteTextures(1, &_handle);
+			glDeleteTextures(1, &_id);
 		}
-	}
-
-	void Texture2D::Bind() const
-	{
-		glBindTexture(GL_TEXTURE_2D, _handle);
-	}
-
-	void Texture2D::Bind(int slot) const
-	{
-		glActiveTexture(GL_TEXTURE0 + slot);
-		glBindTexture(GL_TEXTURE_2D, _handle);
 	}
 }

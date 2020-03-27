@@ -5,14 +5,18 @@ layout(location = 1) in vec3 offset;
 layout(location = 2) in vec2 size;
 layout(location = 3) in vec4 color;
 
+uniform GlobalUniforms
+{
+    mat4 viewMatrix;
+    mat4 projectionMatrix;
+    mat4 viewProjectionMatrix;
+};
+
 out VertexData
 {
 	vec2 uv;
 	vec4 color;
 } vert;
-
-uniform mat4 projectionMatrix;
-uniform mat4 viewMatrix;
 
 void main()
 {

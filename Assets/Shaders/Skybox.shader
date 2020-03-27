@@ -2,17 +2,22 @@
 
 layout(location = 0) in vec3 position;
 
+uniform GlobalUniforms
+{
+    mat4 viewMatrix;
+    mat4 projectionMatrix;
+    mat4 viewProjectionMatrix;
+};
+
 out VertexData
 {
 	vec3 uv;
 } vert;
 
-uniform mat4 viewProj;
-
 void main()
 {
 	vert.uv = position;
-	gl_Position = (viewProj * vec4(position, 1.0)).xyww;
+	gl_Position = (projectionMatrix * viewMatrix * vec4(position, 1.0)).xyww;
 }
 
 #endif

@@ -11,6 +11,6 @@ namespace Freeking
 		Texture() = default;
 		virtual ~Texture() = default;
 
-		virtual const GLuint GetHandle() const = 0;
+		virtual const GLuint GetId() const = 0;
 	};
 }

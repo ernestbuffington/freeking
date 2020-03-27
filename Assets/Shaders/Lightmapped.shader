@@ -6,6 +6,15 @@ layout(location = 2) in vec2 uv0;
 layout(location = 3) in vec2 uv1;
 layout(location = 4) in vec2 uv2;
 
+uniform GlobalUniforms
+{
+    mat4 viewMatrix;
+    mat4 projectionMatrix;
+    mat4 viewProjectionMatrix;
+};
+
+uniform mat4 modelMatrix;
+
 out VertexData
 {
 	vec3 normal;
@@ -14,9 +23,6 @@ out VertexData
 	vec2 uv2;
 } vert;
 
-uniform mat4 viewProj;
-uniform mat4 model;
-
 void main()
 {
 	vert.normal = normal;
@@ -24,7 +30,7 @@ void main()
 	vert.uv1 = uv1;
 	vert.uv2 = uv2;
 
-	gl_Position = viewProj * model * vec4(position, 1.0);
+	gl_Position = viewProjectionMatrix * modelMatrix * vec4(position, 1.0);
 }
 
 #endif

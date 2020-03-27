@@ -6,14 +6,14 @@ namespace Freeking
 
 	TextureCube::TextureCube(const std::array<Image, 6>& faces)
 	{
-		glGenTextures(1, &_handle);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, _handle);
+		glGenTextures(1, &_id);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, _id);
 
 		for (size_t i = 0; i < faces.size(); i++)
 		{
 			const auto& face = faces[i];
 			glTexImage2D(
-				GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
+				static_cast<GLenum>(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i),
 				0,
 				face.internalFormat,
 				face.width, face.height,
@@ -28,9 +28,9 @@ namespace Freeking
 
 	TextureCube::~TextureCube()
 	{
-		if (_handle)
+		if (_id)
 		{
-			glDeleteTextures(1, &_handle);
+			glDeleteTextures(1, &_id);
 		}
 	}
 }

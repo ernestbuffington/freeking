@@ -1,37 +1,43 @@
 #include "TextureBuffer.h"
-#include "NormalTable.h"
 #include <memory>
 
 namespace Freeking
 {
 	TextureBuffer::TextureBuffer(void* buffer, size_t length, GLenum format) :
-		_handle(0),
-		_bufferHandle(0)
+		_id(0),
+		_bufferId(0)
 	{
-		glGenTextures(1, &_handle);
-		glGenBuffers(1, &_bufferHandle);
+		glGenTextures(1, &_id);
+		glGenBuffers(1, &_bufferId);
 
-		glBindBuffer(GL_TEXTURE_BUFFER, _bufferHandle);
-		glBufferData(GL_TEXTURE_BUFFER, length, buffer, GL_STATIC_READ);
+		glBindBuffer(GL_TEXTURE_BUFFER, _bufferId);
+		glBufferData(GL_TEXTURE_BUFFER, length, buffer, GL_DYNAMIC_DRAW);
 		glBindBuffer(GL_TEXTURE_BUFFER, 0);
 
-		glBindTexture(GL_TEXTURE_BUFFER, _handle);
-		glTexBuffer(GL_TEXTURE_BUFFER, format, _bufferHandle);
+		glBindTexture(GL_TEXTURE_BUFFER, _id);
+		glTexBuffer(GL_TEXTURE_BUFFER, format, _bufferId);
 		glBindTexture(GL_TEXTURE_BUFFER, 0);
 	}
 
 	TextureBuffer::~TextureBuffer()
 	{
-		if (_bufferHandle != 0)
+		if (_bufferId != 0)
 		{
-			glDeleteBuffers(1, &_bufferHandle);
-			_bufferHandle = 0;
+			glDeleteBuffers(1, &_bufferId);
+			_bufferId = 0;
 		}
 
-		if (_handle != 0)
+		if (_id != 0)
 		{
-			glDeleteTextures(1, &_handle);
-			_handle = 0;
+			glDeleteTextures(1, &_id);
+			_id = 0;
 		}
+	}
+
+	void TextureBuffer::SetBuffer(void* buffer, size_t length)
+	{
+		glBindBuffer(GL_TEXTURE_BUFFER, _bufferId);
+		glBufferSubData(GL_TEXTURE_BUFFER, 0, length, buffer);
+		glBindBuffer(GL_TEXTURE_BUFFER, 0);
 	}
 }

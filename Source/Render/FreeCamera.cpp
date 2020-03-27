@@ -71,6 +71,7 @@ namespace Freeking
 
 		if (_noclip)
 		{
+			SetRotation(_pitch, _yaw, 0);
 			FlyMove(force, dt);
 
 			return;

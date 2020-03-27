@@ -3,17 +3,22 @@
 layout(location = 0) in vec3 position;
 layout(location = 1) in vec4 color;
 
+uniform GlobalUniforms
+{
+    mat4 viewMatrix;
+    mat4 projectionMatrix;
+    mat4 viewProjectionMatrix;
+};
+
 out VertexData
 {
 	vec4 color;
 } vert;
 
-uniform mat4 viewProj;
-
 void main()
 {
 	vert.color = color;
-	gl_Position = viewProj * vec4(position, 1.0);
+	gl_Position = viewProjectionMatrix * vec4(position, 1.0);
 }
 
 #endif

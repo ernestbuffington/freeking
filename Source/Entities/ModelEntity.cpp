@@ -37,8 +37,8 @@ namespace Freeking
 		if (_shader && _model && _texture)
 		{
 			int frame = 0;
-
-			_shader->SetParameterValue("model", GetTransform());
+			
+			_shader->SetParameterValue("modelMatrix", GetTransform());
 			_shader->SetParameterValue("delta", 0.0f);
 			_shader->SetParameterValue("normalBuffer", DynamicModel::GetNormalBuffer().get());
 			_shader->SetParameterValue("diffuse", _texture.get());

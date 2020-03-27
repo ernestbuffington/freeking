@@ -79,7 +79,7 @@ namespace Freeking
 				_shader->SetParameterValue("alphaMultiply", 1.0f);
 			}
 
-			_shader->SetParameterValue("model", GetTransform());
+			_shader->SetParameterValue("modelMatrix", GetTransform());
 		}
 	}
 

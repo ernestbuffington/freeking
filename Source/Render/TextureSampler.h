@@ -45,7 +45,7 @@ namespace Freeking
 
 		using TextureSamplerPtr = std::shared_ptr<TextureSampler>;
 
-		const TextureSamplerPtr& Get(const TextureSamplerInitializer& settings);
+		const TextureSamplerPtr& Get(const TextureSamplerInitializer& initializer);
 
 	private:
 
@@ -59,15 +59,13 @@ namespace Freeking
 		static TextureSamplerLibrary Library;
 		static std::shared_ptr<TextureSampler> GetDefault();
 
-		TextureSampler(const TextureSamplerInitializer& settings);
+		TextureSampler(const TextureSamplerInitializer& initializer);
 		~TextureSampler();
 
-		void Bind(GLuint unit);
-
-		inline GLuint GetHandle() const { return _handle;  }
+		inline GLuint GetId() const { return _id;  }
 
 	private:
 
-		GLuint _handle;
+		GLuint _id;
 	};
 }

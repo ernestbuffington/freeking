@@ -26,7 +26,7 @@ namespace Freeking
 
 		SpriteBatch(size_t = 1000);
 
-		void Flush(const Matrix4x4&, float = 1.0f);
+		void Flush(float = 1.0f);
 		void Clear();
 		void DrawText(const Font*, const std::string&, const Vector2f&, const LinearColor&, float);
 		void Draw(Texture2D*, const Vector2f&, float, const LinearColor&);
@@ -96,7 +96,7 @@ namespace Freeking
 			const Vector2f _drawSize;
 		};
 
-		void DrawSprites(const Matrix4x4&, float, const std::shared_ptr<Shader>&, std::vector<SpriteBatch::Sprite>&);
+		void DrawSprites(float, const std::shared_ptr<Shader>&, std::vector<SpriteBatch::Sprite>&);
 		void DrawSlice(Texture2D*, const Slice&, const LinearColor&);
 		static void TransformUV(Vector2f&, const Vector2f&, const Vector2f&, const Vector2f&);
 		static void TransformUVs(Slice&, const Vector2f&, const Vector2f&, const Vector2f&);

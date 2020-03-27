@@ -12,11 +12,13 @@ namespace Freeking
 		TextureBuffer(void* buffer, size_t length, GLenum format);
 		~TextureBuffer();
 
-		virtual const GLuint GetHandle() const override { return _handle; }
+		void SetBuffer(void* buffer, size_t length);
+
+		virtual const GLuint GetId() const override { return _id; }
 
 	protected:
 
-		GLuint _handle;
-		GLuint _bufferHandle;
+		GLuint _id;
+		GLuint _bufferId;
 	};
 }

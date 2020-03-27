@@ -128,7 +128,7 @@ namespace Freeking
 				}
 
 				ImGui::Image(
-					(ImTextureID)(intptr_t)texture->GetHandle(),
+					(ImTextureID)(intptr_t)texture->GetId(),
 					ImVec2((float)texture->GetWidth(), (float)texture->GetHeight()),
 					ImVec2(0, 0), ImVec2(1, 1), ImVec4(1, 1, 1, 1), ImVec4(1, 1, 0, 1));
 
@@ -169,7 +169,7 @@ namespace Freeking
 
 		_window->Swap();
 
-		Shader::Library.Initialize();
+		Shader::Initialize();
 
 		ImGui::CreateContext();
 		ImGui_ImplSDL2_InitForOpenGL(static_cast<SDL_Window*>(*_window), static_cast<SDL_GLContext*>(*_window));
@@ -224,11 +224,6 @@ namespace Freeking
 				}
 			}
 		}
-
-		auto projectionMatrixId = Shader::Globals.GetMatrixId("projectionMatrix");
-		auto viewMatrixId = Shader::Globals.GetMatrixId("viewMatrix");
-		auto viewProjId = Shader::Globals.GetMatrixId("viewProj");
-		auto viewportSizeId = Shader::Globals.GetFloatId("viewportSize");
 
 		TraceResult tr;
 
@@ -324,15 +319,15 @@ namespace Freeking
 			Matrix4x4 viewMatrix = camera.GetTransform();
 			Matrix4x4 viewProjectionMatrix = projectionMatrix * viewMatrix;
 
-			Shader::Globals.SetValue(projectionMatrixId, projectionMatrix);
-			Shader::Globals.SetValue(viewMatrixId, viewMatrix);
-			Shader::Globals.SetValue(viewProjId, viewProjectionMatrix);
-			Shader::Globals.SetValue(viewportSizeId, Vector2f(static_cast<float>(_viewportWidth), static_cast<float>(_viewportHeight)));
-
 			Renderer::ProjectionMatrix = projectionMatrix;
 			Renderer::ViewMatrix = viewMatrix;
 			Renderer::ViewportWidth = static_cast<float>(_viewportWidth);
 			Renderer::ViewportHeight = static_cast<float>(_viewportHeight);
+
+			Shader::GlobalUniforms.Uniforms.viewMatrix = viewMatrix;
+			Shader::GlobalUniforms.Uniforms.projectionMatrix = projectionMatrix;
+			Shader::GlobalUniforms.Uniforms.viewProjectionMatrix = viewProjectionMatrix;
+			Shader::GlobalUniforms.Update();
 
 			if (Input::JustPressed(Button::MouseLeft))
 			{
@@ -366,7 +361,15 @@ namespace Freeking
 				glDepthFunc(GL_LEQUAL);
 				Matrix4x4 skyboxView = viewMatrix;
 				skyboxView.Translate(0);
-				skybox->Draw(projectionMatrix * skyboxView);
+
+				Shader::GlobalUniforms.Uniforms.viewMatrix = skyboxView;
+				Shader::GlobalUniforms.Update();
+
+				skybox->Draw();
+
+				Shader::GlobalUniforms.Uniforms.viewMatrix = viewMatrix;
+				Shader::GlobalUniforms.Update();
+
 				glDepthFunc(GL_LESS);
 				glDepthMask(GL_TRUE);
 			}
@@ -384,14 +387,13 @@ namespace Freeking
 				size_t nextFrame = animator.GetNextFrame();
 
 				Matrix4x4 viewmodelProjectionMatrix = Matrix4x4::Perspective(73, (float)_viewportWidth / (float)_viewportHeight, 0.1f, 100.0f);
-				Matrix4x4 viewmodelViewMatrix = viewMatrix;
-				viewmodelViewMatrix.Translate(0);
 
-				Shader::Globals.SetValue(viewProjId, viewmodelProjectionMatrix);
-				Shader::Globals.SetValue(viewMatrixId, viewmodelViewMatrix);
+				Shader::GlobalUniforms.Uniforms.projectionMatrix = viewmodelProjectionMatrix;
+				Shader::GlobalUniforms.Uniforms.viewProjectionMatrix = viewmodelProjectionMatrix;
+				Shader::GlobalUniforms.Update();
 
 				shader->SetParameterValue("delta", animator.GetFrameDelta());
-				shader->SetParameterValue("model", Matrix4x4::Translation(camera.GetViewModelOffset()) * Matrix3x3::RotationY(Math::DegreesToRadians(90)).ToMatrix4x4());
+				shader->SetParameterValue("modelMatrix", Matrix4x4::Translation(camera.GetViewModelOffset()) * Matrix3x3::RotationY(Math::DegreesToRadians(90)).ToMatrix4x4());
 				shader->SetParameterValue("normalBuffer", DynamicModel::GetNormalBuffer().get());
 				shader->SetParameterValue("cubemap", skybox->GetCubemap(), TextureSampler::Library.Get({ TextureWrapMode::ClampEdge, TextureFilterMode::Linear }).get());
 
@@ -419,8 +421,9 @@ namespace Freeking
 
 				viewmodel2->Draw();
 
-				Shader::Globals.SetValue(viewProjId, viewProjectionMatrix);
-				Shader::Globals.SetValue(viewMatrixId, viewMatrix);
+				Shader::GlobalUniforms.Uniforms.projectionMatrix = viewProjectionMatrix;
+				Shader::GlobalUniforms.Uniforms.viewProjectionMatrix = viewProjectionMatrix;
+				Shader::GlobalUniforms.Update();
 			}
 
 			if (Renderer::DebugDraw)
@@ -482,7 +485,7 @@ namespace Freeking
 				}
 
 				glDisable(GL_DEPTH_TEST);
-				lineRenderer->Flush(viewProjectionMatrix);
+				lineRenderer->Flush();
 				glEnable(GL_DEPTH_TEST);;
 			}
 
@@ -501,9 +504,13 @@ namespace Freeking
 			}
 
 			auto orthoProjection = Matrix4x4::Ortho(0, (float)_viewportWidth, (float)_viewportHeight, 0, -1.0f, 1.0f);
+
+			Shader::GlobalUniforms.Uniforms.projectionMatrix = orthoProjection;
+			Shader::GlobalUniforms.Update();
+
 			spriteBatch->DrawText(font.get(), std::to_string(fps), Vector2f(10, 2), LinearColor(0, 0, 0, 1), 1.0f);
 			spriteBatch->DrawText(font.get(), std::to_string(fps), Vector2f(8, 0), fpsColor, 1.0f);
-			spriteBatch->Flush(orthoProjection);
+			spriteBatch->Flush();
 
 			lineRenderer->Clear();
 			spriteBatch->Clear();

@@ -26,7 +26,7 @@ namespace Freeking
 		void DrawAxis(const Matrix4x4& transform, float length, float size, float alpha = 1.0f);
 		void DrawArrow(const Vector3f& start, const Vector3f& end, const Vector3f& up, const Vector3f& right, const float size, const LinearColor& color);
 
-		void Flush(Matrix4x4& viewProj);
+		void Flush();
 		void Clear();
 
 		inline std::size_t GetVertexCount() const { return _vertexCount; }

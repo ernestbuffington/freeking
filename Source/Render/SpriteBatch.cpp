@@ -494,7 +494,7 @@ namespace Freeking
 		}
 	}
 
-	void SpriteBatch::Flush(const Matrix4x4& proj, float scale)
+	void SpriteBatch::Flush(float scale)
 	{
 		if (_spritesToDraw.empty() && _textToDraw.empty())
 		{
@@ -510,16 +510,15 @@ namespace Freeking
 		const auto& textShader = GetTextShader();
 		if (textShader)
 		{
-			DrawSprites(proj, scale, textShader, _textToDraw);
+			DrawSprites(scale, textShader, _textToDraw);
 		}
 
 		const auto& spriteShader = GetSpriteShader();
 		if (spriteShader)
 		{
-			DrawSprites(proj, scale, spriteShader, _spritesToDraw);
+			DrawSprites(scale, spriteShader, _spritesToDraw);
 		}
 
-		glBindSampler(0, 0);
 		_vertexBinding->Unbind();
 
 		glEnable(GL_DEPTH_TEST);
@@ -531,10 +530,8 @@ namespace Freeking
 		_textToDraw.clear();
 	}
 
-	void SpriteBatch::DrawSprites(const Matrix4x4& proj, float scale, const std::shared_ptr<Shader>& shader, std::vector<SpriteBatch::Sprite>& sprites)
+	void SpriteBatch::DrawSprites(float scale, const std::shared_ptr<Shader>& shader, std::vector<SpriteBatch::Sprite>& sprites)
 	{
-		shader->SetParameterValue("projMatrix", proj);
-
 		static const size_t vertSize = 8;
 		static const size_t faceVertCount = 6;
 		static const size_t vertStride = vertSize * sizeof(float);

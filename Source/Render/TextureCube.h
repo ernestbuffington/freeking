@@ -34,10 +34,10 @@ namespace Freeking
 		TextureCube(const std::array<Image, 6>& faces);
 		~TextureCube();
 
-		virtual const GLuint GetHandle() const override { return _handle; }
+		virtual const GLuint GetId() const override { return _id; }
 
 	private:
 
-		GLuint _handle;
+		GLuint _id;
 	};
 }

@@ -32,39 +32,34 @@ namespace Freeking
 		return sampler;
 	}
 
-	const TextureSamplerLibrary::TextureSamplerPtr& TextureSamplerLibrary::Get(const TextureSamplerInitializer& settings)
+	const TextureSamplerLibrary::TextureSamplerPtr& TextureSamplerLibrary::Get(const TextureSamplerInitializer& initializer)
 	{
-		if (auto it = _samplers.find(settings); it != _samplers.end())
+		if (auto it = _samplers.find(initializer); it != _samplers.end())
 		{
 			return it->second;
 		}
 		else
 		{
-			return _samplers.emplace(settings, std::make_shared<TextureSampler>(settings)).first->second;
+			return _samplers.emplace(initializer, std::make_shared<TextureSampler>(initializer)).first->second;
 		}
 	}
 
-	TextureSampler::TextureSampler(const TextureSamplerInitializer& settings) :
-		_handle(0)
+	TextureSampler::TextureSampler(const TextureSamplerInitializer& initializer) :
+		_id(0)
 	{
-		glGenSamplers(1, &_handle);
-		glSamplerParameteri(_handle, GL_TEXTURE_MIN_FILTER, FilterModesMin[static_cast<int>(settings.filter)]);
-		glSamplerParameteri(_handle, GL_TEXTURE_MAG_FILTER, FilterModesMag[static_cast<int>(settings.filter)]);
-		glSamplerParameteri(_handle, GL_TEXTURE_WRAP_S, WrapModes[static_cast<int>(settings.wrap)]);
-		glSamplerParameteri(_handle, GL_TEXTURE_WRAP_T, WrapModes[static_cast<int>(settings.wrap)]);
-		glSamplerParameterf(_handle, GL_TEXTURE_MAX_ANISOTROPY, 16);
+		glGenSamplers(1, &_id);
+		glSamplerParameteri(_id, GL_TEXTURE_MIN_FILTER, FilterModesMin[static_cast<int>(initializer.filter)]);
+		glSamplerParameteri(_id, GL_TEXTURE_MAG_FILTER, FilterModesMag[static_cast<int>(initializer.filter)]);
+		glSamplerParameteri(_id, GL_TEXTURE_WRAP_S, WrapModes[static_cast<int>(initializer.wrap)]);
+		glSamplerParameteri(_id, GL_TEXTURE_WRAP_T, WrapModes[static_cast<int>(initializer.wrap)]);
+		glSamplerParameterf(_id, GL_TEXTURE_MAX_ANISOTROPY, 16);
 	}
 
 	TextureSampler::~TextureSampler()
 	{
-		if (_handle != 0)
+		if (_id != 0)
 		{
-			glDeleteSamplers(1, &_handle);
+			glDeleteSamplers(1, &_id);
 		}
-	}
-
-	void TextureSampler::Bind(GLuint unit)
-	{
-		glBindSampler(unit, _handle);
 	}
 }
