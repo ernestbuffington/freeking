@@ -20,11 +20,11 @@ namespace Freeking
 
 		struct Image
 		{
-			GLsizei width;
-			GLsizei height;
-			GLenum internalFormat;
-			GLenum format;
-			GLenum type;
+			GLsizei width = 0;
+			GLsizei height = 0;
+			GLenum internalFormat = GL_INVALID_ENUM;
+			GLenum format = GL_INVALID_ENUM;
+			GLenum type = GL_INVALID_ENUM;
 			std::vector<uint8_t> data;
 		};
 

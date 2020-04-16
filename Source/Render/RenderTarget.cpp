@@ -35,7 +35,7 @@ namespace Freeking
 			_depthAttachment = std::move(attachmentTexture);
 		}
 
-		glDrawBuffers(drawBuffers.size(), drawBuffers.data());
+		glDrawBuffers((GLsizei)drawBuffers.size(), drawBuffers.data());
 		GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 
 		switch (status)

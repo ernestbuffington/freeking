@@ -67,7 +67,7 @@ namespace Freeking
 			}
 		}
 
-		alSourcePlayv(sourceIds.size(), sourceIds.data());
+		alSourcePlayv((ALsizei)sourceIds.size(), sourceIds.data());
 
 		_audioQueue.clear();
 	}

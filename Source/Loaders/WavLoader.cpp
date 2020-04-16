@@ -114,8 +114,6 @@ namespace Freeking
 		auto bitsPerSample = riffChunk.wBitsPerSample;
 		auto channelCount = riffChunk.nChannels;
 		auto samplesPerSecond = riffChunk.nSamplesPerSec;
-		auto sampleCount = dataSize / (channelCount * (bitsPerSample / 8));
-		auto totalTime = (float)dataSize / ((float)samplesPerSecond * (float)channelCount * (float)(bitsPerSample / 8));
 
 		return std::make_shared<AudioClip>(channelCount, bitsPerSample, samplesPerSecond, pcmData);
 	}

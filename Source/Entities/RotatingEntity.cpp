@@ -21,7 +21,7 @@ namespace Freeking
 
 		if (_speed > 0.0f)
 		{
-			SetRotation(_initialRotation * Quaternion::FromRadianYaw(Math::AngleAtTime(Time::Now() - _timeSpawned, Math::DegreesToRadians(_speed))));
+			SetRotation(_initialRotation * Quaternion::FromRadianYaw(Math::AngleAtTime(static_cast<float>(Time::Now() - _timeSpawned), Math::DegreesToRadians(_speed))));
 		}
 	}
 
