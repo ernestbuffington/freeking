@@ -211,7 +211,6 @@ namespace Freeking
 			shader->SetParameterValue("alphaCutOff", mesh.second->AlphaCutOff);
 			shader->SetParameterValue("diffuse", mesh.second->GetDiffuse().get());
 			shader->SetParameterValue("lightmap", mesh.second->GetLightmap().get());
-			shader->Apply();
 
 			mesh.second->Draw();
 		}
@@ -236,7 +235,6 @@ namespace Freeking
 			shader->SetParameterValue("alphaMultiply", mesh.second->AlphaMultiply);
 			shader->SetParameterValue("diffuse", mesh.second->GetDiffuse().get());
 			shader->SetParameterValue("lightmap", mesh.second->GetLightmap().get());
-			shader->Apply();
 
 			mesh.second->Draw();
 		}

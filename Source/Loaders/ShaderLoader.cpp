@@ -19,6 +19,9 @@ namespace Freeking
 			return nullptr;
 		}
 
-		return std::make_shared<Shader>(std::string((char*)source.data(), source.size()));
+		auto shader = std::make_shared<Shader>();
+		shader->Compile(std::string((char*)source.data(), source.size()));
+
+		return shader;
 	}
 }

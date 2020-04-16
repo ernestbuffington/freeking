@@ -96,6 +96,7 @@ namespace Freeking
 
 	void BaseCastEntity::PreRender(bool translucent)
 	{
+		_shader->Bind();
 		_shader->SetParameterValue("delta", _animator.GetFrameDelta());
 		_shader->SetParameterValue("modelMatrix", GetTransform());
 		_shader->SetParameterValue("normalBuffer", DynamicModel::GetNormalBuffer().get());
@@ -116,7 +117,6 @@ namespace Freeking
 			_shader->SetParameterValue("frames[1].index", (int)(_animator.GetNextFrame() * mesh->GetFrameVertexCount()));
 			_shader->SetParameterValue("frames[1].translate", mesh->FrameTransforms[_animator.GetNextFrame()].translate);
 			_shader->SetParameterValue("frames[1].scale", mesh->FrameTransforms[_animator.GetNextFrame()].scale);
-			_shader->Apply();
 
 			//if (mesh->SubObjects.size() == 7)
 			//{

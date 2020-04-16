@@ -380,6 +380,7 @@ namespace Freeking
 				glClear(GL_DEPTH_BUFFER_BIT);
 
 				const auto& shader = Shader::Library.DynamicModel;
+				shader->Bind();
 
 				animator.Tick(deltaTime);
 
@@ -405,7 +406,6 @@ namespace Freeking
 				shader->SetParameterValue("frames[1].index", (int)(nextFrame * viewmodel->GetFrameVertexCount()));
 				shader->SetParameterValue("frames[1].translate", viewmodel->FrameTransforms[nextFrame].translate);
 				shader->SetParameterValue("frames[1].scale", viewmodel->FrameTransforms[nextFrame].scale);
-				shader->Apply();
 
 				viewmodel->Draw();
 
@@ -417,7 +417,6 @@ namespace Freeking
 				shader->SetParameterValue("frames[1].index", (int)(nextFrame * viewmodel2->GetFrameVertexCount()));
 				shader->SetParameterValue("frames[1].translate", viewmodel2->FrameTransforms[nextFrame].translate);
 				shader->SetParameterValue("frames[1].scale", viewmodel2->FrameTransforms[nextFrame].scale);
-				shader->Apply();
 
 				viewmodel2->Draw();
 

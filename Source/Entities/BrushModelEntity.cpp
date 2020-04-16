@@ -70,6 +70,8 @@ namespace Freeking
 	{
 		if (_shader)
 		{
+			_shader->Bind();
+
 			if (translucent)
 			{
 				_shader->SetParameterValue("alphaCutOff", 0.0f);

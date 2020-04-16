@@ -29,7 +29,7 @@ namespace Freeking
 			return;
 		}
 
-		shader->Apply();
+		shader->Bind();
 		binding->Bind();
 
 		if (binding->HasIndices())

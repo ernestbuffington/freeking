@@ -24,45 +24,6 @@ namespace Freeking
 		AddLoader<ShaderLoader>();
 	}
 
-	GlobalUniformBuffer::GlobalUniformBuffer() :
-		_bufferId(0)
-	{
-	}
-
-	GlobalUniformBuffer::~GlobalUniformBuffer()
-	{
-		if (_bufferId)
-		{
-			glDeleteBuffers(1, &_bufferId);
-		}
-	}
-
-	void GlobalUniformBuffer::Initialize()
-	{
-		if (_bufferId)
-		{
-			return;
-		}
-
-		glGenBuffers(1, &_bufferId);
-		glBindBuffer(GL_UNIFORM_BUFFER, _bufferId);
-		glBufferData(GL_UNIFORM_BUFFER, sizeof(UniformBlock), NULL, GL_STATIC_DRAW);
-		glBindBufferBase(GL_UNIFORM_BUFFER, 0, _bufferId);
-		glBindBuffer(GL_UNIFORM_BUFFER, 0);
-	}
-
-	void GlobalUniformBuffer::Update()
-	{
-		if (!_bufferId)
-		{
-			return;
-		}
-
-		glBindBuffer(GL_UNIFORM_BUFFER, _bufferId);
-		glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(UniformBlock), &Uniforms);
-		glBindBuffer(GL_UNIFORM_BUFFER, 0);
-	}
-
 	ShaderLibrary Shader::Library;
 	GlobalUniformBuffer Shader::GlobalUniforms;
 
@@ -77,6 +38,457 @@ namespace Freeking
 
 		GlobalUniforms.Initialize();
 		Library.Initialize();
+	}
+
+	Shader::Shader() :
+		_program(0)
+	{
+	}
+
+	Shader::~Shader()
+	{
+		Unbind();
+
+		if (_program)
+		{
+			glDeleteProgram(_program);
+		}
+	}
+
+	void Shader::InitializeParameter(const std::string& name, GLint location, GLenum glType)
+	{
+		if (auto type = FloatParameter::CastType(glType);
+			type != FloatParameter::Type::Invalid)
+		{
+			auto& p = _floatParameters.AddParameter(name);
+			p.type = type;
+			p.location = location;
+			p.unset = true;
+
+			return;
+		}
+
+		if (auto type = IntParameter::CastType(glType);
+			type != IntParameter::Type::Invalid)
+		{
+			auto& p = _intParameters.AddParameter(name);
+			p.type = type;
+			p.location = location;
+			p.unset = true;
+
+			return;
+		}
+
+		if (auto type = MatrixParameter::CastType(glType);
+			type != MatrixParameter::Type::Invalid)
+		{
+			auto& p = _matrixParameters.AddParameter(name);
+			p.type = type;
+			p.location = location;
+			p.unset = true;
+
+			return;
+		}
+
+		if (auto type = TextureParameter::CastType(glType);
+			type != TextureParameter::Type::Invalid)
+		{
+			auto& p = _textureParameters.AddParameter(name);
+			p.type = type;
+			p.targetType = TextureParameter::CastTargetType(type);
+			p.location = location;
+			p.unset = true;
+			p.unit = static_cast<int>(_textureParameters.GetCount()) - 1;
+
+			// This can be set here as it doesn't change
+			glUniform1i(p.location, p.unit);
+
+			return;
+		}
+	}
+
+	void Shader::Bind()
+	{
+		assert(_program != 0);
+
+		if (_program != _activeProgramId)
+		{
+			glUseProgram(_program);
+			_activeProgramId = _program;
+		}
+	}
+
+	void Shader::Unbind()
+	{
+		if (_activeProgramId != 0)
+		{
+			glUseProgram(0);
+			_activeProgramId = 0;
+		}
+	}
+
+	void Shader::SetParameterValue(const char* name, int value)
+	{
+		SetParameterValue(_intParameters.GetId(name), value);
+	}
+
+	void Shader::SetParameterValue(int id, int value)
+	{
+		assert(_program == _activeProgramId);
+
+		if (auto param = _intParameters.GetParameter(id);
+			param != nullptr && param->type == IntParameter::Type::Int)
+		{
+			param->SetInt(value);
+		}
+	}
+
+	void Shader::SetParameterValue(const char* name, float value)
+	{
+		SetParameterValue(_floatParameters.GetId(name), value);
+	}
+
+	void Shader::SetParameterValue(int id, float value)
+	{
+		assert(_program == _activeProgramId);
+
+		if (auto param = _floatParameters.GetParameter(id);
+			param != nullptr && param->type == FloatParameter::Type::Float)
+		{
+			param->SetFloat(value);
+		}
+	}
+
+	void Shader::SetParameterValue(const char* name, const Vector2f& value)
+	{
+		SetParameterValue(_floatParameters.GetId(name), value);
+	}
+
+	void Shader::SetParameterValue(int id, const Vector2f& value)
+	{
+		assert(_program == _activeProgramId);
+
+		if (auto param = _floatParameters.GetParameter(id);
+			param != nullptr && param->type == FloatParameter::Type::Vec2)
+		{
+			param->SetVec2(value);
+		}
+	}
+
+	void Shader::SetParameterValue(const char* name, const Vector3f& value)
+	{
+		SetParameterValue(_floatParameters.GetId(name), value);
+	}
+
+	void Shader::SetParameterValue(int id, const Vector3f& value)
+	{
+		assert(_program == _activeProgramId);
+
+		if (auto param = _floatParameters.GetParameter(id);
+			param != nullptr && param->type == FloatParameter::Type::Vec3)
+		{
+			param->SetVec3(value);
+		}
+	}
+
+	void Shader::SetParameterValue(const char* name, const Vector4f& value)
+	{
+		SetParameterValue(_floatParameters.GetId(name), value);
+	}
+
+	void Shader::SetParameterValue(int id, const Vector4f& value)
+	{
+		assert(_program == _activeProgramId);
+
+		if (auto param = _floatParameters.GetParameter(id);
+			param != nullptr && param->type == FloatParameter::Type::Vec4)
+		{
+			param->SetVec4(value);
+		}
+	}
+
+	void Shader::SetParameterValue(const char* name, const Matrix3x3& value)
+	{
+		SetParameterValue(_matrixParameters.GetId(name), value);
+	}
+
+	void Shader::SetParameterValue(int id, const Matrix3x3& value)
+	{
+		assert(_program == _activeProgramId);
+
+		if (auto param = _matrixParameters.GetParameter(id);
+			param != nullptr && param->type == MatrixParameter::Type::Mat3)
+		{
+			param->SetMat3(value);
+		}
+	}
+
+	void Shader::SetParameterValue(const char* name, const Matrix4x4& value)
+	{
+		SetParameterValue(_matrixParameters.GetId(name), value);
+	}
+
+	void Shader::SetParameterValue(int id, const Matrix4x4& value)
+	{
+		assert(_program == _activeProgramId);
+
+		if (auto param = _matrixParameters.GetParameter(id);
+			param != nullptr && param->type == MatrixParameter::Type::Mat4)
+		{
+			param->SetMat4(value);
+		}
+	}
+
+	void Shader::SetParameterValue(const char* name, const Texture2D* value)
+	{
+		SetParameterValue(name, value, TextureSampler::GetDefault().get());
+	}
+
+	void Shader::SetParameterValue(int id, const Texture2D* value)
+	{
+		SetParameterValue(id, value, TextureSampler::GetDefault().get());
+	}
+
+	void Shader::SetParameterValue(const char* name, const Texture2D* texture, const TextureSampler* sampler)
+	{
+		if (!texture)
+		{
+			return;
+		}
+
+		SetParameterValue(_textureParameters.GetId(name), texture, sampler);
+	}
+
+	void Shader::SetParameterValue(int id, const Texture2D* texture, const TextureSampler* sampler)
+	{
+		assert(_program == _activeProgramId);
+
+		if (!texture)
+		{
+			return;
+		}
+
+		if (auto param = _textureParameters.GetParameter(id);
+			param != nullptr && param->type == TextureParameter::Type::Tex2D)
+		{
+			param->SetTexture(texture, sampler);
+		}
+	}
+
+	void Shader::SetParameterValue(const char* name, const TextureBuffer* texture)
+	{
+		if (!texture)
+		{
+			return;
+		}
+
+		SetParameterValue(_textureParameters.GetId(name), texture);
+	}
+
+	void Shader::SetParameterValue(const char* name, const TextureCube* texture, const TextureSampler* sampler)
+	{
+		if (!texture)
+		{
+			return;
+		}
+
+		SetParameterValue(_textureParameters.GetId(name), texture, sampler);
+	}
+
+	void Shader::SetParameterValue(int id, const TextureBuffer* texture)
+	{
+		assert(_program == _activeProgramId);
+
+		if (!texture)
+		{
+			return;
+		}
+
+		if (auto param = _textureParameters.GetParameter(id);
+			param != nullptr && param->type == TextureParameter::Type::TexBuffer)
+		{
+			param->SetTexture(texture);
+		}
+	}
+
+	void Shader::SetParameterValue(int id, const TextureCube* texture, const TextureSampler* sampler)
+	{
+		assert(_program == _activeProgramId);
+
+		if (!texture)
+		{
+			return;
+		}
+
+		if (auto param = _textureParameters.GetParameter(id);
+			param != nullptr && param->type == TextureParameter::Type::TexCube)
+		{
+			param->SetTexture(texture, sampler);
+		}
+	}
+
+	void Shader::FloatParameter::SetFloat(float v)
+	{
+		if (type != Type::Float)
+		{
+			return;
+		}
+
+		if (unset || value[0] != v)
+		{
+			value[0] = v;
+			unset = false;
+
+			glUniform1f(location, value[0]);
+		}
+	}
+
+	void Shader::FloatParameter::SetVec2(const Vector2f& v)
+	{
+		if (type != Type::Vec2)
+		{
+			return;
+		}
+
+		if (unset || (value[0] != v.x || value[1] != v.y))
+		{
+			std::memcpy(&value[0], v.Base(), 8);
+			unset = false;
+
+			glUniform2f(location, value[0], value[1]);
+		}
+	}
+
+	void Shader::FloatParameter::SetVec3(const Vector3f& v)
+	{
+		if (type != Type::Vec3)
+		{
+			return;
+		}
+
+		if (unset || (value[0] != v.x || value[1] != v.y || value[2] != v.z))
+		{
+			std::memcpy(&value[0], v.Base(), 12);
+			unset = false;
+
+			glUniform3f(location, value[0], value[1], value[2]);
+		}
+	}
+
+	void Shader::FloatParameter::SetVec4(const Vector4f& v)
+	{
+		if (type != Type::Vec4)
+		{
+			return;
+		}
+
+		if (unset || (value[0] != v.x || value[1] != v.y || value[2] != v.z || value[3] != v.w))
+		{
+			std::memcpy(&value[0], v.Base(), 16);
+			unset = false;
+
+			glUniform4f(location, value[0], value[1], value[2], value[3]);
+		}
+	}
+
+	void Shader::IntParameter::SetInt(int v)
+	{
+		if (type != Type::Int)
+		{
+			return;
+		}
+
+		if (unset || value[0] != v)
+		{
+			value[0] = v;
+			unset = false;
+
+			glUniform1i(location, value[0]);
+		}
+	}
+
+	void Shader::MatrixParameter::SetMat3(const Matrix3x3& v)
+	{
+		if (type != Type::Mat3)
+		{
+			return;
+		}
+
+		std::memcpy(&value[0], v.Base(), 36);
+		unset = false;
+
+		glUniformMatrix3fv(location, 1, GL_FALSE, &value[0]);
+	}
+
+	void Shader::MatrixParameter::SetMat4(const Matrix4x4& v)
+	{
+		if (type != Type::Mat4)
+		{
+			return;
+		}
+
+		std::memcpy(&value[0], v.Base(), 64);
+		unset = false;
+
+		glUniformMatrix4fv(location, 1, GL_FALSE, &value[0]);
+	}
+
+	void Shader::TextureParameter::SetTexture(const Texture2D* texture, const TextureSampler* sampler)
+	{
+		if (type == Type::Tex2D && texture)
+		{
+			textureId = texture->GetId();
+			samplerId = sampler != nullptr ? sampler->GetId() : TextureSampler::GetDefault()->GetId();
+			unset = false;
+
+			Apply();
+		}
+	}
+
+	void Shader::TextureParameter::SetTexture(const TextureBuffer* texture)
+	{
+		if (type == Type::TexBuffer && texture)
+		{
+			textureId = texture->GetId();
+			samplerId = GL_INVALID_INDEX;
+			unset = false;
+
+			Apply();
+		}
+	}
+
+	void Shader::TextureParameter::SetTexture(const TextureCube* texture, const TextureSampler* sampler)
+	{
+		if (type == Type::TexCube && texture)
+		{
+			textureId = texture->GetId();
+			samplerId = sampler != nullptr ? sampler->GetId() : TextureSampler::GetDefault()->GetId();
+			unset = false;
+
+			Apply();
+		}
+	}
+
+	void Shader::TextureParameter::Apply()
+	{
+		if (targetType != GL_INVALID_ENUM)
+		{
+			auto& textureBindingState = _textureBindingStates.at(unit);
+			auto newSamplerId = samplerId != GL_INVALID_INDEX ? samplerId : 0;
+
+			if (textureBindingState.samplerId != newSamplerId)
+			{
+				glBindSampler(unit, newSamplerId);
+				textureBindingState.samplerId = newSamplerId;
+			}
+
+			if (textureBindingState.textureId != textureId)
+			{
+				glActiveTexture(GL_TEXTURE0 + unit);
+				glBindTexture(targetType, textureId);
+				textureBindingState.textureId = textureId;
+			}
+		}
 	}
 
 	static GLuint CreateSubShader(GLenum type, const std::string& source, const std::string& defines)
@@ -110,7 +522,7 @@ namespace Freeking
 		return shader;
 	}
 
-	Shader::Shader(const std::string& source)
+	void Shader::Compile(const std::string& source)
 	{
 		_program = glCreateProgram();
 
@@ -192,549 +604,42 @@ namespace Freeking
 		glUseProgram(currentProgramId);
 	}
 
-	Shader::~Shader()
+	GlobalUniformBuffer::GlobalUniformBuffer() :
+		_bufferId(0)
 	{
-		if (_program)
+	}
+
+	GlobalUniformBuffer::~GlobalUniformBuffer()
+	{
+		if (_bufferId)
 		{
-			glDeleteProgram(_program);
+			glDeleteBuffers(1, &_bufferId);
 		}
 	}
 
-	void Shader::InitializeParameter(const std::string& name, GLint location, GLenum glType)
+	void GlobalUniformBuffer::Initialize()
 	{
-		if (auto type = FloatParameter::Property::CastType(glType);
-			type != FloatParameter::Property::Type::Invalid)
-		{
-			auto& p = _floatParameters.AddParameter(name);
-			p.prop.type = type;
-			p.location = location;
-			p.prop.unset = true;
-			p.prop.dirty = false;
-
-			return;
-		}
-
-		if (auto type = IntParameter::Property::CastType(glType);
-			type != IntParameter::Property::Type::Invalid)
-		{
-			auto& p = _intParameters.AddParameter(name);
-			p.prop.type = type;
-			p.location = location;
-			p.prop.unset = true;
-			p.prop.dirty = false;
-
-			return;
-		}
-
-		if (auto type = MatrixParameter::Property::CastType(glType);
-			type != MatrixParameter::Property::Type::Invalid)
-		{
-			auto& p = _matrixParameters.AddParameter(name);
-			p.prop.type = type;
-			p.location = location;
-			p.prop.unset = true;
-			p.prop.dirty = false;
-
-			return;
-		}
-
-		if (auto type = TextureParameter::Property::CastType(glType);
-			type != TextureParameter::Property::Type::Invalid)
-		{
-			auto& p = _textureParameters.AddParameter(name);
-			p.prop.type = type;
-			p.prop.targetType = TextureParameter::Property::CastTargetType(type);
-			p.location = location;
-			p.prop.unset = true;
-			p.unit = static_cast<int>(_textureParameters.GetCount()) - 1;
-
-			// This can be set here as it doesn't change
-			glUniform1i(p.location, p.unit);
-
-			return;
-		}
-	}
-
-	void Shader::Apply()
-	{
-		if (_program != _activeProgramId)
-		{
-			glUseProgram(_program);
-			_activeProgramId = _program;
-		}
-
-		ApplyFloatParameters();
-		ApplyIntParameters();
-		ApplyMatrixParameters();
-		ApplyTextureParameters();
-	}
-
-	void Shader::Unbind()
-	{
-		if (_activeProgramId != 0)
-		{
-			glUseProgram(0);
-			_activeProgramId = 0;
-		}
-	}
-
-	void Shader::ApplyFloatParameters()
-	{
-		using Property = FloatParameter::Property;
-		using PropertyType = Property::Type;
-
-		for (auto& p : _floatParameters._parameters)
-		{
-			if (p.prop.unset || !p.prop.dirty)
-			{
-				continue;
-			}
-
-			auto& prop = p.prop;
-
-			switch (prop.type)
-			{
-			case PropertyType::Float:
-			{
-				glUniform1f(p.location, prop.value[0]);
-				break;
-			}
-			case PropertyType::Vec2:
-			{
-				glUniform2f(p.location, prop.value[0], prop.value[1]);
-				break;
-			}
-			case PropertyType::Vec3:
-			{
-				glUniform3f(p.location, prop.value[0], prop.value[1], prop.value[2]);
-				break;
-			}
-			case PropertyType::Vec4:
-			{
-				glUniform4f(p.location, prop.value[0], prop.value[1], prop.value[2], prop.value[3]);
-				break;
-			}
-			}
-
-			prop.dirty = false;
-		}
-	}
-
-	void Shader::ApplyIntParameters()
-	{
-		using Property = IntParameter::Property;
-		using PropertyType = Property::Type;
-
-		for (auto& p : _intParameters._parameters)
-		{
-			if (p.prop.unset || !p.prop.dirty)
-			{
-				continue;
-			}
-
-			auto& prop = p.prop;
-
-			switch (prop.type)
-			{
-			case PropertyType::Int:
-			{
-				glUniform1i(p.location, prop.value[0]);
-				break;
-			}
-			case PropertyType::Vec2:
-			{
-				glUniform2i(p.location, prop.value[0], prop.value[1]);
-				break;
-			}
-			case PropertyType::Vec3:
-			{
-				glUniform3i(p.location, prop.value[0], prop.value[1], prop.value[2]);
-				break;
-			}
-			case PropertyType::Vec4:
-			{
-				glUniform4i(p.location, prop.value[0], prop.value[1], prop.value[2], prop.value[3]);
-				break;
-			}
-			}
-
-			prop.dirty = false;
-		}
-	}
-
-	void Shader::ApplyMatrixParameters()
-	{
-		using Property = MatrixParameter::Property;
-		using PropertyType = Property::Type;
-
-		for (auto& p : _matrixParameters._parameters)
-		{
-			if (p.prop.unset || !p.prop.dirty)
-			{
-				continue;
-			}
-
-			auto& prop = p.prop;
-
-			switch (prop.type)
-			{
-			case PropertyType::Mat3:
-			{
-				glUniformMatrix3fv(p.location, 1, GL_FALSE, &prop.value[0]);
-				break;
-			}
-			case PropertyType::Mat4:
-			{
-				glUniformMatrix4fv(p.location, 1, GL_FALSE, &prop.value[0]);
-				break;
-			}
-			}
-
-			prop.dirty = false;
-		}
-	}
-
-	void Shader::ApplyTextureParameters()
-	{
-		using Property = TextureParameter::Property;
-		using PropertyType = Property::Type;
-
-		for (const auto& p : _textureParameters._parameters)
-		{
-			if (p.prop.unset)
-			{
-				continue;
-			}
-
-			const auto& prop = p.prop;
-
-			if (prop.targetType != GL_INVALID_ENUM)
-			{
-				auto& textureBindingState = _textureBindingStates.at(p.unit);
-				auto samplerId = prop.samplerId != GL_INVALID_INDEX ? prop.samplerId : 0;
-
-				if (textureBindingState.samplerId != samplerId)
-				{
-					glBindSampler(p.unit, samplerId);
-					textureBindingState.samplerId = samplerId;
-				}
-
-				if (textureBindingState.textureId != prop.textureId)
-				{
-					glActiveTexture(GL_TEXTURE0 + p.unit);
-					glBindTexture(prop.targetType, prop.textureId);
-					textureBindingState.textureId = prop.textureId;
-				}
-			}
-		}
-	}
-
-	void Shader::SetParameterValue(const char* name, int value)
-	{
-		SetParameterValue(_intParameters.GetId(name), value);
-	}
-
-	void Shader::SetParameterValue(int id, int value)
-	{
-		if (auto param = _intParameters.GetParameter(id);
-			param != nullptr && param->prop.type == IntPropertyType::Int)
-		{
-			param->prop.SetInt(value);
-		}
-	}
-
-	void Shader::SetParameterValue(const char* name, float value)
-	{
-		SetParameterValue(_floatParameters.GetId(name), value);
-	}
-
-	void Shader::SetParameterValue(int id, float value)
-	{
-		if (auto param = _floatParameters.GetParameter(id);
-			param != nullptr && param->prop.type == FloatPropertyType::Float)
-		{
-			param->prop.SetFloat(value);
-		}
-	}
-
-	void Shader::SetParameterValue(const char* name, const Vector2f& value)
-	{
-		SetParameterValue(_floatParameters.GetId(name), value);
-	}
-
-	void Shader::SetParameterValue(int id, const Vector2f& value)
-	{
-		if (auto param = _floatParameters.GetParameter(id);
-			param != nullptr && param->prop.type == FloatPropertyType::Vec2)
-		{
-			param->prop.SetVec2(value);
-		}
-	}
-
-	void Shader::SetParameterValue(const char* name, const Vector3f& value)
-	{
-		SetParameterValue(_floatParameters.GetId(name), value);
-	}
-
-	void Shader::SetParameterValue(int id, const Vector3f& value)
-	{
-		if (auto param = _floatParameters.GetParameter(id);
-			param != nullptr && param->prop.type == FloatPropertyType::Vec3)
-		{
-			param->prop.SetVec3(value);
-		}
-	}
-
-	void Shader::SetParameterValue(const char* name, const Vector4f& value)
-	{
-		SetParameterValue(_floatParameters.GetId(name), value);
-	}
-
-	void Shader::SetParameterValue(int id, const Vector4f& value)
-	{
-		if (auto param = _floatParameters.GetParameter(id);
-			param != nullptr && param->prop.type == FloatPropertyType::Vec4)
-		{
-			param->prop.SetVec4(value);
-		}
-	}
-
-	void Shader::SetParameterValue(const char* name, const Matrix3x3& value)
-	{
-		SetParameterValue(_matrixParameters.GetId(name), value);
-	}
-
-	void Shader::SetParameterValue(int id, const Matrix3x3& value)
-	{
-		if (auto param = _matrixParameters.GetParameter(id);
-			param != nullptr && param->prop.type == MatrixPropertyType::Mat3)
-		{
-			param->prop.SetMat3(value);
-		}
-	}
-
-	void Shader::SetParameterValue(const char* name, const Matrix4x4& value)
-	{
-		SetParameterValue(_matrixParameters.GetId(name), value);
-	}
-
-	void Shader::SetParameterValue(int id, const Matrix4x4& value)
-	{
-		if (auto param = _matrixParameters.GetParameter(id);
-			param != nullptr && param->prop.type == MatrixPropertyType::Mat4)
-		{
-			param->prop.SetMat4(value);
-		}
-	}
-
-	void Shader::SetParameterValue(const char* name, const Texture2D* value)
-	{
-		SetParameterValue(name, value, TextureSampler::GetDefault().get());
-	}
-
-	void Shader::SetParameterValue(int id, const Texture2D* value)
-	{
-		SetParameterValue(id, value, TextureSampler::GetDefault().get());
-	}
-
-	void Shader::SetParameterValue(const char* name, const Texture2D* texture, const TextureSampler* sampler)
-	{
-		if (!texture)
+		if (_bufferId)
 		{
 			return;
 		}
 
-		SetParameterValue(_textureParameters.GetId(name), texture, sampler);
+		glGenBuffers(1, &_bufferId);
+		glBindBuffer(GL_UNIFORM_BUFFER, _bufferId);
+		glBufferData(GL_UNIFORM_BUFFER, sizeof(UniformBlock), NULL, GL_STATIC_DRAW);
+		glBindBufferBase(GL_UNIFORM_BUFFER, 0, _bufferId);
+		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 	}
 
-	void Shader::SetParameterValue(int id, const Texture2D* texture, const TextureSampler* sampler)
+	void GlobalUniformBuffer::Update()
 	{
-		if (!texture)
+		if (!_bufferId)
 		{
 			return;
 		}
 
-		if (auto param = _textureParameters.GetParameter(id);
-			param != nullptr && param->prop.type == TexturePropertyType::Tex2D)
-		{
-			param->prop.SetTexture(texture, sampler);
-		}
-	}
-
-	void Shader::SetParameterValue(const char* name, const TextureBuffer* texture)
-	{
-		if (!texture)
-		{
-			return;
-		}
-
-		SetParameterValue(_textureParameters.GetId(name), texture);
-	}
-
-	void Shader::SetParameterValue(const char* name, const TextureCube* texture, const TextureSampler* sampler)
-	{
-		if (!texture)
-		{
-			return;
-		}
-
-		SetParameterValue(_textureParameters.GetId(name), texture, sampler);
-	}
-
-	void Shader::SetParameterValue(int id, const TextureBuffer* texture)
-	{
-		if (!texture)
-		{
-			return;
-		}
-
-		if (auto param = _textureParameters.GetParameter(id);
-			param != nullptr && param->prop.type == TexturePropertyType::TexBuffer)
-		{
-			param->prop.SetTexture(texture);
-		}
-	}
-
-	void Shader::SetParameterValue(int id, const TextureCube* texture, const TextureSampler* sampler)
-	{
-		if (!texture)
-		{
-			return;
-		}
-
-		if (auto param = _textureParameters.GetParameter(id);
-			param != nullptr && param->prop.type == TexturePropertyType::TexCube)
-		{
-			param->prop.SetTexture(texture, sampler);
-		}
-	}
-
-	void Shader::FloatParameter::Property::SetFloat(float v)
-	{
-		if (type != Type::Float)
-		{
-			return;
-		}
-
-		if (unset || value[0] != v)
-		{
-			value[0] = v;
-			unset = false;
-			dirty = true;
-		}
-	}
-
-	void Shader::FloatParameter::Property::SetVec2(const Vector2f& v)
-	{
-		if (type != Type::Vec2)
-		{
-			return;
-		}
-
-		if (unset || (value[0] != v.x || value[1] != v.y))
-		{
-			std::memcpy(&value[0], v.Base(), 8);
-			unset = false;
-			dirty = true;
-		}
-	}
-
-	void Shader::FloatParameter::Property::SetVec3(const Vector3f& v)
-	{
-		if (type != Type::Vec3)
-		{
-			return;
-		}
-
-		if (unset || (value[0] != v.x || value[1] != v.y || value[2] != v.z))
-		{
-			std::memcpy(&value[0], v.Base(), 12);
-			unset = false;
-			dirty = true;
-		}
-	}
-
-	void Shader::FloatParameter::Property::SetVec4(const Vector4f& v)
-	{
-		if (type != Type::Vec4)
-		{
-			return;
-		}
-
-		if (unset || (value[0] != v.x || value[1] != v.y || value[2] != v.z || value[3] != v.w))
-		{
-			std::memcpy(&value[0], v.Base(), 16);
-			unset = false;
-			dirty = true;
-		}
-	}
-
-	void Shader::IntParameter::Property::SetInt(int v)
-	{
-		if (type != Type::Int)
-		{
-			return;
-		}
-
-		if (unset || value[0] != v)
-		{
-			value[0] = v;
-			unset = false;
-			dirty = true;
-		}
-	}
-
-	void Shader::MatrixParameter::Property::SetMat3(const Matrix3x3& v)
-	{
-		if (type != Type::Mat3)
-		{
-			return;
-		}
-
-		std::memcpy(&value[0], v.Base(), 36);
-		unset = false;
-		dirty = true;
-	}
-
-	void Shader::MatrixParameter::Property::SetMat4(const Matrix4x4& v)
-	{
-		if (type != Type::Mat4)
-		{
-			return;
-		}
-
-		std::memcpy(&value[0], v.Base(), 64);
-		unset = false;
-		dirty = true;
-	}
-
-	void Shader::TextureParameter::Property::SetTexture(const Texture2D* texture, const TextureSampler* sampler)
-	{
-		if (type == Type::Tex2D && texture)
-		{
-			textureId = texture->GetId();
-			samplerId = sampler != nullptr ? sampler->GetId() : TextureSampler::GetDefault()->GetId();
-			unset = false;
-		}
-	}
-
-	void Shader::TextureParameter::Property::SetTexture(const TextureBuffer* texture)
-	{
-		if (type == Type::TexBuffer && texture)
-		{
-			textureId = texture->GetId();
-			samplerId = GL_INVALID_INDEX;
-			unset = false;
-		}
-	}
-
-	void Shader::TextureParameter::Property::SetTexture(const TextureCube* texture, const TextureSampler* sampler)
-	{
-		if (type == Type::TexCube && texture)
-		{
-			textureId = texture->GetId();
-			samplerId = sampler != nullptr ? sampler->GetId() : TextureSampler::GetDefault()->GetId();
-			unset = false;
-		}
+		glBindBuffer(GL_UNIFORM_BUFFER, _bufferId);
+		glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(UniformBlock), &Uniforms);
+		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 	}
 }

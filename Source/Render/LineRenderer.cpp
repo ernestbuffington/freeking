@@ -34,7 +34,7 @@ namespace Freeking
 
 		_vertexBuffer->UpdateBuffer(_buffer.data(), 0, _vertexCount * VertexSize);
 
-		_shader->Apply();
+		_shader->Bind();
 
 		_vertexBinding->Bind();
 		glDrawArrays(GL_LINES, 0, static_cast<GLsizei>(_vertexCount));

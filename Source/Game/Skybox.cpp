@@ -84,15 +84,15 @@ namespace Freeking
 		_vertexBinding->Create(vertexLayout, 1, *_indexBuffer, ElementType::UInt);
 
 		_shader = Shader::Library.Skybox;
-		_shader->SetParameterValue(
-			"cubemap",
-			_cubemap.get(),
-			TextureSampler::Library.Get({ TextureWrapMode::ClampEdge, TextureFilterMode::Linear }).get());
 	}
 
 	void Skybox::Draw()
 	{
-		_shader->Apply();
+		_shader->Bind();
+		_shader->SetParameterValue(
+			"cubemap",
+			_cubemap.get(),
+			TextureSampler::Library.Get({ TextureWrapMode::ClampEdge, TextureFilterMode::Linear }).get());
 
 		_vertexBinding->Bind();
 		glDrawElements(GL_TRIANGLES, _vertexBinding->GetNumElements(), GL_UNSIGNED_INT, (void*)0);

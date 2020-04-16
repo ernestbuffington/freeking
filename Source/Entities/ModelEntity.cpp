@@ -36,6 +36,8 @@ namespace Freeking
 	{
 		if (_shader && _model && _texture)
 		{
+			_shader->Bind();
+
 			int frame = 0;
 			
 			_shader->SetParameterValue("modelMatrix", GetTransform());
@@ -49,7 +51,6 @@ namespace Freeking
 			_shader->SetParameterValue("frames[1].index", (int)(frame * _model->GetFrameVertexCount()));
 			_shader->SetParameterValue("frames[1].translate", _model->FrameTransforms[frame].translate);
 			_shader->SetParameterValue("frames[1].scale", _model->FrameTransforms[frame].scale);
-			_shader->Apply();
 		}
 	}
 

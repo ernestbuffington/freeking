@@ -41,12 +41,12 @@ namespace Freeking
 		_vertexBinding->Create(vertexLayout, 4, *_indexBuffer, ElementType::UInt);
 
 		_shader = Shader::Library.Billboard;
-		_shader->SetParameterValue("diffuse", Texture2D::Library.Get("sprites/corona_a.tga").get());
 	}
 
 	void BillboardBatch::Draw(double dt, const Vector3f& eyePosition, const Vector3f& eyeDirection)
 	{
-		_shader->Apply();
+		_shader->Bind();
+		_shader->SetParameterValue("diffuse", Texture2D::Library.Get("sprites/corona_a.tga").get());
 
 		for (auto& instance : _instances)
 		{

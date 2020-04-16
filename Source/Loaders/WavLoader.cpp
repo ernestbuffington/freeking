@@ -43,7 +43,7 @@ namespace Freeking
 		stream.Read((uint8_t*)&ident[0], 4);
 		if (strncmp(ident, RiffTag, 4) != 0)
 		{
-			return false;
+			return nullptr;
 		}
 
 		auto fileSize = stream.Read<uint32_t>();
@@ -51,7 +51,7 @@ namespace Freeking
 		stream.Read((uint8_t*)&ident[0], 4);
 		if (strncmp(ident, WavTag, 4) != 0)
 		{
-			return false;
+			return nullptr;
 		}
 
 		do
@@ -61,7 +61,7 @@ namespace Freeking
 
 		if (stream.End())
 		{
-			return false;
+			return nullptr;
 		}
 
 		stream.Seek(4, SeekMode::Current);
@@ -71,17 +71,17 @@ namespace Freeking
 
 		if (riffChunk.wFormatTag != 1)
 		{
-			return false;
+			return nullptr;
 		}
 
 		if (riffChunk.nChannels != 1 && riffChunk.nChannels != 2)
 		{
-			return false;
+			return nullptr;
 		}
 
 		if (riffChunk.wBitsPerSample != 8 && riffChunk.wBitsPerSample != 16)
 		{
-			return false;
+			return nullptr;
 		}
 
 		uint32_t chunkId;

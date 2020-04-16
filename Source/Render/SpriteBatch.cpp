@@ -544,6 +544,8 @@ namespace Freeking
 			maxSpriteBatch = _maxSpriteCount;
 		}
 
+		shader->Bind();
+
 		while (basePos < sprites.size() && maxSpriteBatch > 0)
 		{
 			size_t searchPos = basePos;
@@ -557,7 +559,6 @@ namespace Freeking
 			if (batchTexture != nullptr)
 			{
 				shader->SetParameterValue("texture", batchTexture);
-				shader->Apply();
 			}
 
 			for (size_t i = basePos; i < searchPos; ++i)
