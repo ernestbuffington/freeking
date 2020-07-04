@@ -118,17 +118,7 @@ namespace Freeking
 			_shader->SetParameterValue("frames[1].translate", mesh->FrameTransforms[_animator.GetNextFrame()].translate);
 			_shader->SetParameterValue("frames[1].scale", mesh->FrameTransforms[_animator.GetNextFrame()].scale);
 
-			//if (mesh->SubObjects.size() == 7)
-			//{
-			//	mesh->DrawSubObject(0);
-			//	mesh->DrawSubObject(1);
-			//	mesh->DrawSubObject(2);
-			//	mesh->DrawSubObject(3);
-			//}
-			//else
-			{
-				mesh->Draw();
-			}
+			mesh->Draw();
 		}
 	}
 

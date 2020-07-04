@@ -178,8 +178,6 @@ namespace Freeking
 
 		AudioDevice audio;
 
-		Texture2D::Library.SetSpecialNamed("pink", std::make_shared<Texture2D>(2, 2, (uint8_t)255, (uint8_t)0, (uint8_t)255));
-		auto pink = Texture2D::Library.Get("pink");
 		auto crosshair = Texture2D::Library.Get("Textures/crosshair.tga");
 
 		BillboardBatch billboards;

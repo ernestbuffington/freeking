@@ -9,6 +9,7 @@ namespace Freeking
 	class VertexBuffer;
 	class IndexBuffer;
 	class TextureCube;
+	class TextureSampler;
 	class Shader;
 	class Matrix4x4;
 
@@ -29,6 +30,8 @@ namespace Freeking
 		std::unique_ptr<VertexBuffer> _vertexBuffer;
 		std::unique_ptr<IndexBuffer> _indexBuffer;
 		std::shared_ptr<TextureCube> _cubemap;
+		std::shared_ptr<TextureSampler> _cubemapSampler;
 		std::shared_ptr<Shader> _shader;
+		int _cubemapParameterId;
 	};
 }

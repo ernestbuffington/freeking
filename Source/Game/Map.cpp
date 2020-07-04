@@ -964,7 +964,7 @@ namespace Freeking
 			maxs[0] == 0 && maxs[1] == 0 && maxs[2] == 0)
 		{
 			isPoint = true;
-			extents = Vector3f(0);
+			extents = 0;
 		}
 		else
 		{
